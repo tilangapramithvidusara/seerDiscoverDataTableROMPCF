@@ -1,0 +1,48 @@
+/* styles.css */
+
+/* Basic table styles */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+  table-layout: auto; /* Set the table layout to auto */
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap; /* Prevent cell content from wrapping */
+}
+
+/* Header styles */
+thead {
+  background-color: #f2f2f2;
+}
+
+th {
+  font-weight: bold;
+}
+
+/* Data row styles */
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination a {
+  margin: 0 5px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #333;
+}
+
+.pagination a.active {
+  font-weight: bold;
+}
