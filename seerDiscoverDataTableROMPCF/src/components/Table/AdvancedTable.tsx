@@ -1,22 +1,26 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
-import { columnDetails, data, type Person } from '../../Constants/makeData';
+// import { columnDetails, data, type Person } from '../../Constants/makeData';
+import { columnDetails, type Person } from '../../Constants/makeData';
+
 import { columnFixed } from '../../Utils/CustomColumnGenerator';
 import { openSidePane } from '../../Utils/pane.open.utils';
 
-const AdvancedTable = () => {
+const AdvancedTable = ({data}: {data?: any}) => {
+  console.log('final data ==> ', data);
+  
   const averageM = useMemo(
-    () => data.reduce((acc, curr) => acc + curr?.M, 0) / data.length,
+    () => data.reduce((acc: any, curr: any) => acc + curr?.M, 0) / data.length,
     [],
   );
   const averageMS = useMemo(
-    () => data.reduce((acc, curr) => acc + curr?.['M/S'], 0) / data.length,
+    () => data.reduce((acc: any, curr: any) => acc + curr?.['M/S'], 0) / data.length,
     [],
   );
 
   const averageMSC = useMemo(
-    () => data.reduce((acc, curr) => acc + curr['M/S/C'], 0) / data.length,
+    () => data.reduce((acc: any, curr: any) => acc + curr['M/S/C'], 0) / data.length,
     [],
   );
 

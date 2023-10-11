@@ -7,6 +7,8 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import App from "./src/App";
 
+import { connect } from 'react-redux';
+
 import toJsonSchema = require("to-json-schema");
 
 // declare global {
@@ -47,7 +49,7 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
      * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
      * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
      */
-    public updateView(context: ComponentFramework.Context<IInputs>): void
+    public updateView(context: ComponentFramework.Context<IInputs>): any
     {   
         // : React.ReactElement
         console.log('entity name : ', context?.parameters?.entityName?.raw)
@@ -60,8 +62,19 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
         // this.dataLoad(reportId, accountId, context)
         // return React.createElement(React.Fragment);
         console.log("MMM");
-        
-        ReactDOM.render(React.createElement(App, { tableContent: [] }), this.container);
+
+        const ConnectedApp = connect()(App);
+
+        ReactDOM.render(React.createElement(App, { tableContent: [], context: context }), this.container);
+        // ReactDOM.render(
+        //     <Provider>
+        //   );
+
+          // <Provider store={store}>
+            //   <ConnectedApp tableContent={[]} context={context} />
+            // </Provider>,
+            // this.container
+          
         console.log("MMM2");
     }
 
@@ -93,13 +106,13 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
         }
     }
 
+
     async getUrls(reportId: any, context: ComponentFramework.Context<IInputs>){ 
         //testROMReport
         
         let returnMethod: any = {}
         try {
             
-
             let result = await context?.webAPI?.retrieveMultipleRecords(
                 "seerdwp_rompcfconfiguration", 
                 `?$select=seerdwp_rompcfconfigurationid,seerdwp_functionappurl,seerdwp_jasonobjectformat,seerdwp_reportid&$filter=seerdwp_reportid eq '${reportId}'`

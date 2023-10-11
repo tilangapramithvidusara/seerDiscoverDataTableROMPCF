@@ -1,16 +1,14 @@
 import * as React from "react";
-import TableComponent from './components/Table/App';
-import { DataSet } from "./Constants/SampleData";
-import AdvancedTable from "./components/Table/AdvancedTable";
 
-import TabComponent from "./components/index";
-
+import Index from "./index";
+import { Provider, useDispatch } from "react-redux";
+import { store } from "./redux/store";
 
 
-export default function App({tableContent}: {tableContent: any}) {
+export default function App({tableContent, context}: {tableContent: any, context: any}) {
   return (
-    <div>
-      <TabComponent/>
-    </div>
+    <Provider store={store}>
+      <Index tableContent={tableContent} context={context} />
+    </Provider>
   )
 }

@@ -17,13 +17,13 @@ import ButtonGroups from "./Buttons/ButtonGroups";
 import { Box, Chip, Grid, Stack, Typography } from "@mui/material";
 
 
-const App = () => { 
+const App = ({dataSet}: {dataSet: any}) => { 
 
   const items: TabsProps['items'] = [
     {
       key: '1',
       label: 'Report View',
-      children: <AdvancedTable/>,
+      children: <AdvancedTable data={dataSet}/>,
     },
     {
       key: '2',
