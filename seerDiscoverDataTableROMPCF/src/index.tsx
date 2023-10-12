@@ -23,6 +23,8 @@ export default function Index({tableContent, context}: {tableContent: any, conte
     const inititalData = await fetchInitialDataAsync();
     if (!inititalData.error) {
       dispatch(initialFetchSuccess(inititalData?.result));
+    } else {
+      dispatch(initialFetchFailure(inititalData?.result));
     }
   }
 

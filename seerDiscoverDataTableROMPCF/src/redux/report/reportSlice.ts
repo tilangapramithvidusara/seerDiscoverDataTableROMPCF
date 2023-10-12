@@ -13,7 +13,7 @@ const initialState: ReportState = {
   loading: false
 }
 
-export const reportSlice = createSlice({
+const reportSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
@@ -39,6 +39,6 @@ export const {
   initialFetchStart,
   initialFetchSuccess,
   initialFetchFailure,
-} = reportSlice.actions
+} = reportSlice.actions;
 
 export default reportSlice.reducer;

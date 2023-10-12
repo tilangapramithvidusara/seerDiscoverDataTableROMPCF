@@ -1,4 +1,4 @@
-import { dataIdentify } from "../../Constants/identifiedData";
+import { dataIdentify, filterTypesPriority } from "../../Constants/identifiedData";
 import { generateAnalysisDesignMValue, generateIColoumnValue } from "../EstimateAveRate/analysis.design.utils";
 import { inititlaData } from "../../Constants/apiSample";
 import { DataSet } from "../../Constants/SampleData";
@@ -13,12 +13,13 @@ export const arrayGenerator = async (initialDataSet: any) => {
 
       if (rows.includes('Analysis and Design')) {
         const response: any = await generateIColoumnValue(initialDataSet);
-        
+          (data[0] as any).M = response?.resultValue;
+          (data[0] as any)['M/S'] = response?.resultValueMS;
+          (data[0] as any)['M/S/C'] = response?.resultValueMSC;
+          console.log("Analysis and Design response => ", response);
+        await Promise.all([response]);
         // Update resultArray with the response
         // resultArray.push(response);
-        data[0].M = response
-
-        console.log("Analysis and Design response => ", response);
       }
     });
 

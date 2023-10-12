@@ -3,47 +3,63 @@ export const dataIdentify = [
     title: "ANALYSIS & DESIGN",
     rows: [
       "Analysis and Design",
-      "Customisations (Design)",
-      "Custom Requirements (Design)",
-      "Documentation",
-      "Design Review",
-      "Project Manager"
+      // "Customisations (Design)",
+      // "Custom Requirements (Design)",
+      // "Documentation",
+      // "Design Review",
+      // "Project Manager"
     ]
   },
-  {
-    title: "BUILD",
-    rows: [
-      "Configuration",
-      "Integrations",
-      "Customisations (Build)",
-      "Custom Requirements (Build)",
-      "Document Layouts",
-      "Reporting",
-      "Data Migration",
-      "CRP",
-      "Testing",
-      "Project Manager",
-    ]
-  },
-  {
-    title: "DEPLOY",
-    rows: [
-      "Train-the-trainer",
-      "UAT Environment Preparation",
-      "UAT Support",
-      "PROD Environment Preparation",
-      "Support Handover",
-      "Project Manager",
-    ]
-  },
-  {
-    title: "OPERATION",
-    rows: [
-      "End user training",
-      "Post Go-Live Support",
-      "Project Manager",
-    ]
-  }
+  // {
+  //   title: "BUILD",
+  //   rows: [
+  //     "Configuration",
+  //     "Integrations",
+  //     "Customisations (Build)",
+  //     "Custom Requirements (Build)",
+  //     "Document Layouts",
+  //     "Reporting",
+  //     "Data Migration",
+  //     "CRP",
+  //     "Testing",
+  //     "Project Manager",
+  //   ]
+  // },
+  // {
+  //   title: "DEPLOY",
+  //   rows: [
+  //     "Train-the-trainer",
+  //     "UAT Environment Preparation",
+  //     "UAT Support",
+  //     "PROD Environment Preparation",
+  //     "Support Handover",
+  //     "Project Manager",
+  //   ]
+  // },
+  // {
+  //   title: "OPERATION",
+  //   rows: [
+  //     "End user training",
+  //     "Post Go-Live Support",
+  //     "Project Manager",
+  //   ]
+  // }
+]
+
+export const moscowsData: any = {
+  '100000000': 'Must',
+  '100000001': "Should",
+  "100000002": "Could",
+  "100000003": "Will Not",
+  "100000004": "Unanswered",
+  "100000005": "Unsure",
+}
+
+export const filterTypesPriority = [
+  // { type: "M", value: "100000000"},
+  // { type: "M/S", value: "100000001"},
+  // { type: "M/S/C", value: "100000000"},
+  'M', "M/S", "M/S/C"
 ]
 
 

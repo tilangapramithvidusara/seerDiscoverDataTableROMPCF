@@ -11,9 +11,47 @@ export const fetchInitialDataAsync = async() => {
       "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
       "apps": "2cc55a59-46d7-ec11-a7b5-6045bd1001f9",
       "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
-      "outputSetId": "08585045969990987213619994154CU04",
-      "outputHistoryId": "bf6c241a-0968-ee11-9ae7-002248015232"
+      "outputSetId": "08585045133102494979573715267CU11",
+      "outputHistoryId": "8f1416f5-cb68-ee11-9ae7-000d3a0bca56"
     }
+    // {
+    //   "accountid": "82b4fc2f-bc4c-ee11-be6f-6045bdc1ec82",
+    //   "partnerid": "b68dbc7d-76fc-ec11-82e6-002248428304",
+    //   "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
+    //   "apps": "25635765-46d7-ec11-a7b5-6045bd1001f9",
+    //   "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
+    //   "outputSetId": "08585046738151656861741238998CU04",
+    //   "outputHistoryId": "28cf9643-5667-ee11-9ae7-000d3a0be073"
+    // }
+    // {
+    //   "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
+    //   "partnerid": "b388d7ee-bd7e-ec11-8d21-6045bd0e691e",
+    //   "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
+    //   "apps": "2cc55a59-46d7-ec11-a7b5-6045bd1001f9",
+    //   "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
+    //   "outputSetId": "08585045016328982278967445319CU00",
+    //   "outputHistoryId": "98f06824-e768-ee11-9ae7-002248015232"
+    // }
+    
+    // {
+    //   "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
+    //   "partnerid": "b388d7ee-bd7e-ec11-8d21-6045bd0e691e",
+    //   "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
+    //   "apps": "2cc55a59-46d7-ec11-a7b5-6045bd1001f9",
+    //   "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
+    //   "outputSetId": "08585045133102494979573715267CU11",
+    //   "outputHistoryId": "8f1416f5-cb68-ee11-9ae7-000d3a0bca56"
+    // }
+    
+    // {
+    //   "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
+    //   "partnerid": "b388d7ee-bd7e-ec11-8d21-6045bd0e691e",
+    //   "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
+    //   "apps": "2cc55a59-46d7-ec11-a7b5-6045bd1001f9",
+    //   "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
+    //   "outputSetId": "08585045969990987213619994154CU04",
+    //   "outputHistoryId": "bf6c241a-0968-ee11-9ae7-002248015232"
+    // }
     // {
     //   "accountid": "82b4fc2f-bc4c-ee11-be6f-6045bdc1ec82",
     //   "partnerid": "b68dbc7d-76fc-ec11-82e6-002248428304",
@@ -33,7 +71,7 @@ export const fetchInitialDataAsync = async() => {
           },
           timeout: 30000,
         });
-        console.log('res ==> ', res)
+    console.log('res ==> ', res)
     if (res?.status !== 200) throw new Error();
     return {result: (res as any)?.data, error: false}
   } catch (error) {
