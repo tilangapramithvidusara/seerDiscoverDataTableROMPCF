@@ -1,3 +1,113 @@
+// ANALYSIS AND DESING
+
+export const analysisAndDesign = {
+  title: 'ANALYSIS & DESIGN',
+  row: 'Analysis and Design'
+}
+export const cusomizationDesignanAlysisAndDesign = {
+  title: 'ANALYSIS & DESIGN',
+  row: 'Customisations (Design)'
+}
+export const customRequirementDesignAnalysisAndDesign = {
+  title: 'ANALYSIS & DESIGN',
+  row: 'Custom Requirements (Design)'
+}
+export const documentationAnalysisAndDesign = {
+  title: 'ANALYSIS & DESIGN',
+  row: 'Documentation'
+}
+export const designReviewanAlysisAndDesign = {
+  title: 'ANALYSIS & DESIGN',
+  row: 'Design Review'
+}
+export const projectMangerAnalysisAndDesign = {
+  title: 'ANALYSIS & DESIGN',
+  row: 'Project Manager'
+}
+
+
+// BUILD
+export const configurationBuild = {
+  title: 'BUILD',
+  row: 'Configuration'
+}
+export const integrationsBuild = {
+  title: 'BUILD',
+  row: 'Integrations'
+}
+export const customisationBuild = {
+  title: 'BUILD',
+  row: 'Customisations (Build)'
+}
+export const customRequirementBuild = {
+  title: 'BUILD',
+  row: 'Custom Requirements (Build)'
+}
+export const documnentLayoutBuild = {
+  title: 'BUILD',
+  row: 'Document Layouts'
+}
+export const reporting = {
+  title: 'BUILD',
+  row: 'Reporting'
+}
+export const dataMigrationBuild = {
+  title: 'BUILD',
+  row: 'Data Migration'
+}
+export const crpBuild = {
+  title: 'BUILD',
+  row: 'CRP'
+}
+export const testingBuild = {
+  title: 'BUILD',
+  row: 'Testing'
+}
+export const projectManagerBuild = {
+  title: 'BUILD',
+  row: 'Project Manager'
+}
+
+// DEPLOY
+export const trainTheTrainerDeploy = {
+  title: 'DEPLOY',
+  row: 'Train-the-trainer'
+}
+export const uatEncPrepDeploy = {
+  title: 'DEPLOY',
+  row: 'UAT Environment Preparation'
+}
+export const uatSupportDeploy = {
+  title: 'DEPLOY',
+  row: 'UAT Support'
+}
+export const prodEnvPrepDeploy = {
+  title: 'DEPLOY',
+  row: 'PROD Environment Preparation'
+}
+export const supportHandoverDeploy = {
+  title: 'DEPLOY',
+  row: 'Support Handover'
+}
+export const projectMangerDeploy = {
+  title: 'DEPLOY',
+  row: 'Project Manager'
+}
+
+// OPERATION
+export const endUserTrainingOperation = {
+  title: 'OPERATION',
+  row: 'End user training'
+}
+export const postGoLiveSupportOperation = {
+  title: 'OPERATION',
+  row: 'Post Go-Live Support'
+}
+export const projectManagerOperation = {
+  title: 'OPERATION',
+  row: 'Project Manager'
+}
+
 export const dataIdentify = [
   {
     title: "ANALYSIS & DESIGN",

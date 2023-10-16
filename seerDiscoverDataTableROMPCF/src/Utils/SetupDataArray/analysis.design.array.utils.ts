@@ -1,4 +1,4 @@
-import { dataIdentify, filterTypesPriority } from "../../Constants/identifiedData";
+import { analysisAndDesign, dataIdentify, filterTypesPriority } from "../../Constants/identifiedData";
 import { generateAnalysisDesignMValue, generateIColoumnValue } from "../EstimateAveRate/analysis.design.utils";
 import { inititlaData } from "../../Constants/apiSample";
 import { DataSet } from "../../Constants/SampleData";
@@ -8,23 +8,36 @@ export const arrayGenerator = async (initialDataSet: any) => {
   let resultArray: any[] = [];
 
   try {
-    const promises = dataIdentify.map(async (item: any) => {
-      const { title, rows } = item;
+    const analisisAndDesignCalculation = await generateIColoumnValue(initialDataSet, analysisAndDesign.row);
+    (data[0] as any).M = analisisAndDesignCalculation?.analysisDesing?.resultValue;
+    (data[0] as any)['M/S'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMS;
+    (data[0] as any)['M/S/C'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMSC;
 
-      if (rows.includes('Analysis and Design')) {
-        const response: any = await generateIColoumnValue(initialDataSet);
-          (data[0] as any).M = response?.resultValue;
-          (data[0] as any)['M/S'] = response?.resultValueMS;
-          (data[0] as any)['M/S/C'] = response?.resultValueMSC;
-          console.log("Analysis and Design response => ", response);
-        await Promise.all([response]);
-        // Update resultArray with the response
-        // resultArray.push(response);
-      }
-    });
+    (data[1] as any).M = analisisAndDesignCalculation?.customisationDesing?.resultValue;
+    (data[1] as any)['M/S'] = analisisAndDesignCalculation?.customisationDesing?.resultValueMS;
+    (data[1] as any)['M/S/C'] = analisisAndDesignCalculation?.customisationDesing?.resultValueMSC;
+
+    (data[2] as any).M = analisisAndDesignCalculation?.customRequirementDesing?.resultValue;
+    (data[2] as any)['M/S'] = analisisAndDesignCalculation?.customRequirementDesing?.resultValueMS;
+    (data[2] as any)['M/S/C'] = analisisAndDesignCalculation?.customRequirementDesing?.resultValueMSC;
+    await Promise.all([analisisAndDesignCalculation]);
+    // const promises = dataIdentify.map(async (item: any) => {
+    //   const { title, rows } = item;
+
+    //   if (rows.includes('Analysis and Design')) {
+    //     const response: any = await generateIColoumnValue(initialDataSet, analysisAndDesign.row);
+    //       (data[0] as any).M = response?.resultValue;
+    //       (data[0] as any)['M/S'] = response?.resultValueMS;
+    //       (data[0] as any)['M/S/C'] = response?.resultValueMSC;
+    //       console.log("Analysis and Design response => ", response);
+    //     await Promise.all([response]);
+    //     // Update resultArray with the response
+    //     // resultArray.push(response);
+    //   }
+    // });
 
     // Wait for all asynchronous operations to complete
-    await Promise.all(promises);
+    // await Promise.all(promises);
 
     console.log('resultArray ', resultArray, data);
     return data;

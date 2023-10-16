@@ -1,33 +1,99 @@
 import { fitGapData, moscowsData } from "../../Constants/pickListData";
+import { generateCustomRequirementMValue } from "./custom.requirements.utils";
+import { generateCustomisationDesignMValue } from "./customization.design.utils";
 
-export const generateIColoumnValue = async(inititlaData: any) => {
+export const generateIColoumnValue = async(inititlaData: any, title: string) => {
   const condition = true;
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
+
+  let resultValueAnalisisDesign = 0;
+  let resultValueMSAnalisisDesign = 0;
+  let resultValueMSCAnalisisDesign = 0;
+
+  let resultValueCustomisationDesign = 0;
+  let resultValueMSCustomisationDesign = 0;
+  let resultValueMSCCustomisationDesign = 0;
+
+  let resultValueCustomRequirementDesign = 0;
+  let resultValueMSCustomRequirementDesign = 0;
+  let resultValueMSCCustomRequirementDesign = 0;
+
   
   try {
-    const response = await generateAnalysisDesignMValue(inititlaData);
-    console.log("response ====> ", response);
+    const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData);
+    const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData)
+    const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData);
+
+    console.log("response ====> ", responseAnalisisDesign, responseCustomisationDesign);
     
     if (condition) {
       const {parameterModel} = inititlaData;
       if (parameterModel?.length) {
         const { hoursPerday, hourlyRate } = parameterModel[0];
-        resultValue = response?.resultValue * hoursPerday * hourlyRate?.value || 0
-        resultValueMS = response?.resultValueMS * hoursPerday * hourlyRate?.value || 0
-        resultValueMSC = response?.resultValueMSC * hoursPerday * hourlyRate?.value || 0
+        resultValueAnalisisDesign = responseAnalisisDesign?.resultValue * hoursPerday * hourlyRate?.value || 0
+        resultValueMSAnalisisDesign = responseAnalisisDesign?.resultValueMS * hoursPerday * hourlyRate?.value || 0
+        resultValueMSCAnalisisDesign = responseAnalisisDesign?.resultValueMSC * hoursPerday * hourlyRate?.value || 0
+
+        resultValueCustomisationDesign = responseCustomisationDesign?.customisation?.resultValue * hoursPerday * hourlyRate?.value || 0
+        resultValueMSCustomisationDesign = responseCustomisationDesign?.customisation?.resultValueMS * hoursPerday * hourlyRate?.value || 0
+        resultValueMSCCustomisationDesign = responseCustomisationDesign?.customisation?.resultValueMSC * hoursPerday * hourlyRate?.value || 0
+
+        resultValueCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValue * hoursPerday * hourlyRate?.value || 0
+        resultValueMSCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValueMS * hoursPerday * hourlyRate?.value || 0
+        resultValueMSCCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValueMSC * hoursPerday * hourlyRate?.value || 0
       }
       
-      console.log("generateIColoumnValue true ==> ", resultValue, resultValueMS, resultValueMSC);
-      return {resultValue, resultValueMS, resultValueMSC};
+      console.log("generateIColoumnValue resultValueAnalisisDesign true ==> ", resultValueAnalisisDesign, resultValueMSAnalisisDesign, resultValueMSCAnalisisDesign);
+      console.log("generateIColoumnValue CustomisationDesign true ==> ", resultValueCustomisationDesign, resultValueMSCustomisationDesign, resultValueMSCCustomisationDesign);
+      console.log("generateIColoumnValue customRequirement true ==> ", resultValueCustomRequirementDesign, resultValueMSCustomRequirementDesign, resultValueMSCCustomRequirementDesign);
+      return {
+        analysisDesing: {
+          resultValue: resultValueAnalisisDesign,
+          resultValueMS: resultValueMSAnalisisDesign, 
+          resultValueMSC: resultValueMSCAnalisisDesign
+        },
+        customisationDesing: {
+          resultValue: resultValueCustomisationDesign,
+          resultValueMS: resultValueMSCustomisationDesign, 
+          resultValueMSC: resultValueMSCCustomisationDesign
+        },
+        customRequirementDesing: {
+          resultValue: resultValueCustomRequirementDesign,
+          resultValueMS: resultValueMSCustomRequirementDesign, 
+          resultValueMSC: resultValueMSCCustomRequirementDesign
+        }
+      };
     } else {
       console.log("generateIColoumnValue false ==> ", resultValue);
-      return {resultValue, resultValueMS, resultValueMSC};
+      return {
+        analysisDesing: {
+          resultValue,
+          resultValueMS, 
+          resultValueMSC
+        },
+        customisationDesing: {
+          resultValue,
+          resultValueMS, 
+          resultValueMSC
+        }
+      }
     }
   } catch (error) {
     console.log("generateIColoumnValue error ==> ", error);
-    return {resultValue, resultValueMS, resultValueMSC};
+    return {
+      analysisDesing: {
+        resultValue,
+        resultValueMS, 
+        resultValueMSC
+      },
+      customisationDesing: {
+        resultValue,
+        resultValueMS, 
+        resultValueMSC
+      }
+    }
   }
 }
 
@@ -202,7 +268,7 @@ const calculateResultValue = (
   parameterModel: any[]
 ) => {
   const primaryResourceDesignValueFromBaseData = BaseData.reduce((acc, baseItem) => {
-    if (moscowsData?.[baseItem?.seerMoscow] === moscowsData?.[100000000]) {
+    if (moscowsData?.[baseItem?.seerMoscow] === moscowsData?.[100000000] && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
       const quantityFactor = baseItem?.quantity > 0 ? baseItem?.quantity : 1;
       return acc + (baseItem?.designEstimate * (baseItem?.resourceSplit / 100) * quantityFactor);
     }
@@ -210,7 +276,7 @@ const calculateResultValue = (
   }, 0);
 
   const secondaryResourceDesignValueFromBaseData = BaseData.reduce((acc, baseItem) => {
-    if (moscowsData?.[baseItem?.seerMoscow] === moscowsData?.[100000000]) {
+    if (moscowsData?.[baseItem?.seerMoscow] === moscowsData?.[100000000] && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
       return acc + (baseItem?.designEstimate * ((100 - baseItem?.resourceSplit) / 100));
     }
     return acc;
