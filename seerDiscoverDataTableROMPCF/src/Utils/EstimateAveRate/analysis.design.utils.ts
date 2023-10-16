@@ -1,6 +1,8 @@
 import { fitGapData, moscowsData } from "../../Constants/pickListData";
 import { generateCustomRequirementMValue } from "./custom.requirements.utils";
 import { generateCustomisationDesignMValue } from "./customization.design.utils";
+import { generateDesignReviewMValue } from "./design.review.utils";
+import { generateDocumentationMValue } from "./documentation.utils";
 
 export const generateIColoumnValue = async(inititlaData: any, title: string) => {
   const condition = true;
@@ -20,11 +22,22 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
   let resultValueMSCustomRequirementDesign = 0;
   let resultValueMSCCustomRequirementDesign = 0;
 
+  let resultValueDocumentation = 0;
+  let resultValueMSDocumentation = 0;
+  let resultValueMSCDocumentation = 0;
+
+  let resultValueDesignReview = 0;
+  let resultValueMSDesignReview = 0;
+  let resultValueMSCDesignReview = 0;
+
   
   try {
     const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData);
     const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData)
     const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData);
+
+    const responseDocumentation = await generateDocumentationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign})
+    const responseDesignReview = await generateDesignReviewMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseDocumentation})
 
     console.log("response ====> ", responseAnalisisDesign, responseCustomisationDesign);
     
@@ -43,6 +56,14 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
         resultValueCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValue * hoursPerday * hourlyRate?.value || 0
         resultValueMSCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValueMS * hoursPerday * hourlyRate?.value || 0
         resultValueMSCCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValueMSC * hoursPerday * hourlyRate?.value || 0
+
+        resultValueDocumentation = responseDocumentation?.documentation?.resultValue * hoursPerday * hourlyRate?.value || 0
+        resultValueMSDocumentation = responseDocumentation?.documentation?.resultValueMS * hoursPerday * hourlyRate?.value || 0
+        resultValueMSCDocumentation = responseDocumentation?.documentation?.resultValueMSC * hoursPerday * hourlyRate?.value || 0
+
+        resultValueDesignReview = responseDesignReview?.designReview?.resultValue * hoursPerday * hourlyRate?.value || 0
+        resultValueMSDesignReview = responseDesignReview?.designReview?.resultValueMS * hoursPerday * hourlyRate?.value || 0
+        resultValueMSCDesignReview = responseDesignReview?.designReview?.resultValueMSC * hoursPerday * hourlyRate?.value || 0
       }
       
       console.log("generateIColoumnValue resultValueAnalisisDesign true ==> ", resultValueAnalisisDesign, resultValueMSAnalisisDesign, resultValueMSCAnalisisDesign);
@@ -63,6 +84,16 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           resultValue: resultValueCustomRequirementDesign,
           resultValueMS: resultValueMSCustomRequirementDesign, 
           resultValueMSC: resultValueMSCCustomRequirementDesign
+        },
+        documentation: {
+          resultValue: resultValueDocumentation,
+          resultValueMS: resultValueMSDocumentation, 
+          resultValueMSC: resultValueMSCDocumentation
+        },
+        designReview: {
+          resultValue: resultValueDesignReview,
+          resultValueMS: resultValueMSDesignReview, 
+          resultValueMSC: resultValueMSCDesignReview
         }
       };
     } else {

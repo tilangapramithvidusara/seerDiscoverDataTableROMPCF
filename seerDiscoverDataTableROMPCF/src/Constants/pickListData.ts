@@ -13,3 +13,9 @@ export const fitGapData: any = {
   "100000002": "Partial",
   "100000003": "ISV Fit",
 }
+
+export const percentData: any = {
+  '100000000': 'FTE',
+  '100000001': "Percent",
+  "100000002": "Hours",
+}

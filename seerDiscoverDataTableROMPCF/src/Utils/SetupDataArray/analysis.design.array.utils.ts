@@ -20,6 +20,14 @@ export const arrayGenerator = async (initialDataSet: any) => {
     (data[2] as any).M = analisisAndDesignCalculation?.customRequirementDesing?.resultValue;
     (data[2] as any)['M/S'] = analisisAndDesignCalculation?.customRequirementDesing?.resultValueMS;
     (data[2] as any)['M/S/C'] = analisisAndDesignCalculation?.customRequirementDesing?.resultValueMSC;
+
+    (data[3] as any).M = analisisAndDesignCalculation?.documentation?.resultValue;
+    (data[3] as any)['M/S'] = analisisAndDesignCalculation?.documentation?.resultValueMS;
+    (data[3] as any)['M/S/C'] = analisisAndDesignCalculation?.documentation?.resultValueMSC;
+
+    (data[4] as any).M = analisisAndDesignCalculation?.designReview?.resultValue;
+    (data[4] as any)['M/S'] = analisisAndDesignCalculation?.designReview?.resultValueMS;
+    (data[4] as any)['M/S/C'] = analisisAndDesignCalculation?.designReview?.resultValueMSC;
     await Promise.all([analisisAndDesignCalculation]);
     // const promises = dataIdentify.map(async (item: any) => {
     //   const { title, rows } = item;

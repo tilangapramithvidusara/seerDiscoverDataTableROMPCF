@@ -68,7 +68,15 @@ export const data: Person[] = [
   {
     "nameCategory": "ANALYSIS & DESIGN",
     titleCode: '1',
-    name: 'Project Manager',
+    name: 'Documentation',
+    M: 5510.4,
+    'M/S': 5980.8,
+    'M/S/C': 6232.8	
+  },
+  {
+    "nameCategory": "ANALYSIS & DESIGN",
+    titleCode: '1',
+    name: 'Design Review',
     M: 5510.4,
     'M/S': 5980.8,
     'M/S/C': 6232.8	
