@@ -1,7 +1,7 @@
 import { fitGapData, moscowsData } from "../../Constants/pickListData";
 
-export const generateCustomisationDesignMValue = async(inititlaData: any) => {
-  const condition = "Days"; // need to check with 'Estimate - Resource Milestone'!$C$1
+export const generateCustomisationDesignMValue = async(inititlaData: any, condition: boolean) => {
+  // need to check with 'Estimate - Resource Milestone'!$C$1
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -20,51 +20,52 @@ export const generateCustomisationDesignMValue = async(inititlaData: any) => {
       resultValueMSC
     }
   }
+  // Must Customisation
+  let primaryResourceDesignValueFromCustomisationModels = 0;
+  let secondaryResourceDesignValueFromBaseData = 0;
+
+  // Must Should Customisation
+  let primaryResourceDesignValueFromCustomisationModelsMS = 0;
+  let secondaryResourceDesignValueFromBaseDataMS = 0;
+
+  // Must Should Could Customisation
+  let primaryResourceDesignValueFromCustomisationModelsMSC = 0;
+  let secondaryResourceDesignValueFromBaseDataMSC = 0;
+
+  // Must Custom Requirement
+  let primaryResourceDesignValueFromCustomRequirment = 0;
+  let secondaryResourceDesignValueFromCustomRequirment = 0;
+  let primaryResourceDesignValueFromModuleData = 0;
+  let secondaryResourceDesignValueFromModuleData = 0;
+
+  // Must Should Custom Requirement
+  let primaryResourceDesignValueFromCustomRequirmentMS = 0;
+  let secondaryResourceDesignValueFromCustomRequirmentMS = 0;
+  let primaryResourceDesignValueFromModuleDataMS = 0;
+  let secondaryResourceDesignValueFromModuleDataMS = 0;
+
+  // Must Should Could Custom Requirement
+  let primaryResourceDesignValueFromCustomRequirmentMSC = 0;
+  let secondaryResourceDesignValueFromCustomRequirmentMSC = 0;
+  let primaryResourceDesignValueFromModuleDataMSC = 0;
+  let secondaryResourceDesignValueFromModuleDataMSC = 0;
+
+  // Must
+  const seenCustomRequirmentMIds = new Set();
+  const seenModuleMIds = new Set();
+
+  // Must Should
+  const seenCustomRequirmentMSIdsMS = new Set();
+  const seenModuleMSIdsMS = new Set();
+
+  // Must Should Could
+  const seenCustomRequirmentMSCIdsMSC = new Set();
+  const seenModuleMSCIdsMSC = new Set();
   // seerMoscow
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels} = inititlaData
-    if (condition && inititlaData) {
-      // Must Customisation
-      let primaryResourceDesignValueFromCustomisationModels = 0;
-      let secondaryResourceDesignValueFromBaseData = 0;
-
-      // Must Should Customisation
-      let primaryResourceDesignValueFromCustomisationModelsMS = 0;
-      let secondaryResourceDesignValueFromBaseDataMS = 0;
-
-      // Must Should Could Customisation
-      let primaryResourceDesignValueFromCustomisationModelsMSC = 0;
-      let secondaryResourceDesignValueFromBaseDataMSC = 0;
-
-      // Must Custom Requirement
-      let primaryResourceDesignValueFromCustomRequirment = 0;
-      let secondaryResourceDesignValueFromCustomRequirment = 0;
-      let primaryResourceDesignValueFromModuleData = 0;
-      let secondaryResourceDesignValueFromModuleData = 0;
-
-      // Must Should Custom Requirement
-      let primaryResourceDesignValueFromCustomRequirmentMS = 0;
-      let secondaryResourceDesignValueFromCustomRequirmentMS = 0;
-      let primaryResourceDesignValueFromModuleDataMS = 0;
-      let secondaryResourceDesignValueFromModuleDataMS = 0;
-
-      // Must Should Could Custom Requirement
-      let primaryResourceDesignValueFromCustomRequirmentMSC = 0;
-      let secondaryResourceDesignValueFromCustomRequirmentMSC = 0;
-      let primaryResourceDesignValueFromModuleDataMSC = 0;
-      let secondaryResourceDesignValueFromModuleDataMSC = 0;
-
-      // Must
-      const seenCustomRequirmentMIds = new Set();
-      const seenModuleMIds = new Set();
-
-      // Must Should
-      const seenCustomRequirmentMSIdsMS = new Set();
-      const seenModuleMSIdsMS = new Set();
-
-      // Must Should Could
-      const seenCustomRequirmentMSCIdsMSC = new Set();
-      const seenModuleMSCIdsMSC = new Set();
+    if (inititlaData) {
+      
 
       const customizationLoop = await CustomisationModels && CustomisationModels.length && CustomisationModels.map(async(customisationItem: any, customisationIndex: number) => {
         console.log('m customisationItem => ', customisationItem);
@@ -105,29 +106,59 @@ export const generateCustomisationDesignMValue = async(inititlaData: any) => {
       
       console.log("generateCustomisationDesignMValue true ==> ", CustomisationModels.length);
       if (parameterModel?.length) {
-        returnObject.customisation.resultValue = (
-            primaryResourceDesignValueFromCustomisationModels 
-          )/parameterModel[0].hoursPerday;
+        returnObject.customisation.resultValue = generateReturnValue(
+          primaryResourceDesignValueFromCustomisationModels,
+          parameterModel[0].hoursPerday,
+          condition
+        )
+        // (
+        //     primaryResourceDesignValueFromCustomisationModels 
+        //   )/parameterModel[0].hoursPerday;
         
-        returnObject.customisation.resultValueMS = (
-          primaryResourceDesignValueFromCustomisationModelsMS 
-          )/parameterModel[0].hoursPerday;
+        returnObject.customisation.resultValueMS = generateReturnValue(
+          primaryResourceDesignValueFromCustomisationModelsMS,
+          parameterModel[0].hoursPerday,
+          condition
+        )
+        // (
+        //   primaryResourceDesignValueFromCustomisationModelsMS 
+        //   )/parameterModel[0].hoursPerday;
 
-        returnObject.customisation.resultValueMSC = (
-          primaryResourceDesignValueFromCustomisationModelsMSC 
-          )/parameterModel[0].hoursPerday;
+        returnObject.customisation.resultValueMSC =  generateReturnValue(
+          primaryResourceDesignValueFromCustomisationModelsMSC,
+          parameterModel[0].hoursPerday,
+          condition
+        )
+        // (
+        //   primaryResourceDesignValueFromCustomisationModelsMSC 
+        //   )/parameterModel[0].hoursPerday;
 
-          returnObject.customRequirement.resultValue = (
-            primaryResourceDesignValueFromCustomRequirment 
-          )/parameterModel[0].hoursPerday;
+        returnObject.customRequirement.resultValue = generateReturnValue(
+          primaryResourceDesignValueFromCustomRequirment,
+          parameterModel[0].hoursPerday,
+          condition
+        )
+        // (
+        //     primaryResourceDesignValueFromCustomRequirment 
+        //   )/parameterModel[0].hoursPerday;
         
-        returnObject.customRequirement.resultValueMS = (
-          primaryResourceDesignValueFromCustomRequirmentMS 
-          )/parameterModel[0].hoursPerday;
+        returnObject.customRequirement.resultValueMS = generateReturnValue(
+          primaryResourceDesignValueFromCustomRequirmentMS,
+          parameterModel[0].hoursPerday,
+          condition
+        )
+        // (
+        //   primaryResourceDesignValueFromCustomRequirmentMS 
+        //   )/parameterModel[0].hoursPerday;
 
-        returnObject.customRequirement.resultValueMSC = (
-          primaryResourceDesignValueFromCustomRequirmentMSC 
-          )/parameterModel[0].hoursPerday;
+        returnObject.customRequirement.resultValueMSC = generateReturnValue(
+          primaryResourceDesignValueFromCustomRequirmentMSC,
+          parameterModel[0].hoursPerday,
+          condition
+        )
+        // (
+        //   primaryResourceDesignValueFromCustomRequirmentMSC 
+        //   )/parameterModel[0].hoursPerday;
         
       }
         console.log("resultValue => ", resultValue);
@@ -141,6 +172,13 @@ export const generateCustomisationDesignMValue = async(inititlaData: any) => {
     console.log("generateAnalysisDesignMValue error ==> ", error);
     return returnObject;
   }
+}
+
+const generateReturnValue = (val1: number, hoursPerDay: number, condtion: boolean) => {
+  if (condtion) {
+    return (val1)/hoursPerDay
+  }
+  return (val1)
 }
 
 const baseReader = (customisationItem: any, primaryResourceDesignValueFromCustomisationModels: number, secondaryResourceDesignValueFromBaseData: number, x?: number) => {

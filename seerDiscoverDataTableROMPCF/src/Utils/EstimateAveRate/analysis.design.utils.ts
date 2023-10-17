@@ -5,7 +5,8 @@ import { generateDesignReviewMValue } from "./design.review.utils";
 import { generateDocumentationMValue } from "./documentation.utils";
 
 export const generateIColoumnValue = async(inititlaData: any, title: string) => {
-  const condition = true;
+  const romParameter = "Days"
+  const condition = romParameter === "Days";
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -32,85 +33,69 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
 
   
   try {
-    const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData);
-    const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData)
-    const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData);
+    const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData, condition);
+    const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData, condition)
+    const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData, condition);
 
-    const responseDocumentation = await generateDocumentationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign})
-    const responseDesignReview = await generateDesignReviewMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseDocumentation})
+    const responseDocumentation = await generateDocumentationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign}, condition)
+    const responseDesignReview = await generateDesignReviewMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseDocumentation}, condition)
 
     console.log("response ====> ", responseAnalisisDesign, responseCustomisationDesign);
-    
-    if (condition) {
-      const {parameterModel} = inititlaData;
-      if (parameterModel?.length) {
-        const { hoursPerday, hourlyRate } = parameterModel[0];
-        resultValueAnalisisDesign = responseAnalisisDesign?.resultValue * hoursPerday * hourlyRate?.value || 0
-        resultValueMSAnalisisDesign = responseAnalisisDesign?.resultValueMS * hoursPerday * hourlyRate?.value || 0
-        resultValueMSCAnalisisDesign = responseAnalisisDesign?.resultValueMSC * hoursPerday * hourlyRate?.value || 0
 
-        resultValueCustomisationDesign = responseCustomisationDesign?.customisation?.resultValue * hoursPerday * hourlyRate?.value || 0
-        resultValueMSCustomisationDesign = responseCustomisationDesign?.customisation?.resultValueMS * hoursPerday * hourlyRate?.value || 0
-        resultValueMSCCustomisationDesign = responseCustomisationDesign?.customisation?.resultValueMSC * hoursPerday * hourlyRate?.value || 0
+    const {parameterModel} = inititlaData;
+    if (parameterModel?.length) {
+      const { hoursPerday, hourlyRate } = parameterModel[0];
+      resultValueAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValue, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValueMS, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSCAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValueMSC, hourlyRate?.value, hoursPerday, condition)
 
-        resultValueCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValue * hoursPerday * hourlyRate?.value || 0
-        resultValueMSCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValueMS * hoursPerday * hourlyRate?.value || 0
-        resultValueMSCCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValueMSC * hoursPerday * hourlyRate?.value || 0
+      resultValueCustomisationDesign = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultValue, hourlyRate?.value, hoursPerday, condition);
+      resultValueMSCustomisationDesign = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
+      resultValueMSCCustomisationDesign = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultValueMSC, hourlyRate?.value, hoursPerday, condition);
 
-        resultValueDocumentation = responseDocumentation?.documentation?.resultValue * hoursPerday * hourlyRate?.value || 0
-        resultValueMSDocumentation = responseDocumentation?.documentation?.resultValueMS * hoursPerday * hourlyRate?.value || 0
-        resultValueMSCDocumentation = responseDocumentation?.documentation?.resultValueMSC * hoursPerday * hourlyRate?.value || 0
+      resultValueCustomRequirementDesign = checkConditionAndGenerateValue(responseCustomRequirementDesign?.customRequirement?.resultValue, hourlyRate?.value, hoursPerday, condition);
+      resultValueMSCustomRequirementDesign = checkConditionAndGenerateValue(responseCustomRequirementDesign?.customRequirement?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
+      resultValueMSCCustomRequirementDesign = checkConditionAndGenerateValue(responseCustomRequirementDesign?.customRequirement?.resultValueMSC, hourlyRate?.value, hoursPerday, condition);
 
-        resultValueDesignReview = responseDesignReview?.designReview?.resultValue * hoursPerday * hourlyRate?.value || 0
-        resultValueMSDesignReview = responseDesignReview?.designReview?.resultValueMS * hoursPerday * hourlyRate?.value || 0
-        resultValueMSCDesignReview = responseDesignReview?.designReview?.resultValueMSC * hoursPerday * hourlyRate?.value || 0
-      }
-      
-      console.log("generateIColoumnValue resultValueAnalisisDesign true ==> ", resultValueAnalisisDesign, resultValueMSAnalisisDesign, resultValueMSCAnalisisDesign);
-      console.log("generateIColoumnValue CustomisationDesign true ==> ", resultValueCustomisationDesign, resultValueMSCustomisationDesign, resultValueMSCCustomisationDesign);
-      console.log("generateIColoumnValue customRequirement true ==> ", resultValueCustomRequirementDesign, resultValueMSCustomRequirementDesign, resultValueMSCCustomRequirementDesign);
-      return {
-        analysisDesing: {
-          resultValue: resultValueAnalisisDesign,
-          resultValueMS: resultValueMSAnalisisDesign, 
-          resultValueMSC: resultValueMSCAnalisisDesign
-        },
-        customisationDesing: {
-          resultValue: resultValueCustomisationDesign,
-          resultValueMS: resultValueMSCustomisationDesign, 
-          resultValueMSC: resultValueMSCCustomisationDesign
-        },
-        customRequirementDesing: {
-          resultValue: resultValueCustomRequirementDesign,
-          resultValueMS: resultValueMSCustomRequirementDesign, 
-          resultValueMSC: resultValueMSCCustomRequirementDesign
-        },
-        documentation: {
-          resultValue: resultValueDocumentation,
-          resultValueMS: resultValueMSDocumentation, 
-          resultValueMSC: resultValueMSCDocumentation
-        },
-        designReview: {
-          resultValue: resultValueDesignReview,
-          resultValueMS: resultValueMSDesignReview, 
-          resultValueMSC: resultValueMSCDesignReview
-        }
-      };
-    } else {
-      console.log("generateIColoumnValue false ==> ", resultValue);
-      return {
-        analysisDesing: {
-          resultValue,
-          resultValueMS, 
-          resultValueMSC
-        },
-        customisationDesing: {
-          resultValue,
-          resultValueMS, 
-          resultValueMSC
-        }
-      }
+      resultValueDocumentation = checkConditionAndGenerateValue(responseDocumentation?.documentation?.resultValue, hourlyRate?.value, hoursPerday, condition);
+      resultValueMSDocumentation = checkConditionAndGenerateValue(responseDocumentation?.documentation?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
+      resultValueMSCDocumentation = checkConditionAndGenerateValue(responseDocumentation?.documentation?.resultValueMSC, hourlyRate?.value, hoursPerday, condition);
+
+      resultValueDesignReview = checkConditionAndGenerateValue(responseDesignReview?.designReview?.resultValue, hourlyRate?.value, hoursPerday, condition);
+      resultValueMSDesignReview = checkConditionAndGenerateValue(responseDesignReview?.designReview?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
+      resultValueMSCDesignReview = checkConditionAndGenerateValue(responseDesignReview?.designReview?.resultValueMSC, hourlyRate?.value, hoursPerday, condition);
     }
+    
+    console.log("generateIColoumnValue resultValueAnalisisDesign true ==> ", resultValueAnalisisDesign, resultValueMSAnalisisDesign, resultValueMSCAnalisisDesign);
+    console.log("generateIColoumnValue CustomisationDesign true ==> ", resultValueCustomisationDesign, resultValueMSCustomisationDesign, resultValueMSCCustomisationDesign);
+    console.log("generateIColoumnValue customRequirement true ==> ", resultValueCustomRequirementDesign, resultValueMSCustomRequirementDesign, resultValueMSCCustomRequirementDesign);
+    return {
+      analysisDesing: {
+        resultValue: resultValueAnalisisDesign,
+        resultValueMS: resultValueMSAnalisisDesign, 
+        resultValueMSC: resultValueMSCAnalisisDesign
+      },
+      customisationDesing: {
+        resultValue: resultValueCustomisationDesign,
+        resultValueMS: resultValueMSCustomisationDesign, 
+        resultValueMSC: resultValueMSCCustomisationDesign
+      },
+      customRequirementDesing: {
+        resultValue: resultValueCustomRequirementDesign,
+        resultValueMS: resultValueMSCustomRequirementDesign, 
+        resultValueMSC: resultValueMSCCustomRequirementDesign
+      },
+      documentation: {
+        resultValue: resultValueDocumentation,
+        resultValueMS: resultValueMSDocumentation, 
+        resultValueMSC: resultValueMSCDocumentation
+      },
+      designReview: {
+        resultValue: resultValueDesignReview,
+        resultValueMS: resultValueMSDesignReview, 
+        resultValueMSC: resultValueMSCDesignReview
+      }
+    };
   } catch (error) {
     console.log("generateIColoumnValue error ==> ", error);
     return {
@@ -128,50 +113,58 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
   }
 }
 
+const checkConditionAndGenerateValue = (calculatedValue: number, hourlyRate: number, hoursPerDay: number, condition: boolean) => {
+  if (condition) {
+    return calculatedValue * hourlyRate * hoursPerDay || 0;
+  }
+  return calculatedValue * hourlyRate || 0;
+}
+
 // C5 value generate
-export const generateAnalysisDesignMValue = async(inititlaData: any) => {
-  const condition = "Days"; // need to check with 'Estimate - Resource Milestone'!$C$1
+export const generateAnalysisDesignMValue = async(inititlaData: any, condition: boolean) => {
+   // need to check with 'Estimate - Resource Milestone'!$C$1
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
   let x = 0
   let y = 0
+  // Must
+  let primaryResourceDesignValueFromBaseData = 0;
+  let secondaryResourceDesignValueFromBaseData = 0;
+  let primaryResourceDesignValueFromModuleData = 0;
+  let secondaryResourceDesignValueFromModuleData = 0;
+
+  // Must Should
+  let primaryResourceDesignValueFromBaseDataMS = 0;
+  let secondaryResourceDesignValueFromBaseDataMS = 0;
+  let primaryResourceDesignValueFromModuleDataMS = 0;
+  let secondaryResourceDesignValueFromModuleDataMS = 0;
+
+  // Must Should Could
+  let primaryResourceDesignValueFromBaseDataMSC = 0;
+  let secondaryResourceDesignValueFromBaseDataMSC = 0;
+  let primaryResourceDesignValueFromModuleDataMSC = 0;
+  let secondaryResourceDesignValueFromModuleDataMSC = 0;
+
+  // Must
+  const seenBaseMIds = new Set();
+  const seenModuleMIds = new Set();
+
+  // Must Should
+  const seenBaseMSIdsMS = new Set();
+  const seenModuleMSIdsMS = new Set();
+
+  // Must Should Could
+  const seenBaseMSCIdsMSC = new Set();
+  const seenModuleMSCIdsMSC = new Set();
   // seerMoscow
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel} = inititlaData
-    if (condition && inititlaData) {
-      // Must
-      let primaryResourceDesignValueFromBaseData = 0;
-      let secondaryResourceDesignValueFromBaseData = 0;
-      let primaryResourceDesignValueFromModuleData = 0;
-      let secondaryResourceDesignValueFromModuleData = 0;
+    if (inititlaData) {
 
-      // Must Should
-      let primaryResourceDesignValueFromBaseDataMS = 0;
-      let secondaryResourceDesignValueFromBaseDataMS = 0;
-      let primaryResourceDesignValueFromModuleDataMS = 0;
-      let secondaryResourceDesignValueFromModuleDataMS = 0;
-
-      // Must Should Could
-      let primaryResourceDesignValueFromBaseDataMSC = 0;
-      let secondaryResourceDesignValueFromBaseDataMSC = 0;
-      let primaryResourceDesignValueFromModuleDataMSC = 0;
-      let secondaryResourceDesignValueFromModuleDataMSC = 0;
-
-      // Must
-      const seenBaseMIds = new Set();
-      const seenModuleMIds = new Set();
-
-      // Must Should
-      const seenBaseMSIdsMS = new Set();
-      const seenModuleMSIdsMS = new Set();
-
-      // Must Should Could
-      const seenBaseMSCIdsMSC = new Set();
-      const seenModuleMSCIdsMSC = new Set();
-
+      // BASE DATA LOOP
       const baseLoop = await BaseData && BaseData.length && BaseData.map(async(baseItem: any, baseIndex: number) => {
-
+        // ANALYSIS AND DESING
         // Must
         if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
           //
@@ -201,6 +194,13 @@ export const generateAnalysisDesignMValue = async(inititlaData: any) => {
           console.log('switch MSC primaryResourceDesignValueFromBaseData => ', primaryResourceDesignValueFromBaseDataMSC);
           console.log('switch MSC secondaryResourceDesignValueFromBaseData => ', secondaryResourceDesignValueFromBaseDataMSC);
         }
+
+        // CONFIGURATION
+        // Must
+        if (moscowsData?.[baseItem?.seerMoscow] !== moscowsData?.[100000003]) {
+          //
+        }
+
       });
       
       const moduleLoop = await ModuleData && ModuleData?.length && ModuleData.map((moduleDataItem: any, moduleDataIndex: any) => {
@@ -245,26 +245,50 @@ export const generateAnalysisDesignMValue = async(inititlaData: any) => {
       });
       console.log("generateAnalysisDesignMValue true ==> ", BaseData.length, ModuleData.length);
       if (parameterModel?.length) {
-        resultValue = (
-            primaryResourceDesignValueFromBaseData 
-            + secondaryResourceDesignValueFromBaseData 
-            + primaryResourceDesignValueFromModuleData 
-            + secondaryResourceDesignValueFromModuleData
-          )/parameterModel[0].hoursPerday;
+        resultValue = generateReturnValue(
+          primaryResourceDesignValueFromBaseData,
+          secondaryResourceDesignValueFromBaseData,
+          primaryResourceDesignValueFromModuleData,
+          secondaryResourceDesignValueFromModuleData,
+          parameterModel[0].hoursPerday,
+          condition
+        );
+        // (
+        //     primaryResourceDesignValueFromBaseData 
+        //     + secondaryResourceDesignValueFromBaseData 
+        //     + primaryResourceDesignValueFromModuleData 
+        //     + secondaryResourceDesignValueFromModuleData
+        //   )/parameterModel[0].hoursPerday;
         
-        resultValueMS = (
-          primaryResourceDesignValueFromBaseDataMS 
-            + secondaryResourceDesignValueFromBaseDataMS 
-            + primaryResourceDesignValueFromModuleDataMS 
-            + secondaryResourceDesignValueFromModuleDataMS
-          )/parameterModel[0].hoursPerday;
+        resultValueMS = generateReturnValue(
+          primaryResourceDesignValueFromBaseDataMS,
+          secondaryResourceDesignValueFromBaseDataMS,
+          primaryResourceDesignValueFromModuleDataMS,
+          secondaryResourceDesignValueFromModuleDataMS,
+          parameterModel[0].hoursPerday,
+          condition
+        );
+        // (
+        //   primaryResourceDesignValueFromBaseDataMS 
+        //     + secondaryResourceDesignValueFromBaseDataMS 
+        //     + primaryResourceDesignValueFromModuleDataMS 
+        //     + secondaryResourceDesignValueFromModuleDataMS
+        //   )/parameterModel[0].hoursPerday;
 
-        resultValueMSC = (
-          primaryResourceDesignValueFromBaseDataMSC 
-            + secondaryResourceDesignValueFromBaseDataMSC
-            + primaryResourceDesignValueFromModuleDataMSC 
-            + secondaryResourceDesignValueFromModuleDataMSC
-          )/parameterModel[0].hoursPerday;
+        resultValueMSC = generateReturnValue(
+          primaryResourceDesignValueFromBaseDataMSC,
+          secondaryResourceDesignValueFromBaseDataMSC,
+          primaryResourceDesignValueFromModuleDataMSC,
+          secondaryResourceDesignValueFromModuleDataMSC,
+          parameterModel[0].hoursPerday,
+          condition
+        );
+        // (
+        //   primaryResourceDesignValueFromBaseDataMSC 
+        //     + secondaryResourceDesignValueFromBaseDataMSC
+        //     + primaryResourceDesignValueFromModuleDataMSC 
+        //     + secondaryResourceDesignValueFromModuleDataMSC
+        //   )/parameterModel[0].hoursPerday;
         
       }
         console.log("resultValue => ", resultValue);
@@ -278,6 +302,13 @@ export const generateAnalysisDesignMValue = async(inititlaData: any) => {
     console.log("generateAnalysisDesignMValue error ==> ", error);
     return {resultValue, resultValueMS, resultValueMSC};
   }
+}
+
+const generateReturnValue = (val1: number, val2: number, val3: number, val4: number, hoursPerDay: number, condtion: boolean) => {
+  if (condtion) {
+    return (val1 + val2 + val3 + val4)/hoursPerDay
+  }
+  return (val1 + val2 + val3 + val4)
 }
 export const generateAnalysisDesignMValue2 = async (inititlaData: any) => {
   try {

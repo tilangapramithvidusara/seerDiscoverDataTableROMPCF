@@ -1,7 +1,7 @@
 import { fitGapData, moscowsData } from "../../Constants/pickListData";
 
-export const generateCustomRequirementMValue = async(inititlaData: any) => {
-  const condition = "Days"; // need to check with 'Estimate - Resource Milestone'!$C$1
+export const generateCustomRequirementMValue = async(inititlaData: any, condition: boolean) => {
+  // need to check with 'Estimate - Resource Milestone'!$C$1
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -15,39 +15,39 @@ export const generateCustomRequirementMValue = async(inititlaData: any) => {
       resultValueMSC
     }
   }
+  // Must Custom Requirement
+  let primaryResourceDesignValueFromCustomRequirment = 0;
+  let secondaryResourceDesignValueFromCustomRequirment = 0;
+  let primaryResourceDesignValueFromModuleData = 0;
+  let secondaryResourceDesignValueFromModuleData = 0;
+
+  // Must Should Custom Requirement
+  let primaryResourceDesignValueFromCustomRequirmentMS = 0;
+  let secondaryResourceDesignValueFromCustomRequirmentMS = 0;
+  let primaryResourceDesignValueFromModuleDataMS = 0;
+  let secondaryResourceDesignValueFromModuleDataMS = 0;
+
+  // Must Should Could Custom Requirement
+  let primaryResourceDesignValueFromCustomRequirmentMSC = 0;
+  let secondaryResourceDesignValueFromCustomRequirmentMSC = 0;
+  let primaryResourceDesignValueFromModuleDataMSC = 0;
+  let secondaryResourceDesignValueFromModuleDataMSC = 0;
+
+  // Must
+  const seenCustomRequirmentMIds = new Set();
+  const seenModuleMIds = new Set();
+
+  // Must Should
+  const seenCustomRequirmentMSIdsMS = new Set();
+  const seenModuleMSIdsMS = new Set();
+
+  // Must Should Could
+  const seenCustomRequirmentMSCIdsMSC = new Set();
+  const seenModuleMSCIdsMSC = new Set();
   // seerMoscow
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, CustomRequirmentModel} = inititlaData
-    if (condition && inititlaData) {
-      // Must Custom Requirement
-      let primaryResourceDesignValueFromCustomRequirment = 0;
-      let secondaryResourceDesignValueFromCustomRequirment = 0;
-      let primaryResourceDesignValueFromModuleData = 0;
-      let secondaryResourceDesignValueFromModuleData = 0;
-
-      // Must Should Custom Requirement
-      let primaryResourceDesignValueFromCustomRequirmentMS = 0;
-      let secondaryResourceDesignValueFromCustomRequirmentMS = 0;
-      let primaryResourceDesignValueFromModuleDataMS = 0;
-      let secondaryResourceDesignValueFromModuleDataMS = 0;
-
-      // Must Should Could Custom Requirement
-      let primaryResourceDesignValueFromCustomRequirmentMSC = 0;
-      let secondaryResourceDesignValueFromCustomRequirmentMSC = 0;
-      let primaryResourceDesignValueFromModuleDataMSC = 0;
-      let secondaryResourceDesignValueFromModuleDataMSC = 0;
-
-      // Must
-      const seenCustomRequirmentMIds = new Set();
-      const seenModuleMIds = new Set();
-
-      // Must Should
-      const seenCustomRequirmentMSIdsMS = new Set();
-      const seenModuleMSIdsMS = new Set();
-
-      // Must Should Could
-      const seenCustomRequirmentMSCIdsMSC = new Set();
-      const seenModuleMSCIdsMSC = new Set();
+    if (inititlaData) {
 
       const customRequirementLoop = await CustomRequirmentModel && CustomRequirmentModel.length && CustomRequirmentModel.map(async(customRequirementItem: any, customRequirementIndex: number) => {
         console.log('m CustomRequirmentModel => ', customRequirementItem);
@@ -84,17 +84,33 @@ export const generateCustomRequirementMValue = async(inititlaData: any) => {
       
       console.log("generateCustomRequirmentModelMValue true ==> ", CustomRequirmentModel.length);
       if (parameterModel?.length) {
-          returnObject.customRequirement.resultValue = (
-            primaryResourceDesignValueFromCustomRequirment 
-          )/parameterModel[0].hoursPerday;
-        
-        returnObject.customRequirement.resultValueMS = (
-          primaryResourceDesignValueFromCustomRequirmentMS 
-          )/parameterModel[0].hoursPerday;
+        returnObject.customRequirement.resultValue = generateReturnValue(
+          primaryResourceDesignValueFromCustomRequirment,
+          parameterModel[0].hoursPerday,
+          condition
+        )
+        // (
+        //   primaryResourceDesignValueFromCustomRequirment 
+        // )/parameterModel[0].hoursPerday;
+      
+        returnObject.customRequirement.resultValueMS = generateReturnValue(
+          primaryResourceDesignValueFromCustomRequirmentMSC,
+          parameterModel[0].hoursPerday,
+          condition
+        )
+        // (
+        //   primaryResourceDesignValueFromCustomRequirmentMS 
+        //   )/parameterModel[0].hoursPerday;
 
-        returnObject.customRequirement.resultValueMSC = (
-          primaryResourceDesignValueFromCustomRequirmentMSC 
-          )/parameterModel[0].hoursPerday;
+        returnObject.customRequirement.resultValueMSC = 
+        generateReturnValue(
+          primaryResourceDesignValueFromCustomRequirmentMSC,
+          parameterModel[0].hoursPerday,
+          condition
+        )
+        // (
+        //   primaryResourceDesignValueFromCustomRequirmentMSC 
+        //   )/parameterModel[0].hoursPerday;
         
       }
         console.log("resultValue => ", resultValue);
@@ -108,6 +124,13 @@ export const generateCustomRequirementMValue = async(inititlaData: any) => {
     console.log("generateAnalysisDesignMValue error ==> ", error);
     return returnObject;
   }
+}
+
+const generateReturnValue = (val1: number, hoursPerDay: number, condtion: boolean) => {
+  if (condtion) {
+    return (val1)/hoursPerDay
+  }
+  return (val1)
 }
 
 const baseReader = (customRequirementItem: any, primaryResourceDesignValueFromCustomRequirment: number, secondaryResourceDesignValueFromCustomRequirment: number, x?: number) => {
