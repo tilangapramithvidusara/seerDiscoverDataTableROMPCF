@@ -7,6 +7,7 @@ import { generateDocumentationMValue } from "./documentation.utils";
 export const generateIColoumnValue = async(inititlaData: any, title: string) => {
   const romParameter = "Days"
   const condition = romParameter === "Days";
+  // ANALYSIS AND DESIGN
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -30,6 +31,12 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
   let resultValueDesignReview = 0;
   let resultValueMSDesignReview = 0;
   let resultValueMSCDesignReview = 0;
+
+  // BUILD
+  // let resultValue
+  let resultValueConfiguration = 0;
+  let resultValueMSConfiguration = 0;
+  let resultValueMSCConfiguration = 0;
 
   
   try {
@@ -64,6 +71,10 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
       resultValueDesignReview = checkConditionAndGenerateValue(responseDesignReview?.designReview?.resultValue, hourlyRate?.value, hoursPerday, condition);
       resultValueMSDesignReview = checkConditionAndGenerateValue(responseDesignReview?.designReview?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCDesignReview = checkConditionAndGenerateValue(responseDesignReview?.designReview?.resultValueMSC, hourlyRate?.value, hoursPerday, condition);
+
+      resultValueConfiguration = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultValue, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSConfiguration = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultValueMS, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSCConfiguration = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultValueMSC, hourlyRate?.value, hoursPerday, condition)
     }
     
     console.log("generateIColoumnValue resultValueAnalisisDesign true ==> ", resultValueAnalisisDesign, resultValueMSAnalisisDesign, resultValueMSCAnalisisDesign);
@@ -94,6 +105,11 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
         resultValue: resultValueDesignReview,
         resultValueMS: resultValueMSDesignReview, 
         resultValueMSC: resultValueMSCDesignReview
+      },
+      configuration: {
+        resultValue: resultValueConfiguration,
+        resultValueMS: resultValueMSConfiguration, 
+        resultValueMSC: resultValueMSCConfiguration
       }
     };
   } catch (error) {
@@ -128,6 +144,8 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
   let resultValueMSC = 0;
   let x = 0
   let y = 0
+
+  // ANALYSIS AND DESIGN
   // Must
   let primaryResourceDesignValueFromBaseData = 0;
   let secondaryResourceDesignValueFromBaseData = 0;
@@ -158,6 +176,25 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
   const seenBaseMSCIdsMSC = new Set();
   const seenModuleMSCIdsMSC = new Set();
   // seerMoscow
+
+  // CONFIGURATION
+
+  let resultConfigurationValue = 0;
+  let resultConfigurationValueMS = 0;
+  let resultConfigurationValueMSC = 0;
+
+  let buildEstimateConfigurationValueFromBaseData = 0;
+  let buildEstimateConfigurationValueFromModlueData = 0;
+
+  let buildEstimateConfigurationValueFromBaseDataMS = 0;
+  let buildEstimateConfigurationValueFromModlueDataMS = 0;
+
+  let buildEstimateConfigurationValueFromBaseDataMSC = 0;
+  let buildEstimateConfigurationValueFromModlueDataMSC = 0;
+
+  const seenModuleConfigurationMIds = new Set();
+  const seenModuleConfigurationMSIds = new Set();
+  const seenModuleConfigurationMSCIds = new Set();
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel} = inititlaData
     if (inititlaData) {
@@ -197,8 +234,23 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
 
         // CONFIGURATION
         // Must
-        if (moscowsData?.[baseItem?.seerMoscow] !== moscowsData?.[100000003]) {
-          //
+
+        if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
+          // (baseItem?.designEstimate * (baseItem?.resourceSplit / 100)) * baseItem?.quantity
+          buildEstimateConfigurationValueFromBaseData += 
+          baseItem?.quantity > 0 ? baseItem?.buildEstimate * (baseItem?.resourceSplit / 100) * baseItem?.quantity : baseItem?.buildEstimate * (baseItem?.resourceSplit / 100)
+        }
+
+        // Must Should
+        if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
+          buildEstimateConfigurationValueFromBaseDataMS += 
+          baseItem?.quantity > 0 ? baseItem?.buildEstimate * (baseItem?.resourceSplit / 100) * baseItem?.quantity : baseItem?.buildEstimate * (baseItem?.resourceSplit / 100)
+        }
+
+        // Must Should Could
+        if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
+          buildEstimateConfigurationValueFromBaseDataMSC += 
+          baseItem?.quantity > 0 ? baseItem?.buildEstimate * (baseItem?.resourceSplit / 100) * baseItem?.quantity : baseItem?.buildEstimate * (baseItem?.resourceSplit / 100)
         }
 
       });
@@ -242,6 +294,41 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             console.log('switch MSC secondaryResourceDesignValueFromModuleData => ', secondaryResourceDesignValueFromModuleDataMSC);
           }
         }
+
+        // CONFIGURATION  moduleOverrideCustomerSeerEstimateBuild  moduleSeerEstimateBuild moduleOverridePartnerSeerEstimateBuild
+
+        // Must
+        if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000]) {
+          if (!seenModuleConfigurationMIds.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
+            seenModuleConfigurationMIds.add(moduleDataItem?.fitGapProductSeerModule?.id)
+            buildEstimateConfigurationValueFromModlueData += (
+              moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * (moduleDataItem?.moduleSeerResourceSplit / 100)
+              ) + 
+            (moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100))
+          }
+        }
+
+        // Must Should
+        if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001]) {
+          if (!seenModuleConfigurationMSIds.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
+            seenModuleConfigurationMSIds.add(moduleDataItem?.fitGapProductSeerModule?.id)
+            buildEstimateConfigurationValueFromModlueDataMS += (
+              moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * (moduleDataItem?.moduleSeerResourceSplit / 100)
+              ) + 
+            (moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100))
+          }
+        }
+
+        // Must Should Could
+        if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002]) {
+          if (!seenModuleConfigurationMSCIds.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
+            seenModuleConfigurationMSCIds.add(moduleDataItem?.fitGapProductSeerModule?.id)
+            buildEstimateConfigurationValueFromModlueDataMSC += (
+              moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * (moduleDataItem?.moduleSeerResourceSplit / 100)
+              ) + 
+            (moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100))
+          }
+        }
       });
       console.log("generateAnalysisDesignMValue true ==> ", BaseData.length, ModuleData.length);
       if (parameterModel?.length) {
@@ -283,6 +370,28 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           parameterModel[0].hoursPerday,
           condition
         );
+
+        resultConfigurationValue = generateReturnValue(
+          buildEstimateConfigurationValueFromBaseData, 
+          buildEstimateConfigurationValueFromModlueData, 0, 0, 
+          parameterModel[0].hoursPerday, 
+          condition
+        )
+        // (buildEstimateConfigurationValueFromBaseData + buildEstimateConfigurationValueFromModlueData)/parameterModel[0].hoursPerday
+        resultConfigurationValueMS = resultConfigurationValue = generateReturnValue(
+          buildEstimateConfigurationValueFromBaseDataMS, 
+          buildEstimateConfigurationValueFromModlueDataMS, 0, 0, 
+          parameterModel[0].hoursPerday, 
+          condition
+        )
+        //(buildEstimateConfigurationValueFromBaseDataMS + buildEstimateConfigurationValueFromModlueDataMS)/parameterModel[0].hoursPerday
+        resultConfigurationValueMSC = resultConfigurationValue = generateReturnValue(
+          buildEstimateConfigurationValueFromBaseDataMSC, 
+          buildEstimateConfigurationValueFromModlueDataMSC, 0, 0, 
+          parameterModel[0].hoursPerday, 
+          condition
+        )
+        //(buildEstimateConfigurationValueFromBaseDataMSC + buildEstimateConfigurationValueFromModlueDataMSC)/parameterModel[0].hoursPerday
         // (
         //   primaryResourceDesignValueFromBaseDataMSC 
         //     + secondaryResourceDesignValueFromBaseDataMSC
@@ -292,15 +401,32 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         
       }
         console.log("resultValue => ", resultValue);
+        console.log('mm ===> ', 
+        buildEstimateConfigurationValueFromBaseData, 
+        buildEstimateConfigurationValueFromBaseData/8, 
+        buildEstimateConfigurationValueFromModlueData, 
+        (buildEstimateConfigurationValueFromBaseData + buildEstimateConfigurationValueFromModlueData)/8);
       await Promise.all([baseLoop, moduleLoop])
-      return {resultValue, resultValueMS, resultValueMSC};
+      return {resultValue, resultValueMS, resultValueMSC, configuration: {
+        resultValue: resultConfigurationValue,
+        resultValueMS: resultConfigurationValueMS,
+        resultValueMSC: resultConfigurationValueMSC,
+      }};
     } else {
       console.log("generateAnalysisDesignMValue false ==> ");
-      return {resultValue, resultValueMS, resultValueMSC};
+      return {resultValue, resultValueMS, resultValueMSC, configuration: {
+        resultValue: resultConfigurationValue,
+        resultValueMS: resultConfigurationValueMS,
+        resultValueMSC: resultConfigurationValueMSC,
+      }};
     }
   } catch (error) {
     console.log("generateAnalysisDesignMValue error ==> ", error);
-    return {resultValue, resultValueMS, resultValueMSC};
+    return {resultValue, resultValueMS, resultValueMSC, configuration: {
+      resultValue: resultConfigurationValue,
+      resultValueMS: resultConfigurationValueMS,
+      resultValueMSC: resultConfigurationValueMSC,
+    }};
   }
 }
 
@@ -391,9 +517,9 @@ const moduleReader = (moduleDataItem: any, primaryResourceDesignValueFromModuleD
   y += 1;
   // design*(split/100)
   // Design*((100-Split)/100)
-  console.log('primaryResourceDesignValueFromModuleData => ', primaryResourceDesignValueFromModuleData, moduleDataItem?.moduleSeerEstimateDesign * (moduleDataItem?.moduleSeerResourceSplit / 100));
+  // console.log('primaryResourceDesignValueFromModuleData => ', primaryResourceDesignValueFromModuleData, moduleDataItem?.moduleSeerEstimateDesign * (moduleDataItem?.moduleSeerResourceSplit / 100));
   primaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * (moduleDataItem?.moduleSeerResourceSplit / 100)
-  console.log('secondaryResourceDesignValueFromModuleData => ', secondaryResourceDesignValueFromModuleData, moduleDataItem?.moduleSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100));
+  // console.log('secondaryResourceDesignValueFromModuleData => ', secondaryResourceDesignValueFromModuleData, moduleDataItem?.moduleSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100));
   secondaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100)
   return {primaryResourceDesignValueFromModuleData, secondaryResourceDesignValueFromModuleData}
 }

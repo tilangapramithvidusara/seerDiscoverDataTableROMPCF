@@ -17,13 +17,13 @@ import ButtonGroups from "./Buttons/ButtonGroups";
 import { Box, Chip, Grid, Stack, Typography } from "@mui/material";
 
 
-const App = ({dataSet}: {dataSet: any}) => { 
+const App = ({dataSet, onRefreshHandler, isRefreshing}: {dataSet: any, onRefreshHandler?: any, isRefreshing: boolean}) => { 
 
   const items: TabsProps['items'] = [
     {
       key: '1',
       label: 'Report View',
-      children: <AdvancedTable data={dataSet}/>,
+      children: <AdvancedTable data={dataSet} isLoading={isRefreshing}/>,
     },
     {
       key: '2',

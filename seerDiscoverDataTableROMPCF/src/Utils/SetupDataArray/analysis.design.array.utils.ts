@@ -28,6 +28,10 @@ export const arrayGenerator = async (initialDataSet: any) => {
     (data[4] as any).M = analisisAndDesignCalculation?.designReview?.resultValue;
     (data[4] as any)['M/S'] = analisisAndDesignCalculation?.designReview?.resultValueMS;
     (data[4] as any)['M/S/C'] = analisisAndDesignCalculation?.designReview?.resultValueMSC;
+
+    (data[5] as any).M = analisisAndDesignCalculation?.configuration?.resultValue;
+    (data[5] as any)['M/S'] = analisisAndDesignCalculation?.configuration?.resultValueMS;
+    (data[5] as any)['M/S/C'] = analisisAndDesignCalculation?.configuration?.resultValueMSC;
     await Promise.all([analisisAndDesignCalculation]);
     // const promises = dataIdentify.map(async (item: any) => {
     //   const { title, rows } = item;
