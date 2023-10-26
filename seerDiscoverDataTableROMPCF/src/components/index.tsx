@@ -17,18 +17,21 @@ import ButtonGroups from "./Buttons/ButtonGroups";
 import { Box, Chip, Grid, Stack, Typography } from "@mui/material";
 
 
-const App = ({dataSet, onRefreshHandler, isRefreshing}: {dataSet: any, onRefreshHandler?: any, isRefreshing: boolean}) => { 
+const App = ({
+  dataSet, onRefreshHandler, isRefreshing, dataSetEstimateResource
+}: {dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, dataSetEstimateResource: any}) => { 
 
   const items: TabsProps['items'] = [
     {
       key: '1',
-      label: 'Report View',
-      children: <AdvancedTable data={dataSet} isLoading={isRefreshing}/>,
+      label: 'Estimate Average Rate',
+      children: <AdvancedTable data={dataSet} type={'Estimate Average Rate'} isLoading={isRefreshing}/>,
     },
     {
       key: '2',
-      label: 'Rates & Resources',
-      children: <RatesAndResources/>,
+      label: 'Estimate Resource',
+      children: <AdvancedTable data={dataSetEstimateResource} type={'Estimate Resource'} isLoading={isRefreshing}/>,
+      // <RatesAndResources/>,
     },
     {
       key: '3',

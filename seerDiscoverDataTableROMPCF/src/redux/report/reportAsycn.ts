@@ -1,5 +1,37 @@
 import axios from "axios";
-import { initialFetchStart, initialFetchSuccess, initialFetchFailure } from "./reportSlice";
+import {
+  initialFetchStart,
+  initialFetchSuccess,
+  initialFetchFailure,
+} from "./reportSlice";
+
+export const deleteOutputSetAsync: any = async(info: any) => {
+  console.log('info ==> ', info);
+  const requestBody = {
+    outputsetid: info?.OutputSetId
+  }
+  try {
+    const res: any = await axios.post(
+      'https://prod-08.uksouth.logic.azure.com:443/workflows/ca2c7c8980354726999b8b76f250554c/triggers/manual/paths/invoke?api-version=2016-06-01', 
+        requestBody, 
+        {
+          // params: {
+          //   outputsetid: info?.OutputSetId
+          // },
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          timeout: 30000,
+        });
+        console.log('res delete ==> ', res)
+    if (res?.status !== 200) throw new Error();
+    return {result: (res as any)?.data, error: false}
+  } catch (error) {
+    console.log('error delete ==> ', error);
+    return {result: [], error: true}
+  }
+  
+}
 
 export const fetchInitialDataAsync = async() => {
   try {
@@ -7,13 +39,18 @@ export const fetchInitialDataAsync = async() => {
     
     const requestBody = {
       "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
-      "partnerid": "b388d7ee-bd7e-ec11-8d21-6045bd0e691e",
-      "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
-      "apps": "2cc55a59-46d7-ec11-a7b5-6045bd1001f9",
       "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
-      "outputSetId": "08585041680294683701939216538CU29",
-      "outputHistoryId": "381097e1-ef6b-ee11-9ae7-002248015232"
+      "lastexecutedOn" : "2023-10-25T07:47:46.0261668Z"
     }
+    // {
+    //   "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
+    //   "partnerid": "b388d7ee-bd7e-ec11-8d21-6045bd0e691e",
+    //   "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
+    //   "apps": "2cc55a59-46d7-ec11-a7b5-6045bd1001f9",
+    //   "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
+    //   "outputSetId": "08585041680294683701939216538CU29",
+    //   "outputHistoryId": "381097e1-ef6b-ee11-9ae7-002248015232"
+    // }
     // {
     //   "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
     //   "partnerid": "b388d7ee-bd7e-ec11-8d21-6045bd0e691e",

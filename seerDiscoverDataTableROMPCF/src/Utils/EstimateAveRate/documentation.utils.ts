@@ -2,6 +2,7 @@ import { fitGapData, moscowsData, percentData } from "../../Constants/pickListDa
 
 export const generateDocumentationMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any}, condition: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
+  let romParameter = 'Days'
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -18,7 +19,7 @@ export const generateDocumentationMValue = async(inititlaData: any, analisisDesi
   // seerMoscow
   try {
     const {parameterModel} = inititlaData
-    if (condition && inititlaData) {
+    if (inititlaData) {
       // Must Custom Requirement
       const mustCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValue + analisisDesignPre?.responseAnalisisDesign?.resultValue + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValue
       const mustShouldCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValueMS + analisisDesignPre?.responseAnalisisDesign?.resultValueMS + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMS
@@ -38,8 +39,8 @@ export const generateDocumentationMValue = async(inititlaData: any, analisisDesi
         returnObject.documentation.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.collateRequirment/100);
       } else if (percentData?.[parameterModel[0]?.designReviewType] === percentData?.[100000002]) { // hours
         
-        returnObject.documentation.resultValue = parameterModel[0]?.collateRequirment/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.collateRequirment
-        returnObject.documentation.resultValueMS = parameterModel[0]?.collateRequirment/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.collateRequirment
+        returnObject.documentation.resultValue = romParameter == "Hours" ? parameterModel[0]?.collateRequirment :  parameterModel[0]?.collateRequirment/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.collateRequirment
+        returnObject.documentation.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.collateRequirment :  parameterModel[0]?.collateRequirment/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.collateRequirment
         returnObject.documentation.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.collateRequirment/100);
       } else if (percentData?.[parameterModel[0]?.designReviewType] === percentData?.[100000000]) { // FTE
         // returnObject.documentation.resultValue = (parameterModel[0]?.collateRequirment * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.collateRequirment * h8)  // need to find H8

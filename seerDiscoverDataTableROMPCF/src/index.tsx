@@ -6,7 +6,7 @@ import AdvancedTable from "./components/Table/AdvancedTable";
 import TabComponent from "./components/index";
 import { arrayGenerator } from "./Utils/SetupDataArray/analysis.design.array.utils";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchInitialDataAsync } from "./redux/report/reportAsycn";
+import { deleteOutputSetAsync, fetchInitialDataAsync } from "./redux/report/reportAsycn";
 import { initialFetchFailure, initialFetchSuccess } from "./redux/report/reportSlice";
 import Loader from "./components/Loader/Loader";
 
@@ -17,6 +17,7 @@ export default function Index({tableContent, context}: {tableContent: any, conte
   const loading = useSelector((state: any) => state.report.loading)
   const [isLoading, setIsloading] = React.useState<boolean>(false);
   const [dataSet, setDataSet] = React.useState<any []>([])
+  const [dataSetEstimateResource, setDataSetEstimateResource] = React.useState<any []>([])
   console.log('data set ===> ', data)
   React.useEffect(() => {
     initialTriggerHandler();
@@ -28,6 +29,7 @@ export default function Index({tableContent, context}: {tableContent: any, conte
     if (!inititalData.error) {
       dispatch(initialFetchSuccess(inititalData?.result));
     } else {
+      setIsloading(false)
       dispatch(initialFetchFailure(inititalData?.result));
     }
   }
@@ -35,9 +37,11 @@ export default function Index({tableContent, context}: {tableContent: any, conte
   const arrayGeneratorHandler = () => {
     setIsloading(true)
     arrayGenerator(data)
-      .then(result => {
+      .then(async(result: any) => {
         // Handle the result here
-        setDataSet(result);
+        setDataSet(result?.dataEstimateAverageRate ? result?.dataEstimateAverageRate : []);
+        setDataSetEstimateResource(result?.dataEstimateResource ? result?.dataEstimateResource : [])
+        // dispatch(deleteOutputSetAsync({ OutputSetId: data?.OutputSetId }))
         setIsloading(false)
         console.log('dataValue ==> ', result);
       })
@@ -46,6 +50,7 @@ export default function Index({tableContent, context}: {tableContent: any, conte
         setDataSet([]);
         setIsloading(false);
       });
+    // dispatch(deleteOutputSetAsync({ OutputSetId: data?.OutputSetId }))
 
     // const dataValue: any = arrayGenerator(data);
     // setDataSet(dataValue);
@@ -71,7 +76,11 @@ export default function Index({tableContent, context}: {tableContent: any, conte
             <Loader />
           </div>
         </>)
-      : <TabComponent dataSet={dataSet} isRefreshing={loading || isLoading} />}
+      : <TabComponent
+          dataSet={dataSet}
+          isRefreshing={loading || isLoading}
+          dataSetEstimateResource={dataSetEstimateResource}
+        />}
       {/* <TabComponent dataSet={dataSet} isRefreshing={loading || isLoading}/> */}
     </div>
   )

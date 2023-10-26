@@ -13,37 +13,31 @@ export const generateCustomRequirementMValue = async(inititlaData: any, conditio
       resultValue,
       resultValueMS,
       resultValueMSC
+    },
+    customRequirementBuild: {
+      resultValue,
+      resultValueMS,
+      resultValueMSC
     }
   }
-  // Must Custom Requirement
+  // Must Custom Requirement Design
   let primaryResourceDesignValueFromCustomRequirment = 0;
-  let secondaryResourceDesignValueFromCustomRequirment = 0;
-  let primaryResourceDesignValueFromModuleData = 0;
-  let secondaryResourceDesignValueFromModuleData = 0;
 
-  // Must Should Custom Requirement
+  // Must Should Custom Requirement Design
   let primaryResourceDesignValueFromCustomRequirmentMS = 0;
-  let secondaryResourceDesignValueFromCustomRequirmentMS = 0;
-  let primaryResourceDesignValueFromModuleDataMS = 0;
-  let secondaryResourceDesignValueFromModuleDataMS = 0;
 
-  // Must Should Could Custom Requirement
+  // Must Should Could Custom Requirement Design
   let primaryResourceDesignValueFromCustomRequirmentMSC = 0;
-  let secondaryResourceDesignValueFromCustomRequirmentMSC = 0;
-  let primaryResourceDesignValueFromModuleDataMSC = 0;
-  let secondaryResourceDesignValueFromModuleDataMSC = 0;
 
-  // Must
-  const seenCustomRequirmentMIds = new Set();
-  const seenModuleMIds = new Set();
+   // Must Custom Requirement Build
+   let primaryResourceDesignValueBuildFromCustomRequirment = 0;
 
-  // Must Should
-  const seenCustomRequirmentMSIdsMS = new Set();
-  const seenModuleMSIdsMS = new Set();
+   // Must Should Custom Requirement Build
+   let primaryResourceDesignValueBuildFromCustomRequirmentMS = 0;
+ 
+   // Must Should Could Custom Requirement Build
+   let primaryResourceDesignValueBuildFromCustomRequirmentMSC = 0;
 
-  // Must Should Could
-  const seenCustomRequirmentMSCIdsMSC = new Set();
-  const seenModuleMSCIdsMSC = new Set();
   // seerMoscow
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, CustomRequirmentModel} = inititlaData
@@ -57,28 +51,31 @@ export const generateCustomRequirementMValue = async(inititlaData: any, conditio
         // && fitGapData[customisationItem?.seer_fitgap] != fitGapData[100000001]
         if (moscowsData?.[customRequirementItem?.mosCow] == moscowsData?.[100000000]) {
           //
-          const resCustomRequirment = baseReader(customRequirementItem, primaryResourceDesignValueFromCustomRequirment, secondaryResourceDesignValueFromCustomRequirment);
+          const resCustomRequirment = baseReader(customRequirementItem, primaryResourceDesignValueFromCustomRequirment, "design");
           primaryResourceDesignValueFromCustomRequirment = resCustomRequirment.primaryResourceDesignValueFromCustomRequirment
+
+          const resCustomRequirmentBuild = baseReader(customRequirementItem, primaryResourceDesignValueBuildFromCustomRequirment, "build");
+          primaryResourceDesignValueBuildFromCustomRequirment = resCustomRequirmentBuild.primaryResourceDesignValueFromCustomRequirment
         }
 
         // Must Should
         if ((moscowsData?.[customRequirementItem?.mosCow] == moscowsData?.[100000000] || moscowsData?.[customRequirementItem?.mosCow] == moscowsData?.[100000001])) {
           // !seenModuleMIds.has(moduleDataItem?.fitGapProductSeerModule?.id)
-          const resCustomRequirment = baseReader(customRequirementItem, primaryResourceDesignValueFromCustomRequirmentMS, secondaryResourceDesignValueFromCustomRequirmentMS, x);
+          const resCustomRequirment = baseReader(customRequirementItem, primaryResourceDesignValueFromCustomRequirmentMS, "design");
           primaryResourceDesignValueFromCustomRequirmentMS = resCustomRequirment.primaryResourceDesignValueFromCustomRequirment;
-          secondaryResourceDesignValueFromCustomRequirmentMS = resCustomRequirment.secondaryResourceDesignValueFromCustomRequirment;
           console.log('switch MS primaryResourceDesignValueFromCustomRequirmentModel => ', primaryResourceDesignValueFromCustomRequirmentMS);
-          console.log('switch MS secondaryResourceDesignValueFromCustomRequirmentModel => ', secondaryResourceDesignValueFromCustomRequirmentMS);
+          const resCustomRequirmentBuild = baseReader(customRequirementItem, primaryResourceDesignValueBuildFromCustomRequirmentMS, "build");
+          primaryResourceDesignValueBuildFromCustomRequirmentMS = resCustomRequirmentBuild.primaryResourceDesignValueFromCustomRequirment;
         }
 
         // Must Should Could
         if ((moscowsData?.[customRequirementItem?.mosCow] == moscowsData?.[100000000] || moscowsData?.[customRequirementItem?.mosCow] == moscowsData?.[100000001] || moscowsData?.[customRequirementItem?.mosCow] == moscowsData?.[100000002])) {
           //
-          const resCustomRequirment = baseReader(customRequirementItem, primaryResourceDesignValueFromCustomRequirmentMSC, secondaryResourceDesignValueFromCustomRequirmentMSC, x);
+          const resCustomRequirment = baseReader(customRequirementItem, primaryResourceDesignValueFromCustomRequirmentMSC, "design");
           primaryResourceDesignValueFromCustomRequirmentMSC = resCustomRequirment.primaryResourceDesignValueFromCustomRequirment;
-          secondaryResourceDesignValueFromCustomRequirmentMSC = resCustomRequirment.secondaryResourceDesignValueFromCustomRequirment;
           console.log('switch MSC primaryResourceDesignValueFromCustomRequirmentModel => ', primaryResourceDesignValueFromCustomRequirmentMSC);
-          console.log('switch MSC secondaryResourceDesignValueFromCustomRequirmentModel => ', secondaryResourceDesignValueFromCustomRequirmentMSC);
+          const resCustomRequirmentBuild = baseReader(customRequirementItem, primaryResourceDesignValueBuildFromCustomRequirmentMSC, "build");
+          primaryResourceDesignValueBuildFromCustomRequirmentMSC = resCustomRequirmentBuild.primaryResourceDesignValueFromCustomRequirment;
         }
       });
       
@@ -89,29 +86,34 @@ export const generateCustomRequirementMValue = async(inititlaData: any, conditio
           parameterModel[0].hoursPerday,
           condition
         )
-        // (
-        //   primaryResourceDesignValueFromCustomRequirment 
-        // )/parameterModel[0].hoursPerday;
-      
         returnObject.customRequirement.resultValueMS = generateReturnValue(
           primaryResourceDesignValueFromCustomRequirmentMSC,
           parameterModel[0].hoursPerday,
           condition
         )
-        // (
-        //   primaryResourceDesignValueFromCustomRequirmentMS 
-        //   )/parameterModel[0].hoursPerday;
-
         returnObject.customRequirement.resultValueMSC = 
         generateReturnValue(
           primaryResourceDesignValueFromCustomRequirmentMSC,
           parameterModel[0].hoursPerday,
           condition
         )
-        // (
-        //   primaryResourceDesignValueFromCustomRequirmentMSC 
-        //   )/parameterModel[0].hoursPerday;
-        
+
+        returnObject.customRequirementBuild.resultValue = generateReturnValue(
+          primaryResourceDesignValueBuildFromCustomRequirment,
+          parameterModel[0].hoursPerday,
+          condition
+        )
+        returnObject.customRequirementBuild.resultValueMS = generateReturnValue(
+          primaryResourceDesignValueBuildFromCustomRequirmentMSC,
+          parameterModel[0].hoursPerday,
+          condition
+        )
+        returnObject.customRequirementBuild.resultValueMSC = 
+        generateReturnValue(
+          primaryResourceDesignValueBuildFromCustomRequirmentMSC,
+          parameterModel[0].hoursPerday,
+          condition
+        )
       }
         console.log("resultValue => ", resultValue);
       await Promise.all([customRequirementLoop])
@@ -133,7 +135,7 @@ const generateReturnValue = (val1: number, hoursPerDay: number, condtion: boolea
   return (val1)
 }
 
-const baseReader = (customRequirementItem: any, primaryResourceDesignValueFromCustomRequirment: number, secondaryResourceDesignValueFromCustomRequirment: number, x?: number) => {
-  primaryResourceDesignValueFromCustomRequirment += customRequirementItem?.design
-  return {primaryResourceDesignValueFromCustomRequirment, secondaryResourceDesignValueFromCustomRequirment}
+const baseReader = (customRequirementItem: any, primaryResourceDesignValueFromCustomRequirment: number, type: string) => {
+  primaryResourceDesignValueFromCustomRequirment += type === 'design' ? customRequirementItem?.design : customRequirementItem?.build
+  return {primaryResourceDesignValueFromCustomRequirment}
 }

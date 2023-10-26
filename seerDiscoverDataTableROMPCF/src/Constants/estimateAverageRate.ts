@@ -40,22 +40,22 @@ export const columnDetails = [
   },
 ]
 
-export const data: Person[] = [
+export const data: any[] = [
   {
     "nameCategory": "ANALYSIS & DESIGN",
     name: 'Analysis and Design',
     titleCode: '1',
-    M: 19560,
-    'M/S': 21240,
-    'M/S/C': 22020
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
     name: 'Customisations (Design)',
     titleCode: '1',
-    M: 120,
-    'M/S': 120,
-    'M/S/C': 240	
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0	
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -69,44 +69,44 @@ export const data: Person[] = [
     "nameCategory": "ANALYSIS & DESIGN",
     titleCode: '1',
     name: 'Documentation',
-    M: 5510.4,
-    'M/S': 5980.8,
-    'M/S/C': 6232.8	
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0	
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
     titleCode: '1',
     name: 'Design Review',
-    M: 5510.4,
-    'M/S': 5980.8,
-    'M/S/C': 6232.8	
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0	
   },
   {
-    "nameCategory": "DEVELOP",
+    "nameCategory": "BUILD",
     titleCode: '2',
     name: 'Configuration',
-    M: 43260,
-    'M/S': 48420,
-    'M/S/C': 50280
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0
   },
   {
-    "nameCategory": "DEVELOP",
+    "nameCategory": "BUILD",
     titleCode: '2',
     name: 'Integrations',
-    M: 3840,
-    'M/S': 3840,
-    'M/S/C': 3840		
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0		
   },
   {
-    "nameCategory": "DEVELOP",
+    "nameCategory": "BUILD",
     titleCode: '2',
     name: 'Customisations (Build)',
-    M: 120,
-    'M/S': 120,
-    'M/S/C': 240	
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0	
   },
   {
-    "nameCategory": "DEVELOP",
+    "nameCategory": "BUILD",
     titleCode: '2',
     name: 'Custom Requirements (Build)',
     M: 0,
@@ -114,31 +114,31 @@ export const data: Person[] = [
     'M/S/C': 0		
   },
   {
-    "nameCategory": "DEVELOP",
+    "nameCategory": "BUILD",
     titleCode: '2',
     name: 'Document Layouts',
-    M: 7680,
-    'M/S': 7680,
-    'M/S/C': 7680		
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0		
   },
   {
-    "nameCategory": "DEVELOP",
+    "nameCategory": "BUILD",
     titleCode: '2',
     name: 'Reporting',
-    M: 4722,
-    'M/S': 5238,
-    'M/S/C': 5436	
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0	
   },
   {
-    "nameCategory": "DEVELOP",
+    "nameCategory": "BUILD",
     titleCode: '2',
     name: 'Data Migration',
-    M: 4722,
-    'M/S': 5238,
-    'M/S/C': 5436		
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0		
   },
   {
-    "nameCategory": "DEVELOP",
+    "nameCategory": "BUILD",
     titleCode: '2',
     name: 'CRP',
     M: 0,
@@ -146,7 +146,7 @@ export const data: Person[] = [
     'M/S/C': 0	
   },
   {
-    "nameCategory": "DEVELOP",
+    "nameCategory": "BUILD",
     titleCode: '2',
     name: 'Testing',
     M: 0,
@@ -154,60 +154,44 @@ export const data: Person[] = [
     'M/S/C': 0	
   },
   {
-    "nameCategory": "DEVELOP",
-    titleCode: '2',
-    name: 'Project Manager',
-    M: 12868.8,
-    'M/S': 14107.2,
-    'M/S/C': 14582.4		
-  },
-  {
     "nameCategory": "DEPLOY",
     titleCode: '3',
     name: 'Train-the-trainer',
-    M: 10815,
-    'M/S': 12105,
-    'M/S/C': 12570		
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0		
   },
   {
     "nameCategory": "DEPLOY",
     titleCode: '3',
     name: 'UAT Environment Preparation',
-    M: 4722,
-    'M/S': 5238,
-    'M/S/C': 5436	
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0	
   },
   {
     "nameCategory": "DEPLOY",
     titleCode: '3',
     name: 'UAT Support',
-    M: 11805,
-    'M/S': 13095,
-    'M/S/C': 13590		
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0		
   },
   {
     "nameCategory": "DEPLOY",
     titleCode: '3',
     name: 'PROD Environment Preparation',
-    M: 2361,
-    'M/S': 2619,
-    'M/S/C': 2718		
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0		
   },
   {
     "nameCategory": "DEPLOY",
     titleCode: '3',
     name: 'Support Handover',
-    M: 472.2,
-    'M/S': 523.8,
-    'M/S/C': 543.6		
-  },
-  {
-    "nameCategory": "DEPLOY",
-    titleCode: '3',
-    name: 'Project Manager',
-    M: 6035.04,
-    'M/S': 6716.16,
-    'M/S/C': 6971.52		
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0		
   },
   {
     "nameCategory": "OPERATION",
@@ -221,16 +205,64 @@ export const data: Person[] = [
     "nameCategory": "OPERATION",
     titleCode: '4',
     name: 'Post Go-Live Support',
-    M: 9444,
-    'M/S': 10476,
-    'M/S/C': 10872		
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0		
+  },
+  // {
+  //   "nameCategory": undefined,
+  //   titleCode: '5',
+  //   name: 'Sub Total',
+  //   M: 0,
+  //   'M/S': 0,
+  //   'M/S/C': 0	
+  // },
+  // {
+  //   "nameCategory": undefined,
+  //   titleCode: '6',
+  //   name: 'Project Manager',
+  //   M: 0,
+  //   'M/S': 0,
+  //   'M/S/C': 0	
+  // },
+  // {
+  //   "nameCategory": undefined,
+  //   titleCode: '7',
+  //   name: 'Project Risk',
+  //   M: 0,
+  //   'M/S': 0,
+  //   'M/S/C': 0	
+  // },
+  {
+    "nameCategory": 'Sub Total',
+    titleCode: '5',
+    name: '',
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0	
   },
   {
-    "nameCategory": "OPERATION",
-    titleCode: '4',
-    name: 'Project Manager',
-    M: 1888.8,
-    'M/S': 2095.2,
-    'M/S/C': 2174.4		
-  }
+    "nameCategory": 'Project Manager',
+    titleCode: '6',
+    name: '',
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0	
+  },
+  {
+    "nameCategory": 'Project Risk',
+    titleCode: '7',
+    name: '',
+    M: 0,
+    'M/S': 0,
+    'M/S/C': 0	
+  },
+  // {
+  //   "nameCategory": ' ',
+  //   titleCode: '8',
+  //   name: 'Total',
+  //   M: 0,
+  //   'M/S': 0,
+  //   'M/S/C': 0	
+  // },
 ];

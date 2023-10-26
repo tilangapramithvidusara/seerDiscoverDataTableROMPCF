@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material';
-import { MRT_ColumnDef } from 'material-react-table';
+import { MRT_ColumnDef, MRT_AggregationOption } from 'material-react-table';
 import * as React from 'react'
 
 // export default function CustomColumnGenerator({columnArray}: {columnArray: any}) {
@@ -7,13 +7,24 @@ import * as React from 'react'
 
 
 export const columnFixed = (columnArray: any, data: any) => {
+  // const AggregatedGroupRow = ({ row }) => {
+  //   const customRowStyle = {
+  //     backgroundColor: 'your-group-background-color', // Change to your desired background color for grouped rows
+  //   };
+  
+  //   return (
+  //     <MRT_HeaderGroup {...row} sx={customRowStyle} />
+  //   );
+  // };
   const totalColumn =
     (key?: string | number | undefined | any) => {
-      return data.reduce((acc: any, curr: any) => {
-        console.log('acc + curr', acc, curr[key], key);
+      // return data.reduce((acc: any, curr: any) => {
+      //   console.log('acc + curr', acc, curr[key], key);
         
-        return acc + curr[key]
-      }, 0)
+      //   return acc + curr[key]
+      // }, 0)
+      const N = 3;
+      return data.reduceRight((sum: number, item: any, idx: number, a: any) => (a.length - idx) > N  ? sum : sum + item[key] , 0)
     }
   const arrayValue = columnArray.length && columnArray.map((columnItem: any, index: number) => {
     let itemObjec = {
@@ -22,26 +33,39 @@ export const columnFixed = (columnArray: any, data: any) => {
       enableGrouping: columnItem?.enableGrouping ? true : false,
       
       Cell: columnItem?.isCalcultionEnabled ? ({ cell }: { cell: any }) => {
-        if (columnItem?.isCalcultionEnabled) {
-        return(
-          <>
-            {cell.getValue()?.toLocaleString?.('en-US', {
-              style: 'currency',
-              currency: 'EUR',
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 4,
-            })}
-          </>
-        )}
+        if (cell?.row?._valuesCache?.nameCategory == "Project Risk" ||
+        cell?.row?._valuesCache?.nameCategory == "Project Manager" || 
+        cell?.row?._valuesCache?.nameCategory == "Sub Total") {
+          null
+        } else {
+          if (columnItem?.isCalcultionEnabled) {
+          return(
+            <>
+              
+              {cell.getValue()?.toLocaleString?.('en-US', {
+                style: 'currency',
+                currency: 'EUR',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 4,
+              })}
+            </>
+          )}
+        }
       } : null,
       aggregationFn: columnItem?.aggregationFn ? columnItem?.aggregationFn : null,
       AggregatedCell: columnItem?.aggregationFn ? ({ cell, table }: { cell: any, table: any }) => {
+        console.log('mmmmK ==> ', cell?.row, cell?.row?._valuesCache, table);
+        
         return(
-          <>
+          <div style={{
+            backgroundColor: 'yellow'
+          }}>
             {/* {`${columnItem?.aggregationFn.charAt(0).toUpperCase() + columnItem?.aggregationFn.slice(1)} by `} */}
             {/* {table.getColumn(cell.row.groupingColumnId ?? '').columnDef.header}:{' '} */}
             <Box
-              sx={{ color: 'info.main', display: 'inline', fontWeight: 'bold' }}
+              sx={{ color: 'info.main', display: 'inline', fontWeight: 'bold', 
+              // backgroundColor: 'red' 
+            }}
             >
               {cell.getValue()?.toLocaleString?.('en-US', {
               style: 'currency',
@@ -50,7 +74,7 @@ export const columnFixed = (columnArray: any, data: any) => {
               maximumFractionDigits: 4,
             })}
             </Box>
-          </>
+          </div>
       )} :  null,
 
       Footer: columnItem?.showBottomTotal ? () => {

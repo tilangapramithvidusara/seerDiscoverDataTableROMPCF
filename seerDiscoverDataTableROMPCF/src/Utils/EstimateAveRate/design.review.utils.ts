@@ -2,6 +2,7 @@ import { fitGapData, moscowsData, percentData } from "../../Constants/pickListDa
 
 export const generateDesignReviewMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseDocumentation: any}, condition: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
+  let romParameter = 'Days'
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -18,7 +19,7 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
   // seerMoscow
   try {
     const {parameterModel} = inititlaData
-    if (condition && inititlaData) {
+    if (inititlaData) {
       // Must Custom Requirement
       const mustCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValue + analisisDesignPre?.responseAnalisisDesign?.resultValue + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValue + analisisDesignPre?.responseDocumentation.documentation?.resultValue
       const mustShouldCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValueMS + analisisDesignPre?.responseAnalisisDesign?.resultValueMS + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMS + analisisDesignPre?.responseDocumentation.documentation?.resultValueMS
@@ -38,8 +39,8 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
         returnObject.designReview.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.designReview/100);
       } else if (percentData?.[parameterModel[0]?.designReviewType] === percentData?.[100000002]) { // hours
         
-        returnObject.designReview.resultValue = parameterModel[0]?.designReview/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview
-        returnObject.designReview.resultValueMS = parameterModel[0]?.designReview/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview
+        returnObject.designReview.resultValue = romParameter == "Hours" ? parameterModel[0]?.designReview :  parameterModel[0]?.designReview/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview
+        returnObject.designReview.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.designReview :  parameterModel[0]?.designReview/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview
         returnObject.designReview.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.designReview/100);
       } else if (percentData?.[parameterModel[0]?.designReviewType] === percentData?.[100000000]) { // FTE
         // returnObject.designReview.resultValue = (parameterModel[0]?.designReview * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.designReview * h8)  // need to find H8

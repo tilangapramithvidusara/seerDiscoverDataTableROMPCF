@@ -5,15 +5,17 @@ export interface ReportState {
   initialFetchData: object | null,
   error: string | null,
   loading: boolean,
+  analysisAndDesign: object | null
 }
 
 const initialState: ReportState = {
   initialFetchData: null,
   error: null,
-  loading: false
+  loading: false,
+  analysisAndDesign: null,
 }
 
-const reportSlice = createSlice({
+const reportSlice: any = createSlice({
   name: 'user',
   initialState,
   reducers: {
@@ -29,8 +31,10 @@ const reportSlice = createSlice({
       state.error = action.payload,
       state.initialFetchData = null,
       state.loading = false
+    },
+    setAnalysisAndDesign: (state, action) => {
+      state.analysisAndDesign = action?.payload
     }
-
   },
 })
 
