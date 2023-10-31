@@ -162,6 +162,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -176,6 +177,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -190,6 +192,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -204,6 +207,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -218,6 +222,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "BUILD",
@@ -232,6 +237,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "BUILD",
@@ -245,7 +251,8 @@ export const dataEstimateResource: any[] = [
     'M/S_Resource2': 0,
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
-    'M/S/C_Resource2': 0,	
+    'M/S/C_Resource2': 0,
+    type: 'Estimate Resource'	
   },
   {
     "nameCategory": "BUILD",
@@ -260,6 +267,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "BUILD",
@@ -273,7 +281,8 @@ export const dataEstimateResource: any[] = [
     'M/S_Resource2': 0,
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
-    'M/S/C_Resource2': 0,		
+    'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'	
   },
   {
     "nameCategory": "BUILD",
@@ -288,6 +297,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "BUILD",
@@ -302,6 +312,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "BUILD",
@@ -316,6 +327,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "BUILD",
@@ -330,6 +342,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "BUILD",
@@ -343,7 +356,8 @@ export const dataEstimateResource: any[] = [
     'M/S_Resource2': 0,
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
-    'M/S/C_Resource2': 0,	
+    'M/S/C_Resource2': 0,
+    type: 'Estimate Resource'	
   },
   {
     "nameCategory": "DEPLOY",
@@ -358,6 +372,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "DEPLOY",
@@ -372,6 +387,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "DEPLOY",
@@ -386,6 +402,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "DEPLOY",
@@ -400,6 +417,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "DEPLOY",
@@ -413,7 +431,8 @@ export const dataEstimateResource: any[] = [
     'M/S_Resource2': 0,
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
-    'M/S/C_Resource2': 0,		
+    'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'	
   },
   {
     "nameCategory": "OPERATION",
@@ -428,6 +447,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": "OPERATION",
@@ -442,6 +462,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'
   },
   // {
   //   "nameCategory": undefined,
@@ -480,6 +501,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": 'Project Manager',
@@ -494,6 +516,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'
   },
   {
     "nameCategory": 'Project Risk',
@@ -508,6 +531,7 @@ export const dataEstimateResource: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    type: 'Estimate Resource'
   },
   // {
   //   "nameCategory": ' ',

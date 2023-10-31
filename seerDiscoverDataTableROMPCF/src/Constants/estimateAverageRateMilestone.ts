@@ -47,7 +47,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     titleCode: '1',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -55,7 +56,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     titleCode: '1',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -63,7 +65,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     titleCode: '1',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -71,7 +74,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Documentation',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -79,7 +83,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Design Review',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -87,7 +92,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Project Manager',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -95,7 +101,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: '',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "BUILD",
@@ -103,7 +110,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Configuration',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',
   },
   {
     "nameCategory": "BUILD",
@@ -111,7 +119,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Integrations',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',		
   },
   {
     "nameCategory": "BUILD",
@@ -119,7 +128,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Customisations (Build)',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "BUILD",
@@ -127,7 +137,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Custom Requirements (Build)',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',		
   },
   {
     "nameCategory": "BUILD",
@@ -135,7 +146,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Document Layouts',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',		
   },
   {
     "nameCategory": "BUILD",
@@ -143,7 +155,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Reporting',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "BUILD",
@@ -151,7 +164,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Data Migration',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',		
   },
   {
     "nameCategory": "BUILD",
@@ -159,7 +173,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'CRP',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "BUILD",
@@ -167,7 +182,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Testing',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "BUILD",
@@ -175,7 +191,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Project Manager',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "BUILD",
@@ -183,7 +200,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: '',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "DEPLOY",
@@ -191,7 +209,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Train-the-trainer',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',		
   },
   {
     "nameCategory": "DEPLOY",
@@ -199,7 +218,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'UAT Environment Preparation',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "DEPLOY",
@@ -207,7 +227,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'UAT Support',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',		
   },
   {
     "nameCategory": "DEPLOY",
@@ -215,7 +236,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'PROD Environment Preparation',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',		
   },
   {
     "nameCategory": "DEPLOY",
@@ -223,7 +245,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Support Handover',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "DEPLOY",
@@ -231,7 +254,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Project Manager',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "DEPLOY",
@@ -239,7 +263,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: '',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "OPERATION",
@@ -247,7 +272,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'End user training',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "OPERATION",
@@ -255,7 +281,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Post Go-Live Support',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',		
   },
   {
     "nameCategory": "OPERATION",
@@ -263,7 +290,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Project Manager',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": "OPERATION",
@@ -271,7 +299,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: '',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   {
     "nameCategory": undefined,
@@ -279,7 +308,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Sub Total',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',	
   },
   // {
   //   "nameCategory": undefined,
@@ -295,7 +325,8 @@ export const dataEstimateAverageRateMilestone: any[] = [
     name: 'Project Risk',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate Milestone',
   },
   // {
   //   "nameCategory": ' ',
@@ -306,3 +337,31 @@ export const dataEstimateAverageRateMilestone: any[] = [
   //   'M/S/C': 0	
   // },
 ];
+
+
+
+[
+  {
+    name: "Analysis and Design",
+    resources: [
+      {
+        resouceNumber: 1,
+        rate: 0,
+        cost: 0,
+        split: 20
+      },
+      {
+        resouceNumber: 2,
+        rate: 0,
+        cost: 0,
+        split: 80
+      },
+      {
+        resouceNumber: 3,
+        rate: 0,
+        cost: 0,
+        split: 80
+      }
+    ]
+  }
+]

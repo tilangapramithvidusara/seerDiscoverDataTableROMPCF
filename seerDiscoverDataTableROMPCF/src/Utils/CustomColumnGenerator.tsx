@@ -23,8 +23,22 @@ export const columnFixed = (columnArray: any, data: any) => {
         
       //   return acc + curr[key]
       // }, 0)
-      const N = 3;
-      return data.reduceRight((sum: number, item: any, idx: number, a: any) => (a.length - idx) > N  ? sum : sum + item[key] , 0)
+      console.log('mm log ', data);
+      let sumEstimateResource = 0;
+      let indicesToSum = []
+      // type: 'Estimate Resource'
+      if (data?.length && data[0].type == "Estimate Resource") {
+        indicesToSum = [(data.length - 1), (data.length - 3)]
+        sumEstimateResource = indicesToSum.reduceRight((sum, index) => sum + data[index][key], 0);
+      }
+      const N = (data && data?.length && data[0].type == "Estimate Avg Rate Milestone") ? 2 : 3;
+      let total = (data && data?.length && data[0].type == "Estimate Resource") ? sumEstimateResource
+        // data.slice(startIdx, endIdx - 1).reduceRight((accumulator: any, item: any) => {
+        //   return accumulator + item[key];
+        // }, 0)
+       : data.reduceRight((sum: number, item: any, idx: number, a: any) => (a.length - idx) > N  ? sum : sum + item[key] , 0)
+      // (data && data?.length && data[0].type == "Estimate Resource") ? total - data : total
+      return total;
     }
   const arrayValue = columnArray.length && columnArray.map((columnItem: any, index: number) => {
     let itemObjec = {

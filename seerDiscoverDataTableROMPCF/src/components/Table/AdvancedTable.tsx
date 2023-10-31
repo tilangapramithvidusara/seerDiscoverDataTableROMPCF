@@ -27,7 +27,10 @@ const AdvancedTable = ({data, isLoading, type}: {data?: any, isLoading: boolean,
   const [isComLoading, setComIsloading] = React.useState<boolean>(isLoading || false);
   const [resourceType, setResourceType] = React.useState<string>('Must');
 
-  const [columnsSet, setColumnSet] = React.useState(type === 'Estimate Average Rate' ? columnDetails : estimateResourceMustColumnDetails)
+  const [columnsSet, setColumnSet] = React.useState(type !== 'Estimate Resource' ? columnDetails : 
+  estimateResourceMustColumnDetails
+  // estimateResourceMustShouldColumnDetails
+  )
   
   const averageM = useMemo(
     () => data.reduce((acc: any, curr: any) => acc + curr?.M, 0) / data.length,
@@ -56,7 +59,7 @@ const AdvancedTable = ({data, isLoading, type}: {data?: any, isLoading: boolean,
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => 
     columnFixed(columnsSet, data),
-    [],
+    [columnsSet],
   );
 
   const onClickHandler = (event: any, rowData: any) => {
@@ -86,10 +89,13 @@ const AdvancedTable = ({data, isLoading, type}: {data?: any, isLoading: boolean,
   }, [isLoading])
 
   React.useEffect(() => {
-    setColumnSet(type === 'Estimate Average Rate' ? columnDetails : 
+    const columnCreator = type === 'Estimate Average Rate' ? columnDetails : 
     resourceType === 'Must' ? estimateResourceMustColumnDetails :
     resourceType === 'Must Should' ? estimateResourceMustShouldColumnDetails :
-    resourceType === 'Must Should Colud' ? estimateResourceMustShouldCouldColumnDetails : columnDetails)
+    resourceType === 'Must Should Could' ? estimateResourceMustShouldCouldColumnDetails : columnDetails
+    console.log('change ====', columnCreator);
+    
+    setColumnSet(columnCreator);
   }, [resourceType])
   console.log('llll ==> ', isLoading, isComLoading, isRefreshing, loading);
   console.log('ppp==> ', columnsSet);

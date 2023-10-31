@@ -1,4 +1,5 @@
 import { fitGapData, moscowsData } from "../../Constants/pickListData";
+import { calculateProjectManagerEstimateResource, calculateSubTotal, generateEstimateResourceValue } from "../EstimateResource";
 import { generateCRPMValue } from "./crp.utils";
 import { generateCustomRequirementMValue } from "./custom.requirements.utils";
 import { generateCustomisationDesignMValue } from "./customization.design.utils";
@@ -115,93 +116,36 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
 
 
   // ################################ESTIMATE RESOURCE################################
-  let resultValueAnalisisDesignEstimateResource = {};
-  let resultValueMSAnalisisDesignEstimateResource = {};
-  let resultValueMSCAnalisisDesignEstimateResource = {};
-
-  let resultValueCustomisationDesignEstimateResource = {};
-  let resultValueMSCustomisationDesignEstimateResource = {};
-  let resultValueMSCCustomisationDesignEstimateResource = {};
-
-  let resultValueCustomRequirementDesignEstimateResource = {};
-  let resultValueMSCustomRequirementDesignEstimateResource = {};
-  let resultValueMSCCustomRequirementDesignEstimateResource = {};
-
-  let resultValueDocumentationEstimateResource = {};
-  let resultValueMSDocumentationEstimateResource = {};
-  let resultValueMSCDocumentationEstimateResource = {};
-
-  let resultValueDesignReviewEstimateResource = {};
-  let resultValueMSDesignReviewEstimateResource = {};
-  let resultValueMSCDesignReviewEstimateResource = {};
+  let resultValueAnalisisDesignEstimateResource: any = {};
+  let resultValueCustomisationDesignEstimateResource: any = {};
+  let resultValueCustomRequirementDesignEstimateResource: any = {};
+  let resultValueDocumentationEstimateResource: any = {};
+  let resultValueDesignReviewEstimateResource: any = {};
 
   // BUILD
   // let resultValue
-  let resultValueConfigurationEstimateResource = {};
-  let resultValueMSConfigurationEstimateResource = {};
-  let resultValueMSCConfigurationEstimateResource = {};
+  let resultValueConfigurationEstimateResource: any = {};
+  let resultValueIntegrationEstimateResource: any = {};
+  let resultValueCustomisationBuildEstimateResource: any = {};
+  let resultValueCustomRequirementBuildEstimateResource: any = {};
+  let resultValueDocumentLayoutEstimateResource: any = {};
+  let resultValueReportingEstimateResource: any = {};
+  let resultValueDataMigrationEstimateResource: any = {};
+  let resultValueCRPEstimateResource: any = {};
+  let resultValueTestingEstimateResource: any = {};
+  let resultValueTrainTheTrainerEstimateResource: any = {};
+  let resultValueUATEnvironmentPreparationEstimateResource: any = {};
+  let resultValueUATSupportEstimateResource: any = {};
+  let resultValueProdEnvironmentPreparationEstimateResource: any = {};
+  let resultValueSupportHandoverEstimateResource: any = {};
+  let resultValueEndUserTrainingEstimateResource: any = {};
+  let resultValuePostGoLiveEstimateResource: any = {};
+  let resultValueProjectManagerEstimateResource: any = {};
 
-  let resultValueIntegrationEstimateResource = {};
-  let resultValueMSIntegrationEstimateResource = {};
-  let resultValueMSCIntegrationEstimateResource = {};
-
-  let resultValueCustomisationBuildEstimateResource = {};
-  let resultValueMSCustomisationBuildEstimateResource = {};
-  let resultValueMSCCustomisationBuildEstimateResource = {};
-
-  let resultValueCustomRequirementBuildEstimateResource = {};
-  let resultValueMSCustomRequirementBuildEstimateResource = {};
-  let resultValueMSCCustomRequirementBuildEstimateResource = {};
-
-  let resultValueDocumentLayoutEstimateResource = {};
-  let resultValueMSDocumentLayoutEstimateResource = {};
-  let resultValueMSCDocumentLayoutEstimateResource = {};
-
-  let resultValueReportingEstimateResource = {};
-  let resultValueMSReportingEstimateResource = {};
-  let resultValueMSCReportingEstimateResource = {};
-
-  let resultValueDataMigrationEstimateResource = {};
-  let resultValueMSDataMigrationEstimateResource = {};
-  let resultValueMSCDataMigrationEstimateResource = {};
-
-  let resultValueCRPEstimateResource = {};
-  let resultValueMSCRPEstimateResource = {};
-  let resultValueMSCCRPEstimateResource = {}
-
-  let resultValueTestingEstimateResource = {};
-  let resultValueMSTestingEstimateResource = {};
-  let resultValueMSCTestingEstimateResource = {}
-
-  let resultValueTrainTheTrainerEstimateResource = {};
-  let resultValueMSTrainTheTrainerEstimateResource = {};
-  let resultValueMSCTrainTheTrainerEstimateResource = {};
-
-  let resultValueUATEnvironmentPreparationEstimateResource = {};
-  let resultValueMSUATEnvironmentPreparationEstimateResource = {};
-  let resultValueMSCUATEnvironmentPreparationEstimateResource = {}
-
-  let resultValueUATSupportEstimateResource = {};
-  let resultValueMSUATSupportEstimateResource = {};
-  let resultValueMSCUATSupportEstimateResource = {}
-
-  let resultValueProdEnvironmentPreparationEstimateResource = {};
-  let resultValueMSProdEnvironmentPreparationEstimateResource = {};
-  let resultValueMSCProdEnvironmentPreparationEstimateResource = {}
-
-  let resultValueSupportHandoverEstimateResource = {};
-  let resultValueMSSupportHandoverEstimateResource = {};
-  let resultValueMSCSupportHandoverEstimateResource = {};
-
-  let resultValueEndUserTrainingEstimateResource = {};
-  let resultValueMSEndUserTrainingEstimateResource = {};
-  let resultValueMSCEndUserTrainingEstimateResource = {};
+  let projectManagementSub: any = 0;
+  let projectManagementSubMS: any = 0;
+  let projectManagementSubMSC: any = 0;
   
-  let resultValuePostGoLiveEstimateResource = {};
-  let resultValueMSPostGoLiveEstimateResource = {};
-  let resultValueMSCPostGoLiveEstimateResource = {}
-  
-
   try {
     const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData, condition);
     const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData, condition)
@@ -226,6 +170,8 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
     const responseProdEnvironmentPreparation = await generateProdEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition)
     const responseSupportHandover = await generateSupportHandoverMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition)
     const responsePostGoLive = await generatePostGoLiveMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition);
+
+    // const responseProjectManagementSub = await calculateProjectManagerEstimateResource(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration});
 
     const {parameterModel} = inititlaData;
     if (parameterModel?.length) {
@@ -325,9 +271,306 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
 
 
       // ################################ESTIMATE RESOURCE################################
-      resultValueAnalisisDesignEstimateResource = 0;
-      resultValueMSAnalisisDesignEstimateResource = 0;
-      resultValueMSCAnalisisDesignEstimateResource = 0;
+      console.log('hmmm', responseAnalisisDesign?.resultValue, responseAnalisisDesign?.resultValueMSC);
+      
+      resultValueAnalisisDesignEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseAnalisisDesign?.resultValue || 0),
+          'M/S': (responseAnalisisDesign?.resultValueMS || 0),
+          "M/S/C": (responseAnalisisDesign?.resultValueMSC || 0),
+        },
+        {},
+        'Analysis and Design',
+        'All',
+        condition
+      );
+
+      console.log('resultValueAnalisisDesignEstimateResource ==> ', resultValueAnalisisDesignEstimateResource);
+      
+
+      resultValueCustomisationDesignEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseCustomisationDesign?.customisation?.resultValue || 0),
+          'M/S': (responseCustomisationDesign?.customisation?.resultValueMS || 0),
+          "M/S/C": (responseCustomisationDesign?.customisation?.resultValueMSC || 0),
+        },
+        {},
+        'Customisations (Design)',
+        'All',
+        condition
+      );
+
+      resultValueCustomRequirementDesignEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseCustomRequirementDesign?.customRequirement?.resultValue || 0),
+          'M/S': (responseCustomRequirementDesign?.customRequirement?.resultValueMS || 0),
+          "M/S/C": (responseCustomRequirementDesign?.customRequirement?.resultValueMSC || 0),
+        },
+        {},
+        'Custom Requirements (Design)',
+        'All',
+        condition
+      );
+
+      resultValueDocumentationEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseDocumentation?.documentation?.resultValue || 0),
+          'M/S': (responseDocumentation?.documentation?.resultValueMS || 0),
+          "M/S/C": (responseDocumentation?.documentation?.resultValueMSC || 0),
+        },
+        {},
+        'Documentation',
+        'All',
+        condition
+      );
+
+      resultValueDesignReviewEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseDesignReview?.designReview?.resultValue || 0),
+          'M/S': (responseDesignReview?.designReview?.resultValueMS || 0),
+          "M/S/C": (responseDesignReview?.designReview?.resultValueMSC || 0),
+        },
+        {},
+        'Design Review',
+        'All',
+        condition
+      );
+
+      resultValueConfigurationEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseAnalisisDesign?.configuration?.resultValue || 0),
+          'M/S': (responseAnalisisDesign?.configuration?.resultValueMS || 0),
+          "M/S/C": (responseAnalisisDesign?.configuration?.resultValueMSC || 0),
+        },
+        {},
+        'Configuration',
+        'All',
+        condition
+      );
+
+      resultValueIntegrationEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseIntegration?.integration?.resultValue || 0),
+          'M/S': (responseIntegration?.integration?.resultValueMS || 0),
+          "M/S/C": (responseIntegration?.integration?.resultValueMSC || 0),
+        },
+        {},
+        'Integrations',
+        'All',
+        condition
+      );
+
+      resultValueCustomisationBuildEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseCustomisationDesign?.customisationBuild?.resultValue || 0),
+          'M/S': (responseCustomisationDesign?.customisationBuild?.resultValueMS || 0),
+          "M/S/C": (responseCustomisationDesign?.customisationBuild?.resultValueMSC || 0),
+        },
+        {},
+        'Customisations (Build)',
+        'All',
+        condition
+      );
+
+      resultValueCustomRequirementBuildEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseCustomRequirementDesign?.customRequirementBuild?.resultValue || 0),
+          'M/S': (responseCustomRequirementDesign?.customRequirementBuild?.resultValueMS || 0),
+          "M/S/C": (responseCustomRequirementDesign?.customRequirementBuild?.resultValueMSC || 0),
+        },
+        {},
+        'Custom Requirements (Build)',
+        'All',
+        condition
+      );
+
+      resultValueDocumentLayoutEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseDocumentLayout?.documentLayout?.resultValue || 0),
+          'M/S': (responseDocumentLayout?.documentLayout?.resultValueMS || 0),
+          "M/S/C": (responseDocumentLayout?.documentLayout?.resultValueMSC || 0),
+        },
+        {},
+        'Document Layouts',
+        'All',
+        condition
+      );
+
+      resultValueReportingEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseReporting?.reporting?.resultValue || 0),
+          'M/S': (responseReporting?.reporting?.resultValueMS || 0),
+          "M/S/C": (responseReporting?.reporting?.resultValueMSC || 0),
+        },
+        {},
+        'Reporting',
+        'All',
+        condition
+      );
+
+      resultValueDataMigrationEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseDataMigration?.dataMigration?.resultValue || 0),
+          'M/S': (responseDataMigration?.dataMigration?.resultValueMS || 0),
+          "M/S/C": (responseDataMigration?.dataMigration?.resultValueMSC || 0),
+        },
+        {},
+        'Data Migration',
+        'All',
+        condition
+      );
+
+      resultValueCRPEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseCRP?.crp?.resultValue || 0),
+          'M/S': (responseCRP?.crp?.resultValueMS || 0),
+          "M/S/C": (responseCRP?.crp?.resultValueMSC || 0),
+        },
+        {},
+        'CRP',
+        'All',
+        condition
+      );
+
+      resultValueTestingEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseTesting?.testing?.resultValue || 0),
+          'M/S': (responseTesting?.testing?.resultValueMS || 0),
+          "M/S/C": (responseTesting?.testing?.resultValueMSC || 0),
+        },
+        {},
+        'Testing',
+        'All',
+        condition
+      );
+
+      resultValueTrainTheTrainerEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseTrainTheTrainer?.trainTheTrainer?.resultValue || 0),
+          'M/S': (responseTrainTheTrainer?.trainTheTrainer?.resultValueMS || 0),
+          "M/S/C": (responseTrainTheTrainer?.trainTheTrainer?.resultValueMSC || 0),
+        },
+        {},
+        'Train-the-trainer',
+        'All',
+        condition
+      );
+
+      resultValueUATEnvironmentPreparationEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseUATEnvironmentPreparation?.uatEnvironmentPreparation?.resultValue || 0),
+          'M/S': (responseUATEnvironmentPreparation?.uatEnvironmentPreparation?.resultValueMS || 0),
+          "M/S/C": (responseUATEnvironmentPreparation?.uatEnvironmentPreparation?.resultValueMSC || 0),
+        },
+        {},
+        'UAT Environment Preparation',
+        'All',
+        condition
+      );
+
+      resultValueUATSupportEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseUATSupport?.uatSupport?.resultValue || 0),
+          'M/S': (responseUATSupport?.uatSupport?.resultValueMS || 0),
+          "M/S/C": (responseUATSupport?.uatSupport?.resultValueMSC || 0),
+        },
+        {},
+        'UAT Support',
+        'All',
+        condition
+      );
+
+      resultValueProdEnvironmentPreparationEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseProdEnvironmentPreparation?.prodEnvironmentPreparation?.resultValue || 0),
+          'M/S': (responseProdEnvironmentPreparation?.prodEnvironmentPreparation?.resultValueMS || 0),
+          "M/S/C": (responseProdEnvironmentPreparation?.prodEnvironmentPreparation?.resultValueMSC || 0),
+        },
+        {},
+        'PROD Environment Preparation',
+        'All',
+        condition
+      );
+
+      resultValueSupportHandoverEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseSupportHandover?.supportHandover?.resultValue || 0),
+          'M/S': (responseSupportHandover?.supportHandover?.resultValueMS || 0),
+          "M/S/C": (responseSupportHandover?.supportHandover?.resultValueMSC || 0),
+        },
+        {},
+        'Support Handover',
+        'All',
+        condition
+      );
+
+      resultValueEndUserTrainingEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseDocumentLayout?.endUserTraining?.resultValue || 0),
+          'M/S': (responseDocumentLayout?.endUserTraining?.resultValueMS || 0),
+          "M/S/C": (responseDocumentLayout?.endUserTraining?.resultValueMSC || 0),
+        },
+        {},
+        'End user training',
+        'All',
+        condition
+      );
+
+      resultValuePostGoLiveEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responsePostGoLive?.postGoLive?.resultValue || 0),
+          'M/S': (responsePostGoLive?.postGoLive?.resultValueMS || 0),
+          "M/S/C": (responsePostGoLive?.postGoLive?.resultValueMSC || 0),
+        },
+        {},
+        'Post Go-Live Support',
+        'All',
+        condition
+      );
+
+      console.log('resultValuePostGoLiveEstimateResource', resultValuePostGoLiveEstimateResource);
+      
+      let totalOfSub = await calculateSubTotal(
+        responsePostGoLive?.postGoLive, 
+        responseDocumentLayout?.endUserTraining,
+        responseSupportHandover?.supportHandover,
+        responseProdEnvironmentPreparation?.prodEnvironmentPreparation,
+        responseUATSupport?.uatSupport?.resultValue,
+        responseUATEnvironmentPreparation?.uatEnvironmentPreparation,
+        responseTrainTheTrainer?.trainTheTrainer,
+        responseTesting?.testing,
+        responseCRP?.crp,
+        responseDataMigration?.dataMigration,
+        responseReporting?.reporting,
+        responseDocumentLayout?.documentLayout,
+        responseCustomRequirementDesign?.customRequirementBuild,
+        responseCustomisationDesign?.customisationBuild,
+        responseIntegration?.integration,
+        responseAnalisisDesign?.configuration,
+        responseDesignReview?.designReview,
+        responseDocumentation?.documentation,
+        responseCustomRequirementDesign?.customRequirement,
+        responseCustomisationDesign?.customisation,
+        responseAnalisisDesign,
+      );
+
+      console.log('', totalOfSub);
+      
+
+      const responseProjectManagementSub = await calculateProjectManagerEstimateResource(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, totalOfSub);
+
+
+      resultValueProjectManagerEstimateResource = generateEstimateResourceValue(
+        inititlaData, {
+          M: (responseProjectManagementSub?.resultValue || 0),
+          'M/S': (responseProjectManagementSub?.resultValueMS || 0),
+          "M/S/C": (responseProjectManagementSub?.resultValueMSC || 0),
+        },
+        {},
+        'Project Manager',
+        'All',
+        condition
+      );
 
     }
     console.log('ll ==> ', resultValueReporting);
@@ -444,6 +687,47 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
       },
       fColmnValueEstimateAveRate: {
         resultValue: fColmnValueEstimateAveRate
+      },
+      analysisDesingEstimateResource: resultValueAnalisisDesignEstimateResource,
+      customisationDesignEstimateResource: resultValueCustomisationDesignEstimateResource,
+      customRequirementDesignEstimateResource: resultValueCustomRequirementDesignEstimateResource,
+      documentationEstimateResource: resultValueDocumentationEstimateResource,
+      designReviewEstimateResource: resultValueDesignReviewEstimateResource,
+      configurationEstimateResource: resultValueConfigurationEstimateResource,
+      integrationEstimateResource: resultValueIntegrationEstimateResource,
+      customisationBuildEstimateResource: resultValueCustomisationBuildEstimateResource,
+      customRequirementBuildEstimateResource: resultValueCustomRequirementBuildEstimateResource,
+      documentLayoutEstimateResource: resultValueDocumentLayoutEstimateResource,
+      reportingEstimateResource: resultValueReportingEstimateResource,
+      dataMigrationEstimateResource: resultValueDataMigrationEstimateResource,
+      crpEstimateResource: resultValueCRPEstimateResource,
+      testingEstimateResource: resultValueTestingEstimateResource,
+      trainTheTrainerEstimateResource: resultValueTrainTheTrainerEstimateResource,
+      uatEnvironmentPreparationEstimateResource: resultValueUATEnvironmentPreparationEstimateResource,
+      uatSupportEstimateResource: resultValueUATSupportEstimateResource,
+      prodEnvironmentPreparationEstimateResource: resultValueProdEnvironmentPreparationEstimateResource,
+      supportHandoverEstimateResource: resultValueSupportHandoverEstimateResource,
+      endUserTrainingEstimateResource: resultValueEndUserTrainingEstimateResource,
+      postGoLiveEstimateResource: resultValuePostGoLiveEstimateResource,
+      projectManager: resultValueProjectManagerEstimateResource,
+      subSections: {
+        responseAnalisisDesign,
+        responseCustomisationDesign,
+        responseCustomRequirementDesign,
+        responseDocumentation,
+        responseDesignReview,
+        responseIntegration,
+        responseDocumentLayout,
+        responseReporting,
+        responseDataMigration,
+        responseCRP,
+        responseTesting,
+        responseTrainTheTrainer,
+        responseUATEnvironmentPreparation,
+        responseUATSupport,
+        responseProdEnvironmentPreparation,
+        responseSupportHandover,
+        responsePostGoLive,
       }
     };
   } catch (error) {
@@ -463,7 +747,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
   }
 }
 
-const checkConditionAndGenerateValue = (calculatedValue: number, hourlyRate: number, hoursPerDay: number, condition: boolean) => {
+export const checkConditionAndGenerateValue = (calculatedValue: number, hourlyRate: number, hoursPerDay: number, condition: boolean) => {
   if (condition) {
     return calculatedValue * hourlyRate * hoursPerDay || 0;
   }
@@ -535,6 +819,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
 
       // BASE DATA LOOP
       const baseLoop = await BaseData && BaseData.length && BaseData.map(async(baseItem: any, baseIndex: number) => {
+        const {allResources} = baseItem;
         // ANALYSIS AND DESING
         // Must
         if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
@@ -666,6 +951,8 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
       });
       console.log("generateAnalysisDesignMValue true ==> ", BaseData.length, ModuleData.length);
       if (parameterModel?.length) {
+        console.log('lllmmmnnn', primaryResourceDesignValueFromBaseData, secondaryResourceDesignValueFromBaseData, primaryResourceDesignValueFromModuleData, secondaryResourceDesignValueFromModuleData);
+        
         resultValue = generateReturnValue(
           primaryResourceDesignValueFromBaseData,
           secondaryResourceDesignValueFromBaseData,

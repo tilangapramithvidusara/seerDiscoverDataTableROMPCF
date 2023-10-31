@@ -18,8 +18,8 @@ import { Box, Chip, Grid, Stack, Typography } from "@mui/material";
 
 
 const App = ({
-  dataSet, onRefreshHandler, isRefreshing, dataSetEstimateResource
-}: {dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, dataSetEstimateResource: any}) => { 
+  dataSet, onRefreshHandler, isRefreshing, dataSetEstimateResource, dataEstimateAverageRateMilestone
+}: {dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, dataSetEstimateResource: any, dataEstimateAverageRateMilestone: any}) => { 
 
   const items: TabsProps['items'] = [
     {
@@ -29,14 +29,14 @@ const App = ({
     },
     {
       key: '2',
-      label: 'Estimate Resource',
-      children: <AdvancedTable data={dataSetEstimateResource} type={'Estimate Resource'} isLoading={isRefreshing}/>,
-      // <RatesAndResources/>,
+      label: 'Estimate Average Rate Milestone',
+      children: <AdvancedTable data={dataEstimateAverageRateMilestone} type={'Estimate Average Rate Milestone'} isLoading={isRefreshing}/>,
     },
     {
       key: '3',
-      label: 'Risk Factors',
-      children: <RiskFactors/>,
+      label: 'Estimate Resource',
+      children: <AdvancedTable data={dataSetEstimateResource} type={'Estimate Resource'} isLoading={isRefreshing}/>,
+      // <RatesAndResources/>,
     },
     {
       key: '4',

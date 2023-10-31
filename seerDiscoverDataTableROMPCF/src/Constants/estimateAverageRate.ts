@@ -47,7 +47,8 @@ export const data: any[] = [
     titleCode: '1',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -55,7 +56,8 @@ export const data: any[] = [
     titleCode: '1',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -63,7 +65,8 @@ export const data: any[] = [
     titleCode: '1',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -71,7 +74,8 @@ export const data: any[] = [
     name: 'Documentation',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -79,7 +83,8 @@ export const data: any[] = [
     name: 'Design Review',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',
   },
   {
     "nameCategory": "BUILD",
@@ -87,7 +92,8 @@ export const data: any[] = [
     name: 'Configuration',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',
   },
   {
     "nameCategory": "BUILD",
@@ -95,7 +101,8 @@ export const data: any[] = [
     name: 'Integrations',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',	
   },
   {
     "nameCategory": "BUILD",
@@ -103,7 +110,8 @@ export const data: any[] = [
     name: 'Customisations (Build)',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',	
   },
   {
     "nameCategory": "BUILD",
@@ -111,7 +119,8 @@ export const data: any[] = [
     name: 'Custom Requirements (Build)',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',		
   },
   {
     "nameCategory": "BUILD",
@@ -119,7 +128,8 @@ export const data: any[] = [
     name: 'Document Layouts',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',		
   },
   {
     "nameCategory": "BUILD",
@@ -127,7 +137,8 @@ export const data: any[] = [
     name: 'Reporting',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',	
   },
   {
     "nameCategory": "BUILD",
@@ -135,7 +146,8 @@ export const data: any[] = [
     name: 'Data Migration',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',		
   },
   {
     "nameCategory": "BUILD",
@@ -143,7 +155,8 @@ export const data: any[] = [
     name: 'CRP',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',	
   },
   {
     "nameCategory": "BUILD",
@@ -151,7 +164,8 @@ export const data: any[] = [
     name: 'Testing',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',	
   },
   {
     "nameCategory": "DEPLOY",
@@ -159,7 +173,8 @@ export const data: any[] = [
     name: 'Train-the-trainer',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',		
   },
   {
     "nameCategory": "DEPLOY",
@@ -167,7 +182,8 @@ export const data: any[] = [
     name: 'UAT Environment Preparation',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',	
   },
   {
     "nameCategory": "DEPLOY",
@@ -175,7 +191,8 @@ export const data: any[] = [
     name: 'UAT Support',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',		
   },
   {
     "nameCategory": "DEPLOY",
@@ -183,7 +200,8 @@ export const data: any[] = [
     name: 'PROD Environment Preparation',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',		
   },
   {
     "nameCategory": "DEPLOY",
@@ -191,7 +209,8 @@ export const data: any[] = [
     name: 'Support Handover',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',		
   },
   {
     "nameCategory": "OPERATION",
@@ -199,7 +218,8 @@ export const data: any[] = [
     name: 'End user training',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',	
   },
   {
     "nameCategory": "OPERATION",
@@ -207,7 +227,8 @@ export const data: any[] = [
     name: 'Post Go-Live Support',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0		
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',		
   },
   // {
   //   "nameCategory": undefined,
@@ -239,7 +260,8 @@ export const data: any[] = [
     name: '',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',	
   },
   {
     "nameCategory": 'Project Manager',
@@ -247,7 +269,8 @@ export const data: any[] = [
     name: '',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',	
   },
   {
     "nameCategory": 'Project Risk',
@@ -255,7 +278,8 @@ export const data: any[] = [
     name: '',
     M: 0,
     'M/S': 0,
-    'M/S/C': 0	
+    'M/S/C': 0,
+    type: 'Estimate Avg Rate',	
   },
   // {
   //   "nameCategory": ' ',
