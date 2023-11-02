@@ -44,8 +44,6 @@ export const generateCustomRequirementMValue = async(inititlaData: any, conditio
     if (inititlaData) {
 
       const customRequirementLoop = await CustomRequirmentModel && CustomRequirmentModel.length && CustomRequirmentModel.map(async(customRequirementItem: any, customRequirementIndex: number) => {
-        console.log('m CustomRequirmentModel => ', customRequirementItem);
-        console.log('com ==> ', moscowsData?.[customRequirementItem?.mosCow] == moscowsData?.[100000000], fitGapData[customRequirementItem?.fitGap] != fitGapData[100000001]);
         
         // Must
         // && fitGapData[customisationItem?.seer_fitgap] != fitGapData[100000001]
@@ -63,7 +61,6 @@ export const generateCustomRequirementMValue = async(inititlaData: any, conditio
           // !seenModuleMIds.has(moduleDataItem?.fitGapProductSeerModule?.id)
           const resCustomRequirment = baseReader(customRequirementItem, primaryResourceDesignValueFromCustomRequirmentMS, "design");
           primaryResourceDesignValueFromCustomRequirmentMS = resCustomRequirment.primaryResourceDesignValueFromCustomRequirment;
-          console.log('switch MS primaryResourceDesignValueFromCustomRequirmentModel => ', primaryResourceDesignValueFromCustomRequirmentMS);
           const resCustomRequirmentBuild = baseReader(customRequirementItem, primaryResourceDesignValueBuildFromCustomRequirmentMS, "build");
           primaryResourceDesignValueBuildFromCustomRequirmentMS = resCustomRequirmentBuild.primaryResourceDesignValueFromCustomRequirment;
         }
@@ -73,13 +70,11 @@ export const generateCustomRequirementMValue = async(inititlaData: any, conditio
           //
           const resCustomRequirment = baseReader(customRequirementItem, primaryResourceDesignValueFromCustomRequirmentMSC, "design");
           primaryResourceDesignValueFromCustomRequirmentMSC = resCustomRequirment.primaryResourceDesignValueFromCustomRequirment;
-          console.log('switch MSC primaryResourceDesignValueFromCustomRequirmentModel => ', primaryResourceDesignValueFromCustomRequirmentMSC);
           const resCustomRequirmentBuild = baseReader(customRequirementItem, primaryResourceDesignValueBuildFromCustomRequirmentMSC, "build");
           primaryResourceDesignValueBuildFromCustomRequirmentMSC = resCustomRequirmentBuild.primaryResourceDesignValueFromCustomRequirment;
         }
       });
       
-      console.log("generateCustomRequirmentModelMValue true ==> ", CustomRequirmentModel.length);
       if (parameterModel?.length) {
         returnObject.customRequirement.resultValue = generateReturnValue(
           primaryResourceDesignValueFromCustomRequirment,
@@ -115,11 +110,9 @@ export const generateCustomRequirementMValue = async(inititlaData: any, conditio
           condition
         )
       }
-        console.log("resultValue => ", resultValue);
       await Promise.all([customRequirementLoop])
       return returnObject;
     } else {
-      console.log("generateAnalysisDesignMValue false ==> ");
       return returnObject;
     }
   } catch (error) {

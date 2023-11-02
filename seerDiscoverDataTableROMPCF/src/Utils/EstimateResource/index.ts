@@ -10,8 +10,11 @@ export const generateEstimateResourceValue = (
   condition: boolean
   ) => {
   try {
+    
     const {ProjectTasktModel, resourceModelData, parameterModel} = inititlaData;
-    const filteredValue: any = ProjectTasktModel?.length && ProjectTasktModel.find((item: any, index: number) => item?.projectTaskPartner_Name == name);
+    const filteredValue: any = ProjectTasktModel?.length && ProjectTasktModel.find((item: any, index: number) => {
+      return item?.projectTaskPartner_Name == name
+    });
     if (filteredValue) {
       //
       const {
@@ -25,58 +28,53 @@ export const generateEstimateResourceValue = (
       } = filteredValue;
       // projectTaskCustomer_Name
       const checkIsCustomer = projectTaskCustomer_Name ? true : false;
-      console.log('checkIsCustomer', checkIsCustomer)
       const split = checkIsCustomer ? projectTaskCustomer_ResourceSplit : projectTaskPartner_ResourceSplit
+
       const findProjectTaskPartner_Resource = projectTaskPartner_Resource?.id && resourceModelData?.find((item: any, index: number) => checkIsCustomer ? item?.resourceId == projectTaskCustomer_Resource?.id : item?.resourceId == projectTaskPartner_Resource?.id);
       const findProjectTaskPartner_ResourceSecondary = projectTaskPartner_ResourceSecondary?.id && resourceModelData?.find((item: any, index: number) => checkIsCustomer ? item?.resourceId == projectTaskCustomer_ResourceSecondary?.id : item?.resourceId == projectTaskPartner_ResourceSecondary?.id)
       // hourlyRate
-      console.log('findProjectTaskPartner_Resource ', findProjectTaskPartner_Resource, split, subCal.M);
       
 
-      const r1Mvalue = generateValue(split || 0, subCal.M || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition);
+      const r1Mvalue = priority === 'Estimate Resource Milestone' ? subCal.M *  (split || 0)/100 : generateValue(split || 0, subCal.M || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition);
       // condition ? 
       //   subCal.M * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal.M * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate
 
-      const r2Mvalue = generateValue((100 - split) || 0, subCal.M || 0, findProjectTaskPartner_ResourceSecondary?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
+      const r2Mvalue = priority === 'Estimate Resource Milestone' ? subCal.M *  (100 - split || 0)/100 : generateValue((100 - split) || 0, subCal.M || 0, findProjectTaskPartner_ResourceSecondary?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
       // condition ? 
       //   subCal.M * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal.M * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate
 
-      const r1MSvalue = generateValue((split) || 0, subCal['M/S'] || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
+      const r1MSvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S'] || 0) *  (split || 0)/100 : generateValue((split) || 0, subCal['M/S'] || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
       // condition ? 
       //   subCal['M/S'] * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S']* ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate
 
-      const r2MSvalue = generateValue((100 - split) || 0, subCal['M/S'] || 0, findProjectTaskPartner_ResourceSecondary?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
+      const r2MSvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S'] || 0) *  (100 - split || 0)/100 : generateValue((100 - split) || 0, subCal['M/S'] || 0, findProjectTaskPartner_ResourceSecondary?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
       // condition ? 
       //   subCal['M/S'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate
 
-      const r1MSCvalue = generateValue((split) || 0, subCal['M/S/C'] || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
+      const r1MSCvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S/C'] || 0) *  (split || 0)/100 : generateValue((split) || 0, subCal['M/S/C'] || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
       // condition ? 
       //   subCal['M/S/C'] * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S/C'] * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate
 
-      const r2MSCvalue = generateValue((100 - split) || 0, subCal['M/S/C'] || 0, findProjectTaskPartner_ResourceSecondary?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
+      const r2MSCvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S/C'] || 0) *  (100 - split || 0)/100 : generateValue((100 - split) || 0, subCal['M/S/C'] || 0, findProjectTaskPartner_ResourceSecondary?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
       // condition ? 
       //   subCal['M/S/C'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S/C'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate
       const numberOfResources = 2;
 
-      console.log('final ==> ', r1Mvalue, r2Mvalue, r1MSvalue, r2MSvalue, r1MSCvalue, r2MSCvalue);
-      console.log('r1MSCvalue', r1MSCvalue);
-      console.log("subCal['M/S/C']", subCal['M/S/C']);
-      
       return {
-        resultValue1: r1Mvalue,
+        resultValue1:  r1Mvalue,
         resultValue2: r2Mvalue,
-        "M_Resource_Total": r1Mvalue + r2Mvalue,
+        "M_Resource_Total":  r1Mvalue + r2Mvalue,
         resultValueMS1: r1MSvalue,
         resultValueMS2: r2MSvalue,
         "M/S_Resource_Total": r1MSvalue + r2MSvalue,
         resultValueMSC1: r1MSCvalue,
-        resultValueMSC2: r2MSCvalue,
+        resultValueMSC2:  r2MSCvalue,
         "M/S/C_Resource_Total": r1MSCvalue + r2MSCvalue,
         numberOfResources,
       }
@@ -97,10 +95,7 @@ export const generateEstimateResourceValue = (
 }
 
 const generateValue = (split: number, value1: number, value2:  number, hourlyRate: number, condition: boolean) => {
-  console.log('generateValue ==> ', split, value1, value2, hourlyRate);
-  console.log('value1=======', (value1 * (split/100) * value2))
   if (condition) {
-    
     return value1 * (split/100) * value2 * hourlyRate
   }
   return value1 * (split/100) * value2
@@ -132,6 +127,7 @@ export const calculateSubTotal = async(
   
 ) => {
   let responseObject: any = {}
+
   try {
     responseObject['M'] = (resultValuePostGoLiveEstimateResource?.resultValue || 0) +
       (resultValueEndUserTrainingEstimateResource?.resultValue || 0) +
@@ -198,7 +194,6 @@ export const calculateSubTotal = async(
       (resultValueCustomRequirementDesignEstimateResource?.resultValueMSC || 0) +
       (resultValueCustomisationDesignEstimateResource?.resultValueMSC || 0) +
       (resultValueAnalisisDesignEstimateResource?.resultValueMSC || 0)
-    console.log(responseObject, resultValuePostGoLiveEstimateResource?.resultValue);
     
     return responseObject
   } catch (error) {
@@ -218,20 +213,6 @@ export const calculateProjectManagerEstimateResource = async(inititlaData: any, 
   }
 
   // Must Custom Requirement
-  console.log(analisisDesignPre?.responseCustomRequirementDesign?.customRequirementBuild?.resultValue);
-  console.log(analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValue);
-  console.log(analisisDesignPre?.responseCustomisationDesign.customisationBuild?.resultValue);
-  console.log(analisisDesignPre?.responseIntegration.integration?.resultValue);
-  
-  console.log(
-    (analisisDesignPre?.responseCustomRequirementDesign?.customRequirementBuild?.resultValue || 0) + 
-    (analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValue || 0) + 
-    (analisisDesignPre?.responseCustomisationDesign.customisationBuild?.resultValue || 0 ) +
-    (analisisDesignPre?.responseIntegration.integration?.resultValue || 0)
-    );
-  
-  
-  
   const mustCal = 
     (analisisDesignPre?.responseCustomRequirementDesign?.customRequirementBuild?.resultValue || 0) + 
     (analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValue || 0) + 
@@ -247,7 +228,6 @@ export const calculateProjectManagerEstimateResource = async(inititlaData: any, 
     (analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValueMSC || 0) + 
     (analisisDesignPre?.responseCustomisationDesign.customisationBuild?.resultValueMSC || 0) + 
     (analisisDesignPre?.responseIntegration.integration?.resultValueMSC || 0)
-  console.log('mmm ==> ', mustCal, mustShouldCal, mustShouldCal);
   const F4Parameter = parameterModel[0]?.hoursPerday * 5;
   const O37 = 0// to find this we need to complete Estimate Avg Rate Milestone table
   const H6 = 29// if days === c2 => O37/5 else (O37/8)/5
@@ -260,7 +240,6 @@ export const calculateProjectManagerEstimateResource = async(inititlaData: any, 
       // "projectManagement": 20.0000000000,
       //       "projectManagementType": 100000001,
       //(totalOfSub?.['M_Resource1] + totalOfSub?.['M_Resource2]) * (parameterModel[0].projectManagement /100)
-      console.log('jjj', totalOfSub?.['M']);
       
       returnObject.resultValue = (totalOfSub?.['M']) * (parameterModel[0].projectManagement /100)
       returnObject.resultValueMS = (totalOfSub?.['M/S']) * (parameterModel[0].projectManagement /100)
@@ -285,7 +264,6 @@ export const calculateProjectManagerEstimateResource = async(inititlaData: any, 
         // returnObject.resultValueMSC = (parameterModel[0]?.solutionArchitecture * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
       }
     }
-    console.log('returnObject', returnObject);
     
     return returnObject
   } catch (error) {

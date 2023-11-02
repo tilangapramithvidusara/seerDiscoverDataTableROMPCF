@@ -24,11 +24,6 @@ export const generateProjectManagerMValue = async(inititlaData: any, analisisDes
   try {
 
     const {parameterModel} = inititlaData;
-    console.log('parameterModel[0]?.projectManagementType ', 
-    parameterModel[0]?.projectManagementType, 
-    parameterModel[0]?.projectManagement, 
-    analisisDesignPre?.responseSubtotal?.subTotalMAnalysisDesign,
-    percentData[parameterModel[0]?.projectManagementType] == percentData?.[100000001]);
     
     if (percentData[parameterModel[0]?.projectManagementType] == percentData?.[100000001]) {
 
@@ -38,7 +33,6 @@ export const generateProjectManagerMValue = async(inititlaData: any, analisisDes
       returnObject.projectManager.resultValueMS = (parameterModel[0]?.projectManagement/100 || 0) * (analisisDesignPre?.responseSubtotal?.subTotalMSAnalysisDesign || 0)
       // must should could
       returnObject.projectManager.resultValueMSC = (parameterModel[0]?.projectManagement/100 || 0) * (analisisDesignPre?.responseSubtotal?.subTotalMSCAnalysisDesign || 0)
-      console.log("resultValue => ", resultValue, returnObject);
       await Promise.all([returnObject])
       return returnObject;
     } else {
@@ -100,7 +94,6 @@ export const generateProjectManagerMValue = async(inititlaData: any, analisisDes
         returnObject.projectManager.resultValueMSC = 0
       }
       
-      console.log("resultValue => ", resultValue, returnObject);
       await Promise.all([returnObject])
       return returnObject;
     }

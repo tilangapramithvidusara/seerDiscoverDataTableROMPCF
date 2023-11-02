@@ -145,7 +145,6 @@ export const calculateProjectManagerEstimateAvgRateMilestone = async(inititlaDat
         // returnObject.resultValueMSC = (parameterModel[0]?.solutionArchitecture * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
       }
     }
-    console.log('returnObject', returnObject);
 
     returnObject.resultValueSub = (mustCal || 0) + (returnObject.resultValue || 0);
     returnObject.resultValueMSSub = (mustShouldCal || 0) + (returnObject.resultValueMS || 0);
@@ -154,8 +153,4 @@ export const calculateProjectManagerEstimateAvgRateMilestone = async(inititlaDat
   } catch (error) {
     return returnObject;
   }
-}
-
-const getSubSectionTotal = () => {
-
 }

@@ -136,8 +136,6 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
         getFcolValue = 20/100;
       }
       
-      
-      console.log("generateCustomisationDesignMValue true ==> ", CustomisationModels.length);
       if (parameterModel?.length) {
         returnObject.documentLayout.resultValue = generateReturnValue(
           layoutValue,
@@ -163,11 +161,9 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
         returnObject.projectRisk.estimateAveRate = getFcolValue;
         
       }
-        console.log("resultValue => ", resultValue, endUserTrainingValue);
       await Promise.all([customizationLoop])
       return returnObject;
     } else {
-      console.log("generateAnalysisDesignMValue false ==> ");
       return returnObject;
     }
   } catch (error) {

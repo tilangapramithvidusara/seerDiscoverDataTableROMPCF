@@ -30,9 +30,7 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
       const {interfaces_Crf96_json} = IntegrationModel[0];
       const IntegrationDataSet = JSON.parse(interfaces_Crf96_json?.value)
       
-      console.log("generateIntegrationDataSetMValue true ==> ", IntegrationDataSet.length);
       const integrationLoop = IntegrationDataSet && IntegrationDataSet.length && IntegrationDataSet.map((integrationItem: any, itegrationIndex: number) => {
-        console.log("integrationItem ==> ", integrationItem);
         let k2 = integrationItem?.['305110'];
         console.log(k2, integrationItem?.[305110]);
         

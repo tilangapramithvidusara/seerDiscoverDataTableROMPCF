@@ -24,7 +24,6 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
       const mustCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValue + analisisDesignPre?.responseAnalisisDesign?.resultValue + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValue + analisisDesignPre?.responseDocumentation.documentation?.resultValue
       const mustShouldCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValueMS + analisisDesignPre?.responseAnalisisDesign?.resultValueMS + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMS + analisisDesignPre?.responseDocumentation.documentation?.resultValueMS
       const mustShouldCouldCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValueMSC + analisisDesignPre?.responseAnalisisDesign?.resultValueMSC + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMSC + + analisisDesignPre?.responseDocumentation.documentation?.resultValueMSC
-      console.log('mmm ==> ', );
       const F4Parameter = parameterModel[0]?.hoursPerday * 5;
       const O37 = 0// to find this we need to complete Estimate Avg Rate Milestone table
       const H6 = 29// if days === c2 => O37/5 else (O37/8)/5
@@ -48,11 +47,9 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
         // returnObject.designReview.resultValueMSC = (parameterModel[0]?.designReview * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview * f8  // need to find F8
       }
       
-      console.log("resultValue => ", resultValue, returnObject);
       await Promise.all([returnObject])
       return returnObject;
     } else {
-      console.log("generateAnalysisDesignMValue false ==> ");
       return returnObject;
     }
   } catch (error) {

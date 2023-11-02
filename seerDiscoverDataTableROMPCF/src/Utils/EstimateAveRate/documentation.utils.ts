@@ -24,7 +24,6 @@ export const generateDocumentationMValue = async(inititlaData: any, analisisDesi
       const mustCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValue + analisisDesignPre?.responseAnalisisDesign?.resultValue + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValue
       const mustShouldCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValueMS + analisisDesignPre?.responseAnalisisDesign?.resultValueMS + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMS
       const mustShouldCouldCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValueMSC + analisisDesignPre?.responseAnalisisDesign?.resultValueMSC + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMSC
-      console.log('mmm ==> ', );
 
       const F4Parameter = parameterModel[0]?.hoursPerday * 5;
       const O37 = 0// to find this we need to complete Estimate Avg Rate Milestone table
@@ -48,11 +47,9 @@ export const generateDocumentationMValue = async(inititlaData: any, analisisDesi
         // returnObject.documentation.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.collateRequirment/100);
       }
       
-      console.log("resultValue => ", resultValue, returnObject);
       await Promise.all([returnObject])
       return returnObject;
     } else {
-      console.log("generateAnalysisDesignMValue false ==> ");
       return returnObject;
     }
   } catch (error) {

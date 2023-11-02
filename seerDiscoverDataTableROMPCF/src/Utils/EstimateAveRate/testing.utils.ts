@@ -21,20 +21,6 @@ export const generateTestingMValue = async(inititlaData: any, analisisDesignPre:
     const {parameterModel} = inititlaData
     if (inititlaData) {
       // Must Custom Requirement
-      console.log(analisisDesignPre?.responseCustomRequirementDesign?.customRequirementBuild?.resultValue);
-      console.log(analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValue);
-      console.log(analisisDesignPre?.responseCustomisationDesign.customisationBuild?.resultValue);
-      console.log(analisisDesignPre?.responseIntegration.integration?.resultValue);
-      
-      console.log(
-        (analisisDesignPre?.responseCustomRequirementDesign?.customRequirementBuild?.resultValue || 0) + 
-        (analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValue || 0) + 
-        (analisisDesignPre?.responseCustomisationDesign.customisationBuild?.resultValue || 0 ) +
-        (analisisDesignPre?.responseIntegration.integration?.resultValue || 0)
-        );
-      
-      
-      
       const mustCal = 
         (analisisDesignPre?.responseCustomRequirementDesign?.customRequirementBuild?.resultValue || 0) + 
         (analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValue || 0) + 
@@ -50,7 +36,6 @@ export const generateTestingMValue = async(inititlaData: any, analisisDesignPre:
         (analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValueMSC || 0) + 
         (analisisDesignPre?.responseCustomisationDesign.customisationBuild?.resultValueMSC || 0) + 
         (analisisDesignPre?.responseIntegration.integration?.resultValueMSC || 0)
-      console.log('mmm ==> ', mustCal, mustShouldCal, mustShouldCal);
       const F4Parameter = parameterModel[0]?.hoursPerday * 5;
       const O37 = 0// to find this we need to complete Estimate Avg Rate Milestone table
       const H6 = 29// if days === c2 => O37/5 else (O37/8)/5
@@ -76,11 +61,9 @@ export const generateTestingMValue = async(inititlaData: any, analisisDesignPre:
         // returnObject.testing.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.testing * f8) : (parameterModel[0]?.testing * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.testing * f8  // need to find F8
       }
       
-      console.log("resultValue => ", resultValue, returnObject);
       await Promise.all([returnObject])
       return returnObject;
     } else {
-      console.log("generateAnalysisDesignMValue false ==> ");
       return returnObject;
     }
   } catch (error) {

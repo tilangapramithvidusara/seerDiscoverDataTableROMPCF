@@ -6,7 +6,6 @@ export const generateIColoumnValue = async(inititlaData: any, type: string) => {
   
   try {
     const response = await generateAnalysisDesignMValue(inititlaData, type);
-    console.log("response ====> ", response);
     
     if (condition) {
       const {parameterModel} = inititlaData;
@@ -15,10 +14,8 @@ export const generateIColoumnValue = async(inititlaData: any, type: string) => {
         resultValue = response * hoursPerday * hourlyRate?.value || 0
       }
       
-      console.log("generateIColoumnValue true ==> ", resultValue);
       return resultValue;
     } else {
-      console.log("generateIColoumnValue false ==> ", resultValue);
       return resultValue;
     }
   } catch (error) {
@@ -57,8 +54,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, type: strin
               const res = baseReader(baseItem, primaryResourceDesignValueFromBaseData, secondaryResourceDesignValueFromBaseData, x);
               primaryResourceDesignValueFromBaseData = res.primaryResourceDesignValueFromBaseData;
               secondaryResourceDesignValueFromBaseData = res.secondaryResourceDesignValueFromBaseData;
-              console.log('switch M primaryResourceDesignValueFromBaseData => ', primaryResourceDesignValueFromBaseData);
-              console.log('switch M secondaryResourceDesignValueFromBaseData => ', secondaryResourceDesignValueFromBaseData);
             }
             break;
           
@@ -68,8 +63,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, type: strin
               const res = baseReader(baseItem, primaryResourceDesignValueFromBaseData, secondaryResourceDesignValueFromBaseData, x);
               primaryResourceDesignValueFromBaseData = res.primaryResourceDesignValueFromBaseData;
               secondaryResourceDesignValueFromBaseData = res.secondaryResourceDesignValueFromBaseData;
-              console.log('switch MS primaryResourceDesignValueFromBaseData => ', primaryResourceDesignValueFromBaseData);
-              console.log('switch MS secondaryResourceDesignValueFromBaseData => ', secondaryResourceDesignValueFromBaseData);
             }
             break;
           case "M/S/C":
@@ -78,8 +71,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, type: strin
               const res = baseReader(baseItem, primaryResourceDesignValueFromBaseData, secondaryResourceDesignValueFromBaseData, x);
               primaryResourceDesignValueFromBaseData = res.primaryResourceDesignValueFromBaseData;
               secondaryResourceDesignValueFromBaseData = res.secondaryResourceDesignValueFromBaseData;
-              console.log('switch MSC primaryResourceDesignValueFromBaseData => ', primaryResourceDesignValueFromBaseData);
-              console.log('switch MSC secondaryResourceDesignValueFromBaseData => ', secondaryResourceDesignValueFromBaseData);
             }
             break;
           // default:
@@ -107,7 +98,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, type: strin
       });
       
       const moduleLoop = await ModuleData && ModuleData?.length && ModuleData.map((moduleDataItem: any, moduleDataIndex: any) => {
-        console.log('cc ==> ', moduleDataItem?.moduleSeerEstimateDesign, moduleDataItem?.moduleSeerResourceSplit, moduleDataItem?.moduleOverridePartnerSeerEstimateDesign);
         // console.log('ccw ==> ', moduleDataItem?.moduleSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100));
         switch (type) {
           case "M":
@@ -143,13 +133,10 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, type: strin
               //
               if (!seenModuleMSCIds.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
                 seenModuleMSCIds.add(moduleDataItem?.fitGapProductSeerModule?.id);
-                console.log('cc ==>wwwww ==> ', seenModuleMSCIds, moduleDataItem?.moduleOverridePartnerSeerEstimateDesign, moduleDataItem?.moduleSeerEstimateDesign, moduleDataItem?.moduleOverrideCustomerSeerEstimateDesign);
               
                 const res = moduleReader(moduleDataItem, primaryResourceDesignValueFromModuleData, secondaryResourceDesignValueFromModuleData, y);
                 primaryResourceDesignValueFromModuleData = res.primaryResourceDesignValueFromModuleData;
                 secondaryResourceDesignValueFromModuleData = res.secondaryResourceDesignValueFromModuleData;
-                console.log('switch MSC primaryResourceDesignValueFromModuleData => ', primaryResourceDesignValueFromModuleData);
-                console.log('switch MSC secondaryResourceDesignValueFromModuleData => ', secondaryResourceDesignValueFromModuleData);
               }
               // console.log('cc ==>wwwww ==> ', moduleDataItem?.moduleOverridePartnerSeerEstimateDesign, moduleDataItem?.moduleSeerEstimateDesign, moduleDataItem?.moduleOverrideCustomerSeerEstimateDesign);
               
@@ -176,11 +163,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, type: strin
         // }
 
       });
-      console.log("generateAnalysisDesignMValue true ==> ", x, BaseData.length, y, ModuleData.length);
-      console.log("primaryResourceDesignValueFromBaseData ===> ", primaryResourceDesignValueFromBaseData);
-      console.log("secondaryResourceDesignValueFromBaseData ===> ", secondaryResourceDesignValueFromBaseData);
-      console.log("primaryaResourceDesignValueFromModuleData ===> ", primaryResourceDesignValueFromModuleData);
-      console.log("secondaryResourceDesignValueFromModuleData ===> ", secondaryResourceDesignValueFromModuleData);
       if (parameterModel?.length)
         resultValue = (
             primaryResourceDesignValueFromBaseData 
@@ -188,11 +170,9 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, type: strin
             + primaryResourceDesignValueFromModuleData 
             + secondaryResourceDesignValueFromModuleData
           )/parameterModel[0].hoursPerday
-        console.log("resultValue => ", resultValue);
       await Promise.all([baseLoop, moduleLoop])
       return resultValue;
     } else {
-      console.log("generateAnalysisDesignMValue false ==> ");
       return resultValue;
     }
   } catch (error) {
@@ -204,9 +184,6 @@ export const generateAnalysisDesignMValue2 = async (inititlaData: any) => {
   try {
     const { BaseData, ModuleData, parameterModel } = inititlaData;
     const resultValue = calculateResultValue(BaseData, ModuleData, parameterModel);
-    
-    console.log("generateAnalysisDesignMValue true ==> ");
-    console.log("resultValue => ", resultValue);
     return resultValue;
   } catch (error) {
     console.log("generateAnalysisDesignMValue error ==> ", error);
@@ -263,13 +240,10 @@ const calculateResultValue = (
 const baseReader = (baseItem: any, primaryResourceDesignValueFromBaseData: number, secondaryResourceDesignValueFromBaseData: number, x: number) => {
   x += 1;
   if (baseItem?.quantity && baseItem?.quantity > 0) { // Quantity greaterthan 0
-    // (design*(split/100))*quantity
-    console.log('primaryResourceDesignValueFromBaseData => ', primaryResourceDesignValueFromBaseData, (baseItem?.designEstimate * (baseItem?.resourceSplit / 100)) * baseItem?.quantity);
-    
+    // (design*(split/100))*quantity    
     primaryResourceDesignValueFromBaseData += (baseItem?.designEstimate * (baseItem?.resourceSplit / 100)) * baseItem?.quantity
   } else {
     // design value
-    console.log('primaryResourceDesignValueFromBaseData22 => ', primaryResourceDesignValueFromBaseData, (baseItem?.designEstimate * (baseItem?.resourceSplit / 100)));
     primaryResourceDesignValueFromBaseData += (baseItem?.designEstimate * (baseItem?.resourceSplit / 100))
   }
 
@@ -281,9 +255,7 @@ const moduleReader = (moduleDataItem: any, primaryResourceDesignValueFromModuleD
   y += 1;
   // design*(split/100)
   // Design*((100-Split)/100)
-  console.log('primaryResourceDesignValueFromModuleData => ', primaryResourceDesignValueFromModuleData, moduleDataItem?.moduleSeerEstimateDesign * (moduleDataItem?.moduleSeerResourceSplit / 100));
   primaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * (moduleDataItem?.moduleSeerResourceSplit / 100)
-  console.log('secondaryResourceDesignValueFromModuleData => ', secondaryResourceDesignValueFromModuleData, moduleDataItem?.moduleSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100));
   secondaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100)
   return {primaryResourceDesignValueFromModuleData, secondaryResourceDesignValueFromModuleData}
 }

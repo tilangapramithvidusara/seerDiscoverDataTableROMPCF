@@ -23,7 +23,6 @@ export const columnFixed = (columnArray: any, data: any) => {
         
       //   return acc + curr[key]
       // }, 0)
-      console.log('mm log ', data);
       let sumEstimateResource = 0;
       let indicesToSum = []
       // type: 'Estimate Resource'
@@ -31,7 +30,7 @@ export const columnFixed = (columnArray: any, data: any) => {
         indicesToSum = [(data.length - 1), (data.length - 3)]
         sumEstimateResource = indicesToSum.reduceRight((sum, index) => sum + data[index][key], 0);
       }
-      const N = (data && data?.length && data[0].type == "Estimate Avg Rate Milestone") ? 2 : 3;
+      const N = (data && data?.length && data[0].type == "Estimate Avg Rate Milestone" || data && data?.length && data[0].type == "Estimate Resource Milestone") ? 2 : 3;
       let total = (data && data?.length && data[0].type == "Estimate Resource") ? sumEstimateResource
         // data.slice(startIdx, endIdx - 1).reduceRight((accumulator: any, item: any) => {
         //   return accumulator + item[key];
@@ -68,7 +67,6 @@ export const columnFixed = (columnArray: any, data: any) => {
       } : null,
       aggregationFn: columnItem?.aggregationFn ? columnItem?.aggregationFn : null,
       AggregatedCell: columnItem?.aggregationFn ? ({ cell, table }: { cell: any, table: any }) => {
-        console.log('mmmmK ==> ', cell?.row, cell?.row?._valuesCache, table);
         
         return(
           <div style={{

@@ -20,7 +20,6 @@ import {
 } from '../../Constants/estimateResource';
 
 const AdvancedTable = ({data, isLoading, type}: {data?: any, isLoading: boolean, type: string}) => {
-  console.log('final data ==> ', data);
   const dispatch = useDispatch();
   const loading = useSelector((state: any) => state.report.loading)
   const [isRefreshing, setIsRefreshing] = React.useState<boolean>(isLoading || false);
@@ -31,6 +30,7 @@ const AdvancedTable = ({data, isLoading, type}: {data?: any, isLoading: boolean,
   estimateResourceMustColumnDetails
   // estimateResourceMustShouldColumnDetails
   )
+  console.log(type);
   
   const averageM = useMemo(
     () => data.reduce((acc: any, curr: any) => acc + curr?.M, 0) / data.length,
@@ -65,20 +65,14 @@ const AdvancedTable = ({data, isLoading, type}: {data?: any, isLoading: boolean,
   const onClickHandler = (event: any, rowData: any) => {
     
   }
-  console.log('cocococococ ===> ', columns);
-
-
 
   const initialTriggerHandler = async(e: any) => {
     // e.preventDefault()
     setComIsloading(true)
-    console.log('come')
     const inititalData = await fetchInitialDataAsync();
     if (!inititalData.error) {
-      console.log('come1')
       dispatch(initialFetchSuccess(inititalData?.result));
     } else {
-      console.log('come22')
       setComIsloading(false)
       dispatch(initialFetchFailure(inititalData?.result));
     }
@@ -89,40 +83,35 @@ const AdvancedTable = ({data, isLoading, type}: {data?: any, isLoading: boolean,
   }, [isLoading])
 
   React.useEffect(() => {
-    const columnCreator = type === 'Estimate Average Rate' ? columnDetails : 
+    const columnCreator = type === 'Estimate Average Rate' ? columnDetails : type === 'Estimate Average Rate Milestone' ? columnDetails :
     resourceType === 'Must' ? estimateResourceMustColumnDetails :
     resourceType === 'Must Should' ? estimateResourceMustShouldColumnDetails :
     resourceType === 'Must Should Could' ? estimateResourceMustShouldCouldColumnDetails : columnDetails
-    console.log('change ====', columnCreator);
     
     setColumnSet(columnCreator);
-  }, [resourceType])
-  console.log('llll ==> ', isLoading, isComLoading, isRefreshing, loading);
-  console.log('ppp==> ', columnsSet);
-  console.log('mp;; ==> ', resourceType);
-
+  }, [resourceType, type])
 
   return (
     <>
       {(isRefreshing || isComLoading || isLoading || loading) && (
         <>
-        <div className="blur-background"></div>
-        <div className="loader-container">
-          <Loader />
-        </div>
+          <div className="blur-background"></div>
+          <div className="loader-container">
+            <Loader />
+          </div>
         </>
       )}
         <div>
-          {type === 'Estimate Resource' && (
+          <Button onClick={(e) => initialTriggerHandler(e)}>Refresh</Button>
+        </div>
+        <div>
+          {(type === 'Estimate Resource' || type === 'Estimate Resource Milestone') && (
             <ButtonGroups selectedButton={resourceType} setSelectedButton={
               setResourceType
             } numberOfButtons={3} buttonTitles={[
               {title: 'Must'}, {title: 'Must Should'}, {title: 'Must Should Could'}
             ]}/>
           )}
-        </div>
-        <div>
-          <Button onClick={(e) => initialTriggerHandler(e)}>Refresh</Button>
         </div>
         <div>
           <MaterialReactTable

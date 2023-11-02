@@ -19,6 +19,7 @@ export default function Index({tableContent, context}: {tableContent: any, conte
   const [dataSet, setDataSet] = React.useState<any []>([])
   const [dataSetEstimateResource, setDataSetEstimateResource] = React.useState<any []>([])
   const [dataEstimateAverageRateMilestone, setDataEstimateAverageRateMilestone] = React.useState<any[]>([])
+  const [dataEstimateResourceMilestone, setDataEstimateResourceMilestone] = React.useState<any []>([]);
   console.log('data set ===> ', data)
   React.useEffect(() => {
     initialTriggerHandler();
@@ -43,6 +44,7 @@ export default function Index({tableContent, context}: {tableContent: any, conte
         setDataSet(result?.dataEstimateAverageRate ? result?.dataEstimateAverageRate : []);
         setDataSetEstimateResource(result?.dataEstimateResource ? result?.dataEstimateResource : [])
         setDataEstimateAverageRateMilestone(result?.dataEstimateAverageRateMilestone ? result?.dataEstimateAverageRateMilestone : [])
+        setDataEstimateResourceMilestone(result?.dataEstimateResourceMilestone ? result?.dataEstimateResourceMilestone : []);
         // dispatch(deleteOutputSetAsync({ OutputSetId: data?.OutputSetId }))
         setIsloading(false)
         console.log('dataValue ==> ', result);
@@ -83,6 +85,7 @@ export default function Index({tableContent, context}: {tableContent: any, conte
           isRefreshing={loading || isLoading}
           dataSetEstimateResource={dataSetEstimateResource}
           dataEstimateAverageRateMilestone={dataEstimateAverageRateMilestone}
+          dataEstimateResourceMilestone={dataEstimateResourceMilestone}
         />}
       {/* <TabComponent dataSet={dataSet} isRefreshing={loading || isLoading}/> */}
     </div>

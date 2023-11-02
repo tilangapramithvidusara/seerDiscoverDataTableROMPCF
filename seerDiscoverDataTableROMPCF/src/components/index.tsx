@@ -18,8 +18,8 @@ import { Box, Chip, Grid, Stack, Typography } from "@mui/material";
 
 
 const App = ({
-  dataSet, onRefreshHandler, isRefreshing, dataSetEstimateResource, dataEstimateAverageRateMilestone
-}: {dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, dataSetEstimateResource: any, dataEstimateAverageRateMilestone: any}) => { 
+  dataSet, onRefreshHandler, isRefreshing, dataSetEstimateResource, dataEstimateAverageRateMilestone, dataEstimateResourceMilestone
+}: {dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, dataSetEstimateResource: any, dataEstimateAverageRateMilestone: any, dataEstimateResourceMilestone: any}) => { 
 
   const items: TabsProps['items'] = [
     {
@@ -40,26 +40,32 @@ const App = ({
     },
     {
       key: '4',
+      label: 'Estimate Resource Milestone',
+      children: <AdvancedTable data={dataEstimateResourceMilestone} type={'Estimate Resource Milestone'} isLoading={isRefreshing}/>,
+      // <RatesAndResources/>,
+    },
+    {
+      key: '5',
       label: 'Project ROM',
       children: <ProjectROM/>,
     },
     {
-      key: '5',
+      key: '6',
       label: 'Project Margin',
       children: <ProjectMargin/>,
     },
     {
-      key: '6',
+      key: '7',
       label: 'Governance',
       children: <Governance/>,
     },
     {
-      key: '7',
+      key: '8',
       label: 'ROM by Phase',
       children: <ROMByPhase/>,
     },
     {
-      key: '8',
+      key: '9',
       label: 'Fit / Gap',
       children: <FitOrGap/>,
     },

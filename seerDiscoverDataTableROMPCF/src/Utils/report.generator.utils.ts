@@ -27,9 +27,7 @@ const rateGenerator = () => {
         return true; // Keep this item in the filtered array
       }
       return false; // Exclude this item from the filtered array
-    });
-    console.log("filteredArray==> ", filteredArray);
-    
+    });    
   }
   return 1.75;
 }

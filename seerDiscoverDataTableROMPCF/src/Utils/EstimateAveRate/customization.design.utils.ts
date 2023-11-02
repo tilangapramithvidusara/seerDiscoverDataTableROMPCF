@@ -45,8 +45,6 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
       
 
       const customizationLoop = await CustomisationModels && CustomisationModels.length && CustomisationModels.map(async(customisationItem: any, customisationIndex: number) => {
-        console.log('m customisationItem => ', customisationItem);
-        console.log('com ==> ', moscowsData?.[customisationItem?.seer_moscow] == moscowsData?.[100000000], fitGapData[customisationItem?.seer_fitgap] != fitGapData[100000001]);
         
         // Must
         // && fitGapData[customisationItem?.seer_fitgap] != fitGapData[100000001]
@@ -54,7 +52,6 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
           //
           const resCustomisation = baseReader(customisationItem, primaryResourceDesignValueFromCustomisationModels, 'design');
           primaryResourceDesignValueFromCustomisationModels = resCustomisation.primaryResourceDesignValueFromCustomisationModels;
-          console.log('switch M primaryResourceDesignValueFromCustomisationModels => ', primaryResourceDesignValueFromCustomisationModels);
           const resCustomisationBuild = baseReader(customisationItem, primaryResourceDesignValueBuildFromCustomisationModels, 'build');
           primaryResourceDesignValueBuildFromCustomisationModels = resCustomisationBuild.primaryResourceDesignValueFromCustomisationModels;
         }
@@ -64,7 +61,6 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
           // !seenModuleMIds.has(moduleDataItem?.fitGapProductSeerModule?.id)
           const resCustomisation = baseReader(customisationItem, primaryResourceDesignValueFromCustomisationModelsMS, 'design');
           primaryResourceDesignValueFromCustomisationModelsMS = resCustomisation.primaryResourceDesignValueFromCustomisationModels;
-          console.log('switch MS primaryResourceDesignValueFromCustomisationModels => ', primaryResourceDesignValueFromCustomisationModelsMS);
           const resCustomisationBuild = baseReader(customisationItem, primaryResourceDesignValueBuildFromCustomisationModelsMS, 'build');
           primaryResourceDesignValueBuildFromCustomisationModelsMS = resCustomisationBuild.primaryResourceDesignValueFromCustomisationModels;
         }
@@ -74,13 +70,11 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
           //
           const resCustomisation = baseReader(customisationItem, primaryResourceDesignValueFromCustomisationModelsMSC, 'design');
           primaryResourceDesignValueFromCustomisationModelsMSC = resCustomisation.primaryResourceDesignValueFromCustomisationModels;
-          console.log('switch MSC primaryResourceDesignValueFromCustomisationModels => ', primaryResourceDesignValueFromCustomisationModelsMSC, 'design');
           const resCustomisationBuild = baseReader(customisationItem, primaryResourceDesignValueBuildFromCustomisationModelsMSC, 'build');
           primaryResourceDesignValueBuildFromCustomisationModelsMSC = resCustomisationBuild.primaryResourceDesignValueFromCustomisationModels;
         }
       });
       
-      console.log("generateCustomisationDesignMValue true ==> ", CustomisationModels.length);
       if (parameterModel?.length) {
         returnObject.customisation.resultValue = generateReturnValue(
           primaryResourceDesignValueFromCustomisationModels,
@@ -119,11 +113,9 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
         )
         
       }
-        console.log("resultValue => ", resultValue);
       await Promise.all([customizationLoop])
       return returnObject;
     } else {
-      console.log("generateAnalysisDesignMValue false ==> ");
       return returnObject;
     }
   } catch (error) {
