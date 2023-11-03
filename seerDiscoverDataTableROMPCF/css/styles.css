@@ -168,3 +168,15 @@ tr:nth-child(even) {
   padding: 6px 10px;
   font-size: 13px;
 }
+
+.seerDiscoverROM .hightlighted-row {
+  background-color: #b8b8b8;
+}
+
+.seerDiscoverROM .total-row {
+  background-color: #005a9e;
+}
+
+.seerDiscoverROM .hightlighted-row td, .seerDiscoverROM .total-row td{
+  font-weight: 700;
+}
