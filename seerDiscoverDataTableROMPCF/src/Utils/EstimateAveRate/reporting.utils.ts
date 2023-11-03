@@ -1,7 +1,8 @@
 import { fitGapData, moscowsData, percentData } from "../../Constants/pickListData";
 
-export const generateReportingMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean) => {
+export const generateReportingMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean, isFte?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
+  let fte = isFte ? true : false;
   let romParameter = 'Days'
   let resultValue = 0;
   let resultValueMS = 0;
@@ -15,6 +16,11 @@ export const generateReportingMValue = async(inititlaData: any, analisisDesignPr
       resultValueMS,
       resultValueMSC
     },
+    reportingAveRateMilestone: {
+      resultValue,
+      resultValueMS,
+      resultValueMSC
+    }
   }
   // seerMoscow
   try {
@@ -42,24 +48,38 @@ export const generateReportingMValue = async(inititlaData: any, analisisDesignPr
       const h8 = 1123.176 // need to gets it from api
       const g8 = 1217.546
       const f8 = 1406.438
+
+      if (fte) {
+        if (percentData?.[parameterModel[0]?.reportingType] === percentData?.[100000001]) {
+          returnObject.reportingAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.reporting/100);
+          returnObject.reportingAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.reporting/100);
+          returnObject.reportingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.reporting/100);
+        } else {
+          returnObject.reportingAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.reporting/100); // not reporting it need to get from backend
+          returnObject.reportingAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.reporting/100);
+          returnObject.reportingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.reporting/100);
+        }
+      } else {
+        if (percentData?.[parameterModel[0]?.reportingType] === percentData?.[100000001]) {
+
+          returnObject.reporting.resultValue = mustCal * (parameterModel[0]?.reporting/100);
+          returnObject.reporting.resultValueMS = mustShouldCal * (parameterModel[0]?.reporting/100);
+          returnObject.reporting.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.reporting/100);
+        } else if (percentData?.[parameterModel[0]?.reportingType] === percentData?.[100000002]) { // hours
+          
+          returnObject.reporting.resultValue = romParameter == "Hours" ? parameterModel[0]?.reporting : parameterModel[0]?.reporting/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.reporting.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.reporting : parameterModel[0]?.reporting/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.reporting.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.reporting/100);
+        } else if (percentData?.[parameterModel[0]?.reportingType] === percentData?.[100000000]) { // FTE
+          // dont need yet
+          // returnObject.reporting.resultValue = (parameterModel[0]?.reporting * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
+          // returnObject.reporting.resultValueMS = (parameterModel[0]?.reporting * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
+          // returnObject.reporting.resultValueMSC = (parameterModel[0]?.reporting * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
+        }
+      }
       
       // not done yet
-      if (percentData?.[parameterModel[0]?.reportingType] === percentData?.[100000001]) {
-
-        returnObject.reporting.resultValue = mustCal * (parameterModel[0]?.reporting/100);
-        returnObject.reporting.resultValueMS = mustShouldCal * (parameterModel[0]?.reporting/100);
-        returnObject.reporting.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.reporting/100);
-      } else if (percentData?.[parameterModel[0]?.reportingType] === percentData?.[100000002]) { // hours
-        
-        returnObject.reporting.resultValue = romParameter == "Hours" ? parameterModel[0]?.reporting : parameterModel[0]?.reporting/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
-        returnObject.reporting.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.reporting : parameterModel[0]?.reporting/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
-        returnObject.reporting.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.reporting/100);
-      } else if (percentData?.[parameterModel[0]?.reportingType] === percentData?.[100000000]) { // FTE
-        // dont need yet
-        // returnObject.reporting.resultValue = (parameterModel[0]?.reporting * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
-        // returnObject.reporting.resultValueMS = (parameterModel[0]?.reporting * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
-        // returnObject.reporting.resultValueMSC = (parameterModel[0]?.reporting * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
-      }
+      
       
       await Promise.all([returnObject])
       return returnObject;

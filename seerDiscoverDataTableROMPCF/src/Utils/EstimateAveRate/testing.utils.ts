@@ -1,7 +1,8 @@
 import { fitGapData, moscowsData, percentData } from "../../Constants/pickListData";
 
-export const generateTestingMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean) => {
+export const generateTestingMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean, isFte?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
+  let fte = isFte ? true : false;
   let romParameter = 'Days'
   let resultValue = 0;
   let resultValueMS = 0;
@@ -15,6 +16,11 @@ export const generateTestingMValue = async(inititlaData: any, analisisDesignPre:
       resultValueMS,
       resultValueMSC
     },
+    testingAveRateMilestone: {
+      resultValue,
+      resultValueMS,
+      resultValueMSC
+    }
   }
   // seerMoscow
   try {
@@ -42,24 +48,38 @@ export const generateTestingMValue = async(inititlaData: any, analisisDesignPre:
       const h8 = 1123.176 // need to gets it from api
       const g8 = 1217.546
       const f8 = 1406.438
-      
-      // not done yet
-      if (percentData?.[parameterModel[0]?.testingType] === percentData?.[100000001]) {
 
-        returnObject.testing.resultValue = mustCal * (parameterModel[0]?.testing/100);
-        returnObject.testing.resultValueMS = mustShouldCal * (parameterModel[0]?.testing/100);
-        returnObject.testing.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.testing/100);
-      } else if (percentData?.[parameterModel[0]?.testingType] === percentData?.[100000002]) { // hours
-        
-        returnObject.testing.resultValue =  romParameter == "Hours" ? parameterModel[0]?.testing : parameterModel[0]?.testing/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.testing
-        returnObject.testing.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.testing : parameterModel[0]?.testing/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.testing
-        returnObject.testing.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.testing/100);
-      } else if (percentData?.[parameterModel[0]?.testingType] === percentData?.[100000000]) { // FTE
-        // dont need yet
-        // returnObject.testing.resultValue = romParameter == "Hours" ? (parameterModel[0]?.testing * h8) : (parameterModel[0]?.testing * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.testing * h8)  // need to find H8
-        // returnObject.testing.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.testing * g8) : (parameterModel[0]?.testing * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.testing * g8  // need to find G8
-        // returnObject.testing.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.testing * f8) : (parameterModel[0]?.testing * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.testing * f8  // need to find F8
-      }
+      if (fte) {
+        if (percentData?.[parameterModel[0]?.testingType] === percentData?.[100000001]) {
+          returnObject.testingAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.testing/100);
+          returnObject.testingAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.testing/100);
+          returnObject.testingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.testing/100);
+        } else {
+          returnObject.testingAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.testing/100); // not testing it need to get from backend
+          returnObject.testingAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.testing/100);
+          returnObject.testingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.testing/100);
+        }
+      } else {
+        if (percentData?.[parameterModel[0]?.testingType] === percentData?.[100000001]) {
+
+          returnObject.testing.resultValue = mustCal * (parameterModel[0]?.testing/100);
+          returnObject.testing.resultValueMS = mustShouldCal * (parameterModel[0]?.testing/100);
+          returnObject.testing.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.testing/100);
+          returnObject.testingAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.testing/100);
+          returnObject.testingAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.testing/100);
+          returnObject.testingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.testing/100);
+        } else if (percentData?.[parameterModel[0]?.testingType] === percentData?.[100000002]) { // hours
+          
+          returnObject.testing.resultValue =  romParameter == "Hours" ? parameterModel[0]?.testing : parameterModel[0]?.testing/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.testing
+          returnObject.testing.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.testing : parameterModel[0]?.testing/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.testing
+          returnObject.testing.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.testing/100);
+        } else if (percentData?.[parameterModel[0]?.testingType] === percentData?.[100000000]) { // FTE
+          // dont need yet
+          // returnObject.testing.resultValue = romParameter == "Hours" ? (parameterModel[0]?.testing * h8) : (parameterModel[0]?.testing * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.testing * h8)  // need to find H8
+          // returnObject.testing.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.testing * g8) : (parameterModel[0]?.testing * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.testing * g8  // need to find G8
+          // returnObject.testing.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.testing * f8) : (parameterModel[0]?.testing * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.testing * f8  // need to find F8
+        }
+      }      
       
       await Promise.all([returnObject])
       return returnObject;

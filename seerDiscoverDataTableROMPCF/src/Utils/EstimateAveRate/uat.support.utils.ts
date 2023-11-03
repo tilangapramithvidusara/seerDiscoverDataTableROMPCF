@@ -1,7 +1,8 @@
 import { fitGapData, moscowsData, percentData } from "../../Constants/pickListData";
 
-export const generateUATSupportMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean) => {
+export const generateUATSupportMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean, isFte?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
+  let fte = isFte ? true : false;
   let romParameter = 'Days'
   let resultValue = 0;
   let resultValueMS = 0;
@@ -15,11 +16,16 @@ export const generateUATSupportMValue = async(inititlaData: any, analisisDesignP
       resultValueMS,
       resultValueMSC
     },
+    uatSupportAveRateMilestone: {
+      resultValue,
+      resultValueMS,
+      resultValueMSC
+    }
   }
   // seerMoscow
   try {
     const {parameterModel} = inititlaData
-    if (condition && inititlaData) {
+    if (inititlaData) { //condition && 
       // Must Custom Requirement
       const mustCal = 
         (analisisDesignPre?.responseCustomRequirementDesign?.customRequirementBuild?.resultValue || 0) + 
@@ -46,22 +52,34 @@ export const generateUATSupportMValue = async(inititlaData: any, analisisDesignP
       // not done yet
 
       // HAS TO FIND parameterModel[0]?.testing LIKE VALUE FOR UAT ENV
-      if (percentData?.[parameterModel[0]?.uatSupportType] === percentData?.[100000001]) {
+      if (fte) {
+        if (percentData?.[parameterModel[0]?.uatSupportType] === percentData?.[100000001]) {
+          returnObject.uatSupportAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.uatSupport/100);
+          returnObject.uatSupportAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.uatSupport/100);
+          returnObject.uatSupportAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.uatSupport/100);
+        } else {
+          returnObject.uatSupportAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.uatSupport/100); // not uatSupport it need to get from backend
+          returnObject.uatSupportAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.uatSupport/100);
+          returnObject.uatSupportAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.uatSupport/100);
+        }
+      } else {
+        if (percentData?.[parameterModel[0]?.uatSupportType] === percentData?.[100000001]) {
 
-        returnObject.uatSupport.resultValue = mustCal * (parameterModel[0]?.uatSupport/100);
-        returnObject.uatSupport.resultValueMS = mustShouldCal * (parameterModel[0]?.uatSupport/100);
-        returnObject.uatSupport.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.uatSupport/100);
-      } else if (percentData?.[parameterModel[0]?.uatSupportType] === percentData?.[100000002]) { // hours
-        
-        returnObject.uatSupport.resultValue = romParameter == "Hours" ? parameterModel[0]?.uatSupport : parameterModel[0]?.uatSupport/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.uatSupport
-        returnObject.uatSupport.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.uatSupport : parameterModel[0]?.uatSupport/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.uatSupport
-        returnObject.uatSupport.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.uatSupport/100);
-        
-      } else if (percentData?.[parameterModel[0]?.uatSupportType] === percentData?.[100000000]) { // FTE
-        // dont need yet
-        // returnObject.uatSupport.resultValue = (parameterModel[0]?.uatSupport * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.uatSupport * h8)  // need to find H8
-        // returnObject.uatSupport.resultValueMS = (parameterModel[0]?.uatSupport * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.uatSupport * g8  // need to find G8
-        // returnObject.uatSupport.resultValueMSC = (parameterModel[0]?.uatSupport * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.uatSupport * f8  // need to find F8
+          returnObject.uatSupport.resultValue = mustCal * (parameterModel[0]?.uatSupport/100);
+          returnObject.uatSupport.resultValueMS = mustShouldCal * (parameterModel[0]?.uatSupport/100);
+          returnObject.uatSupport.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.uatSupport/100);
+        } else if (percentData?.[parameterModel[0]?.uatSupportType] === percentData?.[100000002]) { // hours
+          
+          returnObject.uatSupport.resultValue = romParameter == "Hours" ? parameterModel[0]?.uatSupport : parameterModel[0]?.uatSupport/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.uatSupport
+          returnObject.uatSupport.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.uatSupport : parameterModel[0]?.uatSupport/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.uatSupport
+          returnObject.uatSupport.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.uatSupport/100);
+          
+        } else if (percentData?.[parameterModel[0]?.uatSupportType] === percentData?.[100000000]) { // FTE
+          // dont need yet
+          // returnObject.uatSupport.resultValue = (parameterModel[0]?.uatSupport * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.uatSupport * h8)  // need to find H8
+          // returnObject.uatSupport.resultValueMS = (parameterModel[0]?.uatSupport * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.uatSupport * g8  // need to find G8
+          // returnObject.uatSupport.resultValueMSC = (parameterModel[0]?.uatSupport * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.uatSupport * f8  // need to find F8
+        }
       }
       
       await Promise.all([returnObject])

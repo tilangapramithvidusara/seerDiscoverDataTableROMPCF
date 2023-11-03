@@ -1,7 +1,8 @@
 import { fitGapData, moscowsData, percentData } from "../../Constants/pickListData";
 
-export const generateCRPMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean) => {
+export const generateCRPMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean, isFte?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
+  let fte = isFte ? true : false;
   let romParameter = 'Days'
   let resultValue = 0;
   let resultValueMS = 0;
@@ -15,6 +16,11 @@ export const generateCRPMValue = async(inititlaData: any, analisisDesignPre: {re
       resultValueMS,
       resultValueMSC
     },
+    crpAveRateMilestone: {
+      resultValue,
+      resultValueMS,
+      resultValueMSC
+    }
   }
   // seerMoscow
   try {
@@ -44,21 +50,33 @@ export const generateCRPMValue = async(inititlaData: any, analisisDesignPre: {re
       const f8 = 1406.438
       
       // not done yet
-      if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000001]) {
+      if (fte) {
+        if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000001]) {
+          returnObject.crpAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.conferenceRoomPilot/100);
+          returnObject.crpAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
+          returnObject.crpAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
+        } else {
+          returnObject.crpAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.conferenceRoomPilot/100); // not conferenceRoomPilot it need to get from backend
+          returnObject.crpAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
+          returnObject.crpAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
+        }
+      } else {
+        if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000001]) {
 
-        returnObject.crp.resultValue = mustCal * (parameterModel[0]?.conferenceRoomPilot/100);
-        returnObject.crp.resultValueMS = mustShouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
-        returnObject.crp.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
-      } else if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000002]) { // hours
-        
-        returnObject.crp.resultValue = romParameter == "Hours" ? parameterModel[0]?.conferenceRoomPilot : parameterModel[0]?.conferenceRoomPilot/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot
-        returnObject.crp.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.conferenceRoomPilot : parameterModel[0]?.conferenceRoomPilot/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot
-        returnObject.crp.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
-      } else if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000000]) { // FTE
-        // dont need yet
-        // returnObject.crp.resultValue = (parameterModel[0]?.conferenceRoomPilot * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.conferenceRoomPilot * h8)  // need to find H8
-        // returnObject.crp.resultValueMS = (parameterModel[0]?.conferenceRoomPilot * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot * g8  // need to find G8
-        // returnObject.crp.resultValueMSC = (parameterModel[0]?.conferenceRoomPilot * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot * f8  // need to find F8
+          returnObject.crp.resultValue = mustCal * (parameterModel[0]?.conferenceRoomPilot/100);
+          returnObject.crp.resultValueMS = mustShouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
+          returnObject.crp.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
+        } else if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000002]) { // hours
+          
+          returnObject.crp.resultValue = romParameter == "Hours" ? parameterModel[0]?.conferenceRoomPilot : parameterModel[0]?.conferenceRoomPilot/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot
+          returnObject.crp.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.conferenceRoomPilot : parameterModel[0]?.conferenceRoomPilot/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot
+          returnObject.crp.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
+        } else if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000000]) { // FTE
+          // dont need yet
+          // returnObject.crp.resultValue = (parameterModel[0]?.conferenceRoomPilot * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.conferenceRoomPilot * h8)  // need to find H8
+          // returnObject.crp.resultValueMS = (parameterModel[0]?.conferenceRoomPilot * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot * g8  // need to find G8
+          // returnObject.crp.resultValueMSC = (parameterModel[0]?.conferenceRoomPilot * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot * f8  // need to find F8
+        }
       }
       
       await Promise.all([returnObject])

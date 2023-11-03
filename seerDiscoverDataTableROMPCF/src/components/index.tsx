@@ -27,23 +27,23 @@ const App = ({
       label: 'Estimate Average Rate',
       children: <AdvancedTable data={dataSet} type={'Estimate Average Rate'} isLoading={isRefreshing}/>,
     },
-    {
-      key: '2',
-      label: 'Estimate Average Rate Milestone',
-      children: <AdvancedTable data={dataEstimateAverageRateMilestone} type={'Estimate Average Rate Milestone'} isLoading={isRefreshing}/>,
-    },
+    // {
+    //   key: '2',
+    //   label: 'Estimate Average Rate Milestone',
+    //   children: <AdvancedTable data={dataEstimateAverageRateMilestone} type={'Estimate Average Rate Milestone'} isLoading={isRefreshing}/>,
+    // },
     {
       key: '3',
       label: 'Estimate Resource',
       children: <AdvancedTable data={dataSetEstimateResource} type={'Estimate Resource'} isLoading={isRefreshing}/>,
       // <RatesAndResources/>,
     },
-    {
-      key: '4',
-      label: 'Estimate Resource Milestone',
-      children: <AdvancedTable data={dataEstimateResourceMilestone} type={'Estimate Resource Milestone'} isLoading={isRefreshing}/>,
-      // <RatesAndResources/>,
-    },
+    // {
+    //   key: '4',
+    //   label: 'Estimate Resource Milestone',
+    //   children: <AdvancedTable data={dataEstimateResourceMilestone} type={'Estimate Resource Milestone'} isLoading={isRefreshing}/>,
+    //   // <RatesAndResources/>,
+    // },
     {
       key: '5',
       label: 'Project ROM',
