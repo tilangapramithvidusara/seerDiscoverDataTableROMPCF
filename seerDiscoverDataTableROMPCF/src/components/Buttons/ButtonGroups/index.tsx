@@ -31,12 +31,13 @@ const index = (
         size="small"
         color="primary"
         onChange={handleButtonChange}
+        className='custom-toggle'
       >
 
         {buttonTitles.map((item: any, index: number) => {
           console.log('item ', item)
           return(
-          <ToggleButton value={`${item?.title}`} aria-label={`Button ${index}`}>
+          <ToggleButton className='toggle-btn' value={`${item?.title}`} aria-label={`Button ${index}`}>
             {item?.title}
           </ToggleButton>
         )})}
@@ -49,11 +50,12 @@ const index = (
           size="small"
           color="primary"
           onChange={handleButtonChange}
+          className='custom-toggle'
         >
-          <ToggleButton value="button1" aria-label="Button 1">
+          <ToggleButton className='toggle-btn' value="button1" aria-label="Button 1">
             Live Data
           </ToggleButton>
-          <ToggleButton value="button2" aria-label="Button 2">
+          <ToggleButton className='toggle-btn' value="button2" aria-label="Button 2">
               SnapShot
           </ToggleButton>  
         </ToggleButtonGroup>

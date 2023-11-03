@@ -12,6 +12,7 @@ import { initialFetchFailure, initialFetchSuccess } from '../../redux/report/rep
 import Loader from '../Loader/Loader';
 import { Button, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import ButtonGroups from '../Buttons/ButtonGroups';
+// import refreshIcon from '../../../images/refresh.png';
 
 import { 
   estimateResourceMustColumnDetails,
@@ -101,17 +102,19 @@ const AdvancedTable = ({data, isLoading, type}: {data?: any, isLoading: boolean,
           </div>
         </>
       )}
-        <div>
-          <Button onClick={(e) => initialTriggerHandler(e)}>Refresh</Button>
-        </div>
-        <div>
-          {(type === 'Estimate Resource' || type === 'Estimate Resource Milestone') && (
-            <ButtonGroups selectedButton={resourceType} setSelectedButton={
-              setResourceType
-            } numberOfButtons={3} buttonTitles={[
-              {title: 'Must'}, {title: 'Must Should'}, {title: 'Must Should Could'}
-            ]}/>
-          )}
+        <div className='flex-wrap ptb-10'>
+          <div className='text-left'>
+            {(type === 'Estimate Resource' || type === 'Estimate Resource Milestone') && (
+              <ButtonGroups selectedButton={resourceType} setSelectedButton={
+                setResourceType
+              } numberOfButtons={3} buttonTitles={[
+                {title: 'Must'}, {title: 'Must Should'}, {title: 'Must Should Could'}
+              ]}/>
+            )}
+          </div>
+          <div className='text-right'>
+            <Button className='btn-default' onClick={(e) => initialTriggerHandler(e)}><img src="" className='refresh-icon' alt="icon"/>Refresh</Button>
+          </div>
         </div>
         <div>
           <MaterialReactTable

@@ -82,19 +82,16 @@ const App = ({
   return (
     <>
       <Grid>
-        <Box sx={{ m: 2 }}>
-          <Stack direction="row" spacing={1}>
-            <Grid>
-              <InputLabel>Mode</InputLabel>
+        <Box sx={{ m: 2 }} className="flex-wrap-justify m-0">
+          <Stack direction="row" className="custom-grid mr-15">
+            <Grid className="flex-wrap">
+              <InputLabel className="label mr-10">Mode</InputLabel>
             </Grid>
             <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton}/>
           </Stack>
+          <DropDownButtons selectedButton={selectedButton}/>
         </Box>
-      </Grid>
-      <br/>
-      
-      <DropDownButtons selectedButton={selectedButton}/>
-      <br/>
+      </Grid>      
       <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
     </>
   )

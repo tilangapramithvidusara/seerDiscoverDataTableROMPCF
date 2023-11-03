@@ -36,7 +36,7 @@ const index = ({selectedButton}: {selectedButton: any}) => {
       <div style={{ display: 'flex' }}>
         {selectedButton === "button2" && (
           <>
-            <Button aria-controls="dropdown-menu" aria-haspopup="true" onClick={handleClick}>
+            <Button aria-controls="dropdown-menu" className="dropdown mr-10" aria-haspopup="true" onClick={handleClick}>
               Load Snapshots
             </Button>
             <Menu
@@ -44,6 +44,7 @@ const index = ({selectedButton}: {selectedButton: any}) => {
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={handleClose}
+              className='custom-dropdown-menu'
             >
               <MenuItem value="item1" onClick={() => handleMenuItemClick("item1")}>Load Snapshots Option 1</MenuItem>
               <MenuItem value="item2" onClick={() => handleMenuItemClick("item2")}>Load Snapshots Option 2</MenuItem>
@@ -52,19 +53,19 @@ const index = ({selectedButton}: {selectedButton: any}) => {
           </>
         )}
         {selectedButton === "button1" && (
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" className='btn-primary'>
             Save Snapshot
           </Button>
         )}
         {selectedButton === "button2" && (
-          <Button variant="contained" color="secondary">
+          <Button variant="contained" color="primary" className='btn-primary'>
             Update Master
           </Button>
         )}
       </div>
-      <div>
+      <div className='text-right'>
         {selectedItem && selectedButton === "button2" && (
-          <InputLabel>{optionList?.[selectedItem]}</InputLabel>
+          <InputLabel className='label  ptb-10'>{optionList?.[selectedItem]}</InputLabel>
         )}
       </div>
     </div>

@@ -71,7 +71,100 @@ tr:nth-child(even) {
   z-index: 1000; /* Ensure it's above the blurred background */
 }
 
-.loader {
-  /* Add styles for your loader here */
+.seerDiscoverROM .flex-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
+.seerDiscoverROM .flex-wrap-start {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.seerDiscoverROM .flex-wrap-justify {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.seerDiscoverROM .label {
+  color: rgb(51, 51, 51);
+  font-size: 0.9rem;
+}
+
+.seerDiscoverROM  .toggle-btn {
+  height: 35px;
+  font-size: 0.9rem;
+  color: rgb(51, 51, 51);
+  text-transform: capitalize;
+}
+
+.seerDiscoverROM  .mr-10 {
+  margin-right: 10px;
+}
+
+.seerDiscoverROM  .mr-15 {
+  margin-right: 15px;
+}
+
+.seerDiscoverROM .refresh-icon {
+  height: 17px;
+  margin-right: 5px;
+}
+
+.seerDiscoverROM .m-0 {
+  margin: 0 !important;
+}
+
+.seerDiscoverROM  .dropdown {
+  border: 1px solid rgb(216, 216, 216) !important;
+  height: 35px;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+
+.seerDiscoverROM  .btn-primary {
+  height: 35px;
+  font-size: 0.9rem;
+  box-shadow: none;
+  text-transform: capitalize;
+}
+
+.custom-dropdown-menu li {
+  font-size: 0.9rem;
+}
+
+.seerDiscoverROM .ant-tabs-nav {
+  margin-bottom: 0;
+}
+
+.seerDiscoverROM .text-right {
+  text-align: right;
+}
+
+.seerDiscoverROM .btn-default {
+  font-size: 0.9rem;
+  color: rgb(51, 51, 51);
+  text-transform: capitalize;
+}
+
+.seerDiscoverROM .MuiAlert-message {
+  padding: 0 !important;
+  font-size: 0.9rem;
+}
+
+.seerDiscoverROM tr:nth-child(even) {
+  background-color: rgb(255, 255, 255) !important;
+}
+
+.seerDiscoverROM .ptb-10 {
+  padding: 10px 0;
+}
+
+
+.seerDiscoverROM td {
+  padding: 6px 10px;
+  font-size: 13px;
+}
