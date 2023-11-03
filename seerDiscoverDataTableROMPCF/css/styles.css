@@ -83,6 +83,12 @@ tr:nth-child(even) {
   justify-content: space-between;
 }
 
+.seerDiscoverROM .flex-wrap-justify {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
 .seerDiscoverROM .label {
   color: rgb(51, 51, 51);
   font-size: 0.9rem;
@@ -97,6 +103,15 @@ tr:nth-child(even) {
 
 .seerDiscoverROM  .mr-10 {
   margin-right: 10px;
+}
+
+.seerDiscoverROM  .mr-15 {
+  margin-right: 15px;
+}
+
+.seerDiscoverROM .refresh-icon {
+  height: 17px;
+  margin-right: 5px;
 }
 
 .seerDiscoverROM .m-0 {
@@ -146,4 +161,10 @@ tr:nth-child(even) {
 
 .seerDiscoverROM .ptb-10 {
   padding: 10px 0;
+}
+
+
+.seerDiscoverROM td {
+  padding: 6px 10px;
+  font-size: 13px;
 }

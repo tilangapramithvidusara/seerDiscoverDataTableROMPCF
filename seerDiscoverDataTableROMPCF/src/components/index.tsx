@@ -82,8 +82,8 @@ const App = ({
   return (
     <>
       <Grid>
-        <Box sx={{ m: 2 }} className="flex-wrap-start m-0">
-          <Stack direction="row" className="custom-grid">
+        <Box sx={{ m: 2 }} className="flex-wrap-justify m-0">
+          <Stack direction="row" className="custom-grid mr-15">
             <Grid className="flex-wrap">
               <InputLabel className="label mr-10">Mode</InputLabel>
             </Grid>
