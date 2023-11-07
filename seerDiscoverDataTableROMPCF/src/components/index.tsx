@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchInitialDataAsync } from "../redux/report/reportAsycn";
 import { initialFetchFailure, initialFetchSuccess } from "../redux/report/reportSlice";
 import Loader from "./Loader/Loader";
+import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 
 
 const App = ({
@@ -120,21 +121,21 @@ const App = ({
           </div>
         </>
       )}
-      <Grid>
+      <Grid className="flex-wrap">
       
         <Box sx={{ m: 2 }} className="flex-wrap-justify m-0">
           <Stack direction="row" className="custom-grid mr-15">
-            <Grid className="flex-wrap">
+            {/* <Grid className="flex-wrap">
               <InputLabel className="label mr-10">Mode</InputLabel>
-            </Grid>
+            </Grid> */}
             <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton}/>
           </Stack>
           <DropDownButtons selectedButton={selectedButton}/>
         </Box>
+        <div className='text-right'>
+        <Button className='btn-primary' onClick={(e) => initialTriggerHandler(e)}><AutorenewOutlinedIcon className="btn-icon"/>Refresh</Button>
+      </div>  
       </Grid> 
-      <div className='text-right'>
-        <Button className='btn-default' onClick={(e) => initialTriggerHandler(e)}><img src={imageUrl} className='refresh-icon' alt="icon"/>Refresh</Button>
-      </div>    
       <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
     </>
   )

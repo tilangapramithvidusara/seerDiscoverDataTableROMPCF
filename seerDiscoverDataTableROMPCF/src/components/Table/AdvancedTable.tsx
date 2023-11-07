@@ -225,7 +225,7 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
                   // row.original.nameCategory == 'Project Manager' ||
                   // row.original.nameCategory == 'Sub Total'
                   )
-                  ? "lightblue" : 'white',
+                  ? "#C1BDBD" : 'white',
                   
               },
               // backgroundColor: "red",
