@@ -24,10 +24,10 @@ th {
   font-weight: bold;
 }
 
-/* Data row styles */
+/* Data row styles
 tr:nth-child(even) {
   background-color: #f2f2f2;
-}
+} */
 
 /* Pagination styles */
 .pagination {
@@ -155,9 +155,9 @@ tr:nth-child(even) {
   font-size: 0.9rem;
 }
 
-.seerDiscoverROM tr:nth-child(even) {
+/* .seerDiscoverROM tr:nth-child(even) {
   background-color: rgb(255, 255, 255) !important;
-}
+} */
 
 .seerDiscoverROM .ptb-10 {
   padding: 10px 0;

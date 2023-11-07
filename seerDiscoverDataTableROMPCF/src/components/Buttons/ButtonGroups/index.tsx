@@ -38,7 +38,7 @@ const index = (
           console.log('item ', item)
           return(
           <ToggleButton className='toggle-btn' value={`${item?.title}`} aria-label={`Button ${index}`}>
-            {item?.title}
+            {item?.value}
           </ToggleButton>
         )})}
         

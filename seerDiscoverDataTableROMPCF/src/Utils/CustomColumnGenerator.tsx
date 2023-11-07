@@ -1,12 +1,16 @@
 import { Box, Stack } from '@mui/material';
 import { MRT_ColumnDef, MRT_AggregationOption } from 'material-react-table';
 import * as React from 'react'
+import { useSelector } from 'react-redux';
 
 // export default function CustomColumnGenerator({columnArray}: {columnArray: any}) {
 
 
 
 export const columnFixed = (columnArray: any, data: any) => {
+  const currency = useSelector((state: any) => state?.report?.currency)
+  console.log(currency);
+  
   // const AggregatedGroupRow = ({ row }) => {
   //   const customRowStyle = {
   //     backgroundColor: 'your-group-background-color', // Change to your desired background color for grouped rows
@@ -57,7 +61,7 @@ export const columnFixed = (columnArray: any, data: any) => {
               
               {cell.getValue()?.toLocaleString?.('en-US', {
                 style: 'currency',
-                currency: 'EUR',
+                currency: currency || 'GBP',
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 4,
               })}
@@ -69,8 +73,8 @@ export const columnFixed = (columnArray: any, data: any) => {
       AggregatedCell: columnItem?.aggregationFn ? ({ cell, table }: { cell: any, table: any }) => {
         
         return(
-          <div style={{
-            backgroundColor: 'yellow'
+          <div id='aggregated-cell' style={{
+            // backgroundColor: 'yellow'
           }}>
             {/* {`${columnItem?.aggregationFn.charAt(0).toUpperCase() + columnItem?.aggregationFn.slice(1)} by `} */}
             {/* {table.getColumn(cell.row.groupingColumnId ?? '').columnDef.header}:{' '} */}
@@ -81,7 +85,7 @@ export const columnFixed = (columnArray: any, data: any) => {
             >
               {cell.getValue()?.toLocaleString?.('en-US', {
               style: 'currency',
-              currency: 'EUR',
+              currency: currency || 'GBP',
               minimumFractionDigits: 2,
               maximumFractionDigits: 4,
             })}
@@ -98,7 +102,7 @@ export const columnFixed = (columnArray: any, data: any) => {
               <Box color="warning.main">
                 {totalColumn(columnItem?.accessorKey)?.toLocaleString?.('en-US', {
                 style: 'currency',
-                  currency: 'EUR',
+                  currency: currency || 'GBP',
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 4,
                 })}

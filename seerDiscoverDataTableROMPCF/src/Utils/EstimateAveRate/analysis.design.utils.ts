@@ -1,3 +1,4 @@
+import { romParameter } from "../../Constants/fteConstants";
 import { fitGapData, moscowsData } from "../../Constants/pickListData";
 import { calculateProjectManagerEstimateResource, calculateSubTotal, generateEstimateResourceValue } from "../EstimateResource";
 import { generateCRPMValue } from "./crp.utils";
@@ -18,7 +19,8 @@ import { generateUATEnvironmentPreparationMValue } from "./uat.environment.prepa
 import { generateUATSupportMValue } from "./uat.support.utils";
 
 export const generateIColoumnValue = async(inititlaData: any, title: string) => {
-  const romParameter = "Days"
+  console.log(inititlaData.fteValue);
+  
   const condition = romParameter === "Days";
   // ################################ESTIMATE AVERAGE RATE################################
   // ANALYSIS AND DESIGN

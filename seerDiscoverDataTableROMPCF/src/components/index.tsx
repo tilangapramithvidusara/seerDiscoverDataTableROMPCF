@@ -14,36 +14,46 @@ import FitOrGap from "./FitOrGap";
 
 import DropDownButtons from "./Buttons/DropDownButtons";
 import ButtonGroups from "./Buttons/ButtonGroups";
-import { Box, Chip, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Chip, Grid, Stack, Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchInitialDataAsync } from "../redux/report/reportAsycn";
+import { initialFetchFailure, initialFetchSuccess } from "../redux/report/reportSlice";
+import Loader from "./Loader/Loader";
 
 
 const App = ({
-  dataSet, onRefreshHandler, isRefreshing, dataSetEstimateResource, dataEstimateAverageRateMilestone, dataEstimateResourceMilestone
+  dataSet, onRefreshHandler, isRefreshing, dataSetEstimateResource, dataEstimateAverageRateMilestone, dataEstimateResourceMilestone,
 }: {dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, dataSetEstimateResource: any, dataEstimateAverageRateMilestone: any, dataEstimateResourceMilestone: any}) => { 
 
   const items: TabsProps['items'] = [
     {
       key: '1',
       label: 'Estimate Average Rate',
-      children: <AdvancedTable data={dataSet} type={'Estimate Average Rate'} isLoading={isRefreshing}/>,
+      children: <AdvancedTable data={dataSet} type={'Estimate Average Rate'} 
+      // isLoading={isRefreshing}
+      />,
     },
     {
       key: '2',
       label: 'Estimate Average Rate Milestone',
-      children: <AdvancedTable data={dataEstimateAverageRateMilestone} type={'Estimate Average Rate Milestone'} isLoading={isRefreshing}/>,
+      children: <AdvancedTable data={dataEstimateAverageRateMilestone} type={'Estimate Average Rate Milestone'} 
+      // isLoading={isRefreshing}
+      />,
     },
     {
       key: '3',
       label: 'Estimate Resource',
-      children: <AdvancedTable data={dataSetEstimateResource} type={'Estimate Resource'} isLoading={isRefreshing}/>,
+      children: <AdvancedTable data={dataSetEstimateResource} type={'Estimate Resource'} 
+      // isLoading={isRefreshing}
+      />,
       // <RatesAndResources/>,
     },
-    {
-      key: '4',
-      label: 'Estimate Resource Milestone',
-      children: <AdvancedTable data={dataEstimateResourceMilestone} type={'Estimate Resource Milestone'} isLoading={isRefreshing}/>,
-      // <RatesAndResources/>,
-    },
+    // {
+    //   key: '4',
+    //   label: 'Estimate Resource Milestone',
+    //   children: <AdvancedTable data={dataEstimateResourceMilestone} type={'Estimate Resource Milestone'} isLoading={isRefreshing}/>,
+    //   // <RatesAndResources/>,
+    // },
     {
       key: '5',
       label: 'Project ROM',
@@ -71,17 +81,47 @@ const App = ({
     },
   ];
 
+  const dispatch = useDispatch();
+  const loading = useSelector((state: any) => state.report.loading)
+  const imageUrl = useSelector((state: any) => state.report.imageUrl)
+  const [isComLoading, setComIsloading] = React.useState<boolean>(isRefreshing || false);
+
+
+
   const onChange = (key: string) => {
     console.log(key);
   };
 
+  const initialTriggerHandler = async(e: any) => {
+    // e.preventDefault()
+    setComIsloading(true)
+    const inititalData = await fetchInitialDataAsync();
+    if (!inititalData.error) {
+      dispatch(initialFetchSuccess(inititalData?.result));
+    } else {
+      setComIsloading(false)
+      dispatch(initialFetchFailure(inititalData?.result));
+    }
+  }
+
   const [selectedButton, setSelectedButton] = React.useState('button1');
   console.log('selectedButton ==> ',  selectedButton);
-  
+  React.useEffect(() => {    
+    setComIsloading(isRefreshing)
+  }, [isRefreshing])
 
   return (
     <>
+      {(isRefreshing || isComLoading || loading) && (
+        <>
+          <div className="blur-background"></div>
+          <div className="loader-container">
+            <Loader />
+          </div>
+        </>
+      )}
       <Grid>
+      
         <Box sx={{ m: 2 }} className="flex-wrap-justify m-0">
           <Stack direction="row" className="custom-grid mr-15">
             <Grid className="flex-wrap">
@@ -91,7 +131,10 @@ const App = ({
           </Stack>
           <DropDownButtons selectedButton={selectedButton}/>
         </Box>
-      </Grid>      
+      </Grid> 
+      <div className='text-right'>
+        <Button className='btn-default' onClick={(e) => initialTriggerHandler(e)}><img src={imageUrl} className='refresh-icon' alt="icon"/>Refresh</Button>
+      </div>    
       <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
     </>
   )
