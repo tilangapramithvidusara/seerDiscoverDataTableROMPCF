@@ -9,6 +9,9 @@ import { columnDetailsEstimateAverageRateMilestone, dataEstimateAverageRateMiles
 import { calculateProjectManagerEstimateResource, generateEstimateResourceValue } from "../EstimateResource";
 import { calculateProjectManagerEstimateAvgRateMilestone } from "../EstimateAverageRateMilestone/project.manager.utils";
 import { dataEstimateResourceMilestone } from "../../Constants/estimateResourceMilestone";
+import { checkHasFte } from "../EstimateAverageRateMilestone/check.has.fte.utils";
+import { generateIColoumnValueFte } from "../EstimateAverageRateMilestone/sub.value.utils";
+import { romParameter } from "../../Constants/fteConstants";
 
 export const arrayGenerator = async (initialDataSet: any) => {
   let resultArray: any[] = [];
@@ -20,13 +23,19 @@ export const arrayGenerator = async (initialDataSet: any) => {
   let subTotalMSEstimateDesignAvgRateMilestone = 0;
   let subTotalMSCEstimateDesignAvgRateMilestone = 0;
 
-  const romParameter = "Days"
   const condition = romParameter === "Days";
   const {parameterModel} = initialDataSet;
   const {hourlyRate, hoursPerday} = parameterModel[0];
 
+  let fteValue: any;
+
   try {
-    const analisisAndDesignCalculation: any = await generateIColoumnValue(initialDataSet, analysisAndDesign.row);
+    const hasFteValue = true;
+    // : boolean = await checkHasFte(parameterModel);
+    if (hasFteValue) {
+      fteValue = await generateIColoumnValueFte(initialDataSet);
+    }
+    const analisisAndDesignCalculation: any = await generateIColoumnValue({...initialDataSet, fteValue}, analysisAndDesign.row);
     (data[0] as any).M = analisisAndDesignCalculation?.analysisDesing?.resultValue;
     (data[0] as any)['M/S'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMS;
     (data[0] as any)['M/S/C'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMSC;
