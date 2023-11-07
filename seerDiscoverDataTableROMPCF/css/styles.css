@@ -178,6 +178,14 @@ tr:nth-child(even) {
   padding: 10px 0;
 }
 
+.seerDiscoverROM .MuiPaper-elevation {
+  background-color: transparent !important;
+}
+
+.seerDiscoverROM .MuiPaper-elevation .MuiAlert-message .MuiBox-root {
+  padding: 0.5rem 0 !important;
+}
+
 .seerDiscoverROM td {
   padding: 1px 10px;
   font-size: 13px;
@@ -245,4 +253,8 @@ tr:nth-child(even) {
 
 .seerDiscoverROM .hightlighted-row td, .seerDiscoverROM .total-row td{
   font-weight: 700;
+}
+
+.seerDiscoverROM .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation2.css-80pr5n-MuiPaper-root {
+  padding: 12px 20px;
 }
