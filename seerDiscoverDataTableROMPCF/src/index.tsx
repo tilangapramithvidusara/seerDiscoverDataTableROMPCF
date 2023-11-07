@@ -7,11 +7,11 @@ import TabComponent from "./components/index";
 import { arrayGenerator } from "./Utils/SetupDataArray/analysis.design.array.utils";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteOutputSetAsync, fetchInitialDataAsync } from "./redux/report/reportAsycn";
-import { initialFetchFailure, initialFetchSuccess } from "./redux/report/reportSlice";
+import { initialFetchFailure, initialFetchSuccess, setImageUrl } from "./redux/report/reportSlice";
 import Loader from "./components/Loader/Loader";
 
 
-export default function Index({tableContent, context}: {tableContent: any, context: any}) {
+export default function Index({tableContent, context, imageUrl}: {tableContent: any, context: any, imageUrl?: any}) {
   const dispatch = useDispatch();
   const data = useSelector((state: any) => state.report?.initialFetchData)
   const loading = useSelector((state: any) => state.report.loading)
@@ -24,6 +24,13 @@ export default function Index({tableContent, context}: {tableContent: any, conte
   React.useEffect(() => {
     initialTriggerHandler();
   }, []);
+  console.log(imageUrl);
+  
+  React.useMemo(() => {
+    console.log(imageUrl);
+    
+    dispatch(setImageUrl(imageUrl));
+  }, [imageUrl]);
 
   const initialTriggerHandler = async() => {
     setIsloading(true)

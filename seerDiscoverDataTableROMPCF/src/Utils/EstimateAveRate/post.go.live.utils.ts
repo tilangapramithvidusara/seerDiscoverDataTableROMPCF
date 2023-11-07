@@ -1,8 +1,10 @@
+import { hoursPerWeek, romParameter } from "../../Constants/fteConstants";
 import { fitGapData, moscowsData, percentData } from "../../Constants/pickListData";
+const para_d4 = 10/100;
 
-export const generatePostGoLiveMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean) => {
+export const generatePostGoLiveMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean, isFte?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
-  let romParameter = 'Days'
+  let fte = isFte ? true : false;
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -15,10 +17,15 @@ export const generatePostGoLiveMValue = async(inititlaData: any, analisisDesignP
       resultValueMS,
       resultValueMSC
     },
+    postGoLiveAveRateMilestone: {
+      resultValue,
+      resultValueMS,
+      resultValueMSC
+    }
   }
   // seerMoscow
   try {
-    const {parameterModel} = inititlaData
+    const {parameterModel, fteValue} = inititlaData
     if (inititlaData) {
       // Must Custom Requirement
       const mustCal = 
@@ -39,26 +46,41 @@ export const generatePostGoLiveMValue = async(inititlaData: any, analisisDesignP
       const F4Parameter = parameterModel[0]?.hoursPerday * 5;
       const O37 = 0// to find this we need to complete Estimate Avg Rate Milestone table
       const H6 = 29// if days === c2 => O37/5 else (O37/8)/5
-      const h8 = 1123.176 // need to gets it from api
-      const g8 = 1217.546
-      const f8 = 1406.438
-      
-      // not done yet
-      if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000001]) {
+      const h7 = fteValue?.totalFte // need to gets it from api
+      const g7 = fteValue?.totalFteMS
+      const f7 = fteValue?.totalFteMSC
+      const h8 = h7 * hoursPerWeek
+      const g8 = g7 * hoursPerWeek
+      const f8 = f7 * hoursPerWeek
 
-        returnObject.postGoLive.resultValue = mustCal * (parameterModel[0]?.postGoLiveSupport/100);
-        returnObject.postGoLive.resultValueMS = mustShouldCal * (parameterModel[0]?.postGoLiveSupport/100);
-        returnObject.postGoLive.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.postGoLiveSupport/100);
-      } else if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000002]) { // hours
-        
-        returnObject.postGoLive.resultValue = romParameter == "Hours" ? parameterModel[0]?.postGoLiveSupport :  parameterModel[0]?.postGoLiveSupport/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
-        returnObject.postGoLive.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.postGoLiveSupport :  parameterModel[0]?.postGoLiveSupport/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
-        returnObject.postGoLive.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.postGoLiveSupport/100);
-      } else if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000000]) { // FTE
-        // dont need yet
-        // returnObject.postGoLive.resultValue = (parameterModel[0]?.postGoLiveSupport * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.postGoLiveSupport * h8)  // need to find H8
-        // returnObject.postGoLive.resultValueMS = (parameterModel[0]?.postGoLiveSupport * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * g8  // need to find G8
-        // returnObject.postGoLive.resultValueMSC = (parameterModel[0]?.postGoLiveSupport * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * f8  // need to find F8
+      if (fte) {
+        if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000001]) {
+          returnObject.postGoLiveAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.postGoLiveSupport/100);
+          returnObject.postGoLiveAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.postGoLiveSupport/100);
+          returnObject.postGoLiveAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.postGoLiveSupport/100);
+        } else {
+          returnObject.postGoLiveAveRateMilestone.resultValue = mustCal * (para_d4); // not postGoLiveSupport it need to get from backend
+          returnObject.postGoLiveAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
+          returnObject.postGoLiveAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
+        }
+      } else {
+        // not done yet
+        if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000001]) {
+
+          returnObject.postGoLive.resultValue = mustCal * (parameterModel[0]?.postGoLiveSupport/100);
+          returnObject.postGoLive.resultValueMS = mustShouldCal * (parameterModel[0]?.postGoLiveSupport/100);
+          returnObject.postGoLive.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.postGoLiveSupport/100);
+        } else if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000002]) { // hours
+          
+          returnObject.postGoLive.resultValue = romParameter == "Hours" ? parameterModel[0]?.postGoLiveSupport :  parameterModel[0]?.postGoLiveSupport/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
+          returnObject.postGoLive.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.postGoLiveSupport :  parameterModel[0]?.postGoLiveSupport/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
+          returnObject.postGoLive.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.postGoLiveSupport :  parameterModel[0]?.postGoLiveSupport/parameterModel[0]?.hoursPerday
+        } else if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000000]) { // FTE
+          // dont need yet
+          returnObject.postGoLive.resultValue = romParameter == "Hours" ? (parameterModel[0]?.postGoLiveSupport * h8) : (parameterModel[0]?.postGoLiveSupport * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.postGoLiveSupport * h8)  // need to find H8
+          returnObject.postGoLive.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.postGoLiveSupport * g8) : (parameterModel[0]?.postGoLiveSupport * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * g8  // need to find G8
+          returnObject.postGoLive.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.postGoLiveSupport * f8) : (parameterModel[0]?.postGoLiveSupport * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * f8  // need to find F8
+        }
       }
       
       await Promise.all([returnObject])

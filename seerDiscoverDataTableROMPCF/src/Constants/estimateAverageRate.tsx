@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 export type Person = {
   nameCategory?: string;
   name: string;
@@ -23,6 +25,15 @@ export const columnDetails = [
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
     showBottomTotal: true,
+    render: (rowData: any) => {
+      console.log(rowData);
+      
+      if (rowData.aggregated) {
+        // Apply background color for aggregated cells
+        return <div style={{ backgroundColor: 'lightblue' }}>{rowData.value}</div>;
+      }
+      return rowData.value;
+    },
   },
   {
     header: 'M/S',

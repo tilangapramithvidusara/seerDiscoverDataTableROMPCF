@@ -1,3 +1,4 @@
+import { romParameter } from "../../Constants/fteConstants";
 import { percentData } from "../../Constants/pickListData";
 
 
@@ -204,7 +205,6 @@ export const calculateSubTotal = async(
 
 export const calculateProjectManagerEstimateResource = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, totalOfSub: any) => {
   const {parameterModel} = inititlaData;
-  let romParameter = 'Days'
 
   const returnObject = {
     resultValue: 0,
@@ -256,12 +256,12 @@ export const calculateProjectManagerEstimateResource = async(inititlaData: any, 
         
         returnObject.resultValue = romParameter == "Hours" ? parameterModel[0]?.solutionArchitecture : parameterModel[0]?.solutionArchitecture/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
         returnObject.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.solutionArchitecture : parameterModel[0]?.solutionArchitecture/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
-        returnObject.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.solutionArchitecture/100);
+        returnObject.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.solutionArchitecture : parameterModel[0]?.solutionArchitecture/parameterModel[0]?.hoursPerday
       } else if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000000]) { // FTE
         // dont need yet
-        // returnObject.resultValue = (parameterModel[0]?.solutionArchitecture * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
-        // returnObject.resultValueMS = (parameterModel[0]?.solutionArchitecture * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
-        // returnObject.resultValueMSC = (parameterModel[0]?.solutionArchitecture * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
+        returnObject.resultValue = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture * h8) : (parameterModel[0]?.solutionArchitecture * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
+        returnObject.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture * g8) : (parameterModel[0]?.solutionArchitecture * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
+        returnObject.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture * f8) : (parameterModel[0]?.solutionArchitecture * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
       }
     }
     

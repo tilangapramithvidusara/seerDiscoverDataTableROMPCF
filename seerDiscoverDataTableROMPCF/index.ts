@@ -25,6 +25,8 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
     private entityName: any;
     private outputSchema ?: toJsonSchema.JSONSchema3or4;
     private container: HTMLDivElement;
+    private imgElement:HTMLImageElement;
+    private imageUrl: string;
     constructor()
     {
 
@@ -41,15 +43,37 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
     public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement): void
     {
         // this.notifyOutputChanged = notifyOutputChanged;
+        this.imgElement = document.createElement("img");
+		context.resources.getResource("refresh.png", this.setImage.bind(this, false, "png"), this.showError.bind(this));
+		container.appendChild(this.imgElement);
         this.container = container;
     }
+
+    private setImage(shouldUpdateOutput:boolean, fileType: string, fileContent: string): void
+	{
+        this.imageUrl = this.generateImageSrcUrl(fileType, fileContent);        
+        this.imgElement.src = this.imageUrl;
+        this.updateView();
+        
+	}
+
+    private generateImageSrcUrl(fileType: string, fileContent: string): string
+	{
+		return  "data:image/" + fileType + ";base64, " + fileContent;
+	}
+
+    private showError(): void
+	{
+        console.log('error occur');
+        
+	}
 
 
     /**
      * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
      * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
      */
-    public updateView(context: ComponentFramework.Context<IInputs>): any
+    public updateView(context?: ComponentFramework.Context<IInputs>): any
     {   
         // : React.ReactElement
         console.log('entity name : ', context?.parameters?.entityName?.raw)
@@ -74,8 +98,19 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
             //   <ConnectedApp tableContent={[]} context={context} />
             // </Provider>,
             // this.container
-          
+        this.renderComponent(context);
         console.log("MMM2");
+    }
+
+    private renderComponent(context?: ComponentFramework.Context<IInputs>): void {
+        if (this.imageUrl && !this.imageUrl.includes('undefined')) {
+            
+            // ReactDOM.render(React.createElement(App, { imageUrl: this.imageUrl }), this.container);
+            ReactDOM.render(React.createElement(App, { tableContent: [], context: context, imageUrl: this.imageUrl }), this.container);
+        } else {
+            ReactDOM.render(React.createElement(App, { tableContent: [], context: context }), this.container);
+            // ReactDOM.render(React.createElement(App), this.container);
+        }
     }
 
     async dataLoad(reportId: any, accountId: any, context: ComponentFramework.Context<IInputs>) {
