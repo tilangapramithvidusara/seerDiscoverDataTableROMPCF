@@ -5,6 +5,10 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import { useState } from 'react';
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
+import DownloadingOutlinedIcon from '@mui/icons-material/DownloadingOutlined';
+import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
+import UpdateOutlined from '@mui/icons-material/UpdateOutlined';
 
 const index = ({selectedButton}: {selectedButton: any}) => {
 
@@ -36,8 +40,8 @@ const index = ({selectedButton}: {selectedButton: any}) => {
       <div style={{ display: 'flex' }}>
         {selectedButton === "button2" && (
           <>
-            <Button aria-controls="dropdown-menu" className="dropdown mr-10" aria-haspopup="true" onClick={handleClick}>
-              Load Snapshots
+            <Button aria-controls="dropdown-menu" className="dropdown mr-10 btn-gray-outline" aria-haspopup="true" onClick={handleClick}>
+            <DownloadingOutlinedIcon className='btn-icon'/> Update Master Load Snapshots
             </Button>
             <Menu
               id="dropdown-menu"
@@ -53,13 +57,13 @@ const index = ({selectedButton}: {selectedButton: any}) => {
           </>
         )}
         {selectedButton === "button1" && (
-          <Button variant="contained" color="primary" className='btn-primary'>
-            Save Snapshot
+          <Button variant="contained" color="primary" className='btn-blue-outline'>
+            <SaveOutlinedIcon className='btn-icon'/> Save Snapshot
           </Button>
         )}
         {selectedButton === "button2" && (
-          <Button variant="contained" color="primary" className='btn-primary'>
-            Update Master
+          <Button variant="contained" color="primary" className='btn-gray-outline'>
+            <UpdateOutlined className='btn-icon'/> Update Master
           </Button>
         )}
       </div>
