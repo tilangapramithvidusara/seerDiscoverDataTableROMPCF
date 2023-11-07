@@ -286,7 +286,7 @@ export const dataEstimateAverageRateMilestone: any[] = [
   },
   {
     "nameCategory": "OPERATION",
-    titleCode: '1',
+    titleCode: '4',
     name: 'Project Manager',
     M: 0,
     'M/S': 0,
@@ -295,7 +295,7 @@ export const dataEstimateAverageRateMilestone: any[] = [
   },
   {
     "nameCategory": "OPERATION",
-    titleCode: '1',
+    titleCode: '4',
     name: '',
     M: 0,
     'M/S': 0,
@@ -303,9 +303,9 @@ export const dataEstimateAverageRateMilestone: any[] = [
     type: 'Estimate Avg Rate Milestone',	
   },
   {
-    "nameCategory": undefined,
+    "nameCategory": 'Sub Total',
     titleCode: '5',
-    name: 'Sub Total',
+    name: '',
     M: 0,
     'M/S': 0,
     'M/S/C': 0,
@@ -320,9 +320,9 @@ export const dataEstimateAverageRateMilestone: any[] = [
   //   'M/S/C': 0	
   // },
   {
-    "nameCategory": undefined,
+    "nameCategory": 'Project Risk',
     titleCode: '7',
-    name: 'Project Risk',
+    name: '',
     M: 0,
     'M/S': 0,
     'M/S/C': 0,

@@ -20,33 +20,37 @@ import {
   estimateResourceMustShouldCouldColumnDetails 
 } from '../../Constants/estimateResource';
 
+const buttonTitles= [
+    {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
+  ]
+
 const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: string}) => {
   const dispatch = useDispatch();
   // const loading = useSelector((state: any) => state.report.loading)
-  const imageUrl = useSelector((state: any) => state.report.imageUrl)
+  // const imageUrl = useSelector((state: any) => state.report.imageUrl)
   // const [isRefreshing, setIsRefreshing] = React.useState<boolean>(isLoading || false);
   // const [isComLoading, setComIsloading] = React.useState<boolean>(isLoading || false);
   const [resourceType, setResourceType] = React.useState<string>('Must');  
-
+  const currency = useSelector((state: any) => state?.report?.currency)
+  const [typeLoader, setTypeLoader] = React.useState(false);
   const [columnsSet, setColumnSet] = React.useState(type !== 'Estimate Resource' ? columnDetails : 
   estimateResourceMustColumnDetails
   // estimateResourceMustShouldColumnDetails
   )
   console.log(type);
-  
-  const averageM = useMemo(
-    () => data.reduce((acc: any, curr: any) => acc + curr?.M, 0) / data.length,
-    [],
-  );
-  const averageMS = useMemo(
-    () => data.reduce((acc: any, curr: any) => acc + curr?.['M/S'], 0) / data.length,
-    [],
-  );
+  // const averageM = useMemo(
+  //   () => data.reduce((acc: any, curr: any) => acc + curr?.M, 0) / data.length,
+  //   [],
+  // );
+  // const averageMS = useMemo(
+  //   () => data.reduce((acc: any, curr: any) => acc + curr?.['M/S'], 0) / data.length,
+  //   [],
+  // );
 
-  const averageMSC = useMemo(
-    () => data.reduce((acc: any, curr: any) => acc + curr['M/S/C'], 0) / data.length,
-    [],
-  );
+  // const averageMSC = useMemo(
+  //   () => data.reduce((acc: any, curr: any) => acc + curr['M/S/C'], 0) / data.length,
+  //   [],
+  // );
 
   // const maxAge = useMemo(
   //   () => data.reduce((acc, curr) => Math.max(acc, curr.age), 0),
@@ -57,16 +61,6 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
   //   () => data.reduce((acc, curr) => acc + curr.salary, 0),
   //   [],
   // );
-
-  const columns = useMemo<MRT_ColumnDef<any>[]>(
-    () => 
-    columnFixed(columnsSet, data),
-    [columnsSet],
-  );
-
-  const onClickHandler = (event: any, rowData: any) => {
-    
-  }
 
   // const initialTriggerHandler = async(e: any) => {
   //   // e.preventDefault()
@@ -84,69 +78,30 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
   //   setComIsloading(isLoading)
   // }, [isLoading])
 
-  React.useEffect(() => {
+  const columnCreator = () => {
     const columnCreator = type === 'Estimate Average Rate' ? columnDetails : type === 'Estimate Average Rate Milestone' ? columnDetails :
     resourceType === 'Must' ? estimateResourceMustColumnDetails :
     resourceType === 'Must Should' ? estimateResourceMustShouldColumnDetails :
     resourceType === 'Must Should Could' ? estimateResourceMustShouldCouldColumnDetails : columnDetails
-    
     setColumnSet(columnCreator);
-  }, [resourceType, type])
-
-  function findRowClassByCellId(cellId: string) {
-    // Find the table cell by ID
-    const cell: any = document.getElementById(cellId);
-    console.log(cell);
-    
-  
-    if (cell) {
-      // Find the parent row of the cell
-      const row = cell.closest('tr');
-  
-      if (row) {
-        // Get the class name of the row
-        return row.className;
-      }
-    }
-  
-    // Return a default value or handle the case where the cell is not found
-    return null;
+    console.log('3');
   }
-
-  const className = useMemo(() => findRowClassByCellId('aggregated-cell'), []);
-
-  console.log(className);
-
-  function changeRowBackgroundColorByClassName(className: any, newColor:string) {
-    const rows: any = document.querySelectorAll(`.${className}`);
-    if (rows.length > 0) {
-      rows.forEach((row: any) => {
-        row.style.backgroundColor = newColor;
-      });
-    } else {
-      console.log(`No rows with class '${className}' found.`);
-    }
-  }
-  
-  // Usage: Change the background color of the row with class 'row2' to 'lightblue'
 
   React.useEffect(() => {
-    if (className) changeRowBackgroundColorByClassName(className, 'lightblue');
-  }, [className])
+    columnCreator();
+  }, [resourceType, type]) // resourceType
 
-  const options = {
-    muiTableBodyRowProps: () => {
-      return {
-        style: {
-          background: 'lightblue', // Set the background color for aggregated cell rows
-        },
-      };
-    },
-  };
-
+  const columns = useMemo<MRT_ColumnDef<any>[]>(
+    () => columnFixed(columnsSet, data, currency),
+    [columnsSet],
+  );//columnsSet
+  
   return (
     <>
-      {/* {(isRefreshing || isComLoading || isLoading || loading) && (
+      {/* {
+      // (isRefreshing || isComLoading || isLoading || loading) 
+      typeLoader
+      && (
         <>
           <div className="blur-background"></div>
           <div className="loader-container">
@@ -170,7 +125,6 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
         </div>
         <div>
           <MaterialReactTable
-            
             columns={columns}
             data={data}
             enableColumnResizing
@@ -185,9 +139,10 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
               // sorting: [{ id: 'state', desc: false }, { id: 'state', desc: false }], //sort by state by default
             }}
             // pageSizeOptions={[5, 10]}
+            muiTableFooterRowProps={{ sx: { backgroundColor: ' #015BA1' } }}
             muiToolbarAlertBannerChipProps={{ color: 'primary' }}
             muiTableContainerProps={{ sx: { maxHeight: 700 } }}
-            muiTableBodyRowProps={({ row }) => {
+            muiTableBodyRowProps={({ row }: {row: any}) => {
               console.log(row.getGroupingValue);
               console.log('>>>>>', row);
               console.log('p[p[p',row.getIsGrouped(), row.original.nameCategory, row.groupingValue);
@@ -203,6 +158,7 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
                 openSidePane('', row.id, row?.original, false);
                 
               },
+              
               // nameCategory: "Project Risk"
               sx: {
                 // hide: row.original.nameCategory == 'Project Manager' || row.original.nameCategory == 'Project Manager' ? true : false,
@@ -218,38 +174,18 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
                 cursor: 'pointer', //you might want to change the cursor too when adding an onClick
                 backgroundColor: 
                   (
-                    row.getIsGrouped() 
+                    row.original.nameCategory == 'Project Risk' && row.getIsGrouped() 
                   // || 
                   // row.original.nameCategory == 'OPERATION' || 
                   // row.original.nameCategory == 'Project Risk' || 
                   // row.original.nameCategory == 'Project Manager' ||
                   // row.original.nameCategory == 'Sub Total'
                   )
-                  ? "lightblue" : 'white',
+                  ? "#FFD042" : row.original.nameCategory == 'Project Risk' && row.getIsGrouped() ? '#C1BDBD' : row.original.name == '' ? '#0E94FD'  : row.getIsGrouped() ? '#C1BDBD' : 'white',
                   
               },
-              // backgroundColor: "red",
               
             })}}
-            
-            // getRowId={(originalRow: any, index: number, parentRow: any) => {
-            //   console.log(originalRow);
-            //   console.log(index);
-            //   console.log(parentRow);
-              
-              
-              
-            //   return ''
-            // }}
-            // rowStyle={(rowData: any) => {
-            //   // Add a condition to check if the row is grouped
-            //   if (rowData.isGrouped) {
-            //     return {
-            //       backgroundColor: 'red', // Change to your grouped background color
-            //     };
-            //   }
-            //   return {};
-            // }}
           />
         </div>
     </>

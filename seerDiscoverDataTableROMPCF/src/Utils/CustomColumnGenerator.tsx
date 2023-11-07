@@ -7,8 +7,8 @@ import { useSelector } from 'react-redux';
 
 
 
-export const columnFixed = (columnArray: any, data: any) => {
-  const currency = useSelector((state: any) => state?.report?.currency)
+export const columnFixed = (columnArray: any, data: any, currency: string) => {
+  
   console.log(currency);
   
   // const AggregatedGroupRow = ({ row }) => {
@@ -58,7 +58,6 @@ export const columnFixed = (columnArray: any, data: any) => {
           if (columnItem?.isCalcultionEnabled) {
           return(
             <>
-              
               {cell.getValue()?.toLocaleString?.('en-US', {
                 style: 'currency',
                 currency: currency || 'GBP',
@@ -79,6 +78,7 @@ export const columnFixed = (columnArray: any, data: any) => {
             {/* {`${columnItem?.aggregationFn.charAt(0).toUpperCase() + columnItem?.aggregationFn.slice(1)} by `} */}
             {/* {table.getColumn(cell.row.groupingColumnId ?? '').columnDef.header}:{' '} */}
             <Box
+            // color for the cell
               sx={{ color: 'info.main', display: 'inline', fontWeight: 'bold', 
               // backgroundColor: 'red' 
             }}

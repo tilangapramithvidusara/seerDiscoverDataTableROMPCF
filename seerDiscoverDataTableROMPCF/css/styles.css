@@ -168,3 +168,13 @@ tr:nth-child(even) {
   padding: 6px 10px;
   font-size: 13px;
 }
+
+.MTableFooter {
+  background-color: 'red';
+}
+
+.MuiTableFooter-root .css-ywf2vi-MuiTableFooter-root {
+  background-color: 'red';
+}
+
+/* class="MuiTableFooter-root css-ywf2vi-MuiTableFooter-root" */

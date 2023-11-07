@@ -54,31 +54,31 @@ const App = ({
     //   children: <AdvancedTable data={dataEstimateResourceMilestone} type={'Estimate Resource Milestone'} isLoading={isRefreshing}/>,
     //   // <RatesAndResources/>,
     // },
-    {
-      key: '5',
-      label: 'Project ROM',
-      children: <ProjectROM/>,
-    },
-    {
-      key: '6',
-      label: 'Project Margin',
-      children: <ProjectMargin/>,
-    },
-    {
-      key: '7',
-      label: 'Governance',
-      children: <Governance/>,
-    },
-    {
-      key: '8',
-      label: 'ROM by Phase',
-      children: <ROMByPhase/>,
-    },
-    {
-      key: '9',
-      label: 'Fit / Gap',
-      children: <FitOrGap/>,
-    },
+    // {
+    //   key: '5',
+    //   label: 'Project ROM',
+    //   children: <ProjectROM/>,
+    // },
+    // {
+    //   key: '6',
+    //   label: 'Project Margin',
+    //   children: <ProjectMargin/>,
+    // },
+    // {
+    //   key: '7',
+    //   label: 'Governance',
+    //   children: <Governance/>,
+    // },
+    // {
+    //   key: '8',
+    //   label: 'ROM by Phase',
+    //   children: <ROMByPhase/>,
+    // },
+    // {
+    //   key: '9',
+    //   label: 'Fit / Gap',
+    //   children: <FitOrGap/>,
+    // },
   ];
 
   const dispatch = useDispatch();
@@ -140,4 +140,4 @@ const App = ({
   )
 }
 
-export default App
+export default React.memo(App)
