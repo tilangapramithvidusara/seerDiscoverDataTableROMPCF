@@ -183,6 +183,7 @@ tr:nth-child(even) {
   font-size: 13px;
   border-bottom: 1px solid #C1BDBD;
   font-family: 'Roboto', sans-serif !important;
+  color: #000000 !important;
 }
 
 .seerDiscoverROM .btn-gray-outline {
