@@ -82,6 +82,60 @@ export const estimateResourceMilestoneMustColumnDetails = [
   },
 ]
 
+export const estimateResourceMilestoneMustColumnDetailsHours = [
+  {
+    header: 'Category',
+    accessorKey: 'nameCategory',
+    enableGrouping: true,
+  },
+  {
+    header: 'Name',
+    accessorKey: 'name',
+  },
+  {
+    header: '',
+    accessorKey: 'M_Resource_Total',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: '',
+    accessorKey: 'M_Resource_Total_H',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: 'Resource 1',
+    accessorKey: 'M_Resource1',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: 'Resource 1 Hours',
+    accessorKey: 'M_Resource1_H',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: 'Resource 2',
+    accessorKey: 'M_Resource2',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: 'Resource 2 Hours',
+    accessorKey: 'M_Resource2_H',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+]
+
 export const estimateResourceMilestoneMustShouldColumnDetails = [
   {
     header: 'Category',
@@ -109,6 +163,39 @@ export const estimateResourceMilestoneMustShouldColumnDetails = [
   {
     header: 'Resource 2',
     accessorKey: 'M/S_Resource2',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+]
+
+export const estimateResourceMilestoneMustShouldColumnDetailsHours = [
+  {
+    header: 'Category',
+    accessorKey: 'nameCategory',
+    enableGrouping: true,
+  },
+  {
+    header: 'Name',
+    accessorKey: 'name',
+  },
+  {
+    header: '',
+    accessorKey: 'M/S_Resource_Total_H',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: 'Resource 1 Hours',
+    accessorKey: 'M/S_Resource1_H',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: 'Resource 2 Hours',
+    accessorKey: 'M/S_Resource2_H',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
     showBottomTotal: true,
@@ -148,6 +235,60 @@ export const estimateResourceMilestoneMustShouldCouldColumnDetails = [
   },
 ]
 
+export const estimateResourceMilestoneMustShouldCouldColumnDetailsHours = [
+  {
+    header: 'Category',
+    accessorKey: 'nameCategory',
+    enableGrouping: true,
+  },
+  {
+    header: 'Name',
+    accessorKey: 'name',
+  },
+  {
+    header: '',
+    accessorKey: 'M/S/C_Resource_Total',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: '',
+    accessorKey: 'M/S/C_Resource_Total_H',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: 'Resource 1',
+    accessorKey: 'M/S/C_Resource1',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: 'Resource 1 Hours',
+    accessorKey: 'M/S/C_Resource1_H',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: 'Resource 2',
+    accessorKey: 'M/S/C_Resource2',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: 'Resource 2 Hours',
+    accessorKey: 'M/S/C_Resource2_H',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+]
+
 export const dataEstimateResourceMilestone: any[] = [
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -162,6 +303,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -177,6 +327,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -192,6 +351,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -207,6 +375,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -222,6 +399,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -237,6 +423,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -252,6 +447,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -267,6 +471,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -282,6 +495,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'	
   },
   {
@@ -297,6 +519,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -312,6 +543,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'	
   },
   {
@@ -326,7 +566,16 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S_Resource2': 0,
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
-    'M/S/C_Resource2': 0,	
+    'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,		
     type: 'Estimate Resource Milestone'
   },
   {
@@ -342,6 +591,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -356,7 +614,16 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S_Resource2': 0,
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
-    'M/S/C_Resource2': 0,	
+    'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,		
     type: 'Estimate Resource Milestone'
   },
   {
@@ -372,6 +639,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -387,6 +663,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'	
   },
   {
@@ -402,6 +687,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -417,6 +711,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -432,6 +735,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -447,6 +759,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -462,6 +783,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -477,6 +807,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -491,7 +830,16 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S_Resource2': 0,
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
-    'M/S/C_Resource2': 0,	
+    'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'	
   },
   {
@@ -507,6 +855,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -522,6 +879,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -537,6 +903,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -551,7 +926,16 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S_Resource2': 0,
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
-    'M/S/C_Resource2': 0,	
+    'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,		
     type: 'Estimate Resource Milestone'
   },
   {
@@ -567,6 +951,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   {
@@ -582,6 +975,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   // {
@@ -621,6 +1023,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   // {
@@ -651,6 +1062,15 @@ export const dataEstimateResourceMilestone: any[] = [
     'M/S/C_Resource_Total': 0,
     'M/S/C_Resource1': 0,
     'M/S/C_Resource2': 0,	
+    'M_Resource_Total_H': 0,
+    'M_Resource1_H': 0,
+    'M_Resource2_H': 0,
+    'M/S_Resource_Total_H': 0,
+    'M/S_Resource1_H': 0,
+    'M/S_Resource2_H': 0,
+    'M/S/C_Resource_Total_H': 0,
+    'M/S/C_Resource1_H': 0,
+    'M/S/C_Resource2_H': 0,	
     type: 'Estimate Resource Milestone'
   },
   // {

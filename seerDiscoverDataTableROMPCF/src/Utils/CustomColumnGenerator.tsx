@@ -22,6 +22,8 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
   // };
   const totalColumn =
     (key?: string | number | undefined | any) => {
+      console.log(key);
+      
       // return data.reduce((acc: any, curr: any) => {
       //   console.log('acc + curr', acc, curr[key], key);
         
@@ -78,8 +80,8 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
             {/* {`${columnItem?.aggregationFn.charAt(0).toUpperCase() + columnItem?.aggregationFn.slice(1)} by `} */}
             {/* {table.getColumn(cell.row.groupingColumnId ?? '').columnDef.header}:{' '} */}
             <Box
-            // color for the cell
-              sx={{ color: 'info.main', display: 'inline', fontWeight: 'bold', 
+            // color for the cell info.main
+              sx={{ color: 'black', display: 'inline', fontWeight: 'bold', 
               // backgroundColor: 'red' 
             }}
             >
@@ -96,10 +98,10 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
       Footer: columnItem?.showBottomTotal ? () => {
         if (columnItem?.showBottomTotal) {
           return(
-            <Stack>
-              Total:
-              {/* <Box color="warning.main">{Math.round(totalColumn)}</Box> */}
-              <Box color="warning.main">
+            // <Stack>
+            //   Total:
+              // {/* <Box color="warning.main">{Math.round(totalColumn)}</Box> */}
+              <Box color="white">
                 {totalColumn(columnItem?.accessorKey)?.toLocaleString?.('en-US', {
                 style: 'currency',
                   currency: currency || 'GBP',
@@ -107,7 +109,7 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
                   maximumFractionDigits: 4,
                 })}
               </Box>
-            </Stack>
+            // {/* </Stack> */}
           )
         }
         

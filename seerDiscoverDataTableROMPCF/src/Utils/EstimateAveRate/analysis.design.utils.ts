@@ -775,6 +775,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
         responseProdEnvironmentPreparation,
         responseSupportHandover,
         responsePostGoLive,
+        
       }
     };
   } catch (error) {

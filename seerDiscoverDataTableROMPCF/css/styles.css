@@ -71,6 +71,10 @@ tr:nth-child(even) {
   z-index: 1000; /* Ensure it's above the blurred background */
 }
 
+.seerDiscoverROM {
+  font-family: 'Roboto', sans-serif !important;
+}
+
 .seerDiscoverROM .flex-wrap {
   display: flex;
   align-items: center;
@@ -91,14 +95,23 @@ tr:nth-child(even) {
 
 .seerDiscoverROM .label {
   color: rgb(51, 51, 51);
-  font-size: 0.9rem;
+  font-size: 13px;
 }
 
 .seerDiscoverROM  .toggle-btn {
   height: 35px;
-  font-size: 0.9rem;
-  color: rgb(51, 51, 51);
+  font-size:13px;
+  padding: 7px 12px;
+  color: #C1BDBD;
+  background-color: transparent !important;
+  border-color: #C1BDBD !important;
   text-transform: capitalize;
+}
+
+.seerDiscoverROM .toggle-btn.Mui-selected {
+  background-color: #0E94FD !important;
+  color: #ffffff !important;
+  border-color: #0E94FD !important;
 }
 
 .seerDiscoverROM  .mr-10 {
@@ -121,19 +134,25 @@ tr:nth-child(even) {
 .seerDiscoverROM  .dropdown {
   border: 1px solid rgb(216, 216, 216) !important;
   height: 35px;
-  font-size: 0.9rem;
+  font-size: 13px;
   text-transform: capitalize;
 }
 
-.seerDiscoverROM  .btn-primary {
-  height: 35px;
-  font-size: 0.9rem;
-  box-shadow: none;
-  text-transform: capitalize;
+.seerDiscoverROM .MuiTableRow-head {
+  background-color: #015BA1;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.seerDiscoverROM .MuiTableRow-head  .Mui-TableHeadCell-Content-Wrapper {
+  color: #ffffff !important;
+}
+
+.seerDiscoverROM td .MuiButtonBase-root .MuiSvgIcon-root {
+  color: transparent;
 }
 
 .custom-dropdown-menu li {
-  font-size: 0.9rem;
+  font-size: 13px;
 }
 
 .seerDiscoverROM .ant-tabs-nav {
@@ -145,36 +164,97 @@ tr:nth-child(even) {
 }
 
 .seerDiscoverROM .btn-default {
-  font-size: 0.9rem;
+  font-size: 13px;
   color: rgb(51, 51, 51);
   text-transform: capitalize;
 }
 
 .seerDiscoverROM .MuiAlert-message {
   padding: 0 !important;
-  font-size: 0.9rem;
+  font-size: 13px;
 }
-
-/* .seerDiscoverROM tr:nth-child(even) {
-  background-color: rgb(255, 255, 255) !important;
-} */
 
 .seerDiscoverROM .ptb-10 {
   padding: 10px 0;
 }
 
+.seerDiscoverROM .MuiPaper-elevation {
+  background-color: transparent !important;
+}
+
+.seerDiscoverROM .MuiPaper-elevation .MuiAlert-message .MuiBox-root {
+  padding: 0.5rem 0 !important;
+}
 
 .seerDiscoverROM td {
-  padding: 6px 10px;
+  padding: 1px 10px;
   font-size: 13px;
+  border-bottom: 1px solid #C1BDBD;
+  font-family: 'Roboto', sans-serif !important;
+  color: #000000 !important;
 }
 
-.MTableFooter {
-  background-color: 'red';
+.seerDiscoverROM .btn-gray-outline {
+  height: 35px;
+  font-size:13px;
+  padding: 7px 12px;
+  color: #C1BDBD;
+  background-color: transparent !important;
+  border: 0.5px solid#C1BDBD !important;
+  box-shadow: none !important;
+  text-transform: capitalize;
 }
 
-.MuiTableFooter-root .css-ywf2vi-MuiTableFooter-root {
-  background-color: 'red';
+
+.seerDiscoverROM .btn-blue-outline {
+  height: 35px;
+  font-size:13px;
+  padding: 7px 12px;
+  color: #0E94FD;
+  background-color: transparent !important;
+  border: 0.5px solid#0E94FD !important;
+  box-shadow: none !important;
+  text-transform: capitalize;
 }
 
-/* class="MuiTableFooter-root css-ywf2vi-MuiTableFooter-root" */
+
+.seerDiscoverROM  .btn-primary {
+  height: 35px;
+  font-size:13px;
+  padding: 7px 12px;
+  color: #ffffff;
+  background-color: #0E94FD !important;
+  border: 1px solid#0E94FD !important;
+  box-shadow: none !important;
+  text-transform: capitalize;
+}
+
+.seerDiscoverROM  .btn-blue-outline .btn-icon{
+  color: #0E94FD !important;
+}
+
+.seerDiscoverROM  .btn-primary .btn-icon{
+  color: #ffffff !important;
+}
+
+.seerDiscoverROM .btn-icon {
+  height: 20px;
+  color: #C1BDBD;
+  margin-right: 2px;
+}
+
+.seerDiscoverROM .hightlighted-row {
+  background-color: #b8b8b8;
+}
+
+.seerDiscoverROM .total-row {
+  background-color: #005a9e;
+}
+
+.seerDiscoverROM .hightlighted-row td, .seerDiscoverROM .total-row td{
+  font-weight: 700;
+}
+
+.seerDiscoverROM .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation2.css-80pr5n-MuiPaper-root {
+  padding: 12px 20px;
+}

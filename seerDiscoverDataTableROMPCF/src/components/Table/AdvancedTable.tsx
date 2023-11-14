@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
 // import { columnDetails, data, type Person } from '../../Constants/makeData';
-import { columnDetails, type Person } from '../../Constants/estimateAverageRate';
+import { columnDetails, columnDetailsHOURS, type Person } from '../../Constants/estimateAverageRate';
 
 import { columnFixed } from '../../Utils/CustomColumnGenerator';
 import { openSidePane } from '../../Utils/pane.open.utils';
@@ -16,9 +16,14 @@ import ButtonGroups from '../Buttons/ButtonGroups';
 
 import { 
   estimateResourceMustColumnDetails,
+  estimateResourceMustColumnDetailsHours,
   estimateResourceMustShouldColumnDetails, 
-  estimateResourceMustShouldCouldColumnDetails 
+  estimateResourceMustShouldColumnDetailsHours, 
+  estimateResourceMustShouldCouldColumnDetails, 
+  estimateResourceMustShouldCouldColumnDetailsHours
 } from '../../Constants/estimateResource';
+import SwipeableTemporaryDrawer from '../SwipeableDrawer';
+import { dayHoursText, defaultText } from '../../Constants';
 
 const buttonTitles= [
     {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
@@ -26,6 +31,9 @@ const buttonTitles= [
 
 const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: string}) => {
   const dispatch = useDispatch();
+  const [isOpenSideDrawer, setIsOpenSideDrawer] = React.useState<boolean>(false);
+  const [selectedRow, setSelectedRow] = React.useState();
+  const [tableMode, setTableMode] = React.useState(defaultText);
   // const loading = useSelector((state: any) => state.report.loading)
   // const imageUrl = useSelector((state: any) => state.report.imageUrl)
   // const [isRefreshing, setIsRefreshing] = React.useState<boolean>(isLoading || false);
@@ -79,23 +87,32 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
   // }, [isLoading])
 
   const columnCreator = () => {
-    const columnCreator = type === 'Estimate Average Rate' ? columnDetails : type === 'Estimate Average Rate Milestone' ? columnDetails :
-    resourceType === 'Must' ? estimateResourceMustColumnDetails :
-    resourceType === 'Must Should' ? estimateResourceMustShouldColumnDetails :
-    resourceType === 'Must Should Could' ? estimateResourceMustShouldCouldColumnDetails : columnDetails
+    const columnCreator = (type === 'Estimate Average Rate' && tableMode == defaultText) ? columnDetails : 
+      (type === 'Estimate Average Rate' && tableMode == dayHoursText) ? columnDetailsHOURS : 
+      (type === 'Estimate Average Rate Milestone' && tableMode == defaultText) ? columnDetails :
+      (type === 'Estimate Average Rate Milestone' && tableMode == dayHoursText) ? columnDetailsHOURS :
+      (resourceType === 'Must' && tableMode == defaultText) ? estimateResourceMustColumnDetails :
+      (resourceType === 'Must' && tableMode == dayHoursText) ? estimateResourceMustColumnDetailsHours :
+      (resourceType === 'Must Should' && tableMode == defaultText) ? estimateResourceMustShouldColumnDetails :
+      (resourceType === 'Must Should' && tableMode == dayHoursText) ? estimateResourceMustShouldColumnDetailsHours :
+      (resourceType === 'Must Should Could' && tableMode == defaultText) ? estimateResourceMustShouldCouldColumnDetails :
+      (resourceType === 'Must Should Could' && tableMode == dayHoursText) ? estimateResourceMustShouldCouldColumnDetailsHours : 
+      columnDetails
+    console.log('l=>', columnCreator);
+    console.log('p=>', type, tableMode);
     setColumnSet(columnCreator);
     console.log('3');
   }
 
   React.useEffect(() => {
     columnCreator();
-  }, [resourceType, type]) // resourceType
+  }, [resourceType, type, tableMode]) // resourceType
 
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => columnFixed(columnsSet, data, currency),
     [columnsSet],
   );//columnsSet
-  
+
   return (
     <>
       {/* {
@@ -120,8 +137,26 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
             )}
           </div>
           {/* <div className='text-right'>
+            <ButtonGroups selectedButton={tableMode} setSelectedButton={
+                setTableMode
+              } numberOfButtons={2} buttonTitles={[
+                {title: defaultText, value: 'Hours'}, {title: dayHoursText, value: 'Hours & Days'}
+              ]}/>
+          </div> */}
+          {/* <div className='text-right'>
             <Button className='btn-default' onClick={(e) => initialTriggerHandler(e)}><img src={imageUrl} className='refresh-icon' alt="icon"/>Refresh</Button>
           </div> */}
+        </div>
+        <div>
+          {isOpenSideDrawer && (
+            <SwipeableTemporaryDrawer 
+              anchor='right' 
+              isOpenSideDrawer={isOpenSideDrawer} 
+              setIsOpenSideDrawer={setIsOpenSideDrawer} 
+              data={selectedRow}
+            />
+          )}
+          
         </div>
         <div>
           <MaterialReactTable
@@ -142,6 +177,15 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
             muiTableFooterRowProps={{ sx: { backgroundColor: ' #015BA1' } }}
             muiToolbarAlertBannerChipProps={{ color: 'primary' }}
             muiTableContainerProps={{ sx: { maxHeight: 700 } }}
+            muiTableFooterProps={{
+              title: 'Total',
+              color: 'white',
+              
+            }}
+            // muiTableFooterRowProps={{
+            //   // title: 'Total',
+            //   footerGroup: 'Total'
+            // }}
             muiTableBodyRowProps={({ row }: {row: any}) => {
               console.log(row.getGroupingValue);
               console.log('>>>>>', row);
@@ -155,7 +199,9 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
               
               onClick: (event) => {
                 console.info("mmmmmmm", row, row?.original, row, row?.original?.name);
-                openSidePane('', row.id, row?.original, false);
+                // openSidePane('', row.id, row?.original, false);
+                setSelectedRow(row)
+                setIsOpenSideDrawer(true)
                 
               },
               
@@ -181,7 +227,7 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
                   // row.original.nameCategory == 'Project Manager' ||
                   // row.original.nameCategory == 'Sub Total'
                   )
-                  ? "#FFD042" : row.original.nameCategory == 'Project Risk' && row.getIsGrouped() ? '#C1BDBD' : row.original.name == '' ? '#0E94FD'  : row.getIsGrouped() ? '#C1BDBD' : 'white',
+                  ? "#FFD042" : row.original.nameCategory == 'Sub Total' && row.getIsGrouped() ? '#0E94FD' : (!row.getIsGrouped() && row.original.name == '') ? '#E6E2E1' : row.getIsGrouped() ? '#C1BDBD' : 'white',
                   
               },
               
