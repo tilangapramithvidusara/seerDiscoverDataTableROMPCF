@@ -30,8 +30,7 @@ export const arrayGenerator = async (initialDataSet: any) => {
   let fteValue: any;
 
   try {
-    const hasFteValue = true;
-    // : boolean = await checkHasFte(parameterModel);
+    const hasFteValue: any = await checkHasFte(parameterModel);
     if (hasFteValue) {
       fteValue = await generateIColoumnValueFte(initialDataSet);
     }
@@ -45,10 +44,10 @@ export const arrayGenerator = async (initialDataSet: any) => {
     (dataEstimateAverageRateMilestone[0] as any).M = analisisAndDesignCalculation?.analysisDesing?.resultValue;
     (dataEstimateAverageRateMilestone[0] as any)['M/S'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMS;
     (dataEstimateAverageRateMilestone[0] as any)['M/S/C'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMSC;
-
     (data[1] as any).M = analisisAndDesignCalculation?.customisationDesing?.resultValue;
     (data[1] as any)['M/S'] = analisisAndDesignCalculation?.customisationDesing?.resultValueMS;
     (data[1] as any)['M/S/C'] = analisisAndDesignCalculation?.customisationDesing?.resultValueMSC;
+    
     subTotalMAnalysisDesign += analisisAndDesignCalculation?.customisationDesing?.resultValue;
     subTotalMSAnalysisDesign += analisisAndDesignCalculation?.customisationDesing?.resultValueMS || 0;
     subTotalMSCAnalysisDesign += analisisAndDesignCalculation?.customisationDesing?.resultValueMSC || 0;
@@ -344,6 +343,7 @@ export const arrayGenerator = async (initialDataSet: any) => {
       subTotalMSCAnalysisDesign
     }, condition, initialDataSet);
     const responseGenerateEstimateResourceMilestone = await generateEstimateResourceMilestone(dataEstimateResourceMilestone, analisisAndDesignCalculation, condition, initialDataSet);
+
   
 
     await Promise.all([analisisAndDesignCalculation, responseGenerateEstimateResource, responseGenerateEstimateResourceMilestone]);
@@ -365,7 +365,11 @@ export const arrayGenerator = async (initialDataSet: any) => {
     // Wait for all asynchronous operations to complete
     // await Promise.all(promises);
 
-    const dataEstimateAverageRate: any[] = data;
+    const dataEstimateAverageRate: any[] = await setDataSetAveRate(data, analisisAndDesignCalculation, initialDataSet, condition);
+    await Promise.all(dataEstimateAverageRate)
+    console.log(';;', dataEstimateAverageRate);
+    
+    // data;
     return {
       dataEstimateAverageRate, 
       dataEstimateResource: responseGenerateEstimateResource, 
@@ -377,6 +381,220 @@ export const arrayGenerator = async (initialDataSet: any) => {
     return resultArray;
   }
 };
+
+const setDataSetAveRate = async(data: any, analisisAndDesignCalculation: any, initialDataSet: any, condition: boolean) => {
+  let subTotalMAnalysisDesignSub = 0;
+  let subTotalMSAnalysisDesignSub = 0;
+  let subTotalMSCAnalysisDesignSub = 0;
+
+  let subTotalMEstimateDesignAvgRateMilestoneSub = 0;
+  let subTotalMSEstimateDesignAvgRateMilestoneSub = 0;
+  let subTotalMSCEstimateDesignAvgRateMilestoneSub = 0;
+  
+  (data[0] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.resultValue;
+  (data[0] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.resultValueMS;
+  (data[0] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.resultValueMSC;
+  (dataEstimateAverageRateMilestone[0] as any).M = analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.resultValue;
+  (dataEstimateAverageRateMilestone[0] as any)['M/S'] = analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.resultValueMS;
+  (dataEstimateAverageRateMilestone[0] as any)['M/S/C'] = analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.resultValueMSC;
+
+  (data[1] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisation?.resultValue;
+  (data[1] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisation?.resultValueMS;
+  (data[1] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisation?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisation?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisation?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisation?.resultValueMSC;
+  (dataEstimateAverageRateMilestone[1] as any).M = analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisation?.resultValue;
+  (dataEstimateAverageRateMilestone[1] as any)['M/S'] = analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisation?.resultValueMS;
+  (dataEstimateAverageRateMilestone[1] as any)['M/S/C'] = analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisation?.resultValueMSC;
+
+  (data[2] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirement?.resultValue || 0;
+  (data[2] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirement?.resultValueMS;
+  (data[2] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirement?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirement?.resultValue || 0;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirement?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirement?.resultValueMSC;
+  (dataEstimateAverageRateMilestone[2] as any).M = analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirement?.resultValue || 0;
+  (dataEstimateAverageRateMilestone[2] as any)['M/S'] = analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirement?.resultValueMS;
+  (dataEstimateAverageRateMilestone[2] as any)['M/S/C'] = analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirement?.resultValueMSC;
+
+  (data[3] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseDocumentation?.documentation?.resultValue || 0;
+  (data[3] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseDocumentation?.documentation?.resultValueMS;
+  (data[3] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseDocumentation?.documentation?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDocumentation?.documentation?.resultValue || 0;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDocumentation?.documentation?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDocumentation?.documentation?.resultValueMSC;
+  (dataEstimateAverageRateMilestone[3] as any).M = analisisAndDesignCalculation?.subSections?.responseDocumentation?.documentation?.resultValue || 0;
+  (dataEstimateAverageRateMilestone[3] as any)['M/S'] = analisisAndDesignCalculation?.subSections?.responseDocumentation?.documentation?.resultValueMS;
+  (dataEstimateAverageRateMilestone[3] as any)['M/S/C'] = analisisAndDesignCalculation?.subSections?.responseDocumentation?.documentation?.resultValueMSC;
+  
+  (data[4] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValue;
+  (data[4] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValueMS;
+  (data[4] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValueMSC;
+  (dataEstimateAverageRateMilestone[4] as any).M = analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValue;
+  (dataEstimateAverageRateMilestone[4] as any)['M/S'] = analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValueMS;
+  (dataEstimateAverageRateMilestone[4] as any)['M/S/C'] = analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValueMSC;
+  const estimateDesignProjectManager = await calculateProjectManagerEstimateAvgRateMilestone(initialDataSet, analisisAndDesignCalculation?.subSections, 'Analysis and Design');
+  (dataEstimateAverageRateMilestone[5] as any).M = estimateDesignProjectManager?.resultValue;
+  (dataEstimateAverageRateMilestone[5] as any)['M/S'] = estimateDesignProjectManager?.resultValueMS;
+  (dataEstimateAverageRateMilestone[5] as any)['M/S/C'] = estimateDesignProjectManager?.resultValueMSC;
+  (dataEstimateAverageRateMilestone[6] as any).M = estimateDesignProjectManager?.resultValueSub;
+  (dataEstimateAverageRateMilestone[6] as any)['M/S'] = estimateDesignProjectManager?.resultValueMSSub;
+  (dataEstimateAverageRateMilestone[6] as any)['M/S/C'] = estimateDesignProjectManager?.resultValueMSCSub;
+
+  (data[5] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.configuration?.resultValue;
+  (data[5] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.configuration?.resultValueMS;
+  (data[5] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.configuration?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.configuration?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.configuration?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.configuration?.resultValueMSC;
+  (dataEstimateAverageRateMilestone[7] as any).M = analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.configuration?.resultValue;
+    (dataEstimateAverageRateMilestone[7] as any)['M/S'] = analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.configuration?.resultValueMS;
+    (dataEstimateAverageRateMilestone[7] as any)['M/S/C'] = analisisAndDesignCalculation?.subSections?.responseAnalisisDesign?.configuration?.resultValueMSC;
+
+  (data[6] as any)["M_H"] = analisisAndDesignCalculation?.subSections?.responseIntegration?.integration?.resultValue;
+  (data[6] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseIntegration?.integration?.resultValueMS;
+  (data[6] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseIntegration?.integration?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseIntegration?.integration?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseIntegration?.integration?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseIntegration?.integration?.resultValueMSC;
+  (dataEstimateAverageRateMilestone[8] as any).M = analisisAndDesignCalculation?.subSections?.responseIntegration?.integration?.resultValue;
+    (dataEstimateAverageRateMilestone[8] as any)['M/S'] = analisisAndDesignCalculation?.subSections?.responseIntegration?.integration?.resultValueMS;
+    (dataEstimateAverageRateMilestone[8] as any)['M/S/C'] = analisisAndDesignCalculation?.subSections?.responseIntegration?.integration?.resultValueMSC;
+
+  (data[7] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisationBuild?.resultValue;
+  (data[7] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisationBuild?.resultValueMS;
+  (data[7] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisationBuild?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisationBuild?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisationBuild?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCustomisationDesign?.customisationBuild?.resultValueMSC;
+
+  //
+  (data[8] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirementBuild?.resultValue;
+  (data[8] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirementBuild?.resultValueMS;
+  (data[8] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirementBuild?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirementBuild?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirementBuild?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCustomRequirementDesign?.customRequirementBuild?.resultValueMSC;
+
+  (data[9] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseDocumentLayout?.documentLayout?.resultValue;
+  (data[9] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseDocumentLayout?.documentLayout?.resultValueMS;
+  (data[9] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseDocumentLayout?.documentLayout?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDocumentLayout?.documentLayout?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDocumentLayout?.documentLayout?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDocumentLayout?.documentLayout?.resultValueMSC;
+
+  (data[10] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseReporting?.reporting?.resultValue;
+  (data[10] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseReporting?.reporting?.resultValueMS;
+  (data[10] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseReporting?.reporting?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseReporting?.reporting?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseReporting?.reporting?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseReporting?.reporting?.resultValueMSC;
+
+  (data[11] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseDataMigration?.dataMigration?.resultValue;
+  (data[11] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseDataMigration?.dataMigration?.resultValueMS;
+  (data[11] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseDataMigration?.dataMigration?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDataMigration?.dataMigration?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDataMigration?.dataMigration?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDataMigration?.dataMigration?.resultValueMSC;
+
+  (data[12] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseCRP?.crp?.resultValue;
+  (data[12] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseCRP?.crp?.resultValueMS;
+  (data[12] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseCRP?.crp?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCRP?.crp?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCRP?.crp?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseCRP?.crp?.resultValueMSC;
+
+  (data[13] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseTesting?.testing?.resultValue;
+  (data[13] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseTesting?.testing?.resultValueMS;
+  (data[13] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseTesting?.testing?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseTesting?.testing?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseTesting?.testing?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseTesting?.testing?.resultValueMSC;
+
+  (data[14] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseTrainTheTrainer?.trainTheTrainer?.resultValue;
+  (data[14] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseTrainTheTrainer?.trainTheTrainer?.resultValueMS;
+  (data[14] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseTrainTheTrainer?.trainTheTrainer?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseTrainTheTrainer?.trainTheTrainer?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseTrainTheTrainer?.trainTheTrainer?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseTrainTheTrainer?.trainTheTrainer?.resultValueMSC;
+
+  (data[15] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseUATEnvironmentPreparation?.uatEnvironmentPreparation?.resultValue;
+  (data[15] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseUATEnvironmentPreparation?.uatEnvironmentPreparation?.resultValueMS;
+  (data[15] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseUATEnvironmentPreparation?.uatEnvironmentPreparation?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseUATEnvironmentPreparation?.uatEnvironmentPreparation?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseUATEnvironmentPreparation?.uatEnvironmentPreparation?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseUATEnvironmentPreparation?.uatEnvironmentPreparation?.resultValueMSC;
+
+  (data[16] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseUATSupport?.uatSupport?.resultValue;
+  (data[16] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseUATSupport?.uatSupport?.resultValueMS;
+  (data[16] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseUATSupport?.uatSupport?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseUATSupport?.uatSupport?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseUATSupport?.uatSupport?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseUATSupport?.uatSupport?.resultValueMSC;
+
+  (data[17] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseProdEnvironmentPreparation?.prodEnvironmentPreparation?.resultValue;
+  (data[17] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseProdEnvironmentPreparation?.prodEnvironmentPreparation?.resultValueMS;
+  (data[17] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseProdEnvironmentPreparation?.prodEnvironmentPreparation?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseProdEnvironmentPreparation?.prodEnvironmentPreparation?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseProdEnvironmentPreparation?.prodEnvironmentPreparation?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseProdEnvironmentPreparation?.prodEnvironmentPreparation?.resultValueMSC;
+
+  (data[18] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseSupportHandover?.supportHandover?.resultValue;
+  (data[18] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseSupportHandover?.supportHandover?.resultValueMS;
+  (data[18] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseSupportHandover?.supportHandover?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseSupportHandover?.supportHandover?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseSupportHandover?.supportHandover?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseSupportHandover?.supportHandover?.resultValueMSC;
+
+  (data[19] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseDocumentLayout?.endUserTraining?.resultValue;
+  (data[19] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseDocumentLayout?.endUserTraining?.resultValueMS;
+  (data[19] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseDocumentLayout?.endUserTraining?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDocumentLayout?.endUserTraining?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDocumentLayout?.endUserTraining?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responseDocumentLayout?.endUserTraining?.resultValueMSC;
+
+  (data[20] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responsePostGoLive?.postGoLive?.resultValue;
+  (data[20] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responsePostGoLive?.postGoLive?.resultValueMS;
+  (data[20] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responsePostGoLive?.postGoLive?.resultValueMSC;
+  subTotalMAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responsePostGoLive?.postGoLive?.resultValue;
+  subTotalMSAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responsePostGoLive?.postGoLive?.resultValueMS;
+  subTotalMSCAnalysisDesignSub += analisisAndDesignCalculation?.subSections?.responsePostGoLive?.postGoLive?.resultValueMSC;
+
+  (data[21] as any)['M_H'] = subTotalMAnalysisDesignSub;
+  (data[21] as any)['M/S_H'] = subTotalMSAnalysisDesignSub;
+  (data[21] as any)['M/S/C_H'] = subTotalMSCAnalysisDesignSub;
+
+  // (data[23] as any)['M_H'] = subTotalMAnalysisDesignSub * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  // (data[23] as any)['M/S_H'] = subTotalMSAnalysisDesignSub * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  // (data[23] as any)['M/S/C_H'] = subTotalMSCAnalysisDesignSub * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+
+  const responsePojectManagement = await generateProjectManagerMValue(initialDataSet, {
+    responseSubtotal: {
+      subTotalMAnalysisDesign: subTotalMAnalysisDesignSub,
+      subTotalMSAnalysisDesign: subTotalMSAnalysisDesignSub,
+      subTotalMSCAnalysisDesign: subTotalMSCAnalysisDesignSub
+    }
+  }, condition);
+
+  (data[22] as any)['M_H'] = responsePojectManagement?.projectManager?.resultValue;
+  (data[22] as any)['M/S_H'] = responsePojectManagement?.projectManager?.resultValueMS;
+  (data[22] as any)['M/S/C_H'] = responsePojectManagement?.projectManager?.resultValueMSC;
+
+  (data[23] as any)['M_H'] = (subTotalMAnalysisDesignSub + responsePojectManagement?.projectManager?.resultValue) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (data[23] as any)['M/S_H'] = (subTotalMSAnalysisDesignSub + responsePojectManagement?.projectManager?.resultValueMS) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (data[23] as any)['M/S/C_H'] = (subTotalMSCAnalysisDesignSub + responsePojectManagement?.projectManager?.resultValueMSC) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  await Promise.all(data)
+  console.log(data);
+  
+  return data;
+}
 
 
 const generateEstimateResource = async(dataEstimateResource: any, analisisAndDesignCalculation: any, responseSubtotal: any, condition: boolean, initialDataSet: any) => {

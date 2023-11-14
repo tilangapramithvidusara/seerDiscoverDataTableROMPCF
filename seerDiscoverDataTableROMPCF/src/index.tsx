@@ -11,7 +11,7 @@ import { initialFetchFailure, initialFetchSuccess, setImageUrl } from "./redux/r
 import Loader from "./components/Loader/Loader";
 
 
-export default function Index({tableContent, context, imageUrl}: {tableContent: any, context: any, imageUrl?: any}) {
+function Index({tableContent, context, imageUrl}: {tableContent: any, context: any, imageUrl?: any}) {
   const dispatch = useDispatch();
   const data = useSelector((state: any) => state.report?.initialFetchData)
   const loading = useSelector((state: any) => state.report.loading)
@@ -98,3 +98,5 @@ export default function Index({tableContent, context, imageUrl}: {tableContent: 
     </div>
   )
 }
+
+export default React.memo(Index)

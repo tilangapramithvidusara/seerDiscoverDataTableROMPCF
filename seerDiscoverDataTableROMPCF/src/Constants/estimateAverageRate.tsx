@@ -51,14 +51,89 @@ export const columnDetails = [
   },
 ]
 
+export const columnDetailsHOURS = [
+  {
+    header: 'Category',
+    accessorKey: 'nameCategory',
+    enableGrouping: true,
+  },
+  {
+    header: 'Name',
+    accessorKey: 'name',
+  },
+  {
+    header: 'M',
+    accessorKey: 'M',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+    render: (rowData: any) => {
+      console.log(rowData);
+      
+      if (rowData.aggregated) {
+        // Apply background color for aggregated cells
+        return <div style={{ backgroundColor: 'lightblue' }}>{rowData.value}</div>;
+      }
+      return rowData.value;
+    },
+  },
+  {
+    header: 'M_Hours',
+    accessorKey: 'M_H',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+    render: (rowData: any) => {
+      console.log(rowData);
+      
+      if (rowData.aggregated) {
+        // Apply background color for aggregated cells
+        return <div style={{ backgroundColor: 'lightblue' }}>{rowData.value}</div>;
+      }
+      return rowData.value;
+    },
+  },
+  {
+    header: 'M/S',
+    accessorKey: 'M/S',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: 'M/S_Hours',
+    accessorKey: 'M/S_H',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: 'M/S/C',
+    accessorKey: 'M/S/C',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+  {
+    header: 'M/S/C_Hours',
+    accessorKey: 'M/S/C_H',
+    isCalcultionEnabled: true,
+    aggregationFn: 'sum',
+    showBottomTotal: true,
+  },
+]
+
 export const data: any[] = [
   {
     "nameCategory": "ANALYSIS & DESIGN",
     name: 'Analysis and Design',
     titleCode: '1',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',
   },
   {
@@ -66,8 +141,11 @@ export const data: any[] = [
     name: 'Customisations (Design)',
     titleCode: '1',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',
   },
   {
@@ -75,8 +153,11 @@ export const data: any[] = [
     name: 'Custom Requirements (Design)',
     titleCode: '1',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',
   },
   {
@@ -84,8 +165,11 @@ export const data: any[] = [
     titleCode: '1',
     name: 'Documentation',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',
   },
   {
@@ -93,8 +177,11 @@ export const data: any[] = [
     titleCode: '1',
     name: 'Design Review',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',
   },
   {
@@ -102,8 +189,11 @@ export const data: any[] = [
     titleCode: '2',
     name: 'Configuration',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',
   },
   {
@@ -111,8 +201,11 @@ export const data: any[] = [
     titleCode: '2',
     name: 'Integrations',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',	
   },
   {
@@ -120,8 +213,11 @@ export const data: any[] = [
     titleCode: '2',
     name: 'Customisations (Build)',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',	
   },
   {
@@ -129,8 +225,11 @@ export const data: any[] = [
     titleCode: '2',
     name: 'Custom Requirements (Build)',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',		
   },
   {
@@ -138,8 +237,11 @@ export const data: any[] = [
     titleCode: '2',
     name: 'Document Layouts',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',		
   },
   {
@@ -147,8 +249,11 @@ export const data: any[] = [
     titleCode: '2',
     name: 'Reporting',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',	
   },
   {
@@ -156,8 +261,11 @@ export const data: any[] = [
     titleCode: '2',
     name: 'Data Migration',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',		
   },
   {
@@ -165,8 +273,11 @@ export const data: any[] = [
     titleCode: '2',
     name: 'CRP',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',	
   },
   {
@@ -174,8 +285,11 @@ export const data: any[] = [
     titleCode: '2',
     name: 'Testing',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',	
   },
   {
@@ -183,8 +297,11 @@ export const data: any[] = [
     titleCode: '3',
     name: 'Train-the-trainer',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',		
   },
   {
@@ -192,8 +309,11 @@ export const data: any[] = [
     titleCode: '3',
     name: 'UAT Environment Preparation',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',	
   },
   {
@@ -201,8 +321,11 @@ export const data: any[] = [
     titleCode: '3',
     name: 'UAT Support',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',		
   },
   {
@@ -210,8 +333,11 @@ export const data: any[] = [
     titleCode: '3',
     name: 'PROD Environment Preparation',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',		
   },
   {
@@ -219,8 +345,11 @@ export const data: any[] = [
     titleCode: '3',
     name: 'Support Handover',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',		
   },
   {
@@ -228,8 +357,11 @@ export const data: any[] = [
     titleCode: '4',
     name: 'End user training',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',	
   },
   {
@@ -237,8 +369,11 @@ export const data: any[] = [
     titleCode: '4',
     name: 'Post Go-Live Support',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',		
   },
   // {
@@ -270,8 +405,11 @@ export const data: any[] = [
     titleCode: '5',
     name: '',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',	
   },
   {
@@ -279,8 +417,11 @@ export const data: any[] = [
     titleCode: '6',
     name: '',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',	
   },
   {
@@ -288,8 +429,11 @@ export const data: any[] = [
     titleCode: '7',
     name: '',
     M: 0,
+    M_H: 0,
     'M/S': 0,
+    'M/S_H': 0,
     'M/S/C': 0,
+    'M/S/C_H': 0,
     type: 'Estimate Avg Rate',	
   },
   // {
