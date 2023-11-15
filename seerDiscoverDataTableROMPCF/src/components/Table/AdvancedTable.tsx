@@ -126,7 +126,7 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
           </div>
         </>
       )} */}
-        <div className='flex-wrap ptb-10'>
+        <div className='flex-wrap ptb-10 custom-toggle-button'>
           <div className='text-left'>
             {(type === 'Estimate Resource' || type === 'Estimate Resource Milestone') && (
               <ButtonGroups selectedButton={resourceType} setSelectedButton={
