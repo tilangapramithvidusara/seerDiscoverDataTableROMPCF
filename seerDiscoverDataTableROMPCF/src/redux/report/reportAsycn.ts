@@ -7,25 +7,7 @@ import {
 
 export const deleteOutputSetAsync: any = async(info: any) => {
   console.log('info ==> ', info);
-  const requestBody = {
-    outputsetid: info?.OutputSetId
-  }
   try {
-    // const res: any = await axios.post(
-    //   'https://prod-08.uksouth.logic.azure.com:443/workflows/ca2c7c8980354726999b8b76f250554c/triggers/manual/paths/invoke?api-version=2016-06-01',
-    //     requestBody,
-    //     {
-    //       // params: {
-    //       //   outputsetid: info?.OutputSetId
-    //       // },
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //       timeout: 30000,
-    //     });
-    //     console.log('res delete ==> ', res)
-    // if (res?.status !== 200) throw new Error();
-    // return {result: (res as any)?.data, error: false}
     const data = {
       "outputsetid":  info?.OutputSetId
     };
