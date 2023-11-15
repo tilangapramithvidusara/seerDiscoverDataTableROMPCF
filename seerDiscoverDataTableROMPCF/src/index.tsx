@@ -52,7 +52,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
         setDataSetEstimateResource(result?.dataEstimateResource ? result?.dataEstimateResource : [])
         setDataEstimateAverageRateMilestone(result?.dataEstimateAverageRateMilestone ? result?.dataEstimateAverageRateMilestone : [])
         setDataEstimateResourceMilestone(result?.dataEstimateResourceMilestone ? result?.dataEstimateResourceMilestone : []);
-        // dispatch(deleteOutputSetAsync({ OutputSetId: data?.OutputSetId }))
+        deleteOutputSetAsync({ OutputSetId: data?.OutputSetId })
         setIsloading(false)
         console.log('dataValue ==> ', result);
       })
@@ -61,7 +61,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
         setDataSet([]);
         setIsloading(false);
       });
-    // dispatch(deleteOutputSetAsync({ OutputSetId: data?.OutputSetId }))
+    deleteOutputSetAsync({ OutputSetId: data?.OutputSetId })
 
     // const dataValue: any = arrayGenerator(data);
     // setDataSet(dataValue);
