@@ -5,10 +5,11 @@ import { percentData } from "../../Constants/pickListData";
 export const generateEstimateResourceValue = (
   inititlaData: any, 
   subCal: any, // M M/S M/S/C 
-  mainCal: any,
+  allSubsections: any,
   name: string,
   priority: string,
-  condition: boolean
+  condition: boolean,
+  isSub?: boolean,
   ) => {
   try {
     
@@ -37,31 +38,37 @@ export const generateEstimateResourceValue = (
       
 
       const r1Mvalue = priority === 'Estimate Resource Milestone' ? subCal.M *  (split || 0)/100 : generateValue(split || 0, subCal.M || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition);
+      const r1MvalueSub = allSubsections?.resultValue *  (split || 0)/100;
       // condition ? 
       //   subCal.M * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal.M * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate
 
       const r2Mvalue = priority === 'Estimate Resource Milestone' ? subCal.M *  (100 - split || 0)/100 : generateValue((100 - split) || 0, subCal.M || 0, findProjectTaskPartner_ResourceSecondary?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
+      const r2MvalueSub = allSubsections?.resultValue *  ((100 - split) || 0)/100;
       // condition ? 
       //   subCal.M * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal.M * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate
 
       const r1MSvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S'] || 0) *  (split || 0)/100 : generateValue((split) || 0, subCal['M/S'] || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
+      const r1MSvalueSub = allSubsections?.resultValueMS *  ((split) || 0)/100;
       // condition ? 
       //   subCal['M/S'] * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S']* ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate
 
       const r2MSvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S'] || 0) *  (100 - split || 0)/100 : generateValue((100 - split) || 0, subCal['M/S'] || 0, findProjectTaskPartner_ResourceSecondary?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
+      const r2MSvalueSub = allSubsections?.resultValueMS *  ((100 - split) || 0)/100;
       // condition ? 
       //   subCal['M/S'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate
 
       const r1MSCvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S/C'] || 0) *  (split || 0)/100 : generateValue((split) || 0, subCal['M/S/C'] || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
+      const r1MSCvalueSub = allSubsections?.resultValueMSC *  ((split) || 0)/100;
       // condition ? 
       //   subCal['M/S/C'] * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S/C'] * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate
 
       const r2MSCvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S/C'] || 0) *  (100 - split || 0)/100 : generateValue((100 - split) || 0, subCal['M/S/C'] || 0, findProjectTaskPartner_ResourceSecondary?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
+      const r2MSCvalueSub = allSubsections?.resultValueMSC *  ((100 - split) || 0)/100;
       // condition ? 
       //   subCal['M/S/C'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S/C'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate
@@ -70,19 +77,36 @@ export const generateEstimateResourceValue = (
       return {
         resultValue1:  r1Mvalue,
         resultValue2: r2Mvalue,
+        resultValue1Sub:  r1MvalueSub,
+        resultValue2Sub: r2MvalueSub,
         "M_Resource_Total":  r1Mvalue + r2Mvalue,
+        "M_Resource_Total_Sub":  r1MvalueSub + r2MvalueSub,
         resultValueMS1: r1MSvalue,
         resultValueMS2: r2MSvalue,
+        resultValueMS1Sub: r1MSvalueSub,
+        resultValueMS2Sub: r2MSvalueSub,
         "M/S_Resource_Total": r1MSvalue + r2MSvalue,
+        "M/S_Resource_Total_Sub": r1MSvalueSub + r2MSvalueSub,
         resultValueMSC1: r1MSCvalue,
         resultValueMSC2:  r2MSCvalue,
+        resultValueMSC1Sub: r1MSCvalueSub,
+        resultValueMSC2Sub:  r2MSCvalueSub,
         "M/S/C_Resource_Total": r1MSCvalue + r2MSCvalue,
+        "M/S/C_Resource_Total_Sub": r1MSCvalueSub + r2MSCvalueSub,
         numberOfResources,
       }
     } else {
+      console.log('', filteredValue, name, ProjectTasktModel?.length);
+      ProjectTasktModel?.length && ProjectTasktModel.find((item: any, index: number) => {
+        console.log(name, item?.projectTaskPartner_Name);
+        
+        return item?.projectTaskPartner_Name == name
+      });
       throw new Error();
     }
   } catch (error) {
+    console.log(error);
+    
     return {
       resultValue1: 0,
       resultValue2: 0,

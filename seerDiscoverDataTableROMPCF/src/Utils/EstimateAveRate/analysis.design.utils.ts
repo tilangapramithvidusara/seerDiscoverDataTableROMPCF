@@ -319,7 +319,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseAnalisisDesign?.resultValueMS || 0),
           "M/S/C": (responseAnalisisDesign?.resultValueMSC || 0),
         },
-        {},
+        responseAnalisisDesign,
         'Analysis and Design',
         'All',
         condition
@@ -334,7 +334,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseCustomisationDesign?.customisation?.resultValueMS || 0),
           "M/S/C": (responseCustomisationDesign?.customisation?.resultValueMSC || 0),
         },
-        {},
+        responseCustomisationDesign?.customisation,
         'Customisations (Design)',
         'All',
         condition
@@ -346,7 +346,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseCustomRequirementDesign?.customRequirement?.resultValueMS || 0),
           "M/S/C": (responseCustomRequirementDesign?.customRequirement?.resultValueMSC || 0),
         },
-        {},
+        responseCustomRequirementDesign?.customRequirement,
         'Custom Requirements (Design)',
         'All',
         condition
@@ -358,7 +358,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseDocumentation?.documentation?.resultValueMS || 0),
           "M/S/C": (responseDocumentation?.documentation?.resultValueMSC || 0),
         },
-        {},
+        responseDocumentation?.documentation,
         'Documentation',
         'All',
         condition
@@ -370,7 +370,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseDesignReview?.designReview?.resultValueMS || 0),
           "M/S/C": (responseDesignReview?.designReview?.resultValueMSC || 0),
         },
-        {},
+        responseDesignReview?.designReview,
         'Design Review',
         'All',
         condition
@@ -382,7 +382,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseAnalisisDesign?.configuration?.resultValueMS || 0),
           "M/S/C": (responseAnalisisDesign?.configuration?.resultValueMSC || 0),
         },
-        {},
+        responseAnalisisDesign?.configuration,
         'Configuration',
         'All',
         condition
@@ -394,7 +394,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseIntegration?.integration?.resultValueMS || 0),
           "M/S/C": (responseIntegration?.integration?.resultValueMSC || 0),
         },
-        {},
+        responseIntegration?.integration,
         'Integrations',
         'All',
         condition
@@ -406,7 +406,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseCustomisationDesign?.customisationBuild?.resultValueMS || 0),
           "M/S/C": (responseCustomisationDesign?.customisationBuild?.resultValueMSC || 0),
         },
-        {},
+        responseCustomisationDesign?.customisationBuild,
         'Customisations (Build)',
         'All',
         condition
@@ -418,7 +418,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseCustomRequirementDesign?.customRequirementBuild?.resultValueMS || 0),
           "M/S/C": (responseCustomRequirementDesign?.customRequirementBuild?.resultValueMSC || 0),
         },
-        {},
+        responseCustomRequirementDesign?.customRequirementBuild,
         'Custom Requirements (Build)',
         'All',
         condition
@@ -430,7 +430,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseDocumentLayout?.documentLayout?.resultValueMS || 0),
           "M/S/C": (responseDocumentLayout?.documentLayout?.resultValueMSC || 0),
         },
-        {},
+        responseDocumentLayout?.documentLayout,
         'Document Layouts',
         'All',
         condition
@@ -442,7 +442,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseReporting?.reporting?.resultValueMS || 0),
           "M/S/C": (responseReporting?.reporting?.resultValueMSC || 0),
         },
-        {},
+        responseReporting?.reporting,
         'Reporting',
         'All',
         condition
@@ -454,7 +454,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseDataMigration?.dataMigration?.resultValueMS || 0),
           "M/S/C": (responseDataMigration?.dataMigration?.resultValueMSC || 0),
         },
-        {},
+        responseDataMigration?.dataMigration,
         'Data Migration',
         'All',
         condition
@@ -466,7 +466,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseCRP?.crp?.resultValueMS || 0),
           "M/S/C": (responseCRP?.crp?.resultValueMSC || 0),
         },
-        {},
+        responseCRP?.crp?.resultValue,
         'CRP',
         'All',
         condition
@@ -478,7 +478,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseTesting?.testing?.resultValueMS || 0),
           "M/S/C": (responseTesting?.testing?.resultValueMSC || 0),
         },
-        {},
+        responseTesting?.testing,
         'Testing',
         'All',
         condition
@@ -490,7 +490,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseTrainTheTrainer?.trainTheTrainer?.resultValueMS || 0),
           "M/S/C": (responseTrainTheTrainer?.trainTheTrainer?.resultValueMSC || 0),
         },
-        {},
+        responseTrainTheTrainer?.trainTheTrainer,
         'Train-the-trainer',
         'All',
         condition
@@ -502,7 +502,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseUATEnvironmentPreparation?.uatEnvironmentPreparation?.resultValueMS || 0),
           "M/S/C": (responseUATEnvironmentPreparation?.uatEnvironmentPreparation?.resultValueMSC || 0),
         },
-        {},
+        responseUATEnvironmentPreparation?.uatEnvironmentPreparation,
         'UAT Environment Preparation',
         'All',
         condition
@@ -514,7 +514,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseUATSupport?.uatSupport?.resultValueMS || 0),
           "M/S/C": (responseUATSupport?.uatSupport?.resultValueMSC || 0),
         },
-        {},
+        responseUATSupport?.uatSupport,
         'UAT Support',
         'All',
         condition
@@ -526,7 +526,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseProdEnvironmentPreparation?.prodEnvironmentPreparation?.resultValueMS || 0),
           "M/S/C": (responseProdEnvironmentPreparation?.prodEnvironmentPreparation?.resultValueMSC || 0),
         },
-        {},
+        responseProdEnvironmentPreparation?.prodEnvironmentPreparation,
         'PROD Environment Preparation',
         'All',
         condition
@@ -538,7 +538,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseSupportHandover?.supportHandover?.resultValueMS || 0),
           "M/S/C": (responseSupportHandover?.supportHandover?.resultValueMSC || 0),
         },
-        {},
+        responseSupportHandover?.supportHandover,
         'Support Handover',
         'All',
         condition
@@ -550,7 +550,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responseDocumentLayout?.endUserTraining?.resultValueMS || 0),
           "M/S/C": (responseDocumentLayout?.endUserTraining?.resultValueMSC || 0),
         },
-        {},
+        responseDocumentLayout?.endUserTraining,
         'End user training',
         'All',
         condition
@@ -562,7 +562,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
           'M/S': (responsePostGoLive?.postGoLive?.resultValueMS || 0),
           "M/S/C": (responsePostGoLive?.postGoLive?.resultValueMSC || 0),
         },
-        {},
+        responsePostGoLive?.postGoLive,
         'Post Go-Live Support',
         'All',
         condition

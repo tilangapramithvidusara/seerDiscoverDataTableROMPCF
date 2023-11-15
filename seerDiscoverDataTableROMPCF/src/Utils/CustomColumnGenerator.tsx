@@ -33,8 +33,16 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
       let indicesToSum = []
       // type: 'Estimate Resource'
       if (data?.length && data[0].type == "Estimate Resource") {
-        indicesToSum = [(data.length - 1), (data.length - 3)]
-        sumEstimateResource = indicesToSum.reduceRight((sum, index) => sum + data[index][key], 0);
+        if (key.includes('_H')) {
+
+          sumEstimateResource = data.reduceRight((sum: number, item: any, idx: number, a: any) => (a.length - idx) > 3  ? sum : sum + item[key] , 0)
+        } else {
+          sumEstimateResource = data.reduceRight((sum: number, item: any, idx: number, a: any) => (a.length - idx) > 3  ? sum : sum + item[key] , 0)
+          // indicesToSum = [(data.length - 1), (data.length - 3)]
+          // sumEstimateResource = indicesToSum.reduceRight((sum, index) => sum + data[index][key], 0);
+        }
+        // indicesToSum = [(data.length - 1), (data.length - 3)]
+        // sumEstimateResource = indicesToSum.reduceRight((sum, index) => sum + data[index][key], 0);
       }
       const N = (data && data?.length && data[0].type == "Estimate Avg Rate Milestone" || data && data?.length && data[0].type == "Estimate Resource Milestone") ? 2 : 3;
       let total = (data && data?.length && data[0].type == "Estimate Resource") ? sumEstimateResource
@@ -52,65 +60,134 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
       enableGrouping: columnItem?.enableGrouping ? true : false,
       
       Cell: columnItem?.isCalcultionEnabled ? ({ cell }: { cell: any }) => {
+        console.log('lolopqqew', cell?.column?.id);
+        
         if (cell?.row?._valuesCache?.nameCategory == "Project Risk" ||
         cell?.row?._valuesCache?.nameCategory == "Project Manager" || 
         cell?.row?._valuesCache?.nameCategory == "Sub Total") {
           null
         } else {
           if (columnItem?.isCalcultionEnabled) {
-          return(
-            <>
-              {cell.getValue()?.toLocaleString?.('en-US', {
-                style: 'currency',
-                currency: currency || 'GBP',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 4,
-              })}
-            </>
-          )}
+            if (cell?.column?.id?.includes('_H')) {
+              return(
+                <>
+                  {cell.getValue()?.toLocaleString?.('en-US', {
+                    // style: 'currency',
+                    // currency: cell?.column?.id?.includes('_H') ? '' : (currency || 'GBP'),
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </>
+              )
+            } else {
+              return(
+                <>
+                  {cell.getValue()?.toLocaleString?.('en-US', {
+                    style: 'currency',
+                    currency: cell?.column?.id?.includes('_H') ? '' : (currency || 'GBP'),
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </>
+              )
+            }
+          }
         }
       } : null,
       aggregationFn: columnItem?.aggregationFn ? columnItem?.aggregationFn : null,
       AggregatedCell: columnItem?.aggregationFn ? ({ cell, table }: { cell: any, table: any }) => {
+
+        // if (columnItem?.isCalcultionEnabled) {
+          if (cell?.column?.id?.includes('_H')) {
+            return(
+              <>
+                {cell.getValue()?.toLocaleString?.('en-US', {
+                  // style: 'currency',
+                  // currency: cell?.column?.id?.includes('_H') ? '' : (currency || 'GBP'),
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </>
+            )
+          } else {
+            return(
+              <>
+                {cell.getValue()?.toLocaleString?.('en-US', {
+                  style: 'currency',
+                  currency: cell?.column?.id?.includes('_H') ? '' : (currency || 'GBP'),
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </>
+            )
+          }
         
-        return(
-          <div id='aggregated-cell' style={{
-            // backgroundColor: 'yellow'
-          }}>
-            {/* {`${columnItem?.aggregationFn.charAt(0).toUpperCase() + columnItem?.aggregationFn.slice(1)} by `} */}
-            {/* {table.getColumn(cell.row.groupingColumnId ?? '').columnDef.header}:{' '} */}
-            <Box
-            // color for the cell info.main
-              sx={{ color: 'black', display: 'inline', fontWeight: 'bold', 
-              // backgroundColor: 'red' 
-            }}
-            >
-              {cell.getValue()?.toLocaleString?.('en-US', {
-              style: 'currency',
-              currency: currency || 'GBP',
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 4,
-            })}
-            </Box>
-          </div>
-      )} :  null,
+      //   return(
+      //     <div id='aggregated-cell' style={{
+      //       // backgroundColor: 'yellow'
+      //     }}>
+      //       {/* {`${columnItem?.aggregationFn.charAt(0).toUpperCase() + columnItem?.aggregationFn.slice(1)} by `} */}
+      //       {/* {table.getColumn(cell.row.groupingColumnId ?? '').columnDef.header}:{' '} */}
+      //       <Box
+      //       // color for the cell info.main
+      //         sx={{ color: 'black', display: 'inline', fontWeight: 'bold', 
+      //         // backgroundColor: 'red' 
+      //       }}
+      //       >
+      //         {cell.getValue()?.toLocaleString?.('en-US', {
+      //         style: 'currency',
+      //         currency: cell?.column?.id?.includes('_H') ? '' : (currency || 'GBP'),
+      //         minimumFractionDigits: 2,
+      //         maximumFractionDigits: 4,
+      //       })}
+      //       </Box>
+      //     </div>
+      // )
+    } :  null,
 
       Footer: columnItem?.showBottomTotal ? () => {
         if (columnItem?.showBottomTotal) {
-          return(
-            // <Stack>
-            //   Total:
-              // {/* <Box color="warning.main">{Math.round(totalColumn)}</Box> */}
-              <Box color="white">
+          console.log('mm', columnItem);
+          console.log('pq', columnItem?.header?.includes('_H') );
+          // if (columnItem?.isCalcultionEnabled) {
+            if (columnItem?.header?.includes('_H')) {
+              return(
+                <Box color="white">
                 {totalColumn(columnItem?.accessorKey)?.toLocaleString?.('en-US', {
-                style: 'currency',
-                  currency: currency || 'GBP',
+                // style: 'currency',
+                //   currency: (currency || 'GBP'),
                   minimumFractionDigits: 2,
-                  maximumFractionDigits: 4,
+                  maximumFractionDigits: 2,
                 })}
               </Box>
-            // {/* </Stack> */}
-          )
+              )
+            } else {
+              return(
+                <Box color="white">
+                {totalColumn(columnItem?.accessorKey)?.toLocaleString?.('en-US', {
+                style: 'currency',
+                  currency: (currency || 'GBP'),
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </Box>
+              )
+            }
+          
+          // return(
+          //   // <Stack>
+          //   //   Total:
+          //     // {/* <Box color="warning.main">{Math.round(totalColumn)}</Box> */}
+          //     <Box color="white">
+          //       {totalColumn(columnItem?.accessorKey)?.toLocaleString?.('en-US', {
+          //       style: 'currency',
+          //         currency: columnItem?.header?.includes('_H') ? '' : (currency || 'GBP'),
+          //         minimumFractionDigits: 2,
+          //         maximumFractionDigits: 4,
+          //       })}
+          //     </Box>
+          //   // {/* </Stack> */}
+          // )
         }
         
       } :  null,

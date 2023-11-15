@@ -78,7 +78,7 @@ export const columnDetailsHOURS = [
     },
   },
   {
-    header: 'M_Hours',
+    header: 'M_Hours/Days',
     accessorKey: 'M_H',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
@@ -101,7 +101,7 @@ export const columnDetailsHOURS = [
     showBottomTotal: true,
   },
   {
-    header: 'M/S_Hours',
+    header: 'M/S_Hours/Days',
     accessorKey: 'M/S_H',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
@@ -115,7 +115,7 @@ export const columnDetailsHOURS = [
     showBottomTotal: true,
   },
   {
-    header: 'M/S/C_Hours',
+    header: 'M/S/C_Hours/Days',
     accessorKey: 'M/S/C_H',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',

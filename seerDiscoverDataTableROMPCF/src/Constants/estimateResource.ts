@@ -114,7 +114,7 @@ export const estimateResourceMustColumnDetailsHours = [
     showBottomTotal: true,
   },
   {
-    header: 'Resource 1 Hours',
+    header: 'Resource 1 Hours/Days',
     accessorKey: 'M_Resource1_H',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
@@ -128,7 +128,7 @@ export const estimateResourceMustColumnDetailsHours = [
     showBottomTotal: true,
   },
   {
-    header: 'Resource 2 Hours',
+    header: 'Resource 2 Hours/Days',
     accessorKey: 'M_Resource2_H',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',

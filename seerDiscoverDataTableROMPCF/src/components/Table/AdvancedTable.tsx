@@ -136,13 +136,16 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
               ]}/>
             )}
           </div>
-          {/* <div className='text-right'>
+          <div className='text-right'>
+          {type === 'Estimate Average Rate' && (
             <ButtonGroups selectedButton={tableMode} setSelectedButton={
-                setTableMode
-              } numberOfButtons={2} buttonTitles={[
-                {title: defaultText, value: 'Hours'}, {title: dayHoursText, value: 'Hours & Days'}
-              ]}/>
-          </div> */}
+              setTableMode
+            } numberOfButtons={2} buttonTitles={[
+              {title: defaultText, value: 'Default'}, {title: dayHoursText, value: 'Hours & Days'}
+            ]}/>
+          )}
+            
+          </div>
           {/* <div className='text-right'>
             <Button className='btn-default' onClick={(e) => initialTriggerHandler(e)}><img src={imageUrl} className='refresh-icon' alt="icon"/>Refresh</Button>
           </div> */}
