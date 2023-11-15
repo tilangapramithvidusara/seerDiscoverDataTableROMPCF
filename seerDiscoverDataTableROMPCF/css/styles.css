@@ -99,7 +99,7 @@ tr:nth-child(even) {
 }
 
 .seerDiscoverROM  .toggle-btn {
-  height: 35px;
+  height: 32px;
   font-size:13px;
   padding: 7px 12px;
   color: #C1BDBD;
@@ -257,4 +257,8 @@ tr:nth-child(even) {
 
 .seerDiscoverROM .MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation2.css-80pr5n-MuiPaper-root {
   padding: 12px 20px;
+}
+
+.seerDiscoverROM .custom-toggle-button .MuiButtonBase-root {
+  width: 50px;
 }
