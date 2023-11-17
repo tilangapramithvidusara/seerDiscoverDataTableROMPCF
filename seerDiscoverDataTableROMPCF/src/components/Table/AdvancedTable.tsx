@@ -24,6 +24,7 @@ import {
 } from '../../Constants/estimateResource';
 import SwipeableTemporaryDrawer from '../SwipeableDrawer';
 import { dayHoursText, defaultText } from '../../Constants';
+import { columnRequirementData } from '../../Constants/requirementsData';
 
 const buttonTitles= [
     {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
@@ -41,11 +42,13 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
   const [resourceType, setResourceType] = React.useState<string>('Must');  
   const currency = useSelector((state: any) => state?.report?.currency)
   const [typeLoader, setTypeLoader] = React.useState(false);
-  const [columnsSet, setColumnSet] = React.useState(type !== 'Estimate Resource' ? columnDetails : 
+  const [columnsSet, setColumnSet] = React.useState(type == 'RequirementData' ? columnRequirementData : type !== 'Estimate Resource' ? columnDetails : 
   estimateResourceMustColumnDetails
   // estimateResourceMustShouldColumnDetails
   )
-  console.log(type);
+  const reportReducerValues = useSelector((state: any) => state?.report?.estimateAverageRateStoreData)
+  console.log(reportReducerValues);
+  
   // const averageM = useMemo(
   //   () => data.reduce((acc: any, curr: any) => acc + curr?.M, 0) / data.length,
   //   [],
@@ -87,7 +90,8 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
   // }, [isLoading])
 
   const columnCreator = () => {
-    const columnCreator = (type === 'Estimate Average Rate' && tableMode == defaultText) ? columnDetails : 
+    
+    const columnCreator = (type == 'RequirementData') ? columnRequirementData : (type === 'Estimate Average Rate' && tableMode == defaultText) ? columnDetails : 
       (type === 'Estimate Average Rate' && tableMode == dayHoursText) ? columnDetailsHOURS : 
       (type === 'Estimate Average Rate Milestone' && tableMode == defaultText) ? columnDetails :
       (type === 'Estimate Average Rate Milestone' && tableMode == dayHoursText) ? columnDetailsHOURS :
@@ -97,14 +101,12 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
       (resourceType === 'Must Should' && tableMode == dayHoursText) ? estimateResourceMustShouldColumnDetailsHours :
       (resourceType === 'Must Should Could' && tableMode == defaultText) ? estimateResourceMustShouldCouldColumnDetails :
       (resourceType === 'Must Should Could' && tableMode == dayHoursText) ? estimateResourceMustShouldCouldColumnDetailsHours : 
-      columnDetails
-    console.log('l=>', columnCreator);
-    console.log('p=>', type, tableMode);
+      columnDetails;
+
     setColumnSet(columnCreator);
-    console.log('3');
   }
 
-  React.useEffect(() => {
+  React.useEffect(() => {    
     columnCreator();
   }, [resourceType, type, tableMode]) // resourceType
 
@@ -126,50 +128,55 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
           </div>
         </>
       )} */}
-        <div className='flex-wrap ptb-10 custom-toggle-button'>
-          <div className='text-left'>
-            {(type === 'Estimate Resource' || type === 'Estimate Resource Milestone') && (
-              <ButtonGroups selectedButton={resourceType} setSelectedButton={
-                setResourceType
-              } numberOfButtons={3} buttonTitles={[
-                {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
-              ]}/>
-            )}
+        {type != 'RequirementData' && (
+          <div>
+            <div className='flex-wrap ptb-10 custom-toggle-button'>
+              <div className='text-left'>
+                {(type === 'Estimate Resource' || type === 'Estimate Resource Milestone') && (
+                  <ButtonGroups selectedButton={resourceType} setSelectedButton={
+                    setResourceType
+                  } numberOfButtons={3} buttonTitles={[
+                    {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
+                  ]}/>
+                )}
+              </div>
+              <div className='text-right'>
+                <ButtonGroups selectedButton={tableMode} setSelectedButton={
+                  setTableMode
+                } numberOfButtons={2} buttonTitles={[
+                  {title: defaultText, value: 'Cost'}, {title: dayHoursText, value: 'Effort'}
+                ]}/>
+              </div>
+              {/* <div className='text-right'>
+                <Button className='btn-default' onClick={(e) => initialTriggerHandler(e)}><img src={imageUrl} className='refresh-icon' alt="icon"/>Refresh</Button>
+              </div> */}
+            </div>
+            <div>
+              {isOpenSideDrawer && (
+                <SwipeableTemporaryDrawer 
+                  anchor='right' 
+                  isOpenSideDrawer={isOpenSideDrawer} 
+                  setIsOpenSideDrawer={setIsOpenSideDrawer} 
+                  data={selectedRow}
+                />
+              )}
+              
+            </div>
           </div>
-          {/* <div className='text-right'>
-            <ButtonGroups selectedButton={tableMode} setSelectedButton={
-                setTableMode
-              } numberOfButtons={2} buttonTitles={[
-                {title: defaultText, value: 'Hours'}, {title: dayHoursText, value: 'Hours & Days'}
-              ]}/>
-          </div> */}
-          {/* <div className='text-right'>
-            <Button className='btn-default' onClick={(e) => initialTriggerHandler(e)}><img src={imageUrl} className='refresh-icon' alt="icon"/>Refresh</Button>
-          </div> */}
-        </div>
-        <div>
-          {isOpenSideDrawer && (
-            <SwipeableTemporaryDrawer 
-              anchor='right' 
-              isOpenSideDrawer={isOpenSideDrawer} 
-              setIsOpenSideDrawer={setIsOpenSideDrawer} 
-              data={selectedRow}
-            />
-          )}
-          
-        </div>
+        )}
+        
         <div>
           <MaterialReactTable
             columns={columns}
             data={data}
             enableColumnResizing
-            enableGrouping
+            enableGrouping={type != 'RequirementData' ? true : false}
             enableStickyHeader
             enableStickyFooter
             initialState={{
               density: 'compact',
               expanded: true, //expand all groups by default   'M', "M/S", "M/S/C", 
-              grouping: ['nameCategory'], //an array of columns to group by by default (can be multiple)
+              grouping: type != 'RequirementData' ? ['nameCategory'] : [], //an array of columns to group by by default (can be multiple)
               pagination: { pageIndex: 0, pageSize: 100 },
               // sorting: [{ id: 'state', desc: false }, { id: 'state', desc: false }], //sort by state by default
             }}
@@ -187,18 +194,9 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
             //   footerGroup: 'Total'
             // }}
             muiTableBodyRowProps={({ row }: {row: any}) => {
-              console.log(row.getGroupingValue);
-              console.log('>>>>>', row);
-              console.log('p[p[p',row.getIsGrouped(), row.original.nameCategory, row.groupingValue);
-              console.log(row.groupingValue ==  'OPERATION', row.groupingValue ==  'Post Go-Live Support', row.original.nameCategory == 'OPERATION');
-              
-              console.log('opopo', row.original);
-              
-              
               return({
               
               onClick: (event) => {
-                console.info("mmmmmmm", row, row?.original, row, row?.original?.name);
                 // openSidePane('', row.id, row?.original, false);
                 setSelectedRow(row)
                 setIsOpenSideDrawer(true)

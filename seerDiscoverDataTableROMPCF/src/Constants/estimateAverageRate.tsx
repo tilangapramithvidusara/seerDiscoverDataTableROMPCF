@@ -61,24 +61,24 @@ export const columnDetailsHOURS = [
     header: 'Name',
     accessorKey: 'name',
   },
+  // {
+  //   header: 'M',
+  //   accessorKey: 'M',
+  //   isCalcultionEnabled: true,
+  //   aggregationFn: 'sum',
+  //   showBottomTotal: true,
+  //   render: (rowData: any) => {
+  //     console.log(rowData);
+      
+  //     if (rowData.aggregated) {
+  //       // Apply background color for aggregated cells
+  //       return <div style={{ backgroundColor: 'lightblue' }}>{rowData.value}</div>;
+  //     }
+  //     return rowData.value;
+  //   },
+  // },
   {
     header: 'M',
-    accessorKey: 'M',
-    isCalcultionEnabled: true,
-    aggregationFn: 'sum',
-    showBottomTotal: true,
-    render: (rowData: any) => {
-      console.log(rowData);
-      
-      if (rowData.aggregated) {
-        // Apply background color for aggregated cells
-        return <div style={{ backgroundColor: 'lightblue' }}>{rowData.value}</div>;
-      }
-      return rowData.value;
-    },
-  },
-  {
-    header: 'M_Hours',
     accessorKey: 'M_H',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
@@ -93,29 +93,29 @@ export const columnDetailsHOURS = [
       return rowData.value;
     },
   },
+  // {
+  //   header: 'M/S',
+  //   accessorKey: 'M/S',
+  //   isCalcultionEnabled: true,
+  //   aggregationFn: 'sum',
+  //   showBottomTotal: true,
+  // },
   {
     header: 'M/S',
-    accessorKey: 'M/S',
-    isCalcultionEnabled: true,
-    aggregationFn: 'sum',
-    showBottomTotal: true,
-  },
-  {
-    header: 'M/S_Hours',
     accessorKey: 'M/S_H',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
     showBottomTotal: true,
   },
+  // {
+  //   header: 'M/S/C',
+  //   accessorKey: 'M/S/C',
+  //   isCalcultionEnabled: true,
+  //   aggregationFn: 'sum',
+  //   showBottomTotal: true,
+  // },
   {
     header: 'M/S/C',
-    accessorKey: 'M/S/C',
-    isCalcultionEnabled: true,
-    aggregationFn: 'sum',
-    showBottomTotal: true,
-  },
-  {
-    header: 'M/S/C_Hours',
     accessorKey: 'M/S/C_H',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',

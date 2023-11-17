@@ -112,7 +112,6 @@ export const calculateProjectManagerEstimateAvgRateMilestone = async(inititlaDat
       responsePostGoLive?.postGoLive?.resultValueMSC;
   }
 
-  console.log('mmm ==> ', mustCal, mustShouldCal, mustShouldCal);
   const F4Parameter = parameterModel[0]?.hoursPerday * 5;
   const O37 = 0// to find this we need to complete Estimate Avg Rate Milestone table
   const H6 = 29// if days === c2 => O37/5 else (O37/8)/5

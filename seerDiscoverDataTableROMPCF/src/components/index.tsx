@@ -23,8 +23,8 @@ import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 
 
 const App = ({
-  dataSet, onRefreshHandler, isRefreshing, dataSetEstimateResource, dataEstimateAverageRateMilestone, dataEstimateResourceMilestone,
-}: {dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, dataSetEstimateResource: any, dataEstimateAverageRateMilestone: any, dataEstimateResourceMilestone: any}) => { 
+  dataSet, onRefreshHandler, isRefreshing, dataSetEstimateResource, dataEstimateAverageRateMilestone, dataEstimateResourceMilestone, requirementData,
+}: {dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, dataSetEstimateResource: any, dataEstimateAverageRateMilestone: any, dataEstimateResourceMilestone: any, requirementData: any}) => { 
 
   const items: TabsProps['items'] = [
     {
@@ -55,11 +55,11 @@ const App = ({
       children: <AdvancedTable data={dataEstimateResourceMilestone} type={'Estimate Resource Milestone'} isLoading={isRefreshing}/>,
       // <RatesAndResources/>,
     },
-    // {
-    //   key: '5',
-    //   label: 'Project ROM',
-    //   children: <ProjectROM/>,
-    // },
+    { // requirementData
+      key: '5',
+      label: 'Requirement',
+      children: <AdvancedTable data={requirementData} type={'RequirementData'} isLoading={isRefreshing}/>,
+    },
     // {
     //   key: '6',
     //   label: 'Project Margin',
@@ -106,7 +106,6 @@ const App = ({
   }
 
   const [selectedButton, setSelectedButton] = React.useState('button1');
-  console.log('selectedButton ==> ',  selectedButton);
   React.useEffect(() => {    
     setComIsloading(isRefreshing)
   }, [isRefreshing])

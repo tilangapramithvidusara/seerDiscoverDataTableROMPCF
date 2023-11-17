@@ -7,8 +7,9 @@ import TabComponent from "./components/index";
 import { arrayGenerator } from "./Utils/SetupDataArray/analysis.design.array.utils";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteOutputSetAsync, fetchInitialDataAsync } from "./redux/report/reportAsycn";
-import { initialFetchFailure, initialFetchSuccess, setImageUrl } from "./redux/report/reportSlice";
+import { initialFetchFailure, initialFetchSuccess, setEstimateAveRateAnalysisDesign, setEstimateAveRateCusomisationDesign, setEstimateAveRateCustomerRequirementDesign, setEstimateAveRateDesignReview, setImageUrl } from "./redux/report/reportSlice";
 import Loader from "./components/Loader/Loader";
+import { dataMapper } from "./Utils/RequirmentData/requirement.data.utils";
 
 
 function Index({tableContent, context, imageUrl}: {tableContent: any, context: any, imageUrl?: any}) {
@@ -20,15 +21,12 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   const [dataSetEstimateResource, setDataSetEstimateResource] = React.useState<any []>([])
   const [dataEstimateAverageRateMilestone, setDataEstimateAverageRateMilestone] = React.useState<any[]>([])
   const [dataEstimateResourceMilestone, setDataEstimateResourceMilestone] = React.useState<any []>([]);
-  console.log('data set ===> ', data)
+  const [requirementData, setRequirementData] = React.useState([])
   React.useEffect(() => {
     initialTriggerHandler();
   }, []);
-  console.log(imageUrl);
   
-  React.useMemo(() => {
-    console.log(imageUrl);
-    
+  React.useMemo(() => {    
     dispatch(setImageUrl(imageUrl));
   }, [imageUrl]);
 
@@ -43,18 +41,31 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     }
   }
 
-  const arrayGeneratorHandler = () => {
+  const arrayGeneratorHandler = async() => {
     setIsloading(true)
-    arrayGenerator(data)
+    
+    const requirment: any = dataMapper(data?.OutputData);
+    if (requirment?.length)
+      setRequirementData(requirment);
+    arrayGenerator(data, dispatch)
       .then(async(result: any) => {
         // Handle the result here
+        console.log('llll', result?.reducerValues);
+        
         setDataSet(result?.dataEstimateAverageRate ? result?.dataEstimateAverageRate : []);
         setDataSetEstimateResource(result?.dataEstimateResource ? result?.dataEstimateResource : [])
         setDataEstimateAverageRateMilestone(result?.dataEstimateAverageRateMilestone ? result?.dataEstimateAverageRateMilestone : [])
         setDataEstimateResourceMilestone(result?.dataEstimateResourceMilestone ? result?.dataEstimateResourceMilestone : []);
+        dispatch(setEstimateAveRateAnalysisDesign(result?.reducerValues?.estimageAveRateAnalysisDesignSidePane))
+        dispatch(setEstimateAveRateCusomisationDesign(result?.reducerValues?.estimageAveRateCustomisationDesignSidePane));
+        dispatch(setEstimateAveRateCustomerRequirementDesign(result?.reducerValues?.estimageAveRateCustomerRequirementDesignSidePane));
+        dispatch(setEstimateAveRateCustomerRequirementDesign(result?.reducerValues?.estimageAveRateCustomerDocumentationSidePane));
+        dispatch(setEstimateAveRateDesignReview(result?.reducerValues?.estimageAveRateCustomerDesignReviewSidePane));
+        // estimageAveRateCustomerDesignReviewSidePane
+        // estimageAveRateCustomerDocumentationSidePane
+        // estimageAveRateCustomerRequirementDesignSidePane
         deleteOutputSetAsync({ OutputSetId: data?.OutputSetId })
         setIsloading(false)
-        console.log('dataValue ==> ', result);
       })
       .catch(error => {
         // Handle any errors here
@@ -70,14 +81,13 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
 
   React.useMemo(() => {
     if (data) {
-      arrayGeneratorHandler()
+      arrayGeneratorHandler();
       // const dataValue = arrayGenerator(data);
       // setDataSet(dataValue);
       // console.log('dataValue ==> ', dataValue);
       
     }
   }, [data]);
-  console.log("lopopo ==> ", loading, isLoading, dataSet);
   
   return (
     <div>
@@ -93,6 +103,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
           dataSetEstimateResource={dataSetEstimateResource}
           dataEstimateAverageRateMilestone={dataEstimateAverageRateMilestone}
           dataEstimateResourceMilestone={dataEstimateResourceMilestone}
+          requirementData={requirementData}
         />}
       {/* <TabComponent dataSet={dataSet} isRefreshing={loading || isLoading}/> */}
     </div>
