@@ -76,16 +76,15 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
     public updateView(context?: ComponentFramework.Context<IInputs>): any
     {   
         // : React.ReactElement
-        console.log('entity name : ', context?.parameters?.entityName?.raw)
-        console.log('account id : ', context?.parameters?.accountId?.raw)
-        console.log('report id : ', context?.parameters?.reportId.raw)
+        // console.log('entity name : ', context?.parameters?.entityName?.raw)
+        // console.log('account id : ', context?.parameters?.accountId?.raw)
+        // console.log('report id : ', context?.parameters?.reportId.raw)
 
         // this.jsonLoader();
         // const reportId = context?.parameters?.reportId?.raw;
         // const accountId = context?.parameters?.accountId?.raw;
         // this.dataLoad(reportId, accountId, context)
         // return React.createElement(React.Fragment);
-        console.log("MMM");
 
         const ConnectedApp = connect()(App);
 
@@ -99,7 +98,6 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
             // </Provider>,
             // this.container
         this.renderComponent(context);
-        console.log("MMM2");
     }
 
     private renderComponent(context?: ComponentFramework.Context<IInputs>): void {
@@ -133,7 +131,7 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
                         "seerdwp_jasonobjectformat": "{\n\"id\": \"accountId\"\n}",
                         "seerdwp_reportid": "testROMReport"
                       };
-                    console.log("data ", data);
+                    // console.log("data ", data);
                         
                     await this.jsonLoader(data, accountId);
                 }

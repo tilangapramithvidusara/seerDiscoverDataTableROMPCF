@@ -32,7 +32,6 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
       
       const integrationLoop = IntegrationDataSet && IntegrationDataSet.length && IntegrationDataSet.map((integrationItem: any, itegrationIndex: number) => {
         let k2 = integrationItem?.['305110'];
-        console.log(k2, integrationItem?.[305110]);
         
         let m2 = 0
         let n2 = 0
@@ -42,9 +41,7 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
         let r2 = 0;
         let s2 = 0
         let t2 = 0;
-        if (integrationItem?.['305110'] !== '') {
-          console.log('call');
-          
+        if (integrationItem?.['305110'] !== '') {          
           if (integrationItem?.['304600'] !== '') {
             const value: any = integrationParameters.find((item, index) => item.lookup == integrationItem?.['304600']);
             m2 = value?.score || 0
@@ -73,13 +70,11 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
           const valuePT21: any = integrationParameters.find((item, index) => item.type == 'Days per msg');
           const para_t21 = valuePT21?.score || 0
           t2 = (k2 == 1) ? s2 : (s2 + (k2 * para_t21));
-          console.log('t2 ===>', t2);
           
         }
         integrationValue += t2;
       })
       await Promise.all(integrationLoop);
-      console.log('integrationValue ==> ', integrationValue);
       
       if (parameterModel?.length) {
         returnObject.integration.resultValue = generateReturnValue(
@@ -101,9 +96,7 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
         )
         
       }
-        console.log("resultValue => ", resultValue);
       await Promise.all([integrationLoop])
-      console.log('returnObject ', returnObject);
       return returnObject;
     } else {
       console.log("generateAnalysisDesignMValue false ==> ");

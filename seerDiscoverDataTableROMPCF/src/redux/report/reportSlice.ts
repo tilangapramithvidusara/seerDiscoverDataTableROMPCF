@@ -7,7 +7,61 @@ export interface ReportState {
   loading: boolean,
   analysisAndDesign: object | null,
   imageUrl: any,
-  currency: string
+  currency: string,
+  estimateAverageRateStoreData: {
+    analysisAndDesign: {
+      M: {
+        value: number;
+        hourlyRate: number;
+        hoursPerday: number;
+        subValue: number;
+        logic: string;
+        shown: string;
+      };
+      MS: {
+        value: number;
+        hourlyRate: number;
+        hoursPerday: number;
+        subValue: number;
+        logic: string;
+        shown: string;
+      };
+      MSC: {
+        value: number;
+        hourlyRate: number;
+        hoursPerday: number;
+        subValue: number;
+        logic: string;
+        shown: string;
+      };
+    }
+    
+    customisationDesign: null | object;
+    customRequirementDesign: null | object;
+    documentation: null | object;
+    designReview: null | object;
+    configuration: null | object;
+    integration: null | object;
+    customisationBuild: null | object;
+    customRequirementBuild: null | object;
+    documentLayout: null | object;
+    reporting: null | object;
+    dataMigration: null | object;
+    crp: null | object;
+    testing: null | object;
+    trainTheTrainer: null | object;
+    uatEnvPrep: null | object;
+    uatSupport: null | object;
+    prodEnvPrep: null | object;
+    supportHandoever: null | object;
+    endUserTraining: null | object;
+    postGoLiveSupport: null | object;
+    subTotal: null | object;
+    projectManager: null | object;
+  },
+  estimateAverageRateMilestoneStoreData: object | null,
+  estimateResourceStoreData: object | null,
+  estimateResourceMilestoneStoreData: object | null
 }
 
 const initialState: ReportState = {
@@ -17,6 +71,85 @@ const initialState: ReportState = {
   analysisAndDesign: null,
   imageUrl: null,
   currency: 'GBP',
+  estimateAverageRateStoreData: {
+    analysisAndDesign: {
+      M: {
+        value: 0,
+        hourlyRate: 0,
+        hoursPerday: 0,
+        subValue: 0,
+        logic: '',
+        shown: ''
+      },
+      MS: {
+        value: 0,
+        hourlyRate: 0,
+        hoursPerday: 0,
+        subValue: 0,
+        logic: '',
+        shown: ''
+      },
+      MSC: {
+        value: 0,
+        hourlyRate: 0,
+        hoursPerday: 0,
+        subValue: 0,
+        logic: '',
+        shown: ''
+      }
+    },
+    customisationDesign: null,
+    customRequirementDesign: null,
+    documentation: null,
+    designReview: null,
+    configuration: null,
+    integration: null,
+    customisationBuild: null,
+    customRequirementBuild: null,
+    documentLayout: null,
+    reporting: null,
+    dataMigration: null,
+    crp: null,
+    testing: null,
+    trainTheTrainer: null,
+    uatEnvPrep: null,
+    uatSupport: null,
+    prodEnvPrep: null,
+    supportHandoever: null,
+    endUserTraining: null,
+    postGoLiveSupport: null,
+    subTotal: null,
+    projectManager: null
+  },
+  estimateAverageRateMilestoneStoreData: {
+    
+  },
+  estimateResourceStoreData: {
+    analysisAndDesign: null,
+    customisationDesign: null,
+    customRequirementDesign: null,
+    documentation: null,
+    designReview: null,
+    configuration: null,
+    integration: null,
+    customisationBuild: null,
+    customRequirementBuild: null,
+    documentLayout: null,
+    reporting: null,
+    dataMigration: null,
+    crp: null,
+    testing: null,
+    trainTheTrainer: null,
+    uatEnvPrep: null,
+    uatSupport: null,
+    prodEnvPrep: null,
+    supportHandoever: null,
+    endUserTraining: null,
+    postGoLiveSupport: null,
+    subTotal: null,
+    projectManager: null
+  },
+  estimateResourceMilestoneStoreData: null,
 }
 
 const reportSlice: any = createSlice({
@@ -43,6 +176,21 @@ const reportSlice: any = createSlice({
     },
     setImageUrl: (state, action) => {
       state.imageUrl = action.payload
+    },
+    setEstimateAveRateAnalysisDesign: (state, action) => {
+      state.estimateAverageRateStoreData.analysisAndDesign = action.payload
+    },
+    setEstimateAveRateCusomisationDesign: (state, action) => {
+      state.estimateAverageRateStoreData.customisationDesign = action.payload
+    },
+    setEstimateAveRateCustomerRequirementDesign: (state, action) => {
+      state.estimateAverageRateStoreData.customRequirementDesign = action.payload
+    },
+    setEstimateAveRateDocumentation: (state, action) => {
+      state.estimateAverageRateStoreData.documentation = action.payload
+    },
+    setEstimateAveRateDesignReview: (state, action) => {
+      state.estimateAverageRateStoreData.designReview = action.payload
     }
   },
 })
@@ -53,6 +201,11 @@ export const {
   initialFetchSuccess,
   initialFetchFailure,
   setImageUrl,
+  setEstimateAveRateAnalysisDesign,
+  setEstimateAveRateCusomisationDesign,
+  setEstimateAveRateCustomerRequirementDesign,
+  setEstimateAveRateDocumentation,
+  setEstimateAveRateDesignReview,
 } = reportSlice.actions;
 
 export default reportSlice.reducer;

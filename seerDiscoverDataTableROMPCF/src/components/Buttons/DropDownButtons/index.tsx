@@ -24,7 +24,6 @@ const index = ({selectedButton}: {selectedButton: any}) => {
   };
 
   const handleMenuItemClick = (itemValue: any) => {
-    console.log("item ===> ", itemValue);
     
     setSelectedItem(itemValue); // Update the selected item in state
     handleClose(); // Close the menu

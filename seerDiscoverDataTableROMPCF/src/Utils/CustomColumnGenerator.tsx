@@ -8,9 +8,7 @@ import { useSelector } from 'react-redux';
 
 
 export const columnFixed = (columnArray: any, data: any, currency: string) => {
-  
-  console.log(currency);
-  
+    
   // const AggregatedGroupRow = ({ row }) => {
   //   const customRowStyle = {
   //     backgroundColor: 'your-group-background-color', // Change to your desired background color for grouped rows
@@ -21,9 +19,7 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
   //   );
   // };
   const totalColumn =
-    (key?: string | number | undefined | any) => {
-      console.log(key);
-      
+    (key?: string | number | undefined | any) => {      
       // return data.reduce((acc: any, curr: any) => {
       //   console.log('acc + curr', acc, curr[key], key);
         
@@ -60,7 +56,6 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
       enableGrouping: columnItem?.enableGrouping ? true : false,
       
       Cell: columnItem?.isCalcultionEnabled ? ({ cell }: { cell: any }) => {
-        console.log('lolopqqew', cell?.column?.id);
         
         if (cell?.row?._valuesCache?.nameCategory == "Project Risk" ||
         cell?.row?._valuesCache?.nameCategory == "Project Manager" || 
@@ -147,10 +142,8 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
 
       Footer: columnItem?.showBottomTotal ? () => {
         if (columnItem?.showBottomTotal) {
-          console.log('mm', columnItem);
-          console.log('pq', columnItem?.header?.includes('_H') );
           // if (columnItem?.isCalcultionEnabled) {
-            if (columnItem?.header?.includes('_H')) {
+            if (columnItem?.accessorKey?.includes('_H')) {
               return(
                 <Box color="white">
                 {totalColumn(columnItem?.accessorKey)?.toLocaleString?.('en-US', {

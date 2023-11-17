@@ -96,10 +96,7 @@ export const generateEstimateResourceValue = (
         numberOfResources,
       }
     } else {
-      console.log('', filteredValue, name, ProjectTasktModel?.length);
-      ProjectTasktModel?.length && ProjectTasktModel.find((item: any, index: number) => {
-        console.log(name, item?.projectTaskPartner_Name);
-        
+      ProjectTasktModel?.length && ProjectTasktModel.find((item: any, index: number) => {        
         return item?.projectTaskPartner_Name == name
       });
       throw new Error();

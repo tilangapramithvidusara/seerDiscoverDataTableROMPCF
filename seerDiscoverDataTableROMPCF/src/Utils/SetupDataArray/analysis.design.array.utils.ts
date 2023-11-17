@@ -13,7 +13,7 @@ import { checkHasFte } from "../EstimateAverageRateMilestone/check.has.fte.utils
 import { generateIColoumnValueFte } from "../EstimateAverageRateMilestone/sub.value.utils";
 import { romParameter } from "../../Constants/fteConstants";
 
-export const arrayGenerator = async (initialDataSet: any) => {
+export const arrayGenerator = async (initialDataSet: any, dispatch: any) => {
   let resultArray: any[] = [];
   let subTotalMAnalysisDesign = 0;
   let subTotalMSAnalysisDesign = 0;
@@ -34,7 +34,7 @@ export const arrayGenerator = async (initialDataSet: any) => {
     if (hasFteValue) {
       fteValue = await generateIColoumnValueFte(initialDataSet);
     }
-    const analisisAndDesignCalculation: any = await generateIColoumnValue({...initialDataSet, fteValue}, analysisAndDesign.row);
+    const analisisAndDesignCalculation: any = await generateIColoumnValue({...initialDataSet, fteValue}, analysisAndDesign.row, dispatch);
     (data[0] as any).M = analisisAndDesignCalculation?.analysisDesing?.resultValue;
     (data[0] as any)['M/S'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMS;
     (data[0] as any)['M/S/C'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMSC;
@@ -382,7 +382,6 @@ export const arrayGenerator = async (initialDataSet: any) => {
 
     const dataEstimateAverageRate: any = await setDataSetAveRate(data, dataEstimateAverageRateMilestone, analisisAndDesignCalculation, initialDataSet, condition);
     // await Promise.all(dataEstimateAverageRate)
-    console.log(';;', dataEstimateAverageRate);
     const responseGenerateEstimateResourceWithSub = await generateEstimateResourceSub(
       responseGenerateEstimateResource, 
       analisisAndDesignCalculation, {
@@ -401,8 +400,9 @@ export const arrayGenerator = async (initialDataSet: any) => {
       dataEstimateResource: responseGenerateEstimateResourceWithSub,
       // responseGenerateEstimateResource, 
       dataEstimateAverageRateMilestone: dataEstimateAverageRate?.dataEstimateAverageRateMilestone, 
-      dataEstimateResourceMilestone: responseGenerateEstimateResourceMilestoneSub
+      dataEstimateResourceMilestone: responseGenerateEstimateResourceMilestoneSub,
       // responseGenerateEstimateResourceMilestone
+      reducerValues: analisisAndDesignCalculation?.reducerValues,
     };
   } catch (error) {
     console.error('Error:', error);
@@ -704,10 +704,7 @@ const setDataSetAveRate = async(data: any, dataEstimateAverageRateMilestone: any
     'Project Manager',
     'All',
     condition
-  );
-
-  console.log('//', resultValueProjectManagerEstimateResource);
-  
+  );  
 
   (data[22] as any)['M_H'] = responsePojectManagement?.projectManager?.resultValue;
   (data[22] as any)['M/S_H'] = responsePojectManagement?.projectManager?.resultValueMS;
@@ -720,9 +717,7 @@ const setDataSetAveRate = async(data: any, dataEstimateAverageRateMilestone: any
   (dataEstimateAverageRateMilestone[30] as any)['M/S_H'] = subTotalMSEstimateDesignAvgRateMilestoneSub * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
   (dataEstimateAverageRateMilestone[30] as any)['M/S/C_H'] = subTotalMSCEstimateDesignAvgRateMilestoneSub * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
 
-  await Promise.all([data, dataEstimateAverageRateMilestone, resultValueProjectManagerEstimateResource])
-  console.log(data);
-  
+  await Promise.all([data, dataEstimateAverageRateMilestone, resultValueProjectManagerEstimateResource])  
   return {resultValueProjectManagerEstimateResource, data, dataEstimateAverageRateMilestone};
 }
 
@@ -1263,7 +1258,6 @@ const generateEstimateResourceSub = async(dataEstimateResource: any, analisisAnd
   
 
   // projectManager
-  console.log(responseSubtotal);
   
   dataEstimateResource[22]['M_Resource1_H'] = responseSubtotal?.projectMangerSubValues?.resultValue1Sub || 0;
   dataEstimateResource[22]['M_Resource2_H'] = responseSubtotal?.projectMangerSubValues?.resultValue2Sub || 0;

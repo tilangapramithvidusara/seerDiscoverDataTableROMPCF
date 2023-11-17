@@ -54,7 +54,6 @@ export const openSidePane = (
   formParameters["seer_m"] = e?.M.toString()
   formParameters["seer_ms"] = e?.['M/S'].toString();
   formParameters["seer_msc"] = e?.['M/S/C'].toString();
-  console.log('ccccc ==.> ', formParameters)
   if (entId != null) {
     window.parent.Xrm.App.sidePanes
       .createPane({
@@ -66,7 +65,6 @@ export const openSidePane = (
         width: 500,
       })
       .then(async(pane: any) => {
-        console.log('form =====> ', formParameters);
         
         await pane.navigate({
           pageType: "entityrecord",

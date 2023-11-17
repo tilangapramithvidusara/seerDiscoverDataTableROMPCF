@@ -1,3 +1,4 @@
+import { useDispatch } from "react-redux";
 import { romParameter } from "../../Constants/fteConstants";
 import { fitGapData, moscowsData } from "../../Constants/pickListData";
 import { calculateProjectManagerEstimateResource, calculateSubTotal, generateEstimateResourceValue } from "../EstimateResource";
@@ -17,9 +18,9 @@ import { generateTestingMValue } from "./testing.utils";
 import { generateTrainTheTrainerMValue } from "./train.the.trainer.utils";
 import { generateUATEnvironmentPreparationMValue } from "./uat.environment.preparation.utils";
 import { generateUATSupportMValue } from "./uat.support.utils";
+import { setEstimateAveRateAnalysisDesign } from "../../redux/report/reportSlice";
 
-export const generateIColoumnValue = async(inititlaData: any, title: string) => {
-  console.log(inititlaData.fteValue);
+export const generateIColoumnValue = async(inititlaData: any, title: string, dispatch: any) => {
   
   const condition = romParameter === "Days";
   // ################################ESTIMATE AVERAGE RATE################################
@@ -185,6 +186,12 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
   let projectManagementSub: any = 0;
   let projectManagementSubMS: any = 0;
   let projectManagementSubMSC: any = 0;
+
+  let estimageAveRateAnalysisDesignSidePane: any;
+  let estimageAveRateCustomisationDesignSidePane: any;
+  let estimageAveRateCustomerRequirementDesignSidePane: any;
+  let estimageAveRateCustomerDocumentationSidePane: any;
+  let estimageAveRateCustomerDesignReviewSidePane: any;
   
   try {
     const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData, condition);
@@ -200,7 +207,6 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
     const responseDataMigration = await generateDataMigrationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition);
     const responseCRP = await generateCRPMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition);
     const responseTesting = await generateTestingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition);
-    console.log("response ====> ", responseAnalisisDesign, responseCustomisationDesign);
 
     // In "train the trainer" has to 0 when "End user train" has value --- Keith said it hold for now
     const responseTrainTheTrainer = await generateTrainTheTrainerMValue(inititlaData, {responseAnalisisDesign}, condition);
@@ -212,7 +218,6 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
     const responsePostGoLive = await generatePostGoLiveMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition);
 
     // const responseProjectManagementSub = await calculateProjectManagerEstimateResource(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration});
-
     const {parameterModel} = inititlaData;
     if (parameterModel?.length) {
       // ################################ESTIMATE AVERAGE RATE################################
@@ -220,22 +225,68 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
       resultValueAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValue, hourlyRate?.value, hoursPerday, condition)
       resultValueMSAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValueMS, hourlyRate?.value, hoursPerday, condition)
       resultValueMSCAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValueMSC, hourlyRate?.value, hoursPerday, condition)
+      estimageAveRateAnalysisDesignSidePane = costReportMainObject({
+        resultValue: resultValueAnalisisDesign,
+        resultValueMS: resultValueMSAnalisisDesign,
+        resultValueMSC: resultValueMSCAnalisisDesign,
+      }, {
+        resultValue: responseAnalisisDesign?.resultValue,
+        resultValueMS: responseAnalisisDesign?.resultValueMS,
+        resultValueMSC: responseAnalisisDesign?.resultValueMSC,
+      }, hourlyRate?.value, hoursPerday, condition)
 
+      console.log('qa', estimageAveRateAnalysisDesignSidePane);
       resultValueCustomisationDesign = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultValue, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCustomisationDesign = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCCustomisationDesign = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultValueMSC, hourlyRate?.value, hoursPerday, condition);
+      estimageAveRateCustomisationDesignSidePane = costReportMainObject({
+          resultValue: resultValueCustomisationDesign,
+          resultValueMS: resultValueMSCustomisationDesign,
+          resultValueMSC: resultValueMSCCustomisationDesign,
+        }, {
+          resultValue: responseCustomisationDesign?.customisation?.resultValue,
+          resultValueMS: responseCustomisationDesign?.customisation?.resultValueMS,
+          resultValueMSC: responseCustomisationDesign?.customisation?.resultValueMSC,
+        }, hourlyRate?.value, hoursPerday, condition)
 
       resultValueCustomRequirementDesign = checkConditionAndGenerateValue(responseCustomRequirementDesign?.customRequirement?.resultValue, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCustomRequirementDesign = checkConditionAndGenerateValue(responseCustomRequirementDesign?.customRequirement?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCCustomRequirementDesign = checkConditionAndGenerateValue(responseCustomRequirementDesign?.customRequirement?.resultValueMSC, hourlyRate?.value, hoursPerday, condition);
+      estimageAveRateCustomerRequirementDesignSidePane = costReportMainObject({
+          resultValue: resultValueCustomRequirementDesign,
+          resultValueMS: resultValueMSCustomRequirementDesign,
+          resultValueMSC: resultValueMSCCustomRequirementDesign,
+        }, {
+          resultValue: responseCustomRequirementDesign?.customRequirement?.resultValue,
+          resultValueMS: responseCustomRequirementDesign?.customRequirement?.resultValueMS,
+          resultValueMSC: responseCustomRequirementDesign?.customRequirement?.resultValueMSC,
+        }, hourlyRate?.value, hoursPerday, condition)
 
       resultValueDocumentation = checkConditionAndGenerateValue(responseDocumentation?.documentation?.resultValue, hourlyRate?.value, hoursPerday, condition);
       resultValueMSDocumentation = checkConditionAndGenerateValue(responseDocumentation?.documentation?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCDocumentation = checkConditionAndGenerateValue(responseDocumentation?.documentation?.resultValueMSC, hourlyRate?.value, hoursPerday, condition);
+      estimageAveRateCustomerDocumentationSidePane = costReportMainObject({
+          resultValue: resultValueDocumentation,
+          resultValueMS: resultValueMSDocumentation,
+          resultValueMSC: resultValueMSCDocumentation,
+        }, {
+          resultValue: responseDocumentation?.documentation?.resultValue,
+          resultValueMS: responseDocumentation?.documentation?.resultValueMS,
+          resultValueMSC: responseDocumentation?.documentation?.resultValueMSC,
+        }, hourlyRate?.value, hoursPerday, condition)
 
       resultValueDesignReview = checkConditionAndGenerateValue(responseDesignReview?.designReview?.resultValue, hourlyRate?.value, hoursPerday, condition);
       resultValueMSDesignReview = checkConditionAndGenerateValue(responseDesignReview?.designReview?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCDesignReview = checkConditionAndGenerateValue(responseDesignReview?.designReview?.resultValueMSC, hourlyRate?.value, hoursPerday, condition);
+      estimageAveRateCustomerDesignReviewSidePane = costReportMainObject({
+          resultValue: resultValueDesignReview,
+          resultValueMS: resultValueMSDesignReview,
+          resultValueMSC: resultValueMSCDesignReview,
+        }, {
+          resultValue: responseDesignReview?.designReview?.resultValue,
+          resultValueMS: responseDesignReview?.designReview?.resultValueMS,
+          resultValueMSC: responseDesignReview?.designReview?.resultValueMSC,
+        }, hourlyRate?.value, hoursPerday, condition)
 
       resultValueConfiguration = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultValue, hourlyRate?.value, hoursPerday, condition)
       resultValueMSConfiguration = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultValueMS, hourlyRate?.value, hoursPerday, condition)
@@ -311,7 +362,6 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
 
 
       // ################################ESTIMATE RESOURCE################################
-      console.log('hmmm', responseAnalisisDesign?.resultValue, responseAnalisisDesign?.resultValueMSC);
       
       resultValueAnalisisDesignEstimateResource = generateEstimateResourceValue(
         inititlaData, {
@@ -323,10 +373,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
         'Analysis and Design',
         'All',
         condition
-      );
-
-      console.log('resultValueAnalisisDesignEstimateResource ==> ', resultValueAnalisisDesignEstimateResource);
-      
+      );      
 
       resultValueCustomisationDesignEstimateResource = generateEstimateResourceValue(
         inititlaData, {
@@ -567,8 +614,6 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
         'All',
         condition
       );
-
-      console.log('resultValuePostGoLiveEstimateResource', resultValuePostGoLiveEstimateResource);
       
       let totalOfSub = await calculateSubTotal(
         responsePostGoLive?.postGoLive, 
@@ -592,10 +637,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
         responseCustomRequirementDesign?.customRequirement,
         responseCustomisationDesign?.customisation,
         responseAnalisisDesign,
-      );
-
-      console.log('', totalOfSub);
-      
+      );      
 
       const responseProjectManagementSub = await calculateProjectManagerEstimateResource(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, totalOfSub);
 
@@ -611,20 +653,11 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
         'All',
         condition
       );
-      console.log(resultValueProjectManagerEstimateResource);
-      console.log(responseProjectManagementSub?.resultValue);
-    }
-    
-    
-    console.log('ll ==> ', resultValueReporting);
 
+    }
 
     ////////////////ESTIMATE RESOURCE MILESTONE START///////////////
     
-    
-    console.log("generateIColoumnValue resultValueAnalisisDesign true ==> ", resultValueAnalisisDesign, resultValueMSAnalisisDesign, resultValueMSCAnalisisDesign);
-    console.log("generateIColoumnValue CustomisationDesign true ==> ", resultValueCustomisationDesign, resultValueMSCustomisationDesign, resultValueMSCCustomisationDesign);
-    console.log("generateIColoumnValue customRequirement true ==> ", resultValueCustomRequirementDesign, resultValueMSCustomRequirementDesign, resultValueMSCCustomRequirementDesign);
     return {
       analysisDesing: {
         resultValue: resultValueAnalisisDesign,
@@ -775,7 +808,13 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
         responseProdEnvironmentPreparation,
         responseSupportHandover,
         responsePostGoLive,
-        
+      },
+      reducerValues: {
+        estimageAveRateAnalysisDesignSidePane,
+        estimageAveRateCustomisationDesignSidePane,
+        estimageAveRateCustomerRequirementDesignSidePane,
+        estimageAveRateCustomerDocumentationSidePane,
+        estimageAveRateCustomerDesignReviewSidePane,
       }
     };
   } catch (error) {
@@ -793,6 +832,36 @@ export const generateIColoumnValue = async(inititlaData: any, title: string) => 
       }
     }
   }
+}
+
+export const costReportMainObject = (values: any, subValues: any, hourlyRate: number, hoursPerday: number, condition: boolean) => {
+  const object = {
+    M: {
+      value: values?.resultValue,
+      hourlyRate: hourlyRate,
+      hoursPerday,
+      subValue: subValues?.resultValue,
+      logic: condition ? 'Cost * hourlyRate * hoursPerday' : 'Cost * hourlyRate',
+      shown: condition ? `${subValues?.resultValue} * ${hourlyRate} * ${hoursPerday}` : `${subValues?.resultValue} * ${hourlyRate}`,
+    },
+    MS: {
+      value: values?.resultValueMS,
+      hourlyRate: hourlyRate,
+      hoursPerday,
+      subValue: subValues?.resultValueMS,
+      logic: condition ? 'Cost * hourlyRate * hoursPerday' : 'Cost * hourlyRate',
+      shown: condition ? `${subValues?.resultValueMS} * ${hourlyRate} * ${hoursPerday}` : `${subValues?.resultValue} * ${hourlyRate}`,
+    },
+    MSC: {
+      value: values?.resultValueMSC,
+      hourlyRate: hourlyRate,
+      hoursPerday,
+      subValue: subValues?.resultValueMSC,
+      logic: condition ? 'Cost * hourlyRate * hoursPerday' : 'Cost * hourlyRate',
+      shown: condition ? `${subValues?.resultValueMSC} * ${hourlyRate} * ${hoursPerday}` : `${subValues?.resultValue} * ${hourlyRate}`,
+    }
+  };
+  return object;
 }
 
 export const checkConditionAndGenerateValue = (calculatedValue: number, hourlyRate: number, hoursPerDay: number, condition: boolean) => {

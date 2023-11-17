@@ -16,14 +16,12 @@ const index = (
   }) => {
 
   const handleButtonChange = (event: any, newValue: any) => {
-    console.log('newValue==> ');
     setTimeout(() => {
       setSelectedButton(newValue);
     }, 10);
     // setSelectedButton(newValue);
   };
 
-  console.log('selectedButton', selectedButton);
   
 
   return (
@@ -39,7 +37,6 @@ const index = (
         >
 
           {buttonTitles.map((item: any, index: number) => {
-            console.log('item ', item)
             return(
             <ToggleButton className='toggle-btn' value={`${item?.title}`} aria-label={`Button ${index}`}>
               {item?.value}

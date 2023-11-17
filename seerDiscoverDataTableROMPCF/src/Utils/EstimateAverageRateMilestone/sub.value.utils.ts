@@ -193,7 +193,6 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string)
     const responseDataMigration = await generateDataMigrationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true);
     const responseCRP = await generateCRPMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true);
     const responseTesting = await generateTestingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true);
-    console.log("response ====> ", responseAnalisisDesign, responseCustomisationDesign);
 
     // In "train the trainer" has to 0 when "End user train" has value --- Keith said it hold for now
     const responseTrainTheTrainer = await generateTrainTheTrainerMValue(inititlaData, {responseAnalisisDesign}, condition, true);
@@ -249,8 +248,6 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string)
       projectManagerAnalysisDesign = totalOfSubAnalysisDesign * para_d4;
       projectManagerAnalysisDesignMS = totalOfSubAnalysisDesignMS * para_d4;
       projectManagerAnalysisDesignMSC = totalOfSubAnalysisDesignMSC * para_d4;
-
-      console.log(projectManagerAnalysisDesignMSC)
 
       totalOfAnalysisDesign = totalOfSubAnalysisDesign + projectManagerAnalysisDesign;
       totalOfAnalysisDesignMS = totalOfSubAnalysisDesignMS + projectManagerAnalysisDesignMS;
@@ -330,8 +327,6 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string)
       projectManagerBuildMS = totalOfSubBuildMS * para_d4;
       projectManagerBuildMSC = totalOfSubBuildMSC * para_d4;
 
-      console.log(projectManagerBuildMSC)
-
       totalOfBuild = totalOfSubBuild + projectManagerBuild;
       totalOfBuildMS = totalOfSubBuildMS + projectManagerBuildMS;
       totalOfBuildMSC = totalOfSubBuildMSC + projectManagerBuildMSC;
@@ -341,9 +336,6 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string)
       totalFteMSC += totalOfBuildMSC
 
       // SKIP 4 ROWS
-      console.log(responseTrainTheTrainer?.trainTheTrainer);
-      console.log(responseTrainTheTrainer?.trainTheTrainerAveRateMilestone);
-      
       
       resultValueTrainTheTrainer = responseTrainTheTrainer?.trainTheTrainerAveRateMilestone?.resultValue;
       resultValueMSTrainTheTrainer = responseTrainTheTrainer?.trainTheTrainerAveRateMilestone?.resultValueMS;
@@ -362,7 +354,6 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string)
       resultValueProdEnvironmentPreparation = responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValue;
       resultValueMSProdEnvironmentPreparation = responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValueMS;
       resultValueMSCProdEnvironmentPreparation = responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValueMSC;
-      console.log(responseProdEnvironmentPreparation);
 
       resultValueSupportHandover = responseSupportHandover?.supportHandoverAveRateMilestone?.resultValue;
       resultValueMSSupportHandover = responseSupportHandover?.supportHandoverAveRateMilestone?.resultValueMS;
@@ -387,17 +378,6 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string)
       projectManagerDeploy = totalOfSubDeploy * para_d4;
       projectManagerDeployMS = totalOfSubDeployMS * para_d4;
       projectManagerDeployMSC = totalOfSubDeployMSC * para_d4;
-
-      console.log(
-        projectManagerDeployMSC, 
-        resultValueSupportHandover, 
-        resultValueProdEnvironmentPreparation, 
-      )
-
-      console.log(resultValueUATSupport, 
-        resultValueTrainTheTrainer, 
-        resultValueUATEnvironmentPreparation);
-      
 
       totalOfDeploy = totalOfSubDeploy + projectManagerDeploy;
       totalOfDeployMS = totalOfSubDeployMS + projectManagerDeployMS;
@@ -427,12 +407,6 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string)
       projectManagerOperationMS = totalOfSubOperationMS * para_d4;
       projectManagerOperationMSC = totalOfSubOperationMSC * para_d4;
 
-      console.log(projectManagerOperation)
-      console.log(projectManagerOperationMSC);
-      
-      console.log(responsePostGoLive);
-      
-
       totalOfOperation = totalOfSubOperation + projectManagerOperation;
       totalOfOperationMS = totalOfSubOperationMS + projectManagerOperationMS;
       totalOfOperationMSC = totalOfSubOperationMSC + projectManagerOperationMSC;
@@ -444,18 +418,11 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string)
       fColmnValueEstimateAveRate = responseDocumentLayout?.projectRisk?.estimateAveRate
 
       // ################################ESTIMATE RESOURCE################################
-      console.log('hmmm', responseAnalisisDesign?.resultValue, responseAnalisisDesign?.resultValueMSC);
-      console.log(totalFte);
-      console.log(totalFteMS);
-      console.log(totalFteMSC);
+
     }
 
     ////////////////ESTIMATE RESOURCE MILESTONE START///////////////
     
-    
-    console.log("generateIColoumnValue resultValueAnalisisDesign true ==> ", resultValueAnalisisDesign, resultValueMSAnalisisDesign, resultValueMSCAnalisisDesign);
-    console.log("generateIColoumnValue CustomisationDesign true ==> ", resultValueCustomisationDesign, resultValueMSCustomisationDesign, resultValueMSCCustomisationDesign);
-    console.log("generateIColoumnValue customRequirement true ==> ", resultValueCustomRequirementDesign, resultValueMSCustomRequirementDesign, resultValueMSCCustomRequirementDesign);
     return {
       totalFte,
       totalFteMS,

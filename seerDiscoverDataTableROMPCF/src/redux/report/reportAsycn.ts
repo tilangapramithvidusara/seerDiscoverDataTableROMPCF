@@ -6,7 +6,6 @@ import {
 } from "./reportSlice";
 
 export const deleteOutputSetAsync: any = async(info: any) => {
-  console.log('info ==> ', info);
   try {
     const data = {
       "outputsetid":  info?.OutputSetId
@@ -28,9 +27,7 @@ export const deleteOutputSetAsync: any = async(info: any) => {
 }
 
 export const fetchInitialDataAsync = async() => {
-  try {
-    console.log('KKKKKKKKKK');
-    
+  try {    
     const requestBody = {
       "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
       "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
@@ -111,7 +108,6 @@ export const fetchInitialDataAsync = async() => {
           },
           timeout: 30000,
         });
-    console.log('res ==> ', res)
     if (res?.status !== 200) throw new Error();
     return {result: (res as any)?.data, error: false}
   } catch (error) {
@@ -148,7 +144,6 @@ export const initialFetch = (context?: any) => {
               "seerdwp_jasonobjectformat": "{\n\"id\": \"accountId\"\n}",
               "seerdwp_reportid": "testROMReport"
             };
-            console.log("data ", data);
                 
             const res: {error: boolean, result: any} | any = await jsonLoader(data, accountId);
             if (res.error) {
@@ -192,7 +187,6 @@ const jsonLoader = async(data?: any, accountId?: any) => {
   if (jsonFormat?.['id'] === "accountId") {
       jsonFormat['id'] = accountId;
   }
-  console.log("jsonFormat ===> ", jsonFormat, data);
   
   var raw = JSON.stringify(jsonFormat);
 
@@ -212,11 +206,7 @@ const jsonLoader = async(data?: any, accountId?: any) => {
     requestOptions
   )
   .then(response=>response.json())
-  .then((result: any)=> {
-
-    // console.log(result)
-    console.log('====> ', result && result?.data && result?.data?.length > 0, result?.data);
-    
+  .then((result: any)=> {    
     if (result && result?.data && result?.data?.length > 0) {
       response = {error: false, result: result?.data}
     }
