@@ -19,3 +19,10 @@ export const percentData: any = {
   '100000001': "Percent",
   "100000002": "Hours",
 }
+
+export const complexityData: any = {
+  '100000000': 'High',
+  '100000001': "Medium",
+  "100000002": "Low",
+  "100000003": "None",
+}
