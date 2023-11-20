@@ -7,7 +7,7 @@ import TabComponent from "./components/index";
 import { arrayGenerator } from "./Utils/SetupDataArray/analysis.design.array.utils";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteOutputSetAsync, fetchInitialDataAsync } from "./redux/report/reportAsycn";
-import { initialFetchFailure, initialFetchSuccess, setEstimateAveRateAnalysisDesign, setEstimateAveRateCusomisationDesign, setEstimateAveRateCustomerRequirementDesign, setEstimateAveRateDesignReview, setImageUrl } from "./redux/report/reportSlice";
+import { initialFetchFailure, initialFetchSuccess, setEstimateAveRateAnalysisDesign, setEstimateAveRateConfiguration, setEstimateAveRateCusomisationDesign, setEstimateAveRateCustomRequirementBuild, setEstimateAveRateCustomerRequirementDesign, setEstimateAveRateCustomisationBuild, setEstimateAveRateDesignReview, setEstimateAveRateDocumentLayout, setEstimateAveRateIntegration, setImageUrl } from "./redux/report/reportSlice";
 import Loader from "./components/Loader/Loader";
 import { dataMapper } from "./Utils/RequirmentData/requirement.data.utils";
 
@@ -61,9 +61,13 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
         dispatch(setEstimateAveRateCustomerRequirementDesign(result?.reducerValues?.estimageAveRateCustomerRequirementDesignSidePane));
         dispatch(setEstimateAveRateCustomerRequirementDesign(result?.reducerValues?.estimageAveRateCustomerDocumentationSidePane));
         dispatch(setEstimateAveRateDesignReview(result?.reducerValues?.estimageAveRateCustomerDesignReviewSidePane));
-        // estimageAveRateCustomerDesignReviewSidePane
-        // estimageAveRateCustomerDocumentationSidePane
-        // estimageAveRateCustomerRequirementDesignSidePane
+        dispatch(setEstimateAveRateConfiguration(result?.reducerValues?.estimageAveRateCustomerConfigurationSidePane));
+        dispatch(setEstimateAveRateIntegration(result?.reducerValues?.estimageAveRateCustomerIntegrationSidePane));
+        dispatch(setEstimateAveRateCustomisationBuild(result?.reducerValues?.estimageAveRateCustomerCustomisationBuildSidePane));
+        dispatch(setEstimateAveRateCustomRequirementBuild(result?.reducerValues?.estimageAveRateCustomerCustomRequirementBuildSidePane));
+        dispatch(setEstimateAveRateDocumentLayout(result?.reducerValues?.estimageAveRateDocumentLayoutSidePane))
+        // estimageAveRateDocumentLayoutSidePane
+
         deleteOutputSetAsync({ OutputSetId: data?.OutputSetId })
         setIsloading(false)
       })
