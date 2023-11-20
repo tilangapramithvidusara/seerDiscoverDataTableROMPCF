@@ -191,7 +191,22 @@ const reportSlice: any = createSlice({
     },
     setEstimateAveRateDesignReview: (state, action) => {
       state.estimateAverageRateStoreData.designReview = action.payload
-    }
+    },
+    setEstimateAveRateConfiguration: (state, action) => {
+      state.estimateAverageRateStoreData.configuration = action.payload
+    },
+    setEstimateAveRateIntegration: (state, action) => {
+      state.estimateAverageRateStoreData.integration = action.payload
+    },
+    setEstimateAveRateCustomisationBuild : (state, action) => {
+      state.estimateAverageRateStoreData.customisationBuild = action.payload
+    },
+    setEstimateAveRateCustomRequirementBuild : (state, action) => {
+      state.estimateAverageRateStoreData.customRequirementBuild = action.payload
+    }, // estimageAveRateDocumentLayoutSidePane
+    setEstimateAveRateDocumentLayout : (state, action) => {
+      state.estimateAverageRateStoreData.documentLayout = action.payload
+    }, 
   },
 })
 
@@ -206,6 +221,11 @@ export const {
   setEstimateAveRateCustomerRequirementDesign,
   setEstimateAveRateDocumentation,
   setEstimateAveRateDesignReview,
+  setEstimateAveRateConfiguration,
+  setEstimateAveRateIntegration,
+  setEstimateAveRateCustomisationBuild,
+  setEstimateAveRateCustomRequirementBuild,
+  setEstimateAveRateDocumentLayout,
 } = reportSlice.actions;
 
 export default reportSlice.reducer;
