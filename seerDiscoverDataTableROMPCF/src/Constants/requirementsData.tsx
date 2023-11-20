@@ -3,7 +3,7 @@ import * as React from 'react'
 export const columnRequirementData = [
   {
     header: 'ID',
-    accessorKey: 'seer_Requirement.id',
+    accessorKey: 'seer_requirementid.value',
     // enableGrouping: true,
   },
   {
