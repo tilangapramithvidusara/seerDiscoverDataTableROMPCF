@@ -32,6 +32,12 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
   let resultValueAnalisisDesign = 0;
   let resultValueMSAnalisisDesign = 0;
   let resultValueMSCAnalisisDesign = 0;
+  let resultValueAnalisisDesignBase = 0;
+  let resultValueMSAnalisisDesignBase = 0;
+  let resultValueMSCAnalisisDesignBase = 0;
+  let resultValueAnalisisDesignModule = 0;
+  let resultValueMSAnalisisDesignModule = 0;
+  let resultValueMSCAnalisisDesignModule = 0;
 
   let resultValueCustomisationDesign = 0;
   let resultValueMSCustomisationDesign = 0;
@@ -54,6 +60,12 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
   let resultValueConfiguration = 0;
   let resultValueMSConfiguration = 0;
   let resultValueMSCConfiguration = 0;
+  let resultValueConfigurationBase = 0;
+  let resultValueMSConfigurationBase = 0;
+  let resultValueMSCConfigurationBase = 0;
+  let resultValueConfigurationModule = 0;
+  let resultValueMSConfigurationModule = 0;
+  let resultValueMSCConfigurationModule = 0;
 
   let resultValueIntegration = 0;
   let resultValueMSIntegration = 0;
@@ -230,6 +242,12 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
       resultValueAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValue, hourlyRate?.value, hoursPerday, condition)
       resultValueMSAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValueMS, hourlyRate?.value, hoursPerday, condition)
       resultValueMSCAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValueMSC, hourlyRate?.value, hoursPerday, condition)
+      resultValueAnalisisDesignBase = checkConditionAndGenerateValue(responseAnalisisDesign?.resultBaseValue, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSAnalisisDesignBase = checkConditionAndGenerateValue(responseAnalisisDesign?.resultBaseValueMS, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSCAnalisisDesignBase = checkConditionAndGenerateValue(responseAnalisisDesign?.resultBaseValueMSC, hourlyRate?.value, hoursPerday, condition)
+      resultValueAnalisisDesignModule = checkConditionAndGenerateValue(responseAnalisisDesign?.resultModuleValue, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSAnalisisDesignModule = checkConditionAndGenerateValue(responseAnalisisDesign?.resultModuleValueMS, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSCAnalisisDesignModule = checkConditionAndGenerateValue(responseAnalisisDesign?.resultModuleValueMSC, hourlyRate?.value, hoursPerday, condition)
       estimageAveRateAnalysisDesignSidePane = costReportMainObject({
         resultValue: resultValueAnalisisDesign,
         resultValueMS: resultValueMSAnalisisDesign,
@@ -238,7 +256,15 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         resultValue: responseAnalisisDesign?.resultValue,
         resultValueMS: responseAnalisisDesign?.resultValueMS,
         resultValueMSC: responseAnalisisDesign?.resultValueMSC,
-      }, hourlyRate?.value, hoursPerday, condition, "AnalysisDesign", responseAnalisisDesign);
+      }, hourlyRate?.value, hoursPerday, condition, "AnalysisDesign", responseAnalisisDesign, {
+        resultValueBase: resultValueAnalisisDesignBase,
+        resultValueMSBase: resultValueAnalisisDesignBase,
+        resultValueMSCBase: resultValueAnalisisDesignBase,
+      }, {
+        resultValueModule: resultValueAnalisisDesignModule,
+        resultValueMSModule: resultValueAnalisisDesignModule,
+        resultValueMSCModule: resultValueAnalisisDesignModule,
+      });
       // resultModule: modulesConfiguration,
       // resultModuleMS: modulesConfigurationMS,
       // resultModuleMSC: modulesConfigurationMSC,
@@ -302,6 +328,12 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
       resultValueConfiguration = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultValue, hourlyRate?.value, hoursPerday, condition)
       resultValueMSConfiguration = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultValueMS, hourlyRate?.value, hoursPerday, condition)
       resultValueMSCConfiguration = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultValueMSC, hourlyRate?.value, hoursPerday, condition)
+      resultValueConfigurationBase = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultBaseValue, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSConfigurationBase = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultBaseValueMS, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSCConfigurationBase = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultBaseValueMSC, hourlyRate?.value, hoursPerday, condition)
+      resultValueConfigurationModule = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultModuleValue, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSConfigurationModule = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultModuleValueMS, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSCConfigurationModule = checkConditionAndGenerateValue(responseAnalisisDesign?.configuration?.resultModuleValueMSC, hourlyRate?.value, hoursPerday, condition)
       estimageAveRateCustomerConfigurationSidePane = costReportMainObject({
           resultValue: resultValueConfiguration,
           resultValueMS: resultValueMSConfiguration,
@@ -310,7 +342,15 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
           resultValue: responseAnalisisDesign?.configuration?.resultValue,
           resultValueMS: responseAnalisisDesign?.configuration?.resultValueMS,
           resultValueMSC: responseAnalisisDesign?.configuration?.resultValueMSC,
-        }, hourlyRate?.value, hoursPerday, condition, "Configuration", responseAnalisisDesign?.configuration)
+        }, hourlyRate?.value, hoursPerday, condition, "Configuration", responseAnalisisDesign?.configuration, {
+          resultValueBase: resultValueConfigurationBase,
+          resultValueMSBase: resultValueMSConfigurationBase,
+          resultValueMSCBase: resultValueMSCConfigurationBase,
+        }, {
+          resultValueModule: resultValueConfigurationModule,
+          resultValueMSModule: resultValueMSConfigurationModule,
+          resultValueMSCModule: resultValueMSCConfigurationModule,
+        })
 
       resultValueIntegration = checkConditionAndGenerateValue(responseIntegration?.integration?.resultValue, hourlyRate?.value, hoursPerday, condition)
       resultValueMSIntegration = checkConditionAndGenerateValue(responseIntegration?.integration?.resultValueMS, hourlyRate?.value, hoursPerday, condition)
@@ -895,7 +935,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
   }
 }
 
-export const costReportMainObject = (values: any, subValues: any, hourlyRate: number, hoursPerday: number, condition: boolean, type?: string, typeData?: any) => {
+export const costReportMainObject = (values: any, subValues: any, hourlyRate: number, hoursPerday: number, condition: boolean, type?: string, typeData?: any, baseValue?: any, moduleValues?: any) => {
   const object: any = {
     M: {
       value: values?.resultValue,
@@ -937,6 +977,12 @@ export const costReportMainObject = (values: any, subValues: any, hourlyRate: nu
     object.M.resultOverideBase = typeData.resultOverideBase;
     object.MS.resultOverideBase = typeData.resultOverideBaseMS;
     object.MSC.resultOverideBase = typeData.resultOverideBaseMSC;
+    object.M.baseValue = baseValue?.resultValueBase;
+    object.M.moduleValue = moduleValues?.resultValueModule;
+    object.MS.baseValue = baseValue?.resultValueMSBase;
+    object.MS.moduleValue = moduleValues?.resultValueMSModule;
+    object.MSC.baseValue = baseValue?.resultValueMSCBase;
+    object.MSC.moduleValue = moduleValues?.resultValueMSCModule;
   }
   return object;
 }
@@ -1310,6 +1356,54 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         resultOverideBase: overidesBaseAnalysisDesign,
         resultOverideBaseMS: overidesBaseAnalysisDesignMS,
         resultOverideBaseMSC: overidesBaseAnalysisDesignMSC,
+        resultModuleValue: generateReturnValue(
+          0,
+          0,
+          primaryResourceDesignValueFromModuleData,
+          secondaryResourceDesignValueFromModuleData,
+          parameterModel[0].hoursPerday,
+          condition
+        ),
+        resultModuleValueMS: generateReturnValue(
+          0,
+          0,
+          primaryResourceDesignValueFromModuleDataMS,
+          secondaryResourceDesignValueFromModuleDataMS,
+          parameterModel[0].hoursPerday,
+          condition
+        ),
+        resultModuleValueMSC: generateReturnValue(
+          0,
+          0,
+          primaryResourceDesignValueFromModuleDataMSC,
+          secondaryResourceDesignValueFromModuleDataMSC,
+          parameterModel[0].hoursPerday,
+          condition
+        ),
+        resultBaseValue: generateReturnValue(
+          primaryResourceDesignValueFromBaseData,
+          secondaryResourceDesignValueFromBaseData,
+          0,
+          0,
+          parameterModel[0].hoursPerday,
+          condition
+        ),
+        resultBaseValueMS: generateReturnValue(
+          primaryResourceDesignValueFromBaseDataMS,
+          secondaryResourceDesignValueFromBaseDataMS,
+          0,
+          0,
+          parameterModel[0].hoursPerday,
+          condition
+        ),
+        resultBaseValueMSC: generateReturnValue(
+          primaryResourceDesignValueFromBaseDataMSC,
+          secondaryResourceDesignValueFromBaseDataMSC,
+          0,
+          0,
+          parameterModel[0].hoursPerday,
+          condition
+        ),
         configuration: {
           resultValue: resultConfigurationValue,
           resultValueMS: resultConfigurationValueMS,
@@ -1326,6 +1420,54 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           resultOverideBase: overidesBaseConfiguration,
           resultOverideBaseMS: overidesBaseConfigurationMS,
           resultOverideBaseMSC: overidesBaseConfigurationMSC,
+          resultModuleValue: generateReturnValue(
+            0,
+            0,
+            0,
+            buildEstimateConfigurationValueFromModlueData,
+            parameterModel[0].hoursPerday,
+            condition
+          ),
+          resultModuleValueMS: generateReturnValue(
+            0,
+            0,
+            0,
+            buildEstimateConfigurationValueFromModlueDataMS,
+            parameterModel[0].hoursPerday,
+            condition
+          ),
+          resultModuleValueMSC: generateReturnValue(
+            0,
+            0,
+            0,
+            buildEstimateConfigurationValueFromModlueDataMSC,
+            parameterModel[0].hoursPerday,
+            condition
+          ),
+          resultBaseValue: generateReturnValue(
+            buildEstimateConfigurationValueFromBaseData,
+            0,
+            0,
+            0,
+            parameterModel[0].hoursPerday,
+            condition
+          ),
+          resultBaseValueMS: generateReturnValue(
+            buildEstimateConfigurationValueFromBaseDataMS,
+            0,
+            0,
+            0,
+            parameterModel[0].hoursPerday,
+            condition
+          ),
+          resultBaseValueMSC: generateReturnValue(
+            buildEstimateConfigurationValueFromBaseDataMSC,
+            0,
+            0,
+            0,
+            parameterModel[0].hoursPerday,
+            condition
+          ),
         }
       };
     } else {
@@ -1342,6 +1484,12 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         resultOverideBase: overidesBaseAnalysisDesign,
         resultOverideBaseMS: overidesBaseAnalysisDesignMS,
         resultOverideBaseMSC: overidesBaseAnalysisDesignMSC,
+        resultModuleValue: 0,
+        resultModuleValueMS: 0,
+        resultModuleValueMSC: 0,
+        resultBaseValue: 0,
+        resultBaseValueMS: 0,
+        resultBaseValueMSC: 0,
         configuration: {
           resultValue: resultConfigurationValue,
           resultValueMS: resultConfigurationValueMS,
@@ -1358,6 +1506,12 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           resultOverideBase: overidesBaseConfiguration,
           resultOverideBaseMS: overidesBaseConfigurationMS,
           resultOverideBaseMSC: overidesBaseConfigurationMSC,
+          resultModuleValue: 0,
+          resultModuleValueMS: 0,
+          resultModuleValueMSC: 0,
+          resultBaseValue: 0,
+          resultBaseValueMS: 0,
+          resultBaseValueMSC: 0,
         }
       };
     }
@@ -1376,6 +1530,12 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
       resultOverideBase: overidesBaseAnalysisDesign,
       resultOverideBaseMS: overidesBaseAnalysisDesignMS,
       resultOverideBaseMSC: overidesBaseAnalysisDesignMSC,
+      resultModuleValue: 0,
+      resultModuleValueMS: 0,
+      resultModuleValueMSC: 0,
+      resultBaseValue: 0,
+      resultBaseValueMS: 0,
+      resultBaseValueMSC: 0,
       configuration: {
         resultValue: resultConfigurationValue,
         resultValueMS: resultConfigurationValueMS,
@@ -1392,6 +1552,12 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         resultOverideBase: overidesBaseConfiguration,
         resultOverideBaseMS: overidesBaseConfigurationMS,
         resultOverideBaseMSC: overidesBaseConfigurationMSC,
+        resultModuleValue: 0,
+        resultModuleValueMS: 0,
+        resultModuleValueMSC: 0,
+        resultBaseValue: 0,
+        resultBaseValueMS: 0,
+        resultBaseValueMSC: 0,
       }
     };
   }
