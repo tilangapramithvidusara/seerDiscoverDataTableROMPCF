@@ -258,8 +258,8 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         resultValueMSC: responseAnalisisDesign?.resultValueMSC,
       }, hourlyRate?.value, hoursPerday, condition, "AnalysisDesign", responseAnalisisDesign, {
         resultValueBase: resultValueAnalisisDesignBase,
-        resultValueMSBase: resultValueAnalisisDesignBase,
-        resultValueMSCBase: resultValueAnalisisDesignBase,
+        resultValueMSBase: resultValueMSAnalisisDesignBase,
+        resultValueMSCBase: resultValueMSCAnalisisDesignBase,
       }, {
         resultValueModule: resultValueAnalisisDesignModule,
         resultValueMSModule: resultValueAnalisisDesignModule,
@@ -963,7 +963,9 @@ export const costReportMainObject = (values: any, subValues: any, hourlyRate: nu
     }
   };
   if (type) {
-    console.log('typeData', typeData?.resultOverideBase);
+    console.log('typeData', typeData);
+    console.log('baseValue', baseValue);
+    
     
     object.M.resultModule = typeData.resultModule;
     object.MS.resultModule = typeData.resultModuleMS;
