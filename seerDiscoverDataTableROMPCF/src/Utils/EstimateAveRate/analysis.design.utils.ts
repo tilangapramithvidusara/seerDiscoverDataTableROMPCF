@@ -262,8 +262,8 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         resultValueMSCBase: resultValueMSCAnalisisDesignBase,
       }, {
         resultValueModule: resultValueAnalisisDesignModule,
-        resultValueMSModule: resultValueAnalisisDesignModule,
-        resultValueMSCModule: resultValueAnalisisDesignModule,
+        resultValueMSModule: resultValueMSAnalisisDesignModule,
+        resultValueMSCModule: resultValueMSCAnalisisDesignModule,
       });
       // resultModule: modulesConfiguration,
       // resultModuleMS: modulesConfigurationMS,
