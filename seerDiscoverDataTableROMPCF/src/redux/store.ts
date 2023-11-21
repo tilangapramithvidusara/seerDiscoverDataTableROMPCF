@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import userSlice from './user/userSlice'
 import reportSlice from './report/reportSlice';
+// import sidePaneSlice  from './sidePane/taskSlice';
 
 export const store = configureStore({
   reducer: {
     user: userSlice,
     report: reportSlice,
+    // sidePane: sidePaneSlice
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false,

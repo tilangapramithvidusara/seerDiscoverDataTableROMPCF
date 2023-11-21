@@ -64,7 +64,6 @@ export default function SwipeableTemporaryDrawer({
         if (cellDataForSidePane?.name === "Analysis and Design") {
           const datatoShow = selectorForSidePane?.estimateAverageRateStoreData?.analysisAndDesign;
           console.log("datatoShowdatatoShow", datatoShow);
-          // const columnValue = cellDataForSidePane?.columnId?.replace(/\//g, '');
           console.log("columnValue", columnValue)
           if (columnValue) {
             const baseValue = datatoShow[columnValue]?.baseValue;
@@ -84,18 +83,19 @@ export default function SwipeableTemporaryDrawer({
               
               return {
                 name: "",
-                value: x?.moduleSeerModuleName
+                value: x?.moduleSeerModuleName,
+                align: "left"
               }
             });
 
             setTableData([
-              { name: "Module Estimate value", value: baseValue, rowColor: "#1976d2" },
-              { name: "Number of Modules", value: uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length, rowColor: "#C1BDBD" },
-              { name: "Module Overrides" },
+              { name: "Module Estimate value", value: baseValue, rowColor: "#808080" , align: "left"},
+              { name: "Number of Modules", value: uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length, rowColor: "#C5C5C5" , align: "left"},
+              { name: "Module Overrides", rowColor: "#C5C5C5" },
               ...resultOverideModule,
-              { name: "Requirements Estimate value", value: moduleValue, rowColor: "#1976d2" },
-              { name: "Number of Requirements", value: uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length , rowColor: "#C1BDBD"  },
-              { name: "Number of Requirement overrides", value: uniqueData_resultOverideBase?.length , rowColor: "#C1BDBD"  },
+              { name: "Requirements Estimate value", value: moduleValue, rowColor:"#808080" , align: "left"},
+              { name: "Number of Requirements", value: uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length , rowColor: "#AEAEAE" , align: "left"  },
+              { name: "Number of Requirement overrides", value: uniqueData_resultOverideBase?.length , rowColor: "#C5C5C5", align: "left"  },
             ])  
             setShowCellData(datatoShow[cellDataForSidePane?.columnId?.replace(/\//g, '')]);
           }
@@ -138,14 +138,14 @@ export default function SwipeableTemporaryDrawer({
               }
             });
             setTableData([
-              { name: "Module Estimate value", value: baseValue, rowColor: "#1976d2" },
-              { name: "Number of Modules", value: uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length, rowColor: "#C1BDBD" },
-              { name: "Module Overrides" },
+              { name: "Module Estimate value", value: baseValue, rowColor: "#808080" },
+              { name: "Number of Modules", value: uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length, rowColor: "#C5C5C5" },
+              { name: "Module Overrides", rowColor: "#C5C5C5" },
               ...resultOverideModule,
-              { name: "Requirements Estimate value", value: moduleValue, rowColor: "#1976d2" },
-              { name: "Number of Requirements", value: uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length , rowColor: "#C1BDBD"  },
-              { name: "Number of Requirement overrides", value: uniqueData_resultOverideBase?.length , rowColor: "#C1BDBD"  },
-            ])  
+              { name: "Requirements Estimate value", value: moduleValue, rowColor: "#AEAEAE" },
+              { name: "Number of Requirements", value: uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length , rowColor: "#C5C5C5"  },
+              { name: "Number of Requirement overrides", value: uniqueData_resultOverideBase?.length , rowColor: "#C5C5C5"  },
+            ]) 
             setShowCellData(datatoShow[cellDataForSidePane?.columnId?.replace(/\//g, '')]);
           }
         }
@@ -161,6 +161,9 @@ export default function SwipeableTemporaryDrawer({
     right: isOpenSideDrawer,
   });
 
+  const onClickTableRow = (e: any) => {
+    console.log("ONCLICK", e)
+  }
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
     (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -183,7 +186,7 @@ export default function SwipeableTemporaryDrawer({
       sx={{ width: 'auto' }}
 
       role="presentation"
-      onClick={toggleDrawer(anchor, false)}
+      // onClick={toggleDrawer(anchor, false)}
       onKeyDown={
         toggleDrawer(anchor, false)
       }
@@ -195,9 +198,9 @@ export default function SwipeableTemporaryDrawer({
         
       <Table sx={{ minWidth: 300 }} aria-label="simple table">
         <TableHead>
-          <TableRow>
+          <TableRow style={{backgroundColor:"#015BA1"}}>
             <TableCell>Title</TableCell>
-            <TableCell align="right">Value</TableCell>
+            <TableCell align="left">Value</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -205,12 +208,13 @@ export default function SwipeableTemporaryDrawer({
             <TableRow
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              style={{backgroundColor:row?.rowColor}}
+              style={{ backgroundColor: row?.rowColor }}
+              onClick={(e) => onClickTableRow(e)}
             >
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell align="right">{row.value}</TableCell>
+              <TableCell align={ row.align ? row?.align : "right"}>{row.value}</TableCell>
               {/* <TableCell align="right">{row.value}</TableCell> */}
             </TableRow>
           ))}
