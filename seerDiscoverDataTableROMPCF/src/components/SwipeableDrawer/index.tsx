@@ -25,6 +25,7 @@ import Paper from '@mui/material/Paper';
 import MailIcon from '@mui/icons-material/Mail';
 import { useSelector } from 'react-redux';
 import { removeDuplicates } from '../../Utils/commonFunc.utils';
+import { CommonUtils } from '../../Utils/SidePaneUtils/EstimateAverageRate/CommonUtils';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
@@ -60,100 +61,20 @@ export default function SwipeableTemporaryDrawer({
     console.log("cellDataForSidePane 1", cellDataForSidePane);
     console.log("cellDataForSidePane 2", selectorForSidePane);
     const columnValue = cellDataForSidePane?.columnId?.replace(/\//g, '');
+    setSidePaneTitle(`${cellDataForSidePane?.nameCategory } - ${ cellDataForSidePane?.name } - ${ cellDataForSidePane?.columnId }`)
 
-    if (cellDataForSidePane?.table === "Estimate Avg Rate") {
-      setSidePaneTitle(`${cellDataForSidePane?.nameCategory } - ${ cellDataForSidePane?.name } - ${ cellDataForSidePane?.columnId }`)
-      if (cellDataForSidePane?.nameCategory === "ANALYSIS & DESIGN") {
-        if (cellDataForSidePane?.name === "Analysis and Design") {
-          
-          const datatoShow = selectorForSidePane?.estimateAverageRateStoreData?.analysisAndDesign;
-          console.log("datatoShowdatatoShow", datatoShow);
-          console.log("columnValue", columnValue)
-          if (columnValue) {
-            const baseValue = datatoShow[columnValue]?.baseValue;
-            const moduleValue = datatoShow[columnValue]?.moduleValue;
-            const resultBase = datatoShow[columnValue]?.resultBase;
-            const resultOverideBase = datatoShow[columnValue]?.resultOverideBase;
-            const getColumnObject = datatoShow[columnValue];
-            console.log("baseValue", baseValue)
-            console.log("datatoShow[columnValue]", datatoShow[columnValue])
-
-            const uniqueData_resultOverideModule = removeDuplicates(getColumnObject?.resultOverideModule, 'moduleSeerModuleName');
-            const uniqueData_resultModule = removeDuplicates(getColumnObject?.resultModule, 'moduleSeerModuleName');
-            const uniqueData_resultBase = resultBase;
-            const uniqueData_resultOverideBase = resultOverideBase;
-            console.log("uniqueData_resultOverideModule", uniqueData_resultOverideModule)
-            const resultOverideModule = uniqueData_resultOverideModule?.map((x: any) => {
-              
-              return {
-                name: "",
-                value: x?.moduleSeerModuleName,
-                align: "left"
-              }
-            });
-
-            setTableData([
-              { name: "Module Estimate value", value: baseValue, rowColor: "#808080" , align: "left"},
-              { name: "Number of Modules", value: uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length, rowColor: "#C5C5C5" , align: "left"},
-              { name: "Module Overrides", rowColor: "#C5C5C5" },
-              ...resultOverideModule,
-              { name: "Requirements Estimate value", value: moduleValue, rowColor:"#808080" , align: "left"},
-              { name: "Number of Requirements", value: uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length , rowColor: "#AEAEAE" , align: "left"  },
-              { name: "Number of Requirement overrides", value: uniqueData_resultOverideBase?.length , rowColor: "#C5C5C5", align: "left"  },
-            ])  
-            setShowCellData(datatoShow[cellDataForSidePane?.columnId?.replace(/\//g, '')]);
-          }
-         
-        } else if (cellDataForSidePane?.name === "Customisations (Design)" && columnValue) {
-          const datatoShow = selectorForSidePane?.estimageAveRateCustomisationDesignSidePane;
-          // setShowCellData(datatoShow[columnValue]);
-        } else if (cellDataForSidePane?.name === "Custom Requirements (Design)" && columnValue) {
-          const datatoShow = selectorForSidePane?.estimageAveRateCustomerRequirementDesignSidePane;
-          // setShowCellData(datatoShow[columnValue]);
-        } else if (cellDataForSidePane?.name === "Documentation" && columnValue) {
-          const datatoShow = selectorForSidePane?.estimageAveRateCustomerDocumentationSidePane;
-          // setShowCellData(datatoShow[columnValue]);
-        } else if (cellDataForSidePane?.name === "Design Review" && columnValue) {
-          const datatoShow = selectorForSidePane?.estimageAveRateCustomerDesignReviewSidePane;
-          // setShowCellData(datatoShow[columnValue]);
-        }
-      } else if (cellDataForSidePane?.nameCategory === "BUILD") {
-        if (cellDataForSidePane?.name === "Configuration") { 
-          const datatoShow = selectorForSidePane?.estimateAverageRateStoreData?.configuration;
-          console.log("datatoShowdatatoShow", datatoShow);
-          console.log("columnValue", columnValue)
-          if (columnValue) {
-            const baseValue = datatoShow[columnValue]?.baseValue;
-            const moduleValue = datatoShow[columnValue]?.moduleValue;
-            const resultBase = datatoShow[columnValue]?.resultBase;
-            const resultOverideBase = datatoShow[columnValue]?.resultOverideBase;
-            const getColumnObject = datatoShow[columnValue];
-            console.log("baseValue", baseValue)
-            console.log("datatoShow[columnValue]", datatoShow[columnValue])
-
-            const uniqueData_resultOverideModule = removeDuplicates(getColumnObject?.resultOverideModule, 'moduleSeerModuleName');
-            const uniqueData_resultModule = removeDuplicates(getColumnObject?.resultModule, 'moduleSeerModuleName');
-            const uniqueData_resultBase = resultBase;
-            const uniqueData_resultOverideBase = resultOverideBase;
-            const resultOverideModule = uniqueData_resultOverideModule?.map((x: any) => {
-              return {
-                name: "",
-                value: x?.moduleSeerModuleName
-              }
-            });
-            setTableData([
-              { name: "Module Estimate value", value: baseValue, rowColor: "#808080" },
-              { name: "Number of Modules", value: uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length, rowColor: "#C5C5C5" },
-              { name: "Module Overrides", rowColor: "#C5C5C5" },
-              ...resultOverideModule,
-              { name: "Requirements Estimate value", value: moduleValue, rowColor: "#AEAEAE" },
-              { name: "Number of Requirements", value: uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length , rowColor: "#C5C5C5"  },
-              { name: "Number of Requirement overrides", value: uniqueData_resultOverideBase?.length , rowColor: "#C5C5C5"  },
-            ]) 
-            setShowCellData(datatoShow[cellDataForSidePane?.columnId?.replace(/\//g, '')]);
-          }
-        }
-      }
+    const data: any = CommonUtils[cellDataForSidePane?.table]?.[cellDataForSidePane?.nameCategory]?.[cellDataForSidePane?.name]?.(selectorForSidePane, columnValue);
+    console.log("Common Utl Result Data", data);
+    if (data) {
+      setTableData([
+        { name: "Module Estimate value", value: data?.baseValue, rowColor: "#808080" , align: "left"},
+        { name: "Number of Modules", value: data?.uniqueData_resultModule?.length + data?.uniqueData_resultOverideModule?.length, rowColor: "#C5C5C5" , align: "left"},
+        { name: "Module Overrides", rowColor: "#C5C5C5" },
+        ...data?.resultOverideModule,
+        { name: "Requirements Estimate value", value: data?.moduleValue, rowColor:"#808080" , align: "left"},
+        { name: "Number of Requirements", value: data?.uniqueData_resultBase?.length + data?.uniqueData_resultOverideBase?.length , rowColor: "#AEAEAE" , align: "left"  },
+        { name: "Number of Requirement overrides", value: data?.uniqueData_resultOverideBase?.length , rowColor: "#C5C5C5", align: "left"  },
+      ])  
     }
   }, [cellDataForSidePane]);
 
@@ -227,75 +148,6 @@ export default function SwipeableTemporaryDrawer({
         </TableBody>
       </Table>
     </TableContainer>
-      {/* <List>
-        <ListItem key={'cost'} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              {<CostIcon />}
-            </ListItemIcon>
-            <ListItemText primary={`Effort: ${showCellData?.subValue}`} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key={'hourlyRate'} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              {<HourlyRate />}
-            </ListItemIcon>
-            <ListItemText primary={`Hourly Rate: ${showCellData?.hourlyRate}`}/>
-          </ListItemButton>
-        </ListItem>
-        <ListItem key={'hoursPerDay'} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              {<HourlyRate />}
-            </ListItemIcon>
-            <ListItemText primary={`Hours Per Day: ${showCellData?.hoursPerday}`} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key={'moduleEstimateValue'} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              {<HourlyRate />}
-            </ListItemIcon>
-            <ListItemText primary={`Module Estimate value: ${showCellData?.moduleEstimateValue}`} />
-          </ListItemButton>
-        </ListItem>
-       
-        <ListItem key={'subValue'} disablePadding>
-          <ListItemSecondaryAction>
-            <ListItemIcon>
-              {<MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={`Sub Value: ${showCellData?.subValue}`} />
-          </ListItemSecondaryAction>
-        </ListItem>
-        <ListItem key={'Logic'} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              {<CostIcon />}
-            </ListItemIcon>
-            <ListItemText primary={`Logic: ${showCellData?.logic?.toString().replace("Cost", "effort")}`} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key={'DataLogic'} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              {<CostIcon />}
-            </ListItemIcon>
-            <ListItemText primary={`Data with Logic: ${showCellData?.shown}`} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key={'total'} disablePadding style={{color: 'black'}}>
-          <ListItemButton>
-            <ListItemIcon>
-              {<Total />}
-            </ListItemIcon>
-            <ListItemText primary={`Total: ${showCellData?.value}`} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        <Divider />
-      </List> */}
     </Box>
   );
 
