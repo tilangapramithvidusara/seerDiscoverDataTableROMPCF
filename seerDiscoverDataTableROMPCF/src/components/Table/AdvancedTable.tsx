@@ -46,7 +46,9 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
   estimateResourceMustColumnDetails
   // estimateResourceMustShouldColumnDetails
   )
-  const reportReducerValues = useSelector((state: any) => state?.report?.estimateAverageRateStoreData)
+  const reportReducerValues = useSelector((state: any) => state?.report?.estimateAverageRateStoreData);
+  const [cellDataForSidePane, setCellDataForSidePane] = React.useState<any>();
+
   console.log(reportReducerValues);
   
   // const averageM = useMemo(
@@ -158,6 +160,7 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
                   isOpenSideDrawer={isOpenSideDrawer} 
                   setIsOpenSideDrawer={setIsOpenSideDrawer} 
                   data={selectedRow}
+                  cellDataForSidePane={cellDataForSidePane}
                 />
               )}
               
@@ -229,7 +232,23 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
                   
               },
               
-            })}}
+              })
+            }}
+          
+            muiTableBodyCellProps= {({ cell }) => ({
+              onClick: () => {
+                console.log("CCCCCCCC", cell);
+                console.log(cell.getValue(), cell.id);
+                setCellDataForSidePane({
+                  cellValue: cell.getValue(),
+                  cellId: cell.id,
+                  columnId: cell?.column?.id,
+                  table: cell?.row?.original?.type,
+                  nameCategory: cell?.row?.original?.nameCategory,
+                  name: cell?.row?.original?.name,
+                });
+              },
+            })}
           />
         </div>
     </>
