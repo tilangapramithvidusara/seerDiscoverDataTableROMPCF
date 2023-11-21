@@ -50,6 +50,8 @@ export default function SwipeableTemporaryDrawer({
   const selectorForSidePane = useSelector((state: any) => state?.report);
   const [showCellData, setShowCellData] = React.useState<any>();
   const [sidePanelData, setSidePaneData] = React.useState<any>();
+  const [sidePaneTitle, setSidePaneTitle] = React.useState<any>();
+
   const [tabledata, setTableData] = React.useState<any>([
     { name: 'No Data' },
 ]);
@@ -60,8 +62,10 @@ export default function SwipeableTemporaryDrawer({
     const columnValue = cellDataForSidePane?.columnId?.replace(/\//g, '');
 
     if (cellDataForSidePane?.table === "Estimate Avg Rate") {
+      setSidePaneTitle(`${cellDataForSidePane?.nameCategory } - ${ cellDataForSidePane?.name } - ${ cellDataForSidePane?.columnId }`)
       if (cellDataForSidePane?.nameCategory === "ANALYSIS & DESIGN") {
         if (cellDataForSidePane?.name === "Analysis and Design") {
+          
           const datatoShow = selectorForSidePane?.estimateAverageRateStoreData?.analysisAndDesign;
           console.log("datatoShowdatatoShow", datatoShow);
           console.log("columnValue", columnValue)
@@ -76,8 +80,8 @@ export default function SwipeableTemporaryDrawer({
 
             const uniqueData_resultOverideModule = removeDuplicates(getColumnObject?.resultOverideModule, 'moduleSeerModuleName');
             const uniqueData_resultModule = removeDuplicates(getColumnObject?.resultModule, 'moduleSeerModuleName');
-            const uniqueData_resultBase = removeDuplicates(resultBase, 'moduleSeerModuleName');
-            const uniqueData_resultOverideBase = removeDuplicates(resultOverideBase, 'moduleSeerModuleName');
+            const uniqueData_resultBase = resultBase;
+            const uniqueData_resultOverideBase = resultOverideBase;
             console.log("uniqueData_resultOverideModule", uniqueData_resultOverideModule)
             const resultOverideModule = uniqueData_resultOverideModule?.map((x: any) => {
               
@@ -129,8 +133,8 @@ export default function SwipeableTemporaryDrawer({
 
             const uniqueData_resultOverideModule = removeDuplicates(getColumnObject?.resultOverideModule, 'moduleSeerModuleName');
             const uniqueData_resultModule = removeDuplicates(getColumnObject?.resultModule, 'moduleSeerModuleName');
-            const uniqueData_resultBase = removeDuplicates(resultBase, 'moduleSeerModuleName');
-            const uniqueData_resultOverideBase = removeDuplicates(resultOverideBase, 'moduleSeerModuleName');
+            const uniqueData_resultBase = resultBase;
+            const uniqueData_resultOverideBase = resultOverideBase;
             const resultOverideModule = uniqueData_resultOverideModule?.map((x: any) => {
               return {
                 name: "",
@@ -182,8 +186,8 @@ export default function SwipeableTemporaryDrawer({
 
   const list = (anchor: Anchor) => (
     <Box
-      // sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 650 }}
-      sx={{ width: 'auto' }}
+      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 500 }}
+      // sx={{ width: '650' }}
 
       role="presentation"
       // onClick={toggleDrawer(anchor, false)}
@@ -193,15 +197,17 @@ export default function SwipeableTemporaryDrawer({
     >
       <TableContainer component={Paper}>
         <div style={{fontSize: '10px', display: 'flex', textAlign:'center', marginLeft: '15px'}}>
-        <h1> Summary Of Calculation</h1>
+          <h1> {sidePaneTitle}</h1>
         </div>
         
       <Table sx={{ minWidth: 300 }} aria-label="simple table">
-        <TableHead>
-          <TableRow style={{backgroundColor:"#015BA1"}}>
-            <TableCell>Title</TableCell>
-            <TableCell align="left">Value</TableCell>
-          </TableRow>
+          <TableHead>
+       
+            <TableRow style={{ backgroundColor: "#015BA1" }}>
+              <TableCell style={{color: "white", fontSize: "15px"}}>Title</TableCell>
+              <TableCell style={{color: "white", fontSize: "15px"}} align="left">Value</TableCell>
+              </TableRow>
+              
         </TableHead>
         <TableBody>
           {tabledata?.map((row: any) => (
