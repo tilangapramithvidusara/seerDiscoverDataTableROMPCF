@@ -48,6 +48,7 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
   )
   const reportReducerValues = useSelector((state: any) => state?.report?.estimateAverageRateStoreData);
   const [cellDataForSidePane, setCellDataForSidePane] = React.useState<any>();
+  const [sidePaneEnable, setSidePaneEnable] = React.useState(false);
 
   console.log(reportReducerValues);
   
@@ -154,7 +155,7 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
               </div> */}
             </div>
             <div>
-              {isOpenSideDrawer && (
+              {isOpenSideDrawer && sidePaneEnable && (
                 <SwipeableTemporaryDrawer 
                   anchor='right' 
                   isOpenSideDrawer={isOpenSideDrawer} 
@@ -237,7 +238,12 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
           
             muiTableBodyCellProps= {({ cell }) => ({
               onClick: () => {
-                console.log("CCCCCCCC", cell);
+                console.log("CCCCCCCC", cell, cell?.row?.original?.nameCategory, cell?.row?.original?.nameCategory);
+                if ((cell?.row?.original?.nameCategory == 'ANALYSIS & DESIGN' || cell?.row?.original?.nameCategory == 'BUILD') && tableMode === defaultText && type === 'Estimate Average Rate') {
+                  setSidePaneEnable(true)
+                } else {
+                  setSidePaneEnable(false)
+                }
                 console.log(cell.getValue(), cell.id);
                 setCellDataForSidePane({
                   cellValue: cell.getValue(),

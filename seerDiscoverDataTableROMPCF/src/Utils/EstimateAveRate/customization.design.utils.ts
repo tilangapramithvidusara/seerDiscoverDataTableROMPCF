@@ -7,17 +7,42 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
   let resultValueMSC = 0;
   let x = 0
   let y = 0
+  // DESIGN
+  let cmCustomisationDesign: any = [];
+
+  let cmCustomisationDesignMS: any = [];
+
+  let cmCustomisationDesignMSC: any = [];
+
+  // BUILD
+  let cmCustomisationBuild: any = [];
+
+  let cmCustomisationBuildMS: any = [];
+
+  let cmCustomisationBuildMSC: any = [];
 
   let returnObject = {
     customisation: {
       resultValue,
       resultValueMS,
-      resultValueMSC
+      resultValueMSC,
+      resultBase: [],
+      resultBaseMS: [],
+      resultBaseMSC: [],
+      resultBaseValue: 0,
+      resultBaseValueMS: 0,
+      resultBaseValueMSC: 0
     },
     customisationBuild: {
       resultValue,
       resultValueMS,
-      resultValueMSC
+      resultValueMSC,
+      resultBase: [],
+      resultBaseMS: [],
+      resultBaseMSC: [],
+      resultBaseValue: 0,
+      resultBaseValueMS: 0,
+      resultBaseValueMSC: 0
     }
   }
   // Must Customisation Design
@@ -50,6 +75,8 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
         // && fitGapData[customisationItem?.seer_fitgap] != fitGapData[100000001]
         if (moscowsData?.[customisationItem?.seer_moscow] == moscowsData?.[100000000]) {
           //
+          cmCustomisationDesign.push(customisationItem);
+          cmCustomisationBuild.push(customisationItem);
           const resCustomisation = baseReader(customisationItem, primaryResourceDesignValueFromCustomisationModels, 'design');
           primaryResourceDesignValueFromCustomisationModels = resCustomisation.primaryResourceDesignValueFromCustomisationModels;
           const resCustomisationBuild = baseReader(customisationItem, primaryResourceDesignValueBuildFromCustomisationModels, 'build');
@@ -59,6 +86,8 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
         // Must Should
         if ((moscowsData?.[customisationItem?.seer_moscow] == moscowsData?.[100000000] || moscowsData?.[customisationItem?.seer_moscow] == moscowsData?.[100000001])) {
           // !seenModuleMIds.has(moduleDataItem?.fitGapProductSeerModule?.id)
+          cmCustomisationDesignMS.push(customisationItem);
+          cmCustomisationBuildMS.push(customisationItem);
           const resCustomisation = baseReader(customisationItem, primaryResourceDesignValueFromCustomisationModelsMS, 'design');
           primaryResourceDesignValueFromCustomisationModelsMS = resCustomisation.primaryResourceDesignValueFromCustomisationModels;
           const resCustomisationBuild = baseReader(customisationItem, primaryResourceDesignValueBuildFromCustomisationModelsMS, 'build');
@@ -68,6 +97,8 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
         // Must Should Could
         if ((moscowsData?.[customisationItem?.seer_moscow] == moscowsData?.[100000000] || moscowsData?.[customisationItem?.seer_moscow] == moscowsData?.[100000001] || moscowsData?.[customisationItem?.seer_moscow] == moscowsData?.[100000002])) {
           //
+          cmCustomisationDesignMSC.push(customisationItem);
+          cmCustomisationBuildMSC.push(customisationItem);
           const resCustomisation = baseReader(customisationItem, primaryResourceDesignValueFromCustomisationModelsMSC, 'design');
           primaryResourceDesignValueFromCustomisationModelsMSC = resCustomisation.primaryResourceDesignValueFromCustomisationModels;
           const resCustomisationBuild = baseReader(customisationItem, primaryResourceDesignValueBuildFromCustomisationModelsMSC, 'build');
@@ -81,36 +112,49 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
           parameterModel[0].hoursPerday,
           condition
         )
+        returnObject.customisation.resultBase = cmCustomisationDesign;
+        returnObject.customisation.resultBaseValue = returnObject.customisation.resultValue;
+        // cmCustomisationDesignMSC
         
         returnObject.customisation.resultValueMS = generateReturnValue(
           primaryResourceDesignValueFromCustomisationModelsMS,
           parameterModel[0].hoursPerday,
           condition
         )
+        returnObject.customisation.resultBaseMS = cmCustomisationDesignMS;
+        returnObject.customisation.resultBaseValueMS = returnObject.customisation.resultValueMS;
 
         returnObject.customisation.resultValueMSC =  generateReturnValue(
           primaryResourceDesignValueFromCustomisationModelsMSC,
           parameterModel[0].hoursPerday,
           condition
         )
+        returnObject.customisation.resultBaseMSC = cmCustomisationDesignMSC;
+        returnObject.customisation.resultBaseValueMSC = returnObject.customisation.resultValueMSC;
 
         returnObject.customisationBuild.resultValue =  generateReturnValue(
           primaryResourceDesignValueBuildFromCustomisationModels,
           parameterModel[0].hoursPerday,
           condition
         )
+        returnObject.customisationBuild.resultBase = cmCustomisationBuild;
+        returnObject.customisationBuild.resultBaseValue = returnObject.customisationBuild.resultValue;
 
         returnObject.customisationBuild.resultValueMS =  generateReturnValue(
           primaryResourceDesignValueBuildFromCustomisationModelsMS,
           parameterModel[0].hoursPerday,
           condition
         )
+        returnObject.customisationBuild.resultBaseMS = cmCustomisationBuildMS;
+        returnObject.customisationBuild.resultBaseValueMS = returnObject.customisationBuild.resultValueMS;
 
         returnObject.customisationBuild.resultValueMSC =  generateReturnValue(
           primaryResourceDesignValueBuildFromCustomisationModelsMSC,
           parameterModel[0].hoursPerday,
           condition
         )
+        returnObject.customisationBuild.resultBaseMSC = cmCustomisationBuildMSC;
+        returnObject.customisationBuild.resultBaseValueMSC = returnObject.customisationBuild.resultValueMSC;
         
       }
       await Promise.all([customizationLoop])
