@@ -52,17 +52,8 @@ export default function SwipeableTemporaryDrawer({
 
     const data: any = CommonUtils[cellDataForSidePane?.table]?.[cellDataForSidePane?.nameCategory]?.[cellDataForSidePane?.name]?.(selectorForSidePane, columnValue);
     console.log("Common Utl Result Data", data);
-    if (data) {
-      setTableData([
-        { name: "Module Estimate value", value: data?.baseValue, rowColor: "#808080" , align: "left"},
-        { name: "Number of Modules", value: data?.uniqueData_resultModule?.length + data?.uniqueData_resultOverideModule?.length, rowColor: "#C5C5C5" , align: "left"},
-        { name: "Module Overrides", rowColor: "#C5C5C5" },
-        ...data?.resultOverideModule,
-        { name: "Requirements Estimate value", value: data?.moduleValue, rowColor:"#808080" , align: "left"},
-        { name: "Number of Requirements", value: data?.uniqueData_resultBase?.length + data?.uniqueData_resultOverideBase?.length , rowColor: "#AEAEAE" , align: "left"  },
-        { name: "Number of Requirement overrides", value: data?.uniqueData_resultOverideBase?.length , rowColor: "#C5C5C5", align: "left"  },
-      ])  
-    }
+    if (data) setTableData(data)  
+    
   }, [cellDataForSidePane]);
 
 

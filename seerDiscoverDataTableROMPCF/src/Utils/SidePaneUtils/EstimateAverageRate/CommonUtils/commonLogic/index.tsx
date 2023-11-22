@@ -16,20 +16,19 @@ export const commonSidePaneLogic = (selectorForSidePane: any, columnValue: any) 
         const uniqueData_resultOverideBase = resultOverideBase;
         const resultOverideModule = uniqueData_resultOverideModule?.map((x: any) => {
             return {
-                name: "",
-                value: x?.moduleSeerModuleName,
-                align: "left"
+                name: `${x?.moduleSeerModuleName}`,
+                value: "",
+                align: "right"
             }
         });
-
-        return {
-            baseValue,
-            uniqueData_resultOverideModule,
-            uniqueData_resultModule,
-            uniqueData_resultOverideBase,
-            resultOverideModule,
-            uniqueData_resultBase,
-            moduleValue
-        }
+        return [
+                { name: "Module Estimate value", value: baseValue, rowColor: "#E0E0E0" , align: "left"},
+                { name: "Number of Modules", value: uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length, rowColor: "#E0E0E0" , align: "left"},
+                { name: "Module Overrides", rowColor: "#E0E0E0" },
+                ...resultOverideModule,
+                { name: "Requirements Estimate value", value: moduleValue, rowColor:"#E0E0E0" , align: "left"},
+                { name: "Number of Requirements", value: uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length , rowColor: "#E0E0E0" , align: "left"  },
+                { name: "Number of Requirement overrides", value: uniqueData_resultOverideBase?.length , rowColor: "#E0E0E0", align: "left"  },
+            ]
     }
 }
