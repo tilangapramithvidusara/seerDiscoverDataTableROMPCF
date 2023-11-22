@@ -16,7 +16,7 @@ export const commonSidePaneLogic = (selectorForSidePane: any, columnValue: any) 
         const uniqueData_resultOverideBase = resultOverideBase;
         const resultOverideModule = uniqueData_resultOverideModule?.map((x: any) => {
             return {
-                name: `            ${x?.moduleSeerModuleName}`,
+                name: `${x?.moduleSeerModuleName}`,
                 value: "",
                 align: "right"
             }
