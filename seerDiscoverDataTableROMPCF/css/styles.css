@@ -262,3 +262,31 @@ tr:nth-child(even) {
 .seerDiscoverROM .custom-toggle-button .MuiButtonBase-root {
   width: 50px;
 }
+
+.MuiDrawer-modal .drawer-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #01508E;
+  padding: 16px;
+}
+
+.MuiDrawer-modal .drawer-heading .title{
+ color: #ffffff;
+ font-size: 16px;
+ margin-bottom: 10px;
+ font-weight: 700;
+}
+
+.MuiDrawer-modal .drawer-heading .sub-title{
+  color: #ffffff;
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-weight: 400;
+}
+
+.MuiDrawer-modal .drawer-heading .close{
+  color: #ffffff;
+  font-size: 16px;
+}

@@ -95,8 +95,9 @@ export default function SwipeableTemporaryDrawer({
       }
     >
       <TableContainer component={Paper}>
-        <div style={{fontSize: '10px', display: 'flex', textAlign:'center', marginLeft: '15px'}}>
-          <h1> {sidePaneTitle}</h1>
+        <div className='drawer-heading'>
+          <div><h1 className='title'> {sidePaneTitle}</h1><span className='sub-title'>Subtile</span></div>
+          <div><span className='close'>&#x2716;</span></div>
         </div>
         
       <Table sx={{ minWidth: 300 }} aria-label="simple table">
