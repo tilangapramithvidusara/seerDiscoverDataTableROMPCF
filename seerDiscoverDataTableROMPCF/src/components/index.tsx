@@ -127,15 +127,17 @@ const App = ({
             {/* <Grid className="flex-wrap">
               <InputLabel className="label mr-10">Mode</InputLabel>
             </Grid> */}
-            <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton}/>
+            {/* <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton}/> */}
           </Stack>
-          <DropDownButtons selectedButton={selectedButton}/>
+          {/* <DropDownButtons selectedButton={selectedButton}/> */}
         </Box>
-        <div className='text-right'>
+        <div className='text-right' 
+        // style={{margin: '2px', height: '10px !important', fontSize: '11px !important'}}
+        >
         <Button className='btn-primary' onClick={(e) => initialTriggerHandler(e)}><AutorenewOutlinedIcon className="btn-icon"/>Refresh</Button>
       </div>  
       </Grid> 
-      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+      <Tabs size="small" defaultActiveKey="1" items={items} onChange={onChange} />
     </>
   )
 }
