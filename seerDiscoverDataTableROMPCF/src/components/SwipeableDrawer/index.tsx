@@ -85,7 +85,7 @@ export default function SwipeableTemporaryDrawer({
 
   const list = (anchor: Anchor) => (
     <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 450 }}
+      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 400 }}
       // sx={{ width: '650' }}
 
       role="presentation"
@@ -96,17 +96,17 @@ export default function SwipeableTemporaryDrawer({
     >
       <TableContainer component={Paper}>
         <div className='drawer-heading'>
-          <div><h1 className='title'> {sidePaneTitle}</h1><span className='sub-title'>Subtile</span></div>
-          <div><span className='close'>&#x2716;</span></div>
+          <div><h1 className='title'> {cellDataForSidePane?.nameCategory}</h1><span className='sub-title'>{cellDataForSidePane?.name + " - "+ cellDataForSidePane?.columnId}</span></div>
+          <div><span className='close' onClick={() => setIsOpenSideDrawer(false)}>&#x2716;</span></div>
         </div>
         
       <Table sx={{ minWidth: 300 }} aria-label="simple table">
           <TableHead>
        
-            <TableRow style={{ backgroundColor: "#015BA1" }}>
+            {/* <TableRow style={{ backgroundColor: "#015BA1" }}>
               <TableCell style={{color: "white", fontSize: "15px"}}>Title</TableCell>
               <TableCell style={{color: "white", fontSize: "15px"}} align="left">Value</TableCell>
-              </TableRow>
+              </TableRow> */}
               
         </TableHead>
         <TableBody>
