@@ -1,26 +1,71 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
 import MailIcon from '@mui/icons-material/Mail';
+import { useSelector } from 'react-redux';
+import { removeDuplicates } from '../../Utils/commonFunc.utils';
+import { CommonUtils } from '../../Utils/SidePaneUtils/EstimateAverageRate/CommonUtils';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
+
+// function createData(
+//   name: string,
+//   value: number,
+// ) {
+//   return { name, value };
+// }
+
+
 export default function SwipeableTemporaryDrawer({
-  anchor, isOpenSideDrawer, data, setIsOpenSideDrawer
+  anchor, isOpenSideDrawer, data, setIsOpenSideDrawer, cellDataForSidePane
 }: {
   anchor: Anchor, 
   isOpenSideDrawer: boolean,
   setIsOpenSideDrawer: any,
-  data: any
-}) {
+  data: any,
+  cellDataForSidePane: any
+  }) {
+  
+  const selectorForSidePane = useSelector((state: any) => state?.report);
+  const [showCellData, setShowCellData] = React.useState<any>();
+  const [sidePanelData, setSidePaneData] = React.useState<any>();
+  const [sidePaneTitle, setSidePaneTitle] = React.useState<any>();
+
+  const [tabledata, setTableData] = React.useState<any>([
+    { name: 'No Data' },
+]);
+  
+  React.useEffect(() => {
+    console.log("cellDataForSidePane 1", cellDataForSidePane);
+    console.log("cellDataForSidePane 2", selectorForSidePane);
+    const columnValue = cellDataForSidePane?.columnId?.replace(/\//g, '');
+    setSidePaneTitle(`${cellDataForSidePane?.nameCategory } - ${ cellDataForSidePane?.name } - ${ cellDataForSidePane?.columnId }`)
+
+    const data: any = CommonUtils[cellDataForSidePane?.table]?.[cellDataForSidePane?.nameCategory]?.[cellDataForSidePane?.name]?.(selectorForSidePane, columnValue);
+    console.log("Common Utl Result Data", data);
+    if (data) {
+      setTableData([
+        { name: "Module Estimate value", value: data?.baseValue, rowColor: "#808080" , align: "left"},
+        { name: "Number of Modules", value: data?.uniqueData_resultModule?.length + data?.uniqueData_resultOverideModule?.length, rowColor: "#C5C5C5" , align: "left"},
+        { name: "Module Overrides", rowColor: "#C5C5C5" },
+        ...data?.resultOverideModule,
+        { name: "Requirements Estimate value", value: data?.moduleValue, rowColor:"#808080" , align: "left"},
+        { name: "Number of Requirements", value: data?.uniqueData_resultBase?.length + data?.uniqueData_resultOverideBase?.length , rowColor: "#AEAEAE" , align: "left"  },
+        { name: "Number of Requirement overrides", value: data?.uniqueData_resultOverideBase?.length , rowColor: "#C5C5C5", align: "left"  },
+      ])  
+    }
+  }, [cellDataForSidePane]);
+
+
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -28,6 +73,9 @@ export default function SwipeableTemporaryDrawer({
     right: isOpenSideDrawer,
   });
 
+  const onClickTableRow = (e: any) => {
+    console.log("ONCLICK", e)
+  }
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
     (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -46,182 +94,47 @@ export default function SwipeableTemporaryDrawer({
 
   const list = (anchor: Anchor) => (
     <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 450 }}
+      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 500 }}
+      // sx={{ width: '650' }}
+
       role="presentation"
-      onClick={toggleDrawer(anchor, false)}
+      // onClick={toggleDrawer(anchor, false)}
       onKeyDown={
         toggleDrawer(anchor, false)
       }
     >
-      {/* InboxIcon */}
-      <List>
-        <ListItem key={'type'} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              {<MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={`Type: ${data?.original?.type}`} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key={'nameCategory'} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              {<MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={`Category: ${data?.original?.nameCategory}`} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key={'name'} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              {<MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={`Name: ${data?.original?.name}`} />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        {
-          (data?.original?.type === 'Estimate Resource' || data?.original?.type === 'Estimate Resource Milestone') ? (
-            <div>
-              <ListItem key={'M'} disablePadding>
-                <ListItemButton>
-                  {/* <ListItemIcon>
-                    {<MailIcon />}
-                  </ListItemIcon> */}
-                  <ListItemText primary={'Must'}/>
-                  {/* <ListItemText primary={`M/S/C: ${data?.original?.['M/S/C']}`} /> */}
-                </ListItemButton>
-              </ListItem>
-              <ListItem key={'MR1'} disablePadding>
-                <ListItemButton>
-                  {/* <ListItemIcon>
-                    {<MailIcon />}
-                  </ListItemIcon> */}
-                  {/* <ListItemText primary={'Resource 1'}/> */}
-                  <ListItemText primary={`Resource 1: ${data?.original?.['M_Resource1']}`} />
-                </ListItemButton>
-              </ListItem>
-              <ListItem key={'MR2'} disablePadding>
-                <ListItemButton>
-                  {/* <ListItemIcon>
-                    {<MailIcon />}
-                  </ListItemIcon> */}
-                  {/* <ListItemText primary={'Resource 1'}/> */}
-                  <ListItemText primary={`Resource 2: ${data?.original?.['M_Resource2']}`} />
-                </ListItemButton>
-              </ListItem>
-              <Divider/>
-              <ListItem key={'M/S'} disablePadding>
-                <ListItemButton>
-                  {/* <ListItemIcon>
-                    {<MailIcon />}
-                  </ListItemIcon> */}
-                  <ListItemText primary={'Must Should'}/>
-                  {/* <ListItemText primary={`M/S/C: ${data?.original?.['M/S/C']}`} /> */}
-                </ListItemButton>
-              </ListItem>
-              <ListItem key={'MSR1'} disablePadding>
-                <ListItemButton>
-                  {/* <ListItemIcon>
-                    {<MailIcon />}
-                  </ListItemIcon> */}
-                  {/* <ListItemText primary={'Resource 1'}/> */}
-                  <ListItemText primary={`Resource 1: ${data?.original?.['M/S_Resource1']}`} />
-                </ListItemButton>
-              </ListItem>
-              <ListItem key={'MSR2'} disablePadding>
-                <ListItemButton>
-                  {/* <ListItemIcon>
-                    {<MailIcon />}
-                  </ListItemIcon> */}
-                  {/* <ListItemText primary={'Resource 1'}/> */}
-                  <ListItemText primary={`Resource 2: ${data?.original?.['M/S_Resource2']}`} />
-                </ListItemButton>
-              </ListItem>
-              <Divider/>
-              <ListItem key={'MSC'} disablePadding>
-                <ListItemButton>
-                  {/* <ListItemIcon>
-                    {<MailIcon />}
-                  </ListItemIcon> */}
-                  <ListItemText primary={'Must Should Could'}/>
-                  {/* <ListItemText primary={`M/S/C: ${data?.original?.['M/S/C']}`} /> */}
-                </ListItemButton>
-              </ListItem>
-              <ListItem key={'MSCR1'} disablePadding>
-                <ListItemButton>
-                  {/* <ListItemIcon>
-                    {<MailIcon />}
-                  </ListItemIcon> */}
-                  {/* <ListItemText primary={'Resource 1'}/> */}
-                  <ListItemText primary={`Resource 1: ${data?.original?.['M/S/C_Resource1']}`} />
-                </ListItemButton>
-              </ListItem>
-              <ListItem key={'MSCR2'} disablePadding>
-                <ListItemButton>
-                  {/* <ListItemIcon>
-                    {<MailIcon />}
-                  </ListItemIcon> */}
-                  {/* <ListItemText primary={'Resource 1'}/> */}
-                  <ListItemText primary={`Resource 2: ${data?.original?.['M/S/C_Resource2']}`} />
-                </ListItemButton>
-              </ListItem>
+      <TableContainer component={Paper}>
+        <div style={{fontSize: '10px', display: 'flex', textAlign:'center', marginLeft: '15px'}}>
+          <h1> {sidePaneTitle}</h1>
+        </div>
+        
+      <Table sx={{ minWidth: 300 }} aria-label="simple table">
+          <TableHead>
+       
+            <TableRow style={{ backgroundColor: "#015BA1" }}>
+              <TableCell style={{color: "white", fontSize: "15px"}}>Title</TableCell>
+              <TableCell style={{color: "white", fontSize: "15px"}} align="left">Value</TableCell>
+              </TableRow>
               
-            </div>
-          ) : (
-            <div>
-              <ListItem key={'M'} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {<MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={`M: ${data?.original?.M}`} />
-                </ListItemButton>
-              </ListItem>
-              <ListItem key={'M/S'} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {<MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={`M/S: ${data?.original?.['M/S']}`} />
-                </ListItemButton>
-              </ListItem>
-              <ListItem key={'M/S/C'} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {<MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={`M/S/C: ${data?.original?.['M/S/C']}`} />
-                </ListItemButton>
-              </ListItem>
-            </div>
-          )
-        }
-        <Divider />
-        {/* {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))} */}
-      </List>
+        </TableHead>
+        <TableBody>
+          {tabledata?.map((row: any) => (
+            <TableRow
+              key={row.name}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              style={{ backgroundColor: row?.rowColor }}
+              onClick={(e) => onClickTableRow(e)}
+            >
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align={ row.align ? row?.align : "right"}>{row.value}</TableCell>
+              {/* <TableCell align="right">{row.value}</TableCell> */}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
     </Box>
   );
 
