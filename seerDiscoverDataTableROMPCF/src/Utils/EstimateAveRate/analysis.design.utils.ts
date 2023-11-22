@@ -42,6 +42,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
   let resultValueCustomisationDesign = 0;
   let resultValueMSCustomisationDesign = 0;
   let resultValueMSCCustomisationDesign = 0;
+  let resultValueCustomisationDesignBase = 0;
+  let resultValueMSCustomisationDesignBase = 0;
+  let resultValueMSCCustomisationDesignBase = 0;
 
   let resultValueCustomRequirementDesign = 0;
   let resultValueMSCustomRequirementDesign = 0;
@@ -74,6 +77,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
   let resultValueCustomisationBuild = 0;
   let resultValueMSCustomisationBuild = 0;
   let resultValueMSCCustomisationBuild = 0;
+  let resultValueCustomisationBuildBase = 0;
+  let resultValueMSCustomisationBuildBase = 0;
+  let resultValueMSCCustomisationBuildBase = 0;
 
   let resultValueCustomRequirementBuild = 0;
   let resultValueMSCustomRequirementBuild = 0;
@@ -276,6 +282,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
       resultValueCustomisationDesign = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultValue, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCustomisationDesign = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCCustomisationDesign = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultValueMSC, hourlyRate?.value, hoursPerday, condition);
+      resultValueCustomisationDesignBase = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultBaseValue, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSCustomisationDesignBase = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultBaseValueMS, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSCCustomisationDesignBase = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultBaseValueMSC, hourlyRate?.value, hoursPerday, condition)
       estimageAveRateCustomisationDesignSidePane = costReportMainObject({
           resultValue: resultValueCustomisationDesign,
           resultValueMS: resultValueMSCustomisationDesign,
@@ -284,7 +293,15 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
           resultValue: responseCustomisationDesign?.customisation?.resultValue,
           resultValueMS: responseCustomisationDesign?.customisation?.resultValueMS,
           resultValueMSC: responseCustomisationDesign?.customisation?.resultValueMSC,
-        }, hourlyRate?.value, hoursPerday, condition)
+        }, hourlyRate?.value, hoursPerday, condition, "CutomisationDesign", responseAnalisisDesign, {
+          resultValueBase: resultValueCustomisationDesignBase,
+          resultValueMSBase: resultValueMSCustomisationDesignBase,
+          resultValueMSCBase: resultValueMSCCustomisationDesignBase,
+        }, {
+          resultValueModule: 0,
+          resultValueMSModule: 0,
+          resultValueMSCModule: 0,
+        }, true);
 
       resultValueCustomRequirementDesign = checkConditionAndGenerateValue(responseCustomRequirementDesign?.customRequirement?.resultValue, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCustomRequirementDesign = checkConditionAndGenerateValue(responseCustomRequirementDesign?.customRequirement?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
@@ -370,6 +387,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
       resultValueCustomisationBuild = checkConditionAndGenerateValue(responseCustomisationDesign?.customisationBuild?.resultValue, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCustomisationBuild = checkConditionAndGenerateValue(responseCustomisationDesign?.customisationBuild?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCCustomisationBuild = checkConditionAndGenerateValue(responseCustomisationDesign?.customisationBuild?.resultValueMSC, hourlyRate?.value, hoursPerday, condition);
+      resultValueCustomisationBuildBase = checkConditionAndGenerateValue(responseCustomisationDesign?.customisationBuild?.resultBaseValue, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSCustomisationBuildBase = checkConditionAndGenerateValue(responseCustomisationDesign?.customisationBuild?.resultBaseValueMS, hourlyRate?.value, hoursPerday, condition)
+      resultValueMSCCustomisationBuildBase = checkConditionAndGenerateValue(responseCustomisationDesign?.customisationBuild?.resultBaseValueMSC, hourlyRate?.value, hoursPerday, condition)
       estimageAveRateCustomerCustomisationBuildSidePane = costReportMainObject({
           resultValue: resultValueCustomisationBuild,
           resultValueMS: resultValueMSCustomisationBuild,
@@ -378,7 +398,15 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
           resultValue: responseCustomisationDesign?.customisationBuild?.resultValue,
           resultValueMS: responseCustomisationDesign?.customisationBuild?.resultValueMS,
           resultValueMSC: responseCustomisationDesign?.customisationBuild?.resultValueMSC,
-        }, hourlyRate?.value, hoursPerday, condition)
+        }, hourlyRate?.value, hoursPerday, condition, "CutomisationBuild", responseAnalisisDesign, {
+          resultValueBase: resultValueCustomisationBuildBase,
+          resultValueMSBase: resultValueMSCustomisationBuildBase,
+          resultValueMSCBase: resultValueMSCCustomisationBuildBase,
+        }, {
+          resultValueModule: 0,
+          resultValueMSModule: 0,
+          resultValueMSCModule: 0,
+        }, true)
 
       resultValueCustomRequirementBuild = checkConditionAndGenerateValue(responseCustomRequirementDesign?.customRequirementBuild?.resultValue, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCustomRequirementBuild = checkConditionAndGenerateValue(responseCustomRequirementDesign?.customRequirementBuild?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
@@ -935,7 +963,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
   }
 }
 
-export const costReportMainObject = (values: any, subValues: any, hourlyRate: number, hoursPerday: number, condition: boolean, type?: string, typeData?: any, baseValue?: any, moduleValues?: any) => {
+export const costReportMainObject = (values: any, subValues: any, hourlyRate: number, hoursPerday: number, condition: boolean, type?: string, typeData?: any, baseValue?: any, moduleValues?: any, returnModule = false) => {
   const object: any = {
     M: {
       value: values?.resultValue,
@@ -967,26 +995,30 @@ export const costReportMainObject = (values: any, subValues: any, hourlyRate: nu
     console.log('baseValue', baseValue);
     
     
-    object.M.resultModule = typeData.resultModule;
-    object.MS.resultModule = typeData.resultModuleMS;
-    object.MSC.resultModule = typeData.resultModuleMSC;
-    object.M.resultOverideModule = typeData.resultOverideModule;
-    object.MS.resultOverideModule = typeData.resultOverideModuleMS;
-    object.MSC.resultOverideModule = typeData.resultOverideModuleMSC;
+    object.M.resultModule = moduleReturn(returnModule, typeData.resultModule);
+    object.MS.resultModule = moduleReturn(returnModule, typeData.resultModuleMS);
+    object.MSC.resultModule = moduleReturn(returnModule, typeData.resultModuleMSC);
+    object.M.resultOverideModule = moduleReturn(returnModule, typeData.resultOverideModule);
+    object.MS.resultOverideModule = moduleReturn(returnModule, typeData.resultOverideModuleMS);
+    object.MSC.resultOverideModule = moduleReturn(returnModule, typeData.resultOverideModuleMSC);
     object.M.resultBase = typeData.resultBase;
     object.MS.resultBase = typeData.resultBaseMS;
     object.MSC.resultBase = typeData.resultBaseMSC;
-    object.M.resultOverideBase = typeData.resultOverideBase;
-    object.MS.resultOverideBase = typeData.resultOverideBaseMS;
-    object.MSC.resultOverideBase = typeData.resultOverideBaseMSC;
+    object.M.resultOverideBase = moduleReturn(returnModule, typeData.resultOverideBase);
+    object.MS.resultOverideBase = moduleReturn(returnModule, typeData.resultOverideBaseMS);
+    object.MSC.resultOverideBase = moduleReturn(returnModule, typeData.resultOverideBaseMSC);
     object.M.baseValue = baseValue?.resultValueBase;
-    object.M.moduleValue = moduleValues?.resultValueModule;
+    object.M.moduleValue = moduleReturn(returnModule, moduleValues?.resultValueModule);
     object.MS.baseValue = baseValue?.resultValueMSBase;
-    object.MS.moduleValue = moduleValues?.resultValueMSModule;
+    object.MS.moduleValue = moduleReturn(returnModule, moduleValues?.resultValueMSModule);
     object.MSC.baseValue = baseValue?.resultValueMSCBase;
-    object.MSC.moduleValue = moduleValues?.resultValueMSCModule;
+    object.MSC.moduleValue = moduleReturn(returnModule, moduleValues?.resultValueMSCModule);
   }
   return object;
+}
+
+const moduleReturn = (returnModule: boolean, value: any) => {
+  return returnModule ? null : value;
 }
 
 export const checkConditionAndGenerateValue = (calculatedValue: number, hourlyRate: number, hoursPerDay: number, condition: boolean) => {
