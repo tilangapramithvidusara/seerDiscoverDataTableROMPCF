@@ -290,8 +290,6 @@ tr:nth-child(even) {
  margin-top: 0;
  margin-bottom: 5px;
  font-weight: 700;
- font-family: 'Roboto', sans-serif !important;
-
 }
 
 .MuiDrawer-modal .drawer-heading .sub-title{
@@ -311,3 +309,8 @@ tr:nth-child(even) {
 .MuiDrawer-modal table th, .MuiDrawer-modal table td {
   border-bottom:1px solid #AAA6A6;
 }
+
+.MuiDrawer-modal th, .MuiDrawer-modal td {
+  padding: 8px 15px !important;
+}
+
