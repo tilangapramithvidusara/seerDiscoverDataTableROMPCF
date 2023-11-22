@@ -100,10 +100,6 @@ tr:nth-child(even) {
 
 .seerDiscoverROM  .toggle-btn {
   height: 20px;
-<<<<<<< HEAD
-  font-size:12px;
-  padding: 10px 12px;
-=======
   /* 32px; */
   font-size:12px;
   /* 13px; */
@@ -111,7 +107,6 @@ tr:nth-child(even) {
   /* 7px 12px; */
   color: #C1BDBD;
   background-color: transparent !important;
->>>>>>> dev
   border-color: #C1BDBD !important;
   text-transform: capitalize;
 }
@@ -220,16 +215,11 @@ tr:nth-child(even) {
 
 .seerDiscoverROM .btn-blue-outline {
   height: 20px;
-<<<<<<< HEAD
-  font-size:12px;
-  padding: 10px 12px;
-=======
   /* 35px; */
   font-size:12px;
   /* 13px; */
   padding: 10px 12px;
   /* 7px 12px; */
->>>>>>> dev
   color: #0E94FD;
   background-color: transparent !important;
   border: 0.5px solid#0E94FD !important;
@@ -240,17 +230,12 @@ tr:nth-child(even) {
 
 .seerDiscoverROM  .btn-primary {
   height: 20px;
-<<<<<<< HEAD
-  font-size:12px;
-  padding: 10px 12px;
-=======
   /* 35px; */
   font-size:12px;
   /* 13px; */
   padding: 10px 12px;
   /* 7px 12px; */
->>>>>>> dev
-  color: #ffffff;
+  color: #ffffff !important;
   background-color: #0E94FD !important;
   border: 1px solid#0E94FD !important;
   box-shadow: none !important;
