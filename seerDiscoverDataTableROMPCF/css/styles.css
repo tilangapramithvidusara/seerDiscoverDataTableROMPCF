@@ -99,11 +99,9 @@ tr:nth-child(even) {
 }
 
 .seerDiscoverROM  .toggle-btn {
-  height: 32px;
-  font-size:13px;
-  padding: 7px 12px;
-  color: #C1BDBD;
-  background-color: transparent !important;
+  height: 20px;
+  font-size:12px;
+  padding: 10px 12px;
   border-color: #C1BDBD !important;
   text-transform: capitalize;
 }
@@ -133,8 +131,8 @@ tr:nth-child(even) {
 
 .seerDiscoverROM  .dropdown {
   border: 1px solid rgb(216, 216, 216) !important;
-  height: 35px;
-  font-size: 13px;
+  height: 20px;
+  font-size: 12px;
   text-transform: capitalize;
 }
 
@@ -159,6 +157,10 @@ tr:nth-child(even) {
   margin-bottom: 0;
 }
 
+.seerDiscoverROM .ant-tabs-nav {
+  font-size: 13px;
+}
+
 .seerDiscoverROM .text-right {
   text-align: right;
 }
@@ -171,7 +173,7 @@ tr:nth-child(even) {
 
 .seerDiscoverROM .MuiAlert-message {
   padding: 0 !important;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .seerDiscoverROM .ptb-10 {
@@ -195,9 +197,9 @@ tr:nth-child(even) {
 }
 
 .seerDiscoverROM .btn-gray-outline {
-  height: 35px;
-  font-size:13px;
-  padding: 7px 12px;
+  height: 20px;
+  font-size:12px;
+  padding: 10px 12px;
   color: #C1BDBD;
   background-color: transparent !important;
   border: 0.5px solid#C1BDBD !important;
@@ -207,9 +209,9 @@ tr:nth-child(even) {
 
 
 .seerDiscoverROM .btn-blue-outline {
-  height: 35px;
-  font-size:13px;
-  padding: 7px 12px;
+  height: 20px;
+  font-size:12px;
+  padding: 10px 12px;
   color: #0E94FD;
   background-color: transparent !important;
   border: 0.5px solid#0E94FD !important;
@@ -219,9 +221,9 @@ tr:nth-child(even) {
 
 
 .seerDiscoverROM  .btn-primary {
-  height: 35px;
-  font-size:13px;
-  padding: 7px 12px;
+  height: 20px;
+  font-size:12px;
+  padding: 10px 12px;
   color: #ffffff;
   background-color: #0E94FD !important;
   border: 1px solid#0E94FD !important;
@@ -241,6 +243,15 @@ tr:nth-child(even) {
   height: 20px;
   color: #C1BDBD;
   margin-right: 2px;
+}
+
+.seerDiscoverROM .MuiChip-deletable {
+  height: 25px;
+}
+
+.seerDiscoverROM .MuiChip-deleteIcon {
+  font-size: 15px !important;
+  color: #ffffff !important;
 }
 
 .seerDiscoverROM .hightlighted-row {
