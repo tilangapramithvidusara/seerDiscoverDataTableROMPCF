@@ -16,19 +16,19 @@ export const commonSidePaneLogic = (selectorForSidePane: any, columnValue: any) 
         const uniqueData_resultOverideBase = resultOverideBase;
         const resultOverideModule = uniqueData_resultOverideModule?.map((x: any) => {
             return {
-                name: `${x?.moduleSeerModuleName}`,
-                value: "",
-                align: "right"
+                name: "         " + `${x?.moduleSeerModuleName}`,
+                value: ""
             }
         });
-        return [
-                { name: "Module Estimate value", value: baseValue, rowColor: "#E0E0E0" , align: "left"},
-                { name: "Number of Modules", value: uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length, rowColor: "#E0E0E0" , align: "left"},
-                { name: "Module Overrides", rowColor: "#E0E0E0" },
-                ...resultOverideModule,
-                { name: "Requirements Estimate value", value: moduleValue, rowColor:"#E0E0E0" , align: "left"},
-                { name: "Number of Requirements", value: uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length , rowColor: "#E0E0E0" , align: "left"  },
-                { name: "Number of Requirement overrides", value: uniqueData_resultOverideBase?.length , rowColor: "#E0E0E0", align: "left"  },
-            ]
+        const rowsArray = []
+        if (baseValue) rowsArray.push({ name: "Module Estimate value", value: baseValue, rowColor: "#E0E0E0", align: "left" });
+        if ((uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length)) rowsArray.push({ name: "Number of Modules", value: uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length, rowColor: "#E0E0E0", align: "left" });
+        if (resultOverideModule?.length) rowsArray.push({ name: "Module Overrides", rowColor: "#E0E0E0" });
+        if (resultOverideModule?.length) rowsArray.push(...resultOverideModule);
+        if (moduleValue) rowsArray.push({ name: "Requirements Estimate value", value: moduleValue, rowColor:"#E0E0E0" , align: "left"});
+        if ((uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length)) rowsArray.push({ name: "Number of Requirements", value: uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length , rowColor: "#E0E0E0" , align: "left"  });
+        if (uniqueData_resultOverideBase?.length) rowsArray.push({ name: "Number of Requirement overrides", value: uniqueData_resultOverideBase?.length , rowColor: "#E0E0E0", align: "left"  });
+
+        return rowsArray
     }
 }

@@ -85,7 +85,7 @@ export default function SwipeableTemporaryDrawer({
 
   const list = (anchor: Anchor) => (
     <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 500 }}
+      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 450 }}
       // sx={{ width: '650' }}
 
       role="presentation"
@@ -113,10 +113,10 @@ export default function SwipeableTemporaryDrawer({
             <TableRow
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              style={{ backgroundColor: row?.rowColor }}
+              style={{ backgroundColor: row?.rowColor, height: "9px" }}
               onClick={(e) => onClickTableRow(e)}
             >
-              <TableCell component="th" scope="row">
+              <TableCell component="th" scope="row" align={ row.align ? row?.align : "left"}>
                 {row.name}
               </TableCell>
               <TableCell align={ row.align ? row?.align : "right"}>{row.value}</TableCell>
