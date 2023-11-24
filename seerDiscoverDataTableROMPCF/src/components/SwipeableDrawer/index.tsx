@@ -41,7 +41,7 @@ export default function SwipeableTemporaryDrawer({
   const [sidePaneTitle, setSidePaneTitle] = React.useState<any>();
 
   const [tabledata, setTableData] = React.useState<any>([
-    { name: 'No Data' },
+    { name: '' },
 ]);
   
   React.useEffect(() => {
