@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Project containing your PowerApps Component Framework (PCF) control.",
   "scripts": {
+    "postinstall": "patch-package",
     "build": "pcf-scripts build",
     "clean": "pcf-scripts clean",
     "lint": "pcf-scripts lint",
@@ -13,12 +14,14 @@
     "refreshTypes": "pcf-scripts refreshTypes"
   },
   "dependencies": {
+    "@mui/icons-material": "^5.14.18",
     "@mui/material": "^5.14.6",
     "@reduxjs/toolkit": "^1.9.7",
     "@types/to-json-schema": "^0.2.1",
     "antd": "^5.8.4",
     "axios": "^1.5.1",
-    "material-react-table": "^1.14.0",
+    "material-react-table": "^1.15.1",
+    "patch-package": "^8.0.0",
     "react-dom": "^17.0.2",
     "react-highlight-words": "^0.20.0",
     "react-paginate": "^8.2.0",

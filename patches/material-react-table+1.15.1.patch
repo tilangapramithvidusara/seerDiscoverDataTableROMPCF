@@ -1,0 +1,13 @@
+diff --git a/node_modules/material-react-table/dist/index.d.ts b/node_modules/material-react-table/dist/index.d.ts
+index 44cfc2e..9a36129 100644
+--- a/node_modules/material-react-table/dist/index.d.ts
++++ b/node_modules/material-react-table/dist/index.d.ts
+@@ -618,7 +618,7 @@ type MaterialReactTableProps<TData extends Record<string, any> = {}> = Omit<Part
+     /**
+      * Changes which kind of CSS layout is used to render the table. `semantic` uses default semantic HTML elements, while `grid` adds CSS grid and flexbox styles
+      */
+-    layoutMode?: 'semantic' | 'grid';
++    layoutMode?: 'semantic' | 'grid' | 'grid-no-grow';
+     /**
+      * Pass in either a locale imported from `material-react-table/locales/*` or a custom locale object.
+      *
