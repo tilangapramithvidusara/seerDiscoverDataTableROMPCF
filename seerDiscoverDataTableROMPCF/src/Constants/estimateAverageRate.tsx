@@ -14,12 +14,17 @@ export const columnDetails = [
     header: 'Category',
     accessorKey: 'nameCategory',
     enableGrouping: true,
+
   },
   {
     header: 'Name',
     accessorKey: 'name',
+    width: 5000,
+    size: 5000,
   },
   {
+    width: 500,
+    size: 500,
     header: 'M',
     accessorKey: 'M',
     isCalcultionEnabled: true,

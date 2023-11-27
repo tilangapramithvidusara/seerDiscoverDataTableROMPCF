@@ -25,12 +25,13 @@ import {
 import SwipeableTemporaryDrawer from '../SwipeableDrawer';
 import { dayHoursText, defaultText } from '../../Constants';
 import { columnRequirementData } from '../../Constants/requirementsData';
+import { columnCustomisationData } from '../../Constants/cutomisationData';
 
 const buttonTitles= [
     {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
   ]
 
-const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: string}) => {
+const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: string}) => {  
   const dispatch = useDispatch();
   const [isOpenSideDrawer, setIsOpenSideDrawer] = React.useState<boolean>(false);
   const [selectedRow, setSelectedRow] = React.useState();
@@ -94,7 +95,8 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
 
   const columnCreator = () => {
     
-    const columnCreator = (type == 'RequirementData') ? columnRequirementData : (type === 'Estimate Average Rate' && tableMode == defaultText) ? columnDetails : 
+    const columnCreator = (type == 'CustomisationData') ? columnCustomisationData : 
+      (type == 'RequirementData') ? columnRequirementData : (type === 'Estimate Average Rate' && tableMode == defaultText) ? columnDetails : 
       (type === 'Estimate Average Rate' && tableMode == dayHoursText) ? columnDetailsHOURS : 
       (type === 'Estimate Average Rate Milestone' && tableMode == defaultText) ? columnDetails :
       (type === 'Estimate Average Rate Milestone' && tableMode == dayHoursText) ? columnDetailsHOURS :
@@ -105,14 +107,14 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
       (resourceType === 'Must Should Could' && tableMode == defaultText) ? estimateResourceMustShouldCouldColumnDetails :
       (resourceType === 'Must Should Could' && tableMode == dayHoursText) ? estimateResourceMustShouldCouldColumnDetailsHours : 
       columnDetails;
-
+    
     setColumnSet(columnCreator);
   }
 
-  React.useEffect(() => {    
+  React.useEffect(() => {      
     columnCreator();
   }, [resourceType, type, tableMode]) // resourceType
-
+  
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => columnFixed(columnsSet, data, currency),
     [columnsSet],
@@ -131,7 +133,7 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
           </div>
         </>
       )} */}
-        {type != 'RequirementData' && (
+        {type != 'RequirementData' && type != 'CustomisationData' && (
           <div>
             <div className='flex-wrap ptb-10 custom-toggle-button'>
               <div className='text-left'>
@@ -173,14 +175,15 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
           <MaterialReactTable
             columns={columns}
             data={data}
-            enableColumnResizing
-            enableGrouping={type != 'RequirementData' ? true : false}
+            enableColumnResizing={true}
+            // layoutMode= 'grid'
+            enableGrouping={(type != 'RequirementData' && type != 'CustomisationData') ? true : false}
             enableStickyHeader
             enableStickyFooter
             initialState={{
               density: 'compact',
               expanded: true, //expand all groups by default   'M', "M/S", "M/S/C", 
-              grouping: type != 'RequirementData' ? ['nameCategory'] : [], //an array of columns to group by by default (can be multiple)
+              // grouping: (type != 'RequirementData' && type != 'CustomisationData') ? ['nameCategory'] : [], //an array of columns to group by by default (can be multiple)
               pagination: { pageIndex: 0, pageSize: 100 },
               // sorting: [{ id: 'state', desc: false }, { id: 'state', desc: false }], //sort by state by default
             }}
@@ -213,23 +216,23 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
                 // height: row.original.nameCategory == 'Project Manager' ? 0 : 10,
                 // lineHeight: row.original.nameCategory == 'Project Manager' ? 0 : 'normal',
                 visibility: 
-                  ((row.original.nameCategory == 'Project Manager' && !row.getIsGrouped()) || 
-                  (row.original.nameCategory == 'Sub Total' && !row.getIsGrouped()) ||
-                  (row.original.nameCategory == 'Project Risk' && !row.getIsGrouped()))
+                  ((row?.original?.nameCategory == 'Project Manager' && !row.getIsGrouped()) || 
+                  (row?.original?.nameCategory == 'Sub Total' && !row.getIsGrouped()) ||
+                  (row?.original?.nameCategory == 'Project Risk' && !row.getIsGrouped()))
                   ? 'collapse' : 'visible', // hidden
                 // emptyCells: row.original.nameCategory == 'Project Manager' ? 'hide' : 'show',
                 // visibility: row.original.nameCategory == 'Project Manager' ? false : true,
                 cursor: 'pointer', //you might want to change the cursor too when adding an onClick
                 backgroundColor: 
                   (
-                    row.original.nameCategory == 'Project Risk' && row.getIsGrouped() 
+                    row?.original?.nameCategory == 'Project Risk' && row.getIsGrouped() 
                   // || 
                   // row.original.nameCategory == 'OPERATION' || 
                   // row.original.nameCategory == 'Project Risk' || 
                   // row.original.nameCategory == 'Project Manager' ||
                   // row.original.nameCategory == 'Sub Total'
                   )
-                  ? "#FFD042" : row.original.nameCategory == 'Sub Total' && row.getIsGrouped() ? '#0E94FD' : (!row.getIsGrouped() && row.original.name == '') ? '#E6E2E1' : row.getIsGrouped() ? '#C1BDBD' : 'white',
+                  ? "#FFD042" : row?.original?.nameCategory == 'Sub Total' && row.getIsGrouped() ? '#0E94FD' : (!row.getIsGrouped() && row.original.name == '') ? '#E6E2E1' : row.getIsGrouped() ? '#C1BDBD' : 'white',
                   
               },
               

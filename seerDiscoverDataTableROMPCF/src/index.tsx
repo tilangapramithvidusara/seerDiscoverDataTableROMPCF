@@ -22,6 +22,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   const [dataEstimateAverageRateMilestone, setDataEstimateAverageRateMilestone] = React.useState<any[]>([])
   const [dataEstimateResourceMilestone, setDataEstimateResourceMilestone] = React.useState<any []>([]);
   const [requirementData, setRequirementData] = React.useState([])
+  const [customisationData, setCustomisationData] = React.useState([]);
   React.useEffect(() => {
     initialTriggerHandler();
   }, []);
@@ -45,8 +46,12 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     setIsloading(true)
     
     const requirment: any = dataMapper(data?.OutputData);
+    const customisation: any = dataMapper(data?.CustomisationModels, 'customisation');
     if (requirment?.length)
       setRequirementData(requirment);
+    if (customisation?.length) {
+      setCustomisationData(customisation)
+    }
     arrayGenerator(data, dispatch)
       .then(async(result: any) => {
         // Handle the result here
@@ -108,6 +113,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
           dataEstimateAverageRateMilestone={dataEstimateAverageRateMilestone}
           dataEstimateResourceMilestone={dataEstimateResourceMilestone}
           requirementData={requirementData}
+          customisationData={customisationData}
         />}
       {/* <TabComponent dataSet={dataSet} isRefreshing={loading || isLoading}/> */}
     </div>

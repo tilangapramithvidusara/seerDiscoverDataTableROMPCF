@@ -23,8 +23,20 @@ import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 
 
 const App = ({
-  dataSet, onRefreshHandler, isRefreshing, dataSetEstimateResource, dataEstimateAverageRateMilestone, dataEstimateResourceMilestone, requirementData,
-}: {dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, dataSetEstimateResource: any, dataEstimateAverageRateMilestone: any, dataEstimateResourceMilestone: any, requirementData: any}) => { 
+  dataSet, onRefreshHandler, isRefreshing, 
+  dataSetEstimateResource, 
+  dataEstimateAverageRateMilestone, 
+  dataEstimateResourceMilestone, 
+  requirementData,
+  customisationData,
+}: {
+  dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, 
+  dataSetEstimateResource: any, 
+  dataEstimateAverageRateMilestone: any, 
+  dataEstimateResourceMilestone: any, 
+  requirementData: any,
+  customisationData: any,
+}) => { 
 
   const items: TabsProps['items'] = [
     {
@@ -60,11 +72,11 @@ const App = ({
       label: 'Requirement',
       children: <AdvancedTable data={requirementData} type={'RequirementData'} isLoading={isRefreshing}/>,
     },
-    // {
-    //   key: '6',
-    //   label: 'Project Margin',
-    //   children: <ProjectMargin/>,
-    // },
+    {
+      key: '6',
+      label: 'Customisation',
+      children: <AdvancedTable data={customisationData} type={'CustomisationData'} isLoading={isRefreshing}/>,
+    },
     // {
     //   key: '7',
     //   label: 'Governance',
