@@ -314,15 +314,6 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any) => {
     (dataEstimateAverageRateMilestone[29] as any)['M/S'] = subTotalMSEstimateDesignAvgRateMilestone;
     (dataEstimateAverageRateMilestone[29] as any)['M/S/C'] = subTotalMSCEstimateDesignAvgRateMilestone;
 
-    // fColmnValueEstimateAveRate
-    (data[23] as any).M = subTotalMAnalysisDesign * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-    (data[23] as any)['M/S'] = subTotalMSAnalysisDesign * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-    (data[23] as any)['M/S/C'] = subTotalMSCAnalysisDesign * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-    (dataEstimateAverageRateMilestone[30] as any).M = subTotalMEstimateDesignAvgRateMilestone * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-    (dataEstimateAverageRateMilestone[30] as any)['M/S'] = subTotalMSEstimateDesignAvgRateMilestone * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-    (dataEstimateAverageRateMilestone[30] as any)['M/S/C'] = subTotalMSCEstimateDesignAvgRateMilestone * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-
-
     const responsePojectManagement = await generateProjectManagerMValue(initialDataSet, {
       responseSubtotal: {
         subTotalMAnalysisDesign,
@@ -334,6 +325,15 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any) => {
     (data[22] as any).M = responsePojectManagement?.projectManager?.resultValue;
     (data[22] as any)['M/S'] = responsePojectManagement?.projectManager?.resultValueMS;
     (data[22] as any)['M/S/C'] = responsePojectManagement?.projectManager?.resultValueMSC;
+
+    // fColmnValueEstimateAveRate
+    (data[23] as any).M = (subTotalMAnalysisDesign + responsePojectManagement?.projectManager?.resultValue) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+    (data[23] as any)['M/S'] = (subTotalMSAnalysisDesign + responsePojectManagement?.projectManager?.resultValueMS) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+    (data[23] as any)['M/S/C'] = (subTotalMSCAnalysisDesign + responsePojectManagement?.projectManager?.resultValueMSC) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+    (dataEstimateAverageRateMilestone[30] as any).M = subTotalMEstimateDesignAvgRateMilestone * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+    (dataEstimateAverageRateMilestone[30] as any)['M/S'] = subTotalMSEstimateDesignAvgRateMilestone * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+    (dataEstimateAverageRateMilestone[30] as any)['M/S/C'] = subTotalMSCEstimateDesignAvgRateMilestone * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+
 
     // const resultValueProjectManagerEstimateResource = generateEstimateResourceValue(
     //   inititlaData, {
@@ -988,15 +988,15 @@ const generateEstimateResource = async(dataEstimateResource: any, analisisAndDes
   dataEstimateResource[22]['M/S_Resource_Total'] = analisisAndDesignCalculation?.projectManager?.['M/S_Resource_Total'] || 0;
   dataEstimateResource[22]['M/S/C_Resource_Total'] = analisisAndDesignCalculation?.projectManager?.['M/S/C_Resource_Total'] || 0;
 
-  (dataEstimateResource[23] as any)['M_Resource1'] = dataEstimateResource[21]['M_Resource1'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M_Resource2'] = dataEstimateResource[21]['M_Resource2'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M/S_Resource1'] = dataEstimateResource[21]['M/S_Resource1'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M/S_Resource2'] = dataEstimateResource[21]['M/S_Resource2'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M/S/C_Resource1'] = dataEstimateResource[21]['M/S/C_Resource1'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M/S/C_Resource2'] = dataEstimateResource[21]['M/S/C_Resource2'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M_Resource_Total'] = dataEstimateResource[21]['M_Resource_Total'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M/S_Resource_Total'] = dataEstimateResource[21]['M/S_Resource_Total'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M/S/C_Resource_Total'] = dataEstimateResource[21]['M/S/C_Resource_Total'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M_Resource1'] = (dataEstimateResource[21]['M_Resource1'] + dataEstimateResource[22]['M_Resource1']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M_Resource2'] = (dataEstimateResource[21]['M_Resource2'] + dataEstimateResource[22]['M_Resource2']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M/S_Resource1'] = (dataEstimateResource[21]['M/S_Resource1'] + dataEstimateResource[22]['M/S_Resource1']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M/S_Resource2'] = (dataEstimateResource[21]['M/S_Resource2'] + dataEstimateResource[22]['M/S_Resource2']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M/S/C_Resource1'] = (dataEstimateResource[21]['M/S/C_Resource1'] + dataEstimateResource[22]['M/S/C_Resource1']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M/S/C_Resource2'] = (dataEstimateResource[21]['M/S/C_Resource2'] + dataEstimateResource[22]['M/S/C_Resource2']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M_Resource_Total'] = (dataEstimateResource[21]['M_Resource_Total'] + dataEstimateResource[22]['M_Resource_Total']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M/S_Resource_Total'] = (dataEstimateResource[21]['M/S_Resource_Total'] + dataEstimateResource[22]['M/S_Resource_Total']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M/S/C_Resource_Total'] = (dataEstimateResource[21]['M/S/C_Resource_Total'] + dataEstimateResource[22]['M/S/C_Resource_Total']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
   await Promise.all(dataEstimateResource);
   return dataEstimateResource;
     /////////////////// ESTIMATE RESOURCE - END ///////////////////
@@ -1269,15 +1269,15 @@ const generateEstimateResourceSub = async(dataEstimateResource: any, analisisAnd
   dataEstimateResource[22]['M/S_Resource_Total_H'] = responseSubtotal?.projectMangerSubValues?.['M/S_Resource_Total_Sub'] || 0;
   dataEstimateResource[22]['M/S/C_Resource_Total_H'] = responseSubtotal?.projectMangerSubValues?.['M/S/C_Resource_Total_Sub'] || 0;
 
-  (dataEstimateResource[23] as any)['M_Resource1_H'] = dataEstimateResource[21]['M_Resource1_H'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M_Resource2_H'] = dataEstimateResource[21]['M_Resource2_H'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M/S_Resource1_H'] = dataEstimateResource[21]['M/S_Resource1_H'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M/S_Resource2_H'] = dataEstimateResource[21]['M/S_Resource2_H'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M/S/C_Resource1_H'] = dataEstimateResource[21]['M/S/C_Resource1_H'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M/S/C_Resource2_H'] = dataEstimateResource[21]['M/S/C_Resource2_H'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M_Resource_Total_H'] = dataEstimateResource[21]['M_Resource_Total_H'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M/S_Resource_Total_H'] = dataEstimateResource[21]['M/S_Resource_Total_H'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
-  (dataEstimateResource[23] as any)['M/S/C_Resource_Total_H'] = dataEstimateResource[21]['M/S/C_Resource_Total_H'] * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M_Resource1_H'] = (dataEstimateResource[21]['M_Resource1_H'] + dataEstimateResource[22]['M_Resource1_H']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M_Resource2_H'] = (dataEstimateResource[21]['M_Resource2_H'] + dataEstimateResource[22]['M_Resource2_H']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M/S_Resource1_H'] = (dataEstimateResource[21]['M/S_Resource1_H'] + dataEstimateResource[22]['M/S_Resource1_H']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M/S_Resource2_H'] = (dataEstimateResource[21]['M/S_Resource2_H'] + dataEstimateResource[22]['M/S_Resource2_H']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M/S/C_Resource1_H'] = (dataEstimateResource[21]['M/S/C_Resource1_H'] + dataEstimateResource[22]['M/S/C_Resource1_H']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M/S/C_Resource2_H'] = (dataEstimateResource[21]['M/S/C_Resource2_H'] + dataEstimateResource[22]['M/S/C_Resource2_H']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M_Resource_Total_H'] = (dataEstimateResource[21]['M_Resource_Total_H'] + dataEstimateResource[22]['M_Resource_Total_H']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M/S_Resource_Total_H'] = (dataEstimateResource[21]['M/S_Resource_Total_H'] + dataEstimateResource[22]['M/S_Resource_Total_H']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
+  (dataEstimateResource[23] as any)['M/S/C_Resource_Total_H'] = (dataEstimateResource[21]['M/S/C_Resource_Total_H'] + dataEstimateResource[22]['M/S/C_Resource_Total_H']) * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
   await Promise.all(dataEstimateResource);
   return dataEstimateResource;
 }
