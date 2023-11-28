@@ -14,17 +14,12 @@ export const columnDetails = [
     header: 'Category',
     accessorKey: 'nameCategory',
     enableGrouping: true,
-
   },
   {
     header: 'Name',
     accessorKey: 'name',
-    width: 5000,
-    size: 5000,
   },
   {
-    width: 500,
-    size: 500,
     header: 'M',
     accessorKey: 'M',
     isCalcultionEnabled: true,
@@ -140,6 +135,7 @@ export const data: any[] = [
     'M/S/C': 0,
     'M/S/C_H': 0,
     type: 'Estimate Avg Rate',
+    isClickable: true,
   },
   {
     "nameCategory": "ANALYSIS & DESIGN",
@@ -200,6 +196,7 @@ export const data: any[] = [
     'M/S/C': 0,
     'M/S/C_H': 0,
     type: 'Estimate Avg Rate',
+    isClickable: true,
   },
   {
     "nameCategory": "BUILD",

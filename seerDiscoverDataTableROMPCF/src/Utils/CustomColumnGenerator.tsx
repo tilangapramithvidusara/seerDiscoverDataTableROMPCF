@@ -1,4 +1,5 @@
 import { Box, Stack } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 import { MRT_ColumnDef, MRT_AggregationOption } from 'material-react-table';
 import * as React from 'react'
 import { useSelector } from 'react-redux';
@@ -49,13 +50,14 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
       // (data && data?.length && data[0].type == "Estimate Resource") ? total - data : total
       return total;
     }
-  const arrayValue = columnArray.length && columnArray.map((columnItem: any, index: number) => {
+  const arrayValue = columnArray.length && columnArray.map((columnItem: any, index: number) => {    
     let itemObjec = {
       header: columnItem?.header,
       accessorKey: columnItem?.accessorKey,
       enableGrouping: columnItem?.enableGrouping ? true : false,
       
       Cell: columnItem?.isCalcultionEnabled ? ({ cell }: { cell: any }) => {
+        const clickable = (cell?.row?.original?.isClickable && cell?.row?.original?.type == 'Estimate Avg Rate') ? true : false;
         
         if (cell?.row?._valuesCache?.nameCategory == "Project Risk" ||
         cell?.row?._valuesCache?.nameCategory == "Project Manager" || 
@@ -74,16 +76,25 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
                   })}
                 </>
               )
-            } else {
+            } else {//isClickable
               return(
-                <>
+                <Box sx={{flexDirection: 'row', position: 'relative' }}>
                   {cell.getValue()?.toLocaleString?.('en-US', {
                     style: 'currency',
                     currency: cell?.column?.id?.includes('_H') ? '' : (currency || 'GBP'),
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
-                </>
+                  {clickable && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '1px', // Adjust the top position as needed
+                      right: '5px', // Adjust the right position as needed
+                    }}>
+                      <InfoIcon fontSize="small" />
+                    </div>
+                  )}
+                </Box>
               )
             }
           }
@@ -91,7 +102,7 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
       } : null,
       aggregationFn: columnItem?.aggregationFn ? columnItem?.aggregationFn : null,
       AggregatedCell: columnItem?.aggregationFn ? ({ cell, table }: { cell: any, table: any }) => {
-
+        const clickable = cell?.row?._valuesCache?.name == 'Analysis and Design';        
         // if (columnItem?.isCalcultionEnabled) {
           if (cell?.column?.id?.includes('_H')) {
             return(

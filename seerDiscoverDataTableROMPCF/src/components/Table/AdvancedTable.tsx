@@ -170,20 +170,24 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
             </div>
           </div>
         )}
-        
-        <div>
+        <div style={{ flexGrow: 0 }}>
           <MaterialReactTable
             columns={columns}
             data={data}
+            // defaultColumn ={{
+            //   maxSize: 400,
+            //   minSize: 80,
+            //   size: 345, //default size is usually 180
+            // }}
             enableColumnResizing={true}
-            // layoutMode= 'grid'
+            layoutMode= 'grid-no-grow'
             enableGrouping={(type != 'RequirementData' && type != 'CustomisationData') ? true : false}
             enableStickyHeader
             enableStickyFooter
             initialState={{
               density: 'compact',
               expanded: true, //expand all groups by default   'M', "M/S", "M/S/C", 
-              // grouping: (type != 'RequirementData' && type != 'CustomisationData') ? ['nameCategory'] : [], //an array of columns to group by by default (can be multiple)
+              grouping: (type != 'RequirementData' && type != 'CustomisationData') ? ['nameCategory'] : [], //an array of columns to group by by default (can be multiple)
               pagination: { pageIndex: 0, pageSize: 100 },
               // sorting: [{ id: 'state', desc: false }, { id: 'state', desc: false }], //sort by state by default
             }}
@@ -194,7 +198,6 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
             muiTableFooterProps={{
               title: 'Total',
               color: 'white',
-              
             }}
             // muiTableFooterRowProps={{
             //   // title: 'Total',
@@ -202,7 +205,6 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
             // }}
             muiTableBodyRowProps={({ row }: {row: any}) => {
               return({
-              
               onClick: (event) => {
                 // openSidePane('', row.id, row?.original, false);
                 setSelectedRow(row)
