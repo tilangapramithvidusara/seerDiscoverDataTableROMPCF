@@ -119,7 +119,8 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
     () => columnFixed(columnsSet, data, currency),
     [columnsSet],
   );//columnsSet
-
+  console.log('llop', columns);
+  
   return (
     <>
       {/* {
@@ -171,14 +172,18 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
           </div>
         )}
         <div style={{ flexGrow: 0 }}>
-          <MaterialReactTable
-            columns={columns}
+          {columns?.length ? (
+            <MaterialReactTable
+            columns={
+              columns
+            }
             data={data}
             // defaultColumn ={{
             //   maxSize: 400,
             //   minSize: 80,
             //   size: 345, //default size is usually 180
             // }}
+            columnResizeMode={'onEnd'}
             enableColumnResizing={true}
             layoutMode= 'grid-no-grow'
             enableGrouping={(type != 'RequirementData' && type != 'CustomisationData') ? true : false}
@@ -261,6 +266,15 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
               },
             })}
           />
+          ) : (
+            <>
+          <div className="blur-background"></div>
+          <div className="loader-container">
+            <Loader />
+          </div>
+        </>
+          )}
+          
         </div>
     </>
   );

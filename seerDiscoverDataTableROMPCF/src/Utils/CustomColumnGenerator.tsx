@@ -1,5 +1,6 @@
 import { Box, Stack } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
+import { green } from '@mui/material/colors';
 import { MRT_ColumnDef, MRT_AggregationOption } from 'material-react-table';
 import * as React from 'react'
 import { useSelector } from 'react-redux';
@@ -55,6 +56,7 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
       header: columnItem?.header,
       accessorKey: columnItem?.accessorKey,
       enableGrouping: columnItem?.enableGrouping ? true : false,
+      size: columnItem?.size || undefined,
       
       Cell: columnItem?.isCalcultionEnabled ? ({ cell }: { cell: any }) => {
         const clickable = (cell?.row?.original?.isClickable && cell?.row?.original?.type == 'Estimate Avg Rate') ? true : false;
@@ -88,10 +90,15 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
                   {clickable && (
                     <div style={{
                       position: 'absolute',
-                      top: '1px', // Adjust the top position as needed
-                      right: '5px', // Adjust the right position as needed
+                      top: '0px', // Adjust the top position as needed
+                      right: '20px', // Adjust the right position as needed
+                      width: '5px',
+                      height: '5px'
                     }}>
-                      <InfoIcon fontSize="small" />
+                      <InfoIcon 
+                      sx={{ fontSize: 10, color: green[500] }}
+                      // fontSize="small" 
+                      />
                     </div>
                   )}
                 </Box>
