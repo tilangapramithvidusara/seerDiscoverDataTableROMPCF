@@ -5,10 +5,12 @@ export const columnRequirementData = [
     header: 'ID',
     accessorKey: 'seer_requirementid.value',
     // enableGrouping: true,
+    size: 80,
   },
   {
     header: 'Requirement',
     accessorKey: 'seer_Requirement.name',
+    size: 270,
   },
   {
     header: 'Module',
@@ -25,10 +27,12 @@ export const columnRequirementData = [
     //   }
     //   return rowData.value;
     // },
+    size: 250,
   },
   {
     header: 'MoSCoW',
     accessorKey: 'seer_Moscow',
+    size: 60,
     // isCalcultionEnabled: true,
     // aggregationFn: 'sum',
     // showBottomTotal: true,
@@ -36,6 +40,7 @@ export const columnRequirementData = [
   {
     header: 'FitGap',
     accessorKey: 'seer_FitGap',
+    size: 60,
     // isCalcultionEnabled: true,
     // aggregationFn: 'sum',
     // showBottomTotal: true,
@@ -43,6 +48,7 @@ export const columnRequirementData = [
   {
     header: 'Complexity',
     accessorKey: 'seer_Complexity',
+    size: 60,
     // isCalcultionEnabled: true,
     // aggregationFn: 'sum',
     // showBottomTotal: true,
@@ -50,6 +56,7 @@ export const columnRequirementData = [
   {
     header: 'Design',
     accessorKey: 'seer_EstimateDesign',
+    size: 60,
     // isCalcultionEnabled: true,
     // aggregationFn: 'sum',
     // showBottomTotal: true,
@@ -57,6 +64,7 @@ export const columnRequirementData = [
   {
     header: 'Build',
     accessorKey: 'seer_Estimatebuild',
+    size: 60,
     // isCalcultionEnabled: true,
     // aggregationFn: 'sum',
     // showBottomTotal: true,
@@ -64,6 +72,7 @@ export const columnRequirementData = [
   {
     header: 'Quantity',
     accessorKey: 'seer_Quantity',
+    size: 60,
     // isCalcultionEnabled: true,
     // aggregationFn: 'sum',
     // showBottomTotal: true,

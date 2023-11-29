@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import { removeDuplicates } from "../../../../commonFunc.utils";
 
 export const commonSidePaneLogic = (selectorForSidePane: any, columnValue: any) => {
@@ -22,7 +23,7 @@ export const commonSidePaneLogic = (selectorForSidePane: any, columnValue: any) 
             totalResultOverideModuleFor_M_MS_MSC = [...totalResultOverideModuleFor_M_MS_MSC, ...uniqueresultOverideModule]
         
         if (datatoShow[type]?.resultBase?.length)
-            totalResultBaseFor_M_MS_MSC = [...totalResultBaseFor_M_MS_MSC, ...datatoShow[type]?.resultBase]
+            totalResultBaseFor_M_MS_MSC = [...totalResultBaseFor_M_MS_MSC,  ...datatoShow[type]?.resultBase]
 
         if (datatoShow[type]?.resultOverideBase?.length)
             totalResultOverrideBaseFor_M_MS_MSC = [...totalResultOverrideBaseFor_M_MS_MSC, ...datatoShow[type]?.resultOverideBase];
