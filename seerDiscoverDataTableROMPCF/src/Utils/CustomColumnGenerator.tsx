@@ -90,13 +90,13 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
                   {clickable && (
                     <div style={{
                       position: 'absolute',
-                      top: '0px', // Adjust the top position as needed
-                      right: '20px', // Adjust the right position as needed
-                      width: '5px',
-                      height: '5px'
+                      top: '-3px', // Adjust the top position as needed
+                      right: '0px', // Adjust the right position as needed
+                      width: '8px',
+                      height: '8px'
                     }}>
                       <InfoIcon 
-                      sx={{ fontSize: 10, color: green[500] }}
+                      sx={{ fontSize: 12, color: green[500] }}
                       // fontSize="small" 
                       />
                     </div>
