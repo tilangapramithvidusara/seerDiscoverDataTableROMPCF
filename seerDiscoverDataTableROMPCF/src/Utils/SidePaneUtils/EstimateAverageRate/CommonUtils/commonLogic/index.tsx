@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import { removeDuplicates } from "../../../../commonFunc.utils";
 
 export const commonSidePaneLogic = (selectorForSidePane: any, columnValue: any) => {
