@@ -6,5 +6,16 @@ export const sidePaneConstants: any = {
     CONFIGURATION: "Configuration",
     CUSTOMIZATION_DESIGN: "Customisations (Design)",
     CUSTOMIZATION_BUILD: "Customisations (Build)"
+}
+  
+export const sidePaneIDs: any = {
+  common: {
+    MODULE_OVERRIDES: "Module Overrides",
+    MODULE_ESTIMATE_VALUE: "Module Estimate value",
+    NUMBER_OF_MODULES: "Number of Modules",
+    REQUIRNMENTS_ESTIMATE_VALUE: "Requirements Estimate value",
+    NUMBER_OF_REQUIRNMENT_OVERRIDES: "Number of Requirement overrides",
+    NUMBER_OF_REQUIENMENTS: "Number of Requirements"
   }
+}
   

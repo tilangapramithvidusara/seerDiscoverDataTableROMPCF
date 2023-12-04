@@ -185,7 +185,7 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
             // }}
             columnResizeMode={'onEnd'}
             enableColumnResizing={true}
-            layoutMode= 'grid-no-grow'
+            // layoutMode= 'grid-no-grow'
             enableGrouping={(type != 'RequirementData' && type != 'CustomisationData') ? true : false}
             enableStickyHeader
             enableStickyFooter

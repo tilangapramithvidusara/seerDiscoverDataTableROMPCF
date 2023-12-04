@@ -70,12 +70,8 @@ export default function SwipeableTemporaryDrawer({
   });
 
   const onClickTableRow = (e: any, type: any) => {
-    console.log("ONCLICK", e);
     setTableData((prev: any) => {
-      console.log("PPPPP", prev);
       return prev?.map((x: any) => {
-        console.log("PPPPddddP", x);
-
         if (e?.id === x?.id) {
           return {
             ...x,
@@ -87,6 +83,7 @@ export default function SwipeableTemporaryDrawer({
       });
     });
   };
+  
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
     (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -151,9 +148,10 @@ export default function SwipeableTemporaryDrawer({
                           <ArrowForwardIosIcon
                             onClick={(e: any) => onClickTableRow(row, false)}
                             style={{marginTop:"10px", height: '15px', width: '18px', marginLeft:"4px", stroke: "black", strokeWidth: 1}}
+                            
                           >
                             Expand
-                          </ArrowForwardIosIcon>
+                            </ArrowForwardIosIcon>
                           <TableCell>{row.name}</TableCell>
                         </>
                       ) : (
