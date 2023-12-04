@@ -16,6 +16,7 @@ import { CommonUtils } from "../../Utils/SidePaneUtils/EstimateAverageRate/Commo
 import { Button } from "antd";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 type Anchor = "top" | "left" | "bottom" | "right";
 
@@ -147,12 +148,12 @@ export default function SwipeableTemporaryDrawer({
                     {row?.header ? (
                       row?.collapse ? (
                         <>
-                          <ExpandLessIcon
+                          <ArrowForwardIosIcon
                             onClick={(e: any) => onClickTableRow(row, false)}
-                            style={{marginTop:"6px"}}
+                            style={{marginTop:"10px", height: '15px', width: '18px', marginLeft:"4px", stroke: "black", strokeWidth: 1}}
                           >
                             Expand
-                          </ExpandLessIcon>
+                          </ArrowForwardIosIcon>
                           <TableCell>{row.name}</TableCell>
                         </>
                       ) : (
