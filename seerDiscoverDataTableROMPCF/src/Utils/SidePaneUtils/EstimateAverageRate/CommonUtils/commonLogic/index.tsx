@@ -75,13 +75,13 @@ export const commonSidePaneLogic = (selectorForSidePane: any, columnValue: any) 
             }
         });
 
-        if (moduleValue) rowsArray.push({ name: "Module Estimate value", value: `£${moduleValue}`, rowColor: "#E0E0E0", align: "left", collapse: false, header: true, id: "Module Estimate value" });
-        if ((uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length)) rowsArray.push({ name: "Number of Modules", value: uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length, rowColor: "#E0E0E0", align: "left" , collapse: false, header: true, id: "Number of Modules"  });
+        if (moduleValue) rowsArray.push({ name: "Module Estimate value", value: `£${moduleValue}`, rowColor: "#E0E0E0", align: "left", collapse: false, header: false, id: "Module Estimate value" });
+        if ((uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length)) rowsArray.push({ name: "Number of Modules", value: uniqueData_resultModule?.length + uniqueData_resultOverideModule?.length, rowColor: "#E0E0E0", align: "left" , collapse: false, header: false, id: "Number of Modules"  });
         if (resultOverideModule?.length) rowsArray.push({ name: "Module Overrides", rowColor: "#E0E0E0", collapse: false, id: "Module Overrides" , header: true });
         if (resultOverideModule?.length) rowsArray.push(...resultOverideModule);
-        if (baseValue) rowsArray.push({ name: "Requirements Estimate value", value: `£${baseValue}` , rowColor: "#E0E0E0", align: "left" , collapse: false,  header: true });
-        if ((uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length)) rowsArray.push({ name: "Number of Requirements", value: uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length, rowColor: "#E0E0E0", align: "left" , collapse: false , header: true , id: "Number of Requirements" });
-        if (uniqueData_resultOverideBase?.length) rowsArray.push({ name: "Number of Requirement overrides", value: uniqueData_resultOverideBase?.length, rowColor: "#E0E0E0", align: "left", collapse: false, header: true , id:  "Number of Requirement overrides" });
+        if (baseValue) rowsArray.push({ name: "Requirements Estimate value", value: `£${baseValue}` , rowColor: "#E0E0E0", align: "left" , collapse: false,  header: false });
+        if ((uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length)) rowsArray.push({ name: "Number of Requirements", value: uniqueData_resultBase?.length + uniqueData_resultOverideBase?.length, rowColor: "#E0E0E0", align: "left" , collapse: false , header: false , id: "Number of Requirements" });
+        if (uniqueData_resultOverideBase?.length) rowsArray.push({ name: "Number of Requirement overrides", value: uniqueData_resultOverideBase?.length, rowColor: "#E0E0E0", align: "left", collapse: false, header: false , id:  "Number of Requirement overrides" });
 
         return rowsArray
     }
