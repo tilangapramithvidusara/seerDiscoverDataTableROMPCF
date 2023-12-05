@@ -26,3 +26,14 @@ export const complexityData: any = {
   "100000002": "Low",
   "100000003": "None",
 }
+
+export const currencyData: any = {
+  'AUD': 'AUD$',
+  'GBP': '£',
+  'CAD': 'CAD$',
+  'EUR': '€',
+  'NZD': 'NZD$',
+  'BRL': 'R$',
+  'ZAR': 'R',
+  'USD': '$'
+}

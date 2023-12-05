@@ -20,6 +20,8 @@ import { fetchInitialDataAsync } from "../redux/report/reportAsycn";
 import { initialFetchFailure, initialFetchSuccess } from "../redux/report/reportSlice";
 import Loader from "./Loader/Loader";
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
+import DyanamicTable from "./Table/DyanamicTable";
+import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 
 
 const App = ({
@@ -97,8 +99,9 @@ const App = ({
   const dispatch = useDispatch();
   const loading = useSelector((state: any) => state.report.loading)
   const imageUrl = useSelector((state: any) => state.report.imageUrl)
+  const initialFetchData = useSelector((state: any) => state.report.initialFetchData);
   const [isComLoading, setComIsloading] = React.useState<boolean>(isRefreshing || false);
-
+  const [openSettingPopup, setOpenSettingPopup] = React.useState<boolean>(false);
 
 
   const onChange = (key: string) => {
@@ -120,7 +123,13 @@ const App = ({
   const [selectedButton, setSelectedButton] = React.useState('button1');
   React.useEffect(() => {    
     setComIsloading(isRefreshing)
-  }, [isRefreshing])
+  }, [isRefreshing]);
+
+  const formattedSettingHandler = (event: any, initFetchedData: any) => {
+    const formatedData = parameterModelConvertToTableJson(initFetchedData?.parameterModel);
+    console.log('formatedData => ', formatedData);
+    
+  }
 
   return (
     <>
@@ -134,19 +143,22 @@ const App = ({
       )}
       <Grid className="flex-wrap">
       
-        <Box sx={{ m: 2 }} className="flex-wrap-justify m-0">
+        {/* <Box sx={{ m: 2 }} className="flex-wrap-justify m-0">
           <Stack direction="row" className="custom-grid mr-15">
-            {/* <Grid className="flex-wrap">
+            <Grid className="flex-wrap">
               <InputLabel className="label mr-10">Mode</InputLabel>
-            </Grid> */}
-            {/* <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton}/> */}
+            </Grid>
+            <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton}/>
           </Stack>
-          {/* <DropDownButtons selectedButton={selectedButton}/> */}
-        </Box>
+          <DropDownButtons selectedButton={selectedButton}/>
+        </Box> */}
         <div className='text-right' 
         // style={{margin: '2px', height: '10px !important', fontSize: '11px !important'}}
         >
         <Button className='btn-primary' onClick={(e) => initialTriggerHandler(e)}><AutorenewOutlinedIcon className="btn-icon"/>Refresh</Button>
+        {/* {selectedButton == 'button2' && (
+          <Button className='btn-primary' onClick={(e) => formattedSettingHandler(e, initialFetchData)}><AutorenewOutlinedIcon className="btn-icon"/>Setting</Button>
+        )} */}
       </div>  
       </Grid> 
       <Tabs size="small" defaultActiveKey="1" items={items} onChange={onChange} />
