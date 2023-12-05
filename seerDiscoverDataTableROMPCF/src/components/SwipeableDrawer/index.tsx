@@ -139,7 +139,7 @@ export default function SwipeableTemporaryDrawer({
                   <TableRow
                     key={row.name}
                     // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    style={{ backgroundColor: row?.rowColor, display: "flex" }}
+                    style={{ backgroundColor: row?.rowColor }}
                     // onClick={(e) => onClickTableRow(e)}
                   >
                     {row?.header ? (
@@ -147,8 +147,7 @@ export default function SwipeableTemporaryDrawer({
                         <>
                           <ArrowForwardIosIcon
                             onClick={(e: any) => onClickTableRow(row, false)}
-                            style={{marginTop:"10px", height: '15px', width: '18px', marginLeft:"4px", stroke: "black", strokeWidth: 1}}
-                            
+                            className="collapse-icon collapse-expand-icon"
                           >
                             Expand
                             </ArrowForwardIosIcon>
@@ -157,7 +156,7 @@ export default function SwipeableTemporaryDrawer({
                       ) : (
                         <ExpandMoreIcon
                             onClick={(e: any) => onClickTableRow(row, true)}
-                            style={{marginTop:"6px"}}
+                            className="collapse-icon"
                         >
                           Collapse
                         </ExpandMoreIcon>

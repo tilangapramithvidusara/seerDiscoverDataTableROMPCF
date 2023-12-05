@@ -287,6 +287,7 @@ tr:nth-child(even) {
 
 .MuiDrawer-modal .MuiPaper-elevation {
   border-radius: 0;
+  box-shadow: none;
 }
 
 .MuiDrawer-modal .drawer-heading {
@@ -320,9 +321,33 @@ tr:nth-child(even) {
   cursor: pointer;
 }
 
-/* .MuiDrawer-modal table th, .MuiDrawer-modal table td {
+.MuiDrawer-modal tr{
+  display: flex;
+  justify-content: space-between;
+}
+
+.MuiDrawer-modal tr {
+  display: flex;
+  justify-content: space-between;
   border-bottom:1px solid #AAA6A6;
-} */
+  position: relative;
+}
+
+.MuiDrawer-modal .collapse-icon {
+  position: absolute;
+  right: 12px;
+  top: 8px;
+  stroke: black;
+  stroke-width: 1;
+}
+
+.MuiDrawer-modal .collapse-expand-icon {
+  width: 15px;
+}
+
+.MuiDrawer-modal table th, .MuiDrawer-modal table td {
+  border: none;
+}
 
 .MuiDrawer-modal th, .MuiDrawer-modal td {
   padding: 8px 15px !important;
