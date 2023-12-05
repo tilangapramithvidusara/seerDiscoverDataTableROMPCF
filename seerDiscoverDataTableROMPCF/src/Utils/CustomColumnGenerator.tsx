@@ -69,18 +69,18 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
           if (columnItem?.isCalcultionEnabled) {
             if (cell?.column?.id?.includes('_H')) {
               return(
-                <>
+                <div style={{textAlign: 'right'}}>
                   {cell.getValue()?.toLocaleString?.('en-US', {
                     // style: 'currency',
                     // currency: cell?.column?.id?.includes('_H') ? '' : (currency || 'GBP'),
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
-                </>
+                </div>
               )
             } else {//isClickable
               return(
-                <Box sx={{flexDirection: 'row', position: 'relative' }}>
+                <Box sx={{flexDirection: 'row', position: 'relative', textAlign: 'right' }}>
                   {cell.getValue()?.toLocaleString?.('en-US', {
                     style: 'currency',
                     currency: cell?.column?.id?.includes('_H') ? '' : (currency || 'GBP'),
@@ -90,8 +90,9 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
                   {clickable && (
                     <div style={{
                       position: 'absolute',
-                      top: '-3px', // Adjust the top position as needed
-                      right: '0px', // Adjust the right position as needed
+                      top: '-1px', // Adjust the top position as needed
+                      // right: '-2px', // Adjust the right position as needed
+                      left: '-2px',
                       width: '8px',
                       height: '8px'
                     }}>
@@ -113,25 +114,25 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
         // if (columnItem?.isCalcultionEnabled) {
           if (cell?.column?.id?.includes('_H')) {
             return(
-              <>
+              <div style={{textAlign: 'right'}}>
                 {cell.getValue()?.toLocaleString?.('en-US', {
                   // style: 'currency',
                   // currency: cell?.column?.id?.includes('_H') ? '' : (currency || 'GBP'),
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
-              </>
+              </div>
             )
           } else {
             return(
-              <>
+              <div style={{textAlign: 'right'}}>
                 {cell.getValue()?.toLocaleString?.('en-US', {
                   style: 'currency',
                   currency: cell?.column?.id?.includes('_H') ? '' : (currency || 'GBP'),
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
-              </>
+              </div>
             )
           }
         
@@ -163,7 +164,7 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
           // if (columnItem?.isCalcultionEnabled) {
             if (columnItem?.accessorKey?.includes('_H')) {
               return(
-                <Box color="white">
+                <Box color="white" sx={{textAlign: 'right'}}>
                 {totalColumn(columnItem?.accessorKey)?.toLocaleString?.('en-US', {
                 // style: 'currency',
                 //   currency: (currency || 'GBP'),
@@ -174,7 +175,7 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
               )
             } else {
               return(
-                <Box color="white">
+                <Box color="white" sx={{textAlign: 'right'}} >
                 {totalColumn(columnItem?.accessorKey)?.toLocaleString?.('en-US', {
                 style: 'currency',
                   currency: (currency || 'GBP'),

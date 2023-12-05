@@ -27,6 +27,19 @@ export const deleteOutputSetAsync: any = async(info: any) => {
 }
 
 export const fetchInitialDataAsync = async() => {
+  try {
+    const url = new URL(window.location.href);
+    const queryParameters = url.searchParams;
+    console.log('url ', url);
+    
+    console.log("queryParameters", queryParameters);
+    // const cusId = queryParameters.get("cusid");
+    // const cbsId = queryParameters.get("cbsid");
+    // const _pId = queryParameters.get("pid");
+  } catch (error) {
+    console.log('url error ', error);
+    
+  }
   try {    
     const requestBody = {
       "accountid": "c514b3d1-a45b-ee11-8def-002248015232",

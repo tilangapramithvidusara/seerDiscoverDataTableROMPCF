@@ -9,8 +9,10 @@ import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import DownloadingOutlinedIcon from '@mui/icons-material/DownloadingOutlined';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 import UpdateOutlined from '@mui/icons-material/UpdateOutlined';
+import { useDispatch } from 'react-redux';
 
-const index = ({selectedButton}: {selectedButton: any}) => {
+const index = ({selectedButton, hasSnapshots}: {selectedButton: any, hasSnapshots?: boolean}) => {
+  const dispatch = useDispatch()
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedItem, setSelectedItem] = useState(""); // Initialize the state for selected item
@@ -37,10 +39,19 @@ const index = ({selectedButton}: {selectedButton: any}) => {
   return (
     <div>
       <div style={{ display: 'flex' }}>
-        {selectedButton === "button2" && (
+        {
+          // selectedButton === "button2" && 
+          selectedButton === "button2" && 
+          (
           <>
-            <Button aria-controls="dropdown-menu" className="dropdown mr-10 btn-gray-outline" aria-haspopup="true" onClick={handleClick}>
-            <DownloadingOutlinedIcon className='btn-icon'/> Update Master Load Snapshots
+            <Button 
+              aria-controls="dropdown-menu" 
+              // className="dropdown mr-10 btn-gray-outline" 
+              variant="contained" 
+              color="primary" 
+              className='btn-blue-outline'  
+              aria-haspopup="true" onClick={handleClick}>
+              <DownloadingOutlinedIcon className='btn-icon'/> Load Snapshots
             </Button>
             <Menu
               id="dropdown-menu"
@@ -55,13 +66,23 @@ const index = ({selectedButton}: {selectedButton: any}) => {
             </Menu>
           </>
         )}
-        {selectedButton === "button1" && (
-          <Button variant="contained" color="primary" className='btn-blue-outline'>
+        {
+          selectedButton === "button2" &&
+          // selectedButton === "button1" && 
+        (
+          <Button 
+            variant="contained" 
+            color="primary" 
+            className='btn-blue-outline'>
             <SaveOutlinedIcon className='btn-icon'/> Save Snapshot
           </Button>
         )}
         {selectedButton === "button2" && (
-          <Button variant="contained" color="primary" className='btn-gray-outline'>
+          <Button 
+            variant="contained" 
+            color="primary" 
+            className='btn-gray-outline'
+          >
             <UpdateOutlined className='btn-icon'/> Update Master
           </Button>
         )}
