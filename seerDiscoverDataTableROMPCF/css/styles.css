@@ -320,9 +320,9 @@ tr:nth-child(even) {
   cursor: pointer;
 }
 
-.MuiDrawer-modal table th, .MuiDrawer-modal table td {
+/* .MuiDrawer-modal table th, .MuiDrawer-modal table td {
   border-bottom:1px solid #AAA6A6;
-}
+} */
 
 .MuiDrawer-modal th, .MuiDrawer-modal td {
   padding: 8px 15px !important;
