@@ -20,7 +20,7 @@ import { romParameter } from "../../Constants/fteConstants";
 
 const para_d4 = 10/100;
 
-export const generateIColoumnValueFte = async(inititlaData: any, title?: string) => {
+export const generateIColoumnValueFte = async(inititlaData: any, title?: string, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   const condition = romParameter === "Days";
   // ################################ESTIMATE AVERAGE RATE################################
   // ANALYSIS AND DESIGN

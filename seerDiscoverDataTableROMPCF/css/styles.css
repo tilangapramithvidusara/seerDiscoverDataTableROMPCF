@@ -354,7 +354,7 @@ tr:nth-child(even) {
 }
 
 /* manual table */
-body {
+.seerDiscoverROM body {
   box-sizing: border-box;
   color: #220f5f;
   font-family: 'Poppins', sans-serif;
@@ -392,7 +392,7 @@ tr td {
   text-align: left;
 }
 
-input {
+.seerDiscoverROM input {
   font-size: 16px;
   background-color: transparent;
   border: none;
@@ -401,11 +401,15 @@ input {
   font-family: 'Poppins', sans-serif;
 }
 
-input:hover {
+.seerDiscoverROM input:hover {
   background-color: #fffaf3;
 }
 
-input:focus {
+.seerDiscoverROM input:focus {
   outline: 1px solid #ccc;
   border: 1px solid #ccc;
+}
+
+.seerDiscoverROM .ant-tabs th {
+  --header-mrt_row_expand-size: 14; 
 }

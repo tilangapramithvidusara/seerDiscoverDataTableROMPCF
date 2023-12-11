@@ -23,6 +23,10 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   const [dataEstimateResourceMilestone, setDataEstimateResourceMilestone] = React.useState<any []>([]);
   const [requirementData, setRequirementData] = React.useState([])
   const [customisationData, setCustomisationData] = React.useState([]);
+  const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
+  const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
+  const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
+
   React.useEffect(() => {
     initialTriggerHandler();
   }, []);
@@ -52,7 +56,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     if (customisation?.length) {
       setCustomisationData(customisation)
     }
-    arrayGenerator(data, dispatch)
+    arrayGenerator(data, dispatch, settingParameters, isSnapshotModeEnable)
       .then(async(result: any) => {
         // Handle the result here
         console.log('llll', result?.reducerValues);

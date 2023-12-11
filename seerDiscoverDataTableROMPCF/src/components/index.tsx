@@ -20,8 +20,11 @@ import { fetchInitialDataAsync } from "../redux/report/reportAsycn";
 import { initialFetchFailure, initialFetchSuccess } from "../redux/report/reportSlice";
 import Loader from "./Loader/Loader";
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
+import { Settings } from "@mui/icons-material";
 import DyanamicTable from "./Table/DyanamicTable";
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
+import DialogComponent from "./Dialog";
+import { setSettingParameters } from "../redux/snapshotReport/snapshotReportSlice";
 
 
 const App = ({
@@ -71,12 +74,12 @@ const App = ({
     },
     { // requirementData
       key: '5',
-      label: 'Requirement',
+      label: 'Requirements',
       children: <AdvancedTable data={requirementData} type={'RequirementData'} isLoading={isRefreshing}/>,
     },
     {
       key: '6',
-      label: 'Customisation',
+      label: 'Customisations',
       children: <AdvancedTable data={customisationData} type={'CustomisationData'} isLoading={isRefreshing}/>,
     },
     // {
@@ -100,10 +103,12 @@ const App = ({
   const loading = useSelector((state: any) => state.report.loading)
   const imageUrl = useSelector((state: any) => state.report.imageUrl)
   const initialFetchData = useSelector((state: any) => state.report.initialFetchData);
+  const hasLoadedData = useSelector((state: any) => state?.report?.hasLoadedData)
   const [isComLoading, setComIsloading] = React.useState<boolean>(isRefreshing || false);
   const [openSettingPopup, setOpenSettingPopup] = React.useState<boolean>(false);
-
-
+  const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
+  const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
+  
   const onChange = (key: string) => {
     console.log(key);
   };
@@ -126,8 +131,15 @@ const App = ({
   }, [isRefreshing]);
 
   const formattedSettingHandler = (event: any, initFetchedData: any) => {
-    const formatedData = parameterModelConvertToTableJson(initFetchedData?.parameterModel);
-    console.log('formatedData => ', formatedData);
+    if (hasLoadedData) {
+      // set retrived data as setSettingParameter
+    } else {
+      const formatedData = parameterModelConvertToTableJson(initFetchedData?.parameterModel);
+      dispatch(setSettingParameters(formatedData))
+      console.log('formatedData => ', formatedData);
+    }
+    
+    setOpenSettingPopup(true)
     
   }
 
@@ -143,7 +155,7 @@ const App = ({
       )}
       <Grid className="flex-wrap">
       
-        {/* <Box sx={{ m: 2 }} className="flex-wrap-justify m-0">
+        <Box sx={{ m: 2 }} className="flex-wrap-justify m-0">
           <Stack direction="row" className="custom-grid mr-15">
             <Grid className="flex-wrap">
               <InputLabel className="label mr-10">Mode</InputLabel>
@@ -151,16 +163,21 @@ const App = ({
             <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton}/>
           </Stack>
           <DropDownButtons selectedButton={selectedButton}/>
-        </Box> */}
+        </Box>
         <div className='text-right' 
         // style={{margin: '2px', height: '10px !important', fontSize: '11px !important'}}
         >
         <Button className='btn-primary' onClick={(e) => initialTriggerHandler(e)}><AutorenewOutlinedIcon className="btn-icon"/>Refresh</Button>
-        {/* {selectedButton == 'button2' && (
-          <Button className='btn-primary' onClick={(e) => formattedSettingHandler(e, initialFetchData)}><AutorenewOutlinedIcon className="btn-icon"/>Setting</Button>
-        )} */}
+        {selectedButton == 'button2' && (
+          <Button className='btn-primary' onClick={(e) => formattedSettingHandler(e, initialFetchData)}><Settings className="btn-icon"/>Setting</Button>
+        )}
       </div>  
       </Grid> 
+      <div>
+        {openSettingPopup && (
+          <DialogComponent setOpenSettingPopup={setOpenSettingPopup} openSettingPopup={openSettingPopup}/>
+        )}
+      </div>
       <Tabs size="small" defaultActiveKey="1" items={items} onChange={onChange} />
     </>
   )

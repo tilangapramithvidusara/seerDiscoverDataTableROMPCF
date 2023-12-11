@@ -9,11 +9,11 @@ import { columnDetailsEstimateAverageRateMilestone, dataEstimateAverageRateMiles
 import { calculateProjectManagerEstimateResource, generateEstimateResourceValue } from "../EstimateResource";
 import { calculateProjectManagerEstimateAvgRateMilestone } from "../EstimateAverageRateMilestone/project.manager.utils";
 import { dataEstimateResourceMilestone } from "../../Constants/estimateResourceMilestone";
-import { checkHasFte } from "../EstimateAverageRateMilestone/check.has.fte.utils";
+import { checkHasFte, checkHasFteParameter } from "../EstimateAverageRateMilestone/check.has.fte.utils";
 import { generateIColoumnValueFte } from "../EstimateAverageRateMilestone/sub.value.utils";
 import { romParameter } from "../../Constants/fteConstants";
 
-export const arrayGenerator = async (initialDataSet: any, dispatch: any) => {
+export const arrayGenerator = async (initialDataSet: any, dispatch: any, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   let resultArray: any[] = [];
   let subTotalMAnalysisDesign = 0;
   let subTotalMSAnalysisDesign = 0;
@@ -28,13 +28,27 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any) => {
   const {hourlyRate, hoursPerday} = parameterModel[0];
 
   let fteValue: any;
+  let hasFteValue: boolean;
 
   try {
-    const hasFteValue: any = await checkHasFte(parameterModel);
-    if (hasFteValue) {
-      fteValue = await generateIColoumnValueFte(initialDataSet);
+    // checkHasFteParameter
+    console.log('ll ==> ', settingParameters && isSnapshotModeEnable);
+    
+    if (settingParameters && isSnapshotModeEnable) {
+      hasFteValue = await checkHasFteParameter(settingParameters);
+      console.log('cc=> ', hasFteValue);
+      
+      if (hasFteValue) {
+        fteValue = await generateIColoumnValueFte(initialDataSet, '', settingParameters, isSnapshotModeEnable);
+      }
+    } else {
+      hasFteValue = await checkHasFte(parameterModel);
+      if (hasFteValue) {
+        fteValue = await generateIColoumnValueFte(initialDataSet, '', settingParameters, isSnapshotModeEnable);
+      }
     }
-    const analisisAndDesignCalculation: any = await generateIColoumnValue({...initialDataSet, fteValue}, analysisAndDesign.row, dispatch);
+    
+    const analisisAndDesignCalculation: any = await generateIColoumnValue({...initialDataSet, fteValue}, analysisAndDesign.row, dispatch, hasFteValue, settingParameters, isSnapshotModeEnable);
     (data[0] as any).M = analisisAndDesignCalculation?.analysisDesing?.resultValue;
     (data[0] as any)['M/S'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMS;
     (data[0] as any)['M/S/C'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMSC;

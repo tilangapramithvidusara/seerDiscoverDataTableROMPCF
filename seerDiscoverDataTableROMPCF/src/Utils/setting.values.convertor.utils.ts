@@ -1,4 +1,4 @@
-import { fteDropdown } from "../Constants/dropdownConstants";
+import { currencyDropdown, fteDropdown } from "../Constants/dropdownConstants";
 
 interface ParameterObject {
   hoursPerday?: number;
@@ -11,9 +11,9 @@ interface ParameterObject {
   // Add other properties as needed based on your application
 }
 
-interface Parameter {
+export interface Parameter {
   name: string;
-  switch: '%' | null;
+  switch: string | null;
   currentValue: string | number;
   baslineValue: string | number | null;
   type: 'dropdown' | 'string' | null;
@@ -29,7 +29,7 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
   let parameterObject = parameterModel[0];
   parameterObject = {
     ...parameterObject,
-    changeManagerCurrent: parameterObject?.parameterObject,
+    changeManagerCurrent: parameterObject?.changeManager,
     changeManagerTypeCurrent: parameterObject?.changeManagerType,
     cloudDeploymentManagementCurrent: parameterObject?.cloudDeploymentManagement,
     cloudDeploymentManagementTypeCurrent: parameterObject?.cloudDeploymentManagementType,
@@ -85,7 +85,7 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       currentValue: parameterObject?.isocurrencycode ? parameterObject.isocurrencycode?.value : 'GBP',
       baslineValue: parameterObject?.isocurrencycode ? parameterObject.isocurrencycode?.value : 'GBP',
       currentValueType: 'dropdown', // dropdown | string | null
-      currentValueDropdownValues: [], // add currency mapping
+      currentValueDropdownValues: currencyDropdown, // add currency mapping
       type: null, // dropdown | string | null
       dropdownValues: [],
     },
@@ -253,6 +253,32 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
   return {formattedData, parameterObject}
 }
 
-export const tableJsonConvertToparameterModel = () => {
-
+export const tableJsonConvertToparameterModel = (formattedData: Parameter[], currentParameterModel: any) => {
+  let parameterObject = currentParameterModel[0];
+  parameterObject = {
+    ...parameterObject,
+    changeManager: parameterObject?.changeManager,
+    changeManagerType: parameterObject?.changeManagerType,
+    cloudDeploymentManagement: parameterObject?.cloudDeploymentManagement,
+    cloudDeploymentManagementType: parameterObject?.cloudDeploymentManagementType,
+    collateRequirment: parameterObject?.collateRequirment,
+    collateRequirmentType: parameterObject?.collateRequirmentType,
+    conferenceRoomPilot: parameterObject?.conferenceRoomPilot,
+    conferenceRoomPilotType: parameterObject?.conferenceRoomPilotType,
+    isocurrencycode: parameterObject?.isocurrencycode?.value,
+    dataMigration: parameterObject?.dataMigration,
+    dataMigrationType: parameterObject?.dataMigrationType,
+    deployProd: parameterObject?.deployProd,
+    deployProdType: parameterObject?.deployProdType,
+    deployUat: parameterObject?.deployUat,
+    deployUatType: parameterObject?.deployUatType,
+    designReview: parameterObject?.designReview,
+    designReviewType: parameterObject?.designReviewType,
+    endUserTraining: parameterObject?.endUserTraining,
+    endUserTrainingUsers: parameterObject?.endUserTrainingUsers,
+    hourlyRate: parameterObject?.hourlyRate?.value,
+    hoursPerday: parameterObject?.hoursPerday,
+    postGoLiveSupport: parameterObject?.postGoLiveSupport,
+    postGoLiveSupportType: parameterObject?.postGoLiveSupportType,
+  }
 }

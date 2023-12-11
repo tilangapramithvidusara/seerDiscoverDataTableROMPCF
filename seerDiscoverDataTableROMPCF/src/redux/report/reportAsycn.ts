@@ -27,25 +27,26 @@ export const deleteOutputSetAsync: any = async(info: any) => {
 }
 
 export const fetchInitialDataAsync = async() => {
-  try {
+  try {    
     const url = new URL(window.location.href);
     const queryParameters = url.searchParams;
-    console.log('url ', url);
+    console.log('accountId -=> ', queryParameters.get("accountId"));
+    const currentDate = new Date();
+    const isoString = currentDate?.toISOString();
     
-    console.log("queryParameters", queryParameters);
-    // const cusId = queryParameters.get("cusid");
-    // const cbsId = queryParameters.get("cbsid");
-    // const _pId = queryParameters.get("pid");
-  } catch (error) {
-    console.log('url error ', error);
-    
-  }
-  try {    
     const requestBody = {
-      "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
+      "accountid": queryParameters?.get("accountId") || "c514b3d1-a45b-ee11-8def-002248015232",
+      // "c514b3d1-a45b-ee11-8def-002248015232",
+      // "1857b6d8-1d72-ee11-8179-002248015232",
+      // queryParameters?.get("id") || "c514b3d1-a45b-ee11-8def-002248015232",
       "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
-      "lastexecutedOn" : "2023-10-25T07:47:46.0261668Z"
+      "lastexecutedOn" : isoString,
+      // isoString,
+      // "2023-10-25T07:47:46.0261668Z"
     }
+
+    console.log('requestBody', requestBody);
+    
     // {
     //   "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
     //   "partnerid": "b388d7ee-bd7e-ec11-8d21-6045bd0e691e",

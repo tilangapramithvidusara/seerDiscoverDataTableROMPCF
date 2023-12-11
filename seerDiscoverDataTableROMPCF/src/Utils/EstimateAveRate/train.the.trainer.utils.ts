@@ -1,7 +1,7 @@
 import { hoursPerWeek, romParameter } from "../../Constants/fteConstants";
 import { fitGapData, moscowsData, percentData } from "../../Constants/pickListData";
 const para_d4 = 10/100;
-export const generateTrainTheTrainerMValue = async(inititlaData: any, analisisDesignPre: {responseAnalisisDesign: any}, condition: boolean, isFte?: boolean) => {
+export const generateTrainTheTrainerMValue = async(inititlaData: any, analisisDesignPre: {responseAnalisisDesign: any}, condition: boolean, isFte?: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
   let fte = isFte ? true : false;
   let resultValue = 0;

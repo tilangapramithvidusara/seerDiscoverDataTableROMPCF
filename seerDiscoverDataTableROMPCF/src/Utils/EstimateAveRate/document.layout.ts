@@ -1,6 +1,6 @@
 import { fitGapData, moscowsData } from "../../Constants/pickListData";
 
-export const generateDocumentLayoutMValue = async(inititlaData: any, condition: boolean) => {
+export const generateDocumentLayoutMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
   let resultValue = 0;
   let resultValueMS = 0;

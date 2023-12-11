@@ -1,7 +1,7 @@
 import { fitGapData, moscowsData } from "../../Constants/pickListData";
 import { integrationParameters } from "../../Constants/integrationParameters";
 
-export const generateIntegrationMValue = async(inititlaData: any, condition: boolean) => {
+export const generateIntegrationMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
   let resultValue = 0;
   let resultValueMS = 0;

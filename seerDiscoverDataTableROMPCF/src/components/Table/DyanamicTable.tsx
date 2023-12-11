@@ -5,36 +5,21 @@ import { TextField, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
 import { parameterSettingColumns, parameterBaseSettingColumns } from '../../Constants/parametersSetting';
-import { setSettingParameters } from '../../redux/snapshotReport/snapshotReportSlice';
-
-const data = [
-  { id: 1, name: 'John Doe', age: 25 },
-  { id: 2, name: 'Jane Doe', age: 30 },
-]
+import { setSettingParameterAttributes, setSettingParameters } from '../../redux/snapshotReport/snapshotReportSlice';
+import { Parameter } from '../../Utils/setting.values.convertor.utils';
+import { fteDropdown } from '../../Constants/dropdownConstants';
 
 const DyanamicTable = () => {
   const dispatch = useDispatch();  
-
-  // const columns = [
-  //   { header: 'ID', accessorKey: 'id' },
-  //   { header: 'Name', accessorKey: 'name' },
-  //   { header: 'Age', accessorKey: 'age' },
-  // ];
-
-  const [employeeData, setEmployeeData] = useState(data)
   const [isBaesline, setIsBaseline] = useState(false);
   const [columns, setColumns] = useState(parameterSettingColumns);
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
 
-  const onChangeInput = (e: any, id: number) => {
-    const { name, value } = e.target
+  console.log('settingParameters', settingParameters);
 
-    const editData = employeeData.map((item) =>
-      item.id === id && name ? { ...item, [name]: value } : item
-    )
-
-    setEmployeeData(editData)
-  }
+  const onChangeHanlder = useCallback((info) => {
+    dispatch(setSettingParameterAttributes(info))
+  }, [dispatch]);
 
   const handleSetSettingParameters = useCallback((info) => {
     dispatch(setSettingParameters(info))
@@ -63,23 +48,112 @@ const DyanamicTable = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map(({ id, name, age }) => (
-            <tr key={id}>
-              <td>{id}</td>
-              <td>
-                <input
-                  name="name"
-                  value={name}
-                  type="text"
-                  onChange={(e) => onChangeInput(e, id)}
-                  placeholder="Type Name"
-                />
-              </td>
-              <td>{age}</td>
-            </tr>
-          ))}
+          {settingParameters?.formattedData?.map((settingItem: Parameter, id: number) => {
+            let name = settingItem?.name;
+            let switchValue = settingItem?.switch;
+            let currentValue = settingItem?.currentValue;
+            let baslineValue = settingItem?.baslineValue;
+            let type = settingItem?.type;
+            let dropdownValues = settingItem?.dropdownValues;
+            let currentValueType = settingItem?.currentValueType;
+            let typeValueCurrent = settingItem?.typeValueCurrent;
+            let typeValueBasline = settingItem?.typeValueBasline;
+            let currentValueDropdownValues = settingItem?.currentValueDropdownValues;
+            return (
+              <tr key={id}>
+                <td>{name}</td>
+                <td>
+                  <div>
+                    {type == 'dropdown' ? (
+                      <div>
+                        <select
+                          value={typeValueCurrent || ''}
+                          onChange={(e) => {
+                            // handleRoleChange(row.id, e.target.value)
+                            onChangeHanlder(
+                              {
+                                ...settingItem,
+                                key: 'typeValueCurrent',
+                                value: e.target.value
+                              }
+                            )
+                          }}
+                        >
+                          {fteDropdown?.map((fteItem: any) => (
+                            <option value={fteItem?.value}>{fteItem?.label}</option>
+                          ))}
+                          {/* <option value="Admin">Admin</option>
+                          <option value="User">User</option>
+                          <option value="Guest">Guest</option> */}
+                        </select>
+                      </div>
+                    ) : (
+                      <div>
+                        {switchValue}
+                      </div>
+                    )}
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    {currentValueType == 'dropdown' ? (
+                      <div>
+                        <select
+                          value={currentValue}
+                          onChange={(e) => {
+                            // handleRoleChange(row.id, e.target.value)
+                            onChangeHanlder(
+                              {
+                                ...settingItem,
+                                key: 'currentValue',
+                                value: e.target.value
+                              }
+                            )
+                          }}
+                        >
+                          {currentValueDropdownValues?.map((currentItem: any) => (
+                            <option value={currentItem?.value}>{currentItem?.label}</option>
+                          ))}
+                          {/* <option value="Admin">Admin</option>
+                          <option value="User">User</option>
+                          <option value="Guest">Guest</option> */}
+                        </select>
+                      </div>
+                    ) : (
+                      <div>
+                        {/* {currentValue} */}
+                        <input
+                          name="currentValue"
+                          value={currentValue}
+                          type="text"
+                          onChange={(e) => {
+
+                            onChangeHanlder(
+                              {
+                                ...settingItem,
+                                key: 'currentValue',
+                                value: e.target.value
+                              }
+                            )
+                          }}
+                          placeholder="Current Value"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            )})}
         </tbody>
       </table>
+      <div style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-end",      
+      }}>
+        <Button>Cancel</Button>
+        <Button>Save</Button>
+      </div>
     </div>
   );
 

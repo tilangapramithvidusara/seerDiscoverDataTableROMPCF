@@ -173,15 +173,17 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
         )}
         <div style={{ flexGrow: 0 }}>
           {columns?.length ? (
+
             <MaterialReactTable
+            // header-mrt_row_expand-size
             columns={
               columns
             }
             data={data}
             // defaultColumn ={{
-            //   maxSize: 400,
-            //   minSize: 80,
-            //   size: 345, //default size is usually 180
+            //   // maxSize: 400,
+            //   // minSize: 10,
+            //   // size: 345, //default size is usually 180
             // }}
             columnResizeMode={'onEnd'}
             enableColumnResizing={true}
@@ -196,6 +198,11 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
               pagination: { pageIndex: 0, pageSize: 100 },
               // sorting: [{ id: 'state', desc: false }, { id: 'state', desc: false }], //sort by state by default
             }}
+            // groupedColumnMode={"reorder"}
+            // positionExpandColumn={undefined}
+            // muiTableHeadCellProps={{
+            //   width: '10px'
+            // }}
             // pageSizeOptions={[5, 10]}
             muiTableFooterRowProps={{ sx: { backgroundColor: ' #015BA1' } }}
             muiToolbarAlertBannerChipProps={{ color: 'primary' }}

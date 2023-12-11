@@ -15,43 +15,43 @@ export const fteDropdown: any = [
 
 export const currencyDropdown: any = [
   {
-    code: 'AUD',
+    value: 'AUD',
     symbol: 'AUD$',
-    name: 'Australian Dollar'
+    label: 'Australian Dollar'
   },
   {
-    code: 'GBP',
+    value: 'GBP',
     symbol: '£',
-    name: 'British Pound'
+    label: 'British Pound'
   },
   {
-    code: 'CAD',
+    value: 'CAD',
     symbol: 'CAD$',
-    name: 'Canadian Dollar'
+    label: 'Canadian Dollar'
   },
   {
-    code: 'EUR',
+    value: 'EUR',
     symbol: '€',
-    name: 'Euro'
+    label: 'Euro'
   },
   {
-    code: 'NZD',
+    value: 'NZD',
     symbol: 'NZD$',
-    name: 'Newzealand Dollar'
+    label: 'Newzealand Dollar'
   },
   {
-    code: 'BRL',
+    value: 'BRL',
     symbol: 'R$',
-    name: 'Real'
+    label: 'Real'
   },
   {
-    code: 'ZAR',
+    value: 'ZAR',
     symbol: 'R',
-    name: 'South African Rand'
+    label: 'South African Rand'
   },
   {
-    code: 'USD',
+    value: 'USD',
     symbol: '$',
-    name: 'Dollar'
+    label: 'Dollar'
   }
 ]

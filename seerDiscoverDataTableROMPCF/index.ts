@@ -88,6 +88,9 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
 
         const ConnectedApp = connect()(App);
 
+        console.log('context => ', context);
+        
+
         ReactDOM.render(React.createElement(App, { tableContent: [], context: context }), this.container);
         // ReactDOM.render(
         //     <Provider>
