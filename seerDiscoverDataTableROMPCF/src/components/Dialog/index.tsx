@@ -44,8 +44,9 @@ export default function SimpleDialog(props: SimpleDialogProps) {
       sx={{width: '100%'}}
       fullWidth={true}
       maxWidth="md"
+      className='custom-modal'
     >
-      <DialogTitle>Settings</DialogTitle>
+      <DialogTitle className='modal-title'>Settings</DialogTitle>
       <DyanamicTable/>
     </Dialog>
   );
