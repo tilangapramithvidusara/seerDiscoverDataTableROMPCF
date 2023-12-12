@@ -161,13 +161,9 @@ const DyanamicTable = () => {
             )})}
         </tbody>
       </table>
-      <div style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-end",      
-      }}>
-        <Button>Cancel</Button>
-        <Button>Save</Button>
+      <div className='modal-footer'>
+        <Button className='btn-gray-outline mr-10'>Cancel</Button>
+        <Button className='btn-primary'>Save</Button>
       </div>
     </div>
   );

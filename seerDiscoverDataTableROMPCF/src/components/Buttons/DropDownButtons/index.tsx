@@ -44,14 +44,14 @@ const index = ({selectedButton, hasSnapshots}: {selectedButton: any, hasSnapshot
           selectedButton === "button2" && 
           (
           <>
-            <Button 
+            <Button title='Load Snapshots'
               aria-controls="dropdown-menu" 
               // className="dropdown mr-10 btn-gray-outline" 
               variant="contained" 
               color="primary" 
-              className='btn-blue-outline'  
+              className='btn-blue-outline btn-small mr-10'  
               aria-haspopup="true" onClick={handleClick}>
-              <DownloadingOutlinedIcon className='btn-icon'/> Load Snapshots
+              <DownloadingOutlinedIcon className='btn-icon'/> 
             </Button>
             <Menu
               id="dropdown-menu"
@@ -70,20 +70,20 @@ const index = ({selectedButton, hasSnapshots}: {selectedButton: any, hasSnapshot
           selectedButton === "button2" &&
           // selectedButton === "button1" && 
         (
-          <Button 
+          <Button  title='Save Snapshot'
             variant="contained" 
             color="primary" 
-            className='btn-blue-outline'>
-            <SaveOutlinedIcon className='btn-icon'/> Save Snapshot
+            className='btn-blue-outline btn-small mr-10'>
+            <SaveOutlinedIcon className='btn-icon'/> 
           </Button>
         )}
         {selectedButton === "button2" && (
-          <Button 
+          <Button title='Update Master'
             variant="contained" 
             color="primary" 
-            className='btn-gray-outline'
+            className='btn-gray-outline btn-small mr-10'
           >
-            <UpdateOutlined className='btn-icon'/> Update Master
+            <UpdateOutlined className='btn-icon'/> 
           </Button>
         )}
       </div>
