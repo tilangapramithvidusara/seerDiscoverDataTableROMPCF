@@ -20,7 +20,7 @@ import { generateUATEnvironmentPreparationMValue } from "./uat.environment.prepa
 import { generateUATSupportMValue } from "./uat.support.utils";
 import { setEstimateAveRateAnalysisDesign } from "../../redux/report/reportSlice";
 
-export const generateIColoumnValue = async(inititlaData: any, title: string, dispatch: any) => {
+export const generateIColoumnValue = async(inititlaData: any, title: string, dispatch: any, hasFteValue?: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   
   const condition = romParameter === "Days";
   // ################################ESTIMATE AVERAGE RATE################################
@@ -217,28 +217,28 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
   let estimageAveRateDocumentLayoutSidePane: any;
   
   try {
-    const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData, condition);
-    const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData, condition)
-    const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData, condition);
+    const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
+    const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable)
+    const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
 
-    const responseDocumentation = await generateDocumentationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign}, condition)
-    const responseDesignReview = await generateDesignReviewMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseDocumentation}, condition);
+    const responseDocumentation = await generateDocumentationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
+    const responseDesignReview = await generateDesignReviewMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseDocumentation}, condition, settingParameters, isSnapshotModeEnable);
 
-    const responseIntegration = await generateIntegrationMValue(inititlaData, condition);
-    const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, condition);
-    const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition)
-    const responseDataMigration = await generateDataMigrationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition);
-    const responseCRP = await generateCRPMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition);
-    const responseTesting = await generateTestingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition);
+    const responseIntegration = await generateIntegrationMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
+    const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
+    const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
+    const responseDataMigration = await generateDataMigrationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
+    const responseCRP = await generateCRPMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
+    const responseTesting = await generateTestingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
 
     // In "train the trainer" has to 0 when "End user train" has value --- Keith said it hold for now
-    const responseTrainTheTrainer = await generateTrainTheTrainerMValue(inititlaData, {responseAnalisisDesign}, condition);
+    const responseTrainTheTrainer = await generateTrainTheTrainerMValue(inititlaData, {responseAnalisisDesign}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
 // UAT ENV MISSING
-    const responseUATEnvironmentPreparation = await generateUATEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition);
-    const responseUATSupport = await generateUATSupportMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition)
-    const responseProdEnvironmentPreparation = await generateProdEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition)
-    const responseSupportHandover = await generateSupportHandoverMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition)
-    const responsePostGoLive = await generatePostGoLiveMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition);
+    const responseUATEnvironmentPreparation = await generateUATEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
+    const responseUATSupport = await generateUATSupportMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
+    const responseProdEnvironmentPreparation = await generateProdEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
+    const responseSupportHandover = await generateSupportHandoverMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
+    const responsePostGoLive = await generatePostGoLiveMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
 
     // const responseProjectManagementSub = await calculateProjectManagerEstimateResource(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration});
     const {parameterModel} = inititlaData;
@@ -1029,7 +1029,7 @@ export const checkConditionAndGenerateValue = (calculatedValue: number, hourlyRa
 }
 
 // C5 value generate
-export const generateAnalysisDesignMValue = async(inititlaData: any, condition: boolean) => {
+export const generateAnalysisDesignMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
    // need to check with 'Estimate - Resource Milestone'!$C$1
   let resultValue = 0;
   let resultValueMS = 0;
@@ -1205,7 +1205,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         }
 
       });
-      
+
       const moduleLoop = await ModuleData && ModuleData?.length && ModuleData.map((moduleDataItem: any, moduleDataIndex: any) => {
 
         // Must
@@ -1228,9 +1228,9 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001]) {
           //
           if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
-            overidesModulesAnalysisDesign.push(moduleDataItem);
+            overidesModulesAnalysisDesignMS.push(moduleDataItem);
           } else {
-            modulesAnalysisDesign.push(moduleDataItem);
+            modulesAnalysisDesignMS.push(moduleDataItem);
           }
           if (!seenModuleMSIdsMS.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
             seenModuleMSIdsMS.add(moduleDataItem?.fitGapProductSeerModule?.id)
@@ -1244,9 +1244,9 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002]) {
           //
           if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
-            overidesModulesAnalysisDesign.push(moduleDataItem);
+            overidesModulesAnalysisDesignMSC.push(moduleDataItem);
           } else {
-            modulesAnalysisDesign.push(moduleDataItem);
+            modulesAnalysisDesignMSC.push(moduleDataItem);
           }
           if (!seenModuleMSCIdsMSC.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
             seenModuleMSCIdsMSC.add(moduleDataItem?.fitGapProductSeerModule?.id);

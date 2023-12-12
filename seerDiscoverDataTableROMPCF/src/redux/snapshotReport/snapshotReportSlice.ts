@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, current } from '@reduxjs/toolkit'
 // import type { PayloadAction } from '@reduxjs/toolkit'
 import { ReportState } from '../../types/reducer.types';
 
@@ -91,6 +91,7 @@ const initialState: any = {
   settingParameters: null,
   settingRated: null,
   currentEditingData: null,
+  hasLoadedData: false,
   loadedSnapshotData: null,
   isLoadingSnapshot: false,
   snapshotsList: null,
@@ -119,8 +120,57 @@ const snapshotSlice: any = createSlice({
     setLoadedSnapshot: (state, action) => {
       state.loadedSnapshotData = action.payload
     },
+    setHasLoadedData: (state, action) => {
+      state.hasLoadedData = action.payload
+    },
     setSettingParameters: (state, action) => {
+      console.log('lloo ===--0 => ', action);
+      // const userIndex = state.settingParameters.findIndex((item: any) => item.name === action?.payload?.name);
+      // if (userIndex !== -1) {
+      //   // Use spread operator to create a new object with updated properties
+      //   // const updatedUser = { ...state.settingParameters[userIndex], name: newName, role: newRole };
+    
+      //   // // Update the array with the new object
+      //   // state.settingParameters = [
+      //   //   ...state.settingParameters.slice(0, userIndex),
+      //   //   updatedUser,
+      //   //   ...state.settingParameters.slice(userIndex + 1),
+      //   // ];
+    
+      //   // console.log('User edited successfully:', updatedUser);
+      // }
+    
       state.settingParameters = action.payload
+    },
+    setSettingParameterAttributes: (state, action) => {
+      console.log('lloo ===--02 => ', action);
+      const {payload: {key, value}} = action;
+      const stateValue = current(state)
+      const parameterValues = stateValue?.settingParameters?.formattedData;
+      console.log('ee',stateValue?.settingParameters);
+      
+      const paramerterIndex = parameterValues?.findIndex((item: any) => item.name === action?.payload?.name);
+      console.log('paramerterIndex', paramerterIndex);
+      
+      if (paramerterIndex !== -1) {
+        // Use spread operator to create a new object with updated properties
+        const updatedPrameter = { 
+          ...parameterValues[paramerterIndex], 
+          [`${key}`]: value, 
+        };
+
+        console.log('updatedPrameter => ', updatedPrameter);
+        
+    
+        // // Update the array with the new object
+        state.settingParameters.formattedData = [
+          ...parameterValues.slice(0, paramerterIndex),
+          updatedPrameter,
+          ...parameterValues.slice(paramerterIndex + 1),
+        ];
+    
+        console.log('User edited successfully:', state.settingParameters);
+      }
     }
   }
 });
@@ -133,6 +183,7 @@ export const {
   setLoadedSnapshot,
   setSnapshotList,
   setSettingParameters,
+  setSettingParameterAttributes,
 } = snapshotSlice.actions;
 
 

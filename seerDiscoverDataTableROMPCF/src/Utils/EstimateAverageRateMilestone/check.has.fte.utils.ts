@@ -26,3 +26,14 @@ export const checkHasFte = async(parameterModel: any) => {
     return false;
   }
 }
+
+export const checkHasFteParameter = async(settingParameters: any) => {
+  try {
+    const hasValue = settingParameters?.formattedData?.some((obj: any) => {
+      if (obj?.typeValueCurrent == 100000000) return true;
+    });
+    return hasValue;
+  } catch (error) {
+    return false;
+  }
+}

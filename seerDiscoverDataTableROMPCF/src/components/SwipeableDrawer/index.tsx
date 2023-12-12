@@ -145,21 +145,21 @@ export default function SwipeableTemporaryDrawer({
                     {row?.header ? (
                       row?.collapse ? (
                         <>
-                          <ArrowForwardIosIcon
+                          <ExpandMoreIcon
                             onClick={(e: any) => onClickTableRow(row, false)}
                             className="collapse-icon collapse-expand-icon"
                           >
                             Expand
-                            </ArrowForwardIosIcon>
+                            </ExpandMoreIcon>
                           <TableCell>{row.name}</TableCell>
                         </>
                       ) : (
-                        <ExpandMoreIcon
+                        <ExpandLessIcon
                             onClick={(e: any) => onClickTableRow(row, true)}
-                            className="collapse-icon"
+                            className="collapse-icon collapse-expand-icon"
                         >
                           Collapse
-                        </ExpandMoreIcon>
+                        </ExpandLessIcon>
                       )
                     ) : (
                       <> </>
