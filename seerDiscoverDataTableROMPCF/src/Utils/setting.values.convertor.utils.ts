@@ -89,11 +89,11 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       type: null, // dropdown | string | null
       dropdownValues: [],
     },
-    { // NOT FINISH YET
+    { // NOT FINISH YET = Total license count
       name: 'Users',
       switch: null,
-      currentValue: parameterObject?.endUserTrainingUsers,
-      baslineValue: parameterObject?.endUserTrainingUsers,
+      currentValue: parameterObject?.totalLicenceCount,
+      baslineValue: parameterObject?.totalLicenceCount,
       type: null, // dropdown | string | null
       dropdownValues: [],
     },
@@ -248,6 +248,34 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       typeValueCurrent: parameterObject?.postGoLiveSupportType,
       typeValueBasline: parameterObject?.postGoLiveSupportType,
       dropdownValues: fteDropdown,
+      // "endUserTraining": 5.0000000000,
+      // "endUserTrainingUsers": 10.0000000000,
+    },
+    {
+      name: 'Project Manager',
+      switch: null,
+      currentValue: parameterObject?.projectManagement,
+      baslineValue: parameterObject?.projectManagement,
+      type: 'dropdown', // dropdown | string | null
+      typeValueCurrent: parameterObject?.projectManagementType,
+      typeValueBasline: parameterObject?.projectManagementType,
+      dropdownValues: fteDropdown,
+    },
+    {
+      name: 'Trainin Hours',
+      switch: null,
+      currentValue: parameterObject?.endUserTraining,
+      baslineValue: parameterObject?.endUserTraining,
+      type: null, // dropdown | string | null
+      dropdownValues: [],
+    },
+    {
+      name: 'Trainin Users',
+      switch: null,
+      currentValue: parameterObject?.endUserTrainingUsers,
+      baslineValue: parameterObject?.endUserTrainingUsers,
+      type: null, // dropdown | string | null
+      dropdownValues: [],
     },
   ];
   return {formattedData, parameterObject}
@@ -281,4 +309,12 @@ export const tableJsonConvertToparameterModel = (formattedData: Parameter[], cur
     postGoLiveSupport: parameterObject?.postGoLiveSupport,
     postGoLiveSupportType: parameterObject?.postGoLiveSupportType,
   }
+}
+
+
+export const checkTypeParseInt = (value: any) => {
+  if (typeof value == 'string') {
+    return parseInt(value)
+  }
+  return value
 }

@@ -56,6 +56,8 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     if (customisation?.length) {
       setCustomisationData(customisation)
     }
+    console.log('+++', isSnapshotModeEnable && settingParameters);
+    
     arrayGenerator(data, dispatch, settingParameters, isSnapshotModeEnable)
       .then(async(result: any) => {
         // Handle the result here
@@ -91,7 +93,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     // setDataSet(dataValue);
     // console.log('dataValue ==> ', dataValue);
   }
-
+// useMemo
   React.useMemo(() => {
     if (data) {
       arrayGeneratorHandler();
@@ -100,7 +102,8 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
       // console.log('dataValue ==> ', dataValue);
       
     }
-  }, [data]);
+  }, 
+  [data]);
   
   return (
     <div>
@@ -118,6 +121,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
           dataEstimateResourceMilestone={dataEstimateResourceMilestone}
           requirementData={requirementData}
           customisationData={customisationData}
+          arrayGeneratorHandler={arrayGeneratorHandler}
         />}
       {/* <TabComponent dataSet={dataSet} isRefreshing={loading || isLoading}/> */}
     </div>

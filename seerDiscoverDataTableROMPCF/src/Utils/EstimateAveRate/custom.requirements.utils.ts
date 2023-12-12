@@ -1,7 +1,9 @@
+import { parameterKeyIndex } from "../../Constants/parametersSetting";
 import { fitGapData, moscowsData } from "../../Constants/pickListData";
 
 export const generateCustomRequirementMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
+  const hasParameters = settingParameters && isSnapshotModeEnable
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -41,6 +43,12 @@ export const generateCustomRequirementMValue = async(inititlaData: any, conditio
   // seerMoscow
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, CustomRequirmentModel} = inititlaData
+    let {hoursPerday} = parameterModel[0]
+      if (hasParameters) {
+        hoursPerday = parseInt(settingParameters?.formattedData[
+          parameterKeyIndex.hoursPerDay
+        ]?.currentValue || '0');
+      }
     if (inititlaData) {
 
       const customRequirementLoop = await CustomRequirmentModel && CustomRequirmentModel.length && CustomRequirmentModel.map(async(customRequirementItem: any, customRequirementIndex: number) => {
@@ -78,35 +86,35 @@ export const generateCustomRequirementMValue = async(inititlaData: any, conditio
       if (parameterModel?.length) {
         returnObject.customRequirement.resultValue = generateReturnValue(
           primaryResourceDesignValueFromCustomRequirment,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         returnObject.customRequirement.resultValueMS = generateReturnValue(
           primaryResourceDesignValueFromCustomRequirmentMSC,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         returnObject.customRequirement.resultValueMSC = 
         generateReturnValue(
           primaryResourceDesignValueFromCustomRequirmentMSC,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
 
         returnObject.customRequirementBuild.resultValue = generateReturnValue(
           primaryResourceDesignValueBuildFromCustomRequirment,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         returnObject.customRequirementBuild.resultValueMS = generateReturnValue(
           primaryResourceDesignValueBuildFromCustomRequirmentMSC,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         returnObject.customRequirementBuild.resultValueMSC = 
         generateReturnValue(
           primaryResourceDesignValueBuildFromCustomRequirmentMSC,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
       }

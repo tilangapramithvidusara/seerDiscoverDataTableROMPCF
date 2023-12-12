@@ -1,8 +1,10 @@
 import { fitGapData, moscowsData } from "../../Constants/pickListData";
 import { integrationParameters } from "../../Constants/integrationParameters";
+import { parameterKeyIndex } from "../../Constants/parametersSetting";
 
 export const generateIntegrationMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
+  let hasParameters = settingParameters && isSnapshotModeEnable;
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -24,6 +26,12 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
   // wholeNumber
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, FactorsModel, IntegrationModel} = inititlaData
+    let {hoursPerday} = parameterModel[0]
+      if (hasParameters) {
+        hoursPerday = parseInt(settingParameters?.formattedData[
+          parameterKeyIndex.hoursPerDay
+        ]?.currentValue || '0');
+      }
     if (inititlaData) {
       
       // interfaces_Crf96_json
@@ -79,19 +87,19 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
       if (parameterModel?.length) {
         returnObject.integration.resultValue = generateReturnValue(
           integrationValue,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         
         returnObject.integration.resultValueMS = generateReturnValue(
           integrationValue,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
 
         returnObject.integration.resultValueMSC =  generateReturnValue(
           integrationValue,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         

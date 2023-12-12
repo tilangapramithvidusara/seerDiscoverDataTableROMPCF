@@ -12,8 +12,11 @@ import { dataEstimateResourceMilestone } from "../../Constants/estimateResourceM
 import { checkHasFte, checkHasFteParameter } from "../EstimateAverageRateMilestone/check.has.fte.utils";
 import { generateIColoumnValueFte } from "../EstimateAverageRateMilestone/sub.value.utils";
 import { romParameter } from "../../Constants/fteConstants";
+import { parameterKeyIndex } from "../../Constants/parametersSetting";
 
 export const arrayGenerator = async (initialDataSet: any, dispatch: any, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
+  console.log('eeee ==> ', settingParameters && isSnapshotModeEnable, settingParameters, isSnapshotModeEnable);
+  const hasParameters = settingParameters && isSnapshotModeEnable
   let resultArray: any[] = [];
   let subTotalMAnalysisDesign = 0;
   let subTotalMSAnalysisDesign = 0;
@@ -25,16 +28,30 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
 
   const condition = romParameter === "Days";
   const {parameterModel} = initialDataSet;
-  const {hourlyRate, hoursPerday} = parameterModel[0];
+  let {hourlyRate, hoursPerday} = parameterModel[0];
+  if (hasParameters) {
+    console.log('a', hourlyRate);
+    hourlyRate = {
+      ...hourlyRate,
+      value: parseInt(settingParameters?.formattedData[
+        parameterKeyIndex.hourlyRate
+      ]?.currentValue || '0')
+    }
+    console.log('b');
+    hoursPerday = parseInt(settingParameters?.formattedData[
+      parameterKeyIndex.hoursPerDay
+    ]?.currentValue || '0');
+    console.log('c');
+  }
 
   let fteValue: any;
   let hasFteValue: boolean;
 
   try {
     // checkHasFteParameter
-    console.log('ll ==> ', settingParameters && isSnapshotModeEnable);
+    console.log('llqq ==> ', settingParameters && isSnapshotModeEnable, hasParameters);
     
-    if (settingParameters && isSnapshotModeEnable) {
+    if (hasParameters) {
       hasFteValue = await checkHasFteParameter(settingParameters);
       console.log('cc=> ', hasFteValue);
       

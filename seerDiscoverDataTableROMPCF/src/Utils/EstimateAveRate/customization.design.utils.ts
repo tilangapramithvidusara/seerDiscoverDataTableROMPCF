@@ -1,7 +1,9 @@
+import { parameterKeyIndex } from "../../Constants/parametersSetting";
 import { fitGapData, moscowsData } from "../../Constants/pickListData";
 
 export const generateCustomisationDesignMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
+  const hasParameters = settingParameters && isSnapshotModeEnable
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -66,6 +68,12 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
   // seerMoscow
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels} = inititlaData
+    let {hourlyRate, hoursPerday} = parameterModel[0]
+    if (hasParameters) {
+      hoursPerday = parseInt(settingParameters?.formattedData[
+        parameterKeyIndex.hoursPerDay
+      ]?.currentValue || '0');
+    }
     if (inititlaData) {
       
 
@@ -109,7 +117,7 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
       if (parameterModel?.length) {
         returnObject.customisation.resultValue = generateReturnValue(
           primaryResourceDesignValueFromCustomisationModels,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         returnObject.customisation.resultBase = cmCustomisationDesign;
@@ -118,7 +126,7 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
         
         returnObject.customisation.resultValueMS = generateReturnValue(
           primaryResourceDesignValueFromCustomisationModelsMS,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         returnObject.customisation.resultBaseMS = cmCustomisationDesignMS;
@@ -126,7 +134,7 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
 
         returnObject.customisation.resultValueMSC =  generateReturnValue(
           primaryResourceDesignValueFromCustomisationModelsMSC,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         returnObject.customisation.resultBaseMSC = cmCustomisationDesignMSC;
@@ -134,7 +142,7 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
 
         returnObject.customisationBuild.resultValue =  generateReturnValue(
           primaryResourceDesignValueBuildFromCustomisationModels,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         returnObject.customisationBuild.resultBase = cmCustomisationBuild;
@@ -142,7 +150,7 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
 
         returnObject.customisationBuild.resultValueMS =  generateReturnValue(
           primaryResourceDesignValueBuildFromCustomisationModelsMS,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         returnObject.customisationBuild.resultBaseMS = cmCustomisationBuildMS;
@@ -150,7 +158,7 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
 
         returnObject.customisationBuild.resultValueMSC =  generateReturnValue(
           primaryResourceDesignValueBuildFromCustomisationModelsMSC,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         returnObject.customisationBuild.resultBaseMSC = cmCustomisationBuildMSC;

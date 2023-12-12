@@ -1,9 +1,16 @@
 import { hoursPerWeek, romParameter } from "../../Constants/fteConstants";
+import { parameterKeyIndex } from "../../Constants/parametersSetting";
 import { fitGapData, moscowsData, percentData } from "../../Constants/pickListData";
-const para_d4 = 10/100;
+let para_d4 = 10/100;
 export const generateCRPMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean, isFte?: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
   let fte = isFte ? true : false;
+  let hasParameters = settingParameters && isSnapshotModeEnable;
+  if (hasParameters) {
+    para_d4 = parseInt(settingParameters?.formattedData[
+      parameterKeyIndex.fteBase
+    ]?.currentValue || '0')
+  }
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -24,7 +31,19 @@ export const generateCRPMValue = async(inititlaData: any, analisisDesignPre: {re
   }
   // seerMoscow
   try {
-    const {parameterModel, fteValue} = inititlaData
+    const {parameterModel, fteValue} = inititlaData;
+    let {hourlyRate, hoursPerday} = parameterModel[0];
+    if (hasParameters) {
+      hoursPerday = parseInt(settingParameters?.formattedData[
+        parameterKeyIndex.hoursPerDay
+      ]?.currentValue || '0');
+      hourlyRate = {
+        ...hourlyRate,
+        value: parseInt(settingParameters?.formattedData[
+          parameterKeyIndex.hourlyRate
+        ]?.currentValue || '0')
+      }
+    }
     if (inititlaData) {
       // Must Custom Requirement
       const mustCal = 
@@ -42,7 +61,7 @@ export const generateCRPMValue = async(inititlaData: any, analisisDesignPre: {re
         (analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValueMSC || 0) + 
         (analisisDesignPre?.responseCustomisationDesign.customisationBuild?.resultValueMSC || 0) + 
         (analisisDesignPre?.responseIntegration.integration?.resultValueMSC || 0)
-      const F4Parameter = parameterModel[0]?.hoursPerday * 5;
+      const F4Parameter = hoursPerday * 5;
       const O37 = 0// to find this we need to complete Estimate Avg Rate Milestone table
       const H6 = 29// if days === c2 => O37/5 else (O37/8)/5
       const h7 = fteValue?.totalFte // need to gets it from api

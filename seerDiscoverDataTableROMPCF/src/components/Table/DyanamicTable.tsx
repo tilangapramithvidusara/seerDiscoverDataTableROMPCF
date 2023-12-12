@@ -5,7 +5,7 @@ import { TextField, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
 import { parameterSettingColumns, parameterBaseSettingColumns } from '../../Constants/parametersSetting';
-import { setSettingParameterAttributes, setSettingParameters } from '../../redux/snapshotReport/snapshotReportSlice';
+import { setSettingParameterAttributes, setSettingParameters, setStateSnapshot } from '../../redux/snapshotReport/snapshotReportSlice';
 import { Parameter } from '../../Utils/setting.values.convertor.utils';
 import { fteDropdown } from '../../Constants/dropdownConstants';
 
@@ -17,8 +17,20 @@ const DyanamicTable = () => {
 
   console.log('settingParameters', settingParameters);
 
+  const handleKeyDown = (event: any) => {
+    if (event.key === 'Enter') {
+      console.log('Sentence changed:');
+      dispatch(setStateSnapshot(true))
+    }
+  };
+
   const onChangeHanlder = useCallback((info) => {
     dispatch(setSettingParameterAttributes(info))
+    if (info?.isDropDown) {
+      dispatch(setStateSnapshot(true))
+    }
+    // example for checking
+    // dispatch(setStateSnapshot(true))
   }, [dispatch]);
 
   const handleSetSettingParameters = useCallback((info) => {
@@ -74,7 +86,8 @@ const DyanamicTable = () => {
                               {
                                 ...settingItem,
                                 key: 'typeValueCurrent',
-                                value: e.target.value
+                                value: e.target.value,
+                                isDropDown: true,
                               }
                             )
                           }}
@@ -106,7 +119,8 @@ const DyanamicTable = () => {
                               {
                                 ...settingItem,
                                 key: 'currentValue',
-                                value: e.target.value
+                                value: e.target.value,
+                                isDropDown: true,
                               }
                             )
                           }}
@@ -126,6 +140,7 @@ const DyanamicTable = () => {
                           name="currentValue"
                           value={currentValue}
                           type="text"
+                          onKeyDown={handleKeyDown}
                           onChange={(e) => {
 
                             onChangeHanlder(

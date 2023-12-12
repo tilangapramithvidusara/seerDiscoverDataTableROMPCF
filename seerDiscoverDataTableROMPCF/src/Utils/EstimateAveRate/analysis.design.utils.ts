@@ -19,8 +19,11 @@ import { generateTrainTheTrainerMValue } from "./train.the.trainer.utils";
 import { generateUATEnvironmentPreparationMValue } from "./uat.environment.preparation.utils";
 import { generateUATSupportMValue } from "./uat.support.utils";
 import { setEstimateAveRateAnalysisDesign } from "../../redux/report/reportSlice";
+import { parameterKeyIndex } from "../../Constants/parametersSetting";
+import { checkTypeParseInt } from "../setting.values.convertor.utils";
 
 export const generateIColoumnValue = async(inititlaData: any, title: string, dispatch: any, hasFteValue?: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
+  console.log('pppp ==> ', settingParameters, isSnapshotModeEnable);
   
   const condition = romParameter === "Days";
   // ################################ESTIMATE AVERAGE RATE################################
@@ -244,8 +247,29 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
     const {parameterModel} = inititlaData;
     if (parameterModel?.length) {
       // ################################ESTIMATE AVERAGE RATE################################
-      const { hoursPerday, hourlyRate } = parameterModel[0];
+      let { hoursPerday, hourlyRate } = parameterModel[0];
+      
+      
+      if (settingParameters && isSnapshotModeEnable) {
+        console.log('q1q1q1q1q ==> ', settingParameters?.formattedData[
+          parameterKeyIndex?.hourlyRate
+        ]?.currentValue, parameterKeyIndex?.hourlyRate);
+        hoursPerday = checkTypeParseInt(settingParameters?.formattedData[
+          parameterKeyIndex.hoursPerDay
+        ]?.currentValue || '0')
+        hourlyRate = {
+          ...hourlyRate,
+          value: parseInt(settingParameters?.formattedData[
+            parameterKeyIndex.hourlyRate
+          ]?.currentValue || '0')
+        }
+
+        console.log('hourlyRate',hourlyRate);
+        
+      }
       resultValueAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValue, hourlyRate?.value, hoursPerday, condition)
+      console.log('peeek ', hourlyRate?.value, hoursPerday,responseAnalisisDesign?.resultValue);
+      
       resultValueMSAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValueMS, hourlyRate?.value, hoursPerday, condition)
       resultValueMSCAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValueMSC, hourlyRate?.value, hoursPerday, condition)
       resultValueAnalisisDesignBase = checkConditionAndGenerateValue(responseAnalisisDesign?.resultBaseValue, hourlyRate?.value, hoursPerday, condition)
@@ -1031,6 +1055,7 @@ export const checkConditionAndGenerateValue = (calculatedValue: number, hourlyRa
 // C5 value generate
 export const generateAnalysisDesignMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
    // need to check with 'Estimate - Resource Milestone'!$C$1
+  const hasParameters = settingParameters && isSnapshotModeEnable
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -1123,6 +1148,15 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
   const seenModuleConfigurationMSCIds = new Set();
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel} = inititlaData
+    let {hoursPerday} = parameterModel[0];
+    if (hasParameters) {
+      hoursPerday = parseInt(settingParameters?.formattedData[
+        parameterKeyIndex.hoursPerDay
+      ]?.currentValue || '0')
+    }
+
+    console.log('hoursPerday design ==> ', hoursPerday, hasParameters);
+    
     if (inititlaData) {
 
       // BASE DATA LOOP
@@ -1313,7 +1347,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseData,
           primaryResourceDesignValueFromModuleData,
           secondaryResourceDesignValueFromModuleData,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         );
         // (
@@ -1328,7 +1362,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseDataMS,
           primaryResourceDesignValueFromModuleDataMS,
           secondaryResourceDesignValueFromModuleDataMS,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         );
         // (
@@ -1343,28 +1377,28 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseDataMSC,
           primaryResourceDesignValueFromModuleDataMSC,
           secondaryResourceDesignValueFromModuleDataMSC,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         );
 
         resultConfigurationValue = generateReturnValue(
           buildEstimateConfigurationValueFromBaseData, 
           buildEstimateConfigurationValueFromModlueData, 0, 0, 
-          parameterModel[0].hoursPerday, 
+          hoursPerday, 
           condition
         )
         // (buildEstimateConfigurationValueFromBaseData + buildEstimateConfigurationValueFromModlueData)/parameterModel[0].hoursPerday
         resultConfigurationValueMS = generateReturnValue(
           buildEstimateConfigurationValueFromBaseDataMS, 
           buildEstimateConfigurationValueFromModlueDataMS, 0, 0, 
-          parameterModel[0].hoursPerday, 
+          hoursPerday, 
           condition
         )
         //(buildEstimateConfigurationValueFromBaseDataMS + buildEstimateConfigurationValueFromModlueDataMS)/parameterModel[0].hoursPerday
         resultConfigurationValueMSC = generateReturnValue(
           buildEstimateConfigurationValueFromBaseDataMSC, 
           buildEstimateConfigurationValueFromModlueDataMSC, 0, 0, 
-          parameterModel[0].hoursPerday, 
+          hoursPerday, 
           condition
         )
         //(buildEstimateConfigurationValueFromBaseDataMSC + buildEstimateConfigurationValueFromModlueDataMSC)/parameterModel[0].hoursPerday
@@ -1395,7 +1429,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           0,
           primaryResourceDesignValueFromModuleData,
           secondaryResourceDesignValueFromModuleData,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         ),
         resultModuleValueMS: generateReturnValue(
@@ -1403,7 +1437,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           0,
           primaryResourceDesignValueFromModuleDataMS,
           secondaryResourceDesignValueFromModuleDataMS,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         ),
         resultModuleValueMSC: generateReturnValue(
@@ -1411,7 +1445,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           0,
           primaryResourceDesignValueFromModuleDataMSC,
           secondaryResourceDesignValueFromModuleDataMSC,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         ),
         resultBaseValue: generateReturnValue(
@@ -1419,7 +1453,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseData,
           0,
           0,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         ),
         resultBaseValueMS: generateReturnValue(
@@ -1427,7 +1461,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseDataMS,
           0,
           0,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         ),
         resultBaseValueMSC: generateReturnValue(
@@ -1435,7 +1469,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseDataMSC,
           0,
           0,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         ),
         configuration: {
@@ -1459,7 +1493,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             0,
             0,
             buildEstimateConfigurationValueFromModlueData,
-            parameterModel[0].hoursPerday,
+            hoursPerday,
             condition
           ),
           resultModuleValueMS: generateReturnValue(
@@ -1467,7 +1501,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             0,
             0,
             buildEstimateConfigurationValueFromModlueDataMS,
-            parameterModel[0].hoursPerday,
+            hoursPerday,
             condition
           ),
           resultModuleValueMSC: generateReturnValue(
@@ -1475,7 +1509,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             0,
             0,
             buildEstimateConfigurationValueFromModlueDataMSC,
-            parameterModel[0].hoursPerday,
+            hoursPerday,
             condition
           ),
           resultBaseValue: generateReturnValue(
@@ -1483,7 +1517,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             0,
             0,
             0,
-            parameterModel[0].hoursPerday,
+            hoursPerday,
             condition
           ),
           resultBaseValueMS: generateReturnValue(
@@ -1491,7 +1525,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             0,
             0,
             0,
-            parameterModel[0].hoursPerday,
+            hoursPerday,
             condition
           ),
           resultBaseValueMSC: generateReturnValue(
@@ -1499,7 +1533,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             0,
             0,
             0,
-            parameterModel[0].hoursPerday,
+            hoursPerday,
             condition
           ),
         }

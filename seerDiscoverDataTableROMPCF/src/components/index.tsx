@@ -24,7 +24,7 @@ import { Settings } from "@mui/icons-material";
 import DyanamicTable from "./Table/DyanamicTable";
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
-import { setSettingParameters } from "../redux/snapshotReport/snapshotReportSlice";
+import { setSettingParameters, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
 
 
 const App = ({
@@ -34,6 +34,7 @@ const App = ({
   dataEstimateResourceMilestone, 
   requirementData,
   customisationData,
+  arrayGeneratorHandler,
 }: {
   dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, 
   dataSetEstimateResource: any, 
@@ -41,6 +42,7 @@ const App = ({
   dataEstimateResourceMilestone: any, 
   requirementData: any,
   customisationData: any,
+  arrayGeneratorHandler: any,
 }) => { 
 
   const items: TabsProps['items'] = [
@@ -108,6 +110,7 @@ const App = ({
   const [openSettingPopup, setOpenSettingPopup] = React.useState<boolean>(false);
   const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
   const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
+  const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
   
   const onChange = (key: string) => {
     console.log(key);
@@ -137,11 +140,27 @@ const App = ({
       const formatedData = parameterModelConvertToTableJson(initFetchedData?.parameterModel);
       dispatch(setSettingParameters(formatedData))
       console.log('formatedData => ', formatedData);
-    }
-    
+    } 
     setOpenSettingPopup(true)
-    
   }
+
+  // only for check
+  React.useMemo(() => {
+    console.log('call meee', settingParameters && isSnapshotModeEnable);
+    console.log('isSnapshotModeEnable', isSnapshotModeEnable);
+    
+    if (settingParameters && isSnapshotModeEnable) {
+      // initialTriggerHandler(settingParameters);
+      arrayGeneratorHandler();
+      dispatch(setStateSnapshot(false))
+      // setTimeout(() => {
+      //   // arrayGeneratorHandler()
+      //   dispatch(setStateSnapshot(false))
+      // }, 1000)
+      
+    }
+  }, [settingParameters && isSnapshotModeEnable])
+  // export const arrayGenerator = async (initialDataSet: any, dispatch: any, settingParameters?: any, isSnapshotModeEnable?: boolean)
 
   return (
     <>

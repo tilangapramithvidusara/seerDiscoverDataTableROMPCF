@@ -17,11 +17,15 @@ import { generateTrainTheTrainerMValue } from "../EstimateAveRate/train.the.trai
 import { generateUATEnvironmentPreparationMValue } from "../EstimateAveRate/uat.environment.preparation.utils";
 import { generateUATSupportMValue } from "../EstimateAveRate/uat.support.utils";
 import { romParameter } from "../../Constants/fteConstants";
+import { checkTypeParseInt } from "../setting.values.convertor.utils";
+import { parameterKeyIndex } from "../../Constants/parametersSetting";
 
 const para_d4 = 10/100;
 
 export const generateIColoumnValueFte = async(inititlaData: any, title?: string, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   const condition = romParameter === "Days";
+  const hasParameters = settingParameters && isSnapshotModeEnable;
+  // formattedData
   // ################################ESTIMATE AVERAGE RATE################################
   // ANALYSIS AND DESIGN
   let resultValue = 0;
@@ -180,28 +184,28 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
   // ################################ESTIMATE RESOURCE################################
   
   try {
-    const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData, condition);
-    const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData, condition)
-    const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData, condition);
+    const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
+    const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable)
+    const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
 
-    const responseDocumentation = await generateDocumentationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign}, condition, true)
-    const responseDesignReview = await generateDesignReviewMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseDocumentation}, condition, true);
+    const responseDocumentation = await generateDocumentationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign}, condition, true, settingParameters, isSnapshotModeEnable)
+    const responseDesignReview = await generateDesignReviewMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseDocumentation}, condition, true, settingParameters, isSnapshotModeEnable);
 
     const responseIntegration = await generateIntegrationMValue(inititlaData, condition);
     const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, condition);
-    const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true)
-    const responseDataMigration = await generateDataMigrationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true);
-    const responseCRP = await generateCRPMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true);
-    const responseTesting = await generateTestingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true);
+    const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable)
+    const responseDataMigration = await generateDataMigrationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
+    const responseCRP = await generateCRPMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
+    const responseTesting = await generateTestingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
 
     // In "train the trainer" has to 0 when "End user train" has value --- Keith said it hold for now
-    const responseTrainTheTrainer = await generateTrainTheTrainerMValue(inititlaData, {responseAnalisisDesign}, condition, true);
+    const responseTrainTheTrainer = await generateTrainTheTrainerMValue(inititlaData, {responseAnalisisDesign}, condition, true, settingParameters, isSnapshotModeEnable);
 // UAT ENV MISSING
-    const responseUATEnvironmentPreparation = await generateUATEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true);
-    const responseUATSupport = await generateUATSupportMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true)
-    const responseProdEnvironmentPreparation = await generateProdEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true)
-    const responseSupportHandover = await generateSupportHandoverMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true)
-    const responsePostGoLive = await generatePostGoLiveMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true);
+    const responseUATEnvironmentPreparation = await generateUATEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
+    const responseUATSupport = await generateUATSupportMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable)
+    const responseProdEnvironmentPreparation = await generateProdEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable)
+    const responseSupportHandover = await generateSupportHandoverMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable)
+    const responsePostGoLive = await generatePostGoLiveMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
 
     // const responseProjectManagementSub = await calculateProjectManagerEstimateResource(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration});
 
@@ -446,7 +450,7 @@ export const checkConditionAndGenerateValue = (calculatedValue: number, hourlyRa
 }
 
 // C5 value generate
-export const generateAnalysisDesignMValue = async(inititlaData: any, condition: boolean) => {
+export const generateAnalysisDesignMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
    // need to check with 'Estimate - Resource Milestone'!$C$1
   let resultValue = 0;
   let resultValueMS = 0;
@@ -506,6 +510,18 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
   const seenModuleConfigurationMSCIds = new Set();
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel} = inititlaData
+    let {hourlyRate, hoursPerday} = parameterModel[0];
+    if (settingParameters && isSnapshotModeEnable) {
+      hoursPerday = checkTypeParseInt(settingParameters?.formattedData[
+        parameterKeyIndex.hoursPerDay
+      ]?.currentValue || '0');
+      hourlyRate = {
+        ...hourlyRate,
+        value: parseInt(settingParameters?.formattedData[
+          parameterKeyIndex.hourlyRate
+        ]?.currentValue || '0')
+      }
+    }
     if (inititlaData) {
 
       // BASE DATA LOOP
@@ -635,7 +651,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseData,
           primaryResourceDesignValueFromModuleData,
           secondaryResourceDesignValueFromModuleData,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         );
         // (
@@ -650,7 +666,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseDataMS,
           primaryResourceDesignValueFromModuleDataMS,
           secondaryResourceDesignValueFromModuleDataMS,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         );
         // (
@@ -665,28 +681,28 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseDataMSC,
           primaryResourceDesignValueFromModuleDataMSC,
           secondaryResourceDesignValueFromModuleDataMSC,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         );
 
         resultConfigurationValue = generateReturnValue(
           buildEstimateConfigurationValueFromBaseData, 
           buildEstimateConfigurationValueFromModlueData, 0, 0, 
-          parameterModel[0].hoursPerday, 
+          hoursPerday, 
           condition
         )
         // (buildEstimateConfigurationValueFromBaseData + buildEstimateConfigurationValueFromModlueData)/parameterModel[0].hoursPerday
         resultConfigurationValueMS = generateReturnValue(
           buildEstimateConfigurationValueFromBaseDataMS, 
           buildEstimateConfigurationValueFromModlueDataMS, 0, 0, 
-          parameterModel[0].hoursPerday, 
+          hoursPerday, 
           condition
         )
         //(buildEstimateConfigurationValueFromBaseDataMS + buildEstimateConfigurationValueFromModlueDataMS)/parameterModel[0].hoursPerday
         resultConfigurationValueMSC = generateReturnValue(
           buildEstimateConfigurationValueFromBaseDataMSC, 
           buildEstimateConfigurationValueFromModlueDataMSC, 0, 0, 
-          parameterModel[0].hoursPerday, 
+          hoursPerday, 
           condition
         )
         //(buildEstimateConfigurationValueFromBaseDataMSC + buildEstimateConfigurationValueFromModlueDataMSC)/parameterModel[0].hoursPerday
