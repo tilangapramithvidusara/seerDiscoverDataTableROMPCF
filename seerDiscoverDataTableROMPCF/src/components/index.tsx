@@ -154,24 +154,29 @@ const App = ({
         </>
       )}
       <Grid className="flex-wrap">
-      
-        <Box sx={{ m: 2 }} className="flex-wrap-justify m-0">
-          <Stack direction="row" className="custom-grid mr-15">
-            <Grid className="flex-wrap">
-              <InputLabel className="label mr-10">Mode</InputLabel>
-            </Grid>
-            <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton}/>
-          </Stack>
-          <DropDownButtons selectedButton={selectedButton}/>
-        </Box>
-        <div className='text-right' 
-        // style={{margin: '2px', height: '10px !important', fontSize: '11px !important'}}
-        >
-        <Button className='btn-primary' onClick={(e) => initialTriggerHandler(e)}><AutorenewOutlinedIcon className="btn-icon"/>Refresh</Button>
-        {selectedButton == 'button2' && (
-          <Button className='btn-primary' onClick={(e) => formattedSettingHandler(e, initialFetchData)}><Settings className="btn-icon"/>Setting</Button>
-        )}
-      </div>  
+        <div className="flex-wrpa-start">
+          <span className="blue-text">Snapshot Name: </span>
+          <span className="gray-text">Unsaved</span>
+        </div>
+        <div className="flex-wrap-end">
+          <Box sx={{ m: 2 }} className="flex-wrap-justify m-0">
+            <Stack direction="row" className="custom-grid mr-15">
+              <Grid className="flex-wrap">
+                {/* <InputLabel className="label mr-10">Mode</InputLabel> */}
+              </Grid>
+              <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton} />
+            </Stack>
+            <DropDownButtons selectedButton={selectedButton} />
+          </Box>
+          <div className='text-right'
+          // style={{margin: '2px', height: '10px !important', fontSize: '11px !important'}}
+          >
+            <Button title="Refresh" className='btn-primary btn-small mr-10' onClick={(e) => initialTriggerHandler(e)}><AutorenewOutlinedIcon className="btn-icon" /></Button>
+            {selectedButton == 'button2' && (
+              <Button title="Setting" className='btn-primary btn-small' onClick={(e) => formattedSettingHandler(e, initialFetchData)}><Settings className="btn-icon" /></Button>
+            )}
+          </div>
+        </div> 
       </Grid> 
       <div>
         {openSettingPopup && (
