@@ -1,4 +1,5 @@
 import { romParameter } from "../../Constants/fteConstants";
+import { parameterKeyIndex } from "../../Constants/parametersSetting";
 import { percentData } from "../../Constants/pickListData";
 
 
@@ -9,13 +10,19 @@ export const generateEstimateResourceValue = (
   name: string,
   priority: string,
   condition: boolean,
-  isSub?: boolean,
+  // isSub?: boolean,
+  settingParameters?: any, isSnapshotModeEnable?: boolean
   ) => {
   try {
     
     const {ProjectTasktModel, resourceModelData, parameterModel} = inititlaData;
     const filteredValue: any = ProjectTasktModel?.length && ProjectTasktModel.find((item: any, index: number) => {
-      return item?.projectTaskPartner_Name == name
+      if (name === 'Project Manager') {
+        console.log('Project Manager 3', item?.projectTaskPartner_Name);
+        console.log('Project Manager 4', item?.name);
+      }  
+      return item?.projectTaskPartner_Name == name || item?.projectTaskCustomer_Name == name || item?.name == name
+      
     });
     if (filteredValue) {
       //
@@ -26,11 +33,14 @@ export const generateEstimateResourceValue = (
         projectTaskCustomer_Name,
         projectTaskCustomer_Resource,
         projectTaskCustomer_ResourceSecondary,
-        projectTaskCustomer_ResourceSplit
+        projectTaskCustomer_ResourceSplit,
+        projectTaskPartner_Name,
+        name,
       } = filteredValue;
       // projectTaskCustomer_Name
       const checkIsCustomer = projectTaskCustomer_Name ? true : false;
-      const split = checkIsCustomer ? projectTaskCustomer_ResourceSplit : projectTaskPartner_ResourceSplit
+      const checkIsPatner = projectTaskPartner_Name ? true : false;
+      const split = checkIsCustomer ? (projectTaskCustomer_ResourceSplit || 0) : (projectTaskPartner_ResourceSplit || 0)
 
       const findProjectTaskPartner_Resource = projectTaskPartner_Resource?.id && resourceModelData?.find((item: any, index: number) => checkIsCustomer ? item?.resourceId == projectTaskCustomer_Resource?.id : item?.resourceId == projectTaskPartner_Resource?.id);
       const findProjectTaskPartner_ResourceSecondary = projectTaskPartner_ResourceSecondary?.id && resourceModelData?.find((item: any, index: number) => checkIsCustomer ? item?.resourceId == projectTaskCustomer_ResourceSecondary?.id : item?.resourceId == projectTaskPartner_ResourceSecondary?.id)
@@ -38,37 +48,37 @@ export const generateEstimateResourceValue = (
       
 
       const r1Mvalue = priority === 'Estimate Resource Milestone' ? subCal.M *  (split || 0)/100 : generateValue(split || 0, subCal.M || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition);
-      const r1MvalueSub = allSubsections?.resultValue *  (split || 0)/100;
+      const r1MvalueSub = allSubsections?.resultValue *  (100 - split || 0)/100;
       // condition ? 
       //   subCal.M * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal.M * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate
 
       const r2Mvalue = priority === 'Estimate Resource Milestone' ? subCal.M *  (100 - split || 0)/100 : generateValue((100 - split) || 0, subCal.M || 0, findProjectTaskPartner_ResourceSecondary?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
-      const r2MvalueSub = allSubsections?.resultValue *  ((100 - split) || 0)/100;
+      const r2MvalueSub = allSubsections?.resultValue *  ((split) || 0)/100;
       // condition ? 
       //   subCal.M * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal.M * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate
 
       const r1MSvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S'] || 0) *  (split || 0)/100 : generateValue((split) || 0, subCal['M/S'] || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
-      const r1MSvalueSub = allSubsections?.resultValueMS *  ((split) || 0)/100;
+      const r1MSvalueSub = allSubsections?.resultValueMS *  ((100 - split) || 0)/100;
       // condition ? 
       //   subCal['M/S'] * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S']* ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate
 
       const r2MSvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S'] || 0) *  (100 - split || 0)/100 : generateValue((100 - split) || 0, subCal['M/S'] || 0, findProjectTaskPartner_ResourceSecondary?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
-      const r2MSvalueSub = allSubsections?.resultValueMS *  ((100 - split) || 0)/100;
+      const r2MSvalueSub = allSubsections?.resultValueMS *  ((split) || 0)/100;
       // condition ? 
       //   subCal['M/S'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate
 
       const r1MSCvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S/C'] || 0) *  (split || 0)/100 : generateValue((split) || 0, subCal['M/S/C'] || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
-      const r1MSCvalueSub = allSubsections?.resultValueMSC *  ((split) || 0)/100;
+      const r1MSCvalueSub = allSubsections?.resultValueMSC *  ((100 - split) || 0)/100;
       // condition ? 
       //   subCal['M/S/C'] * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S/C'] * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate
 
       const r2MSCvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S/C'] || 0) *  (100 - split || 0)/100 : generateValue((100 - split) || 0, subCal['M/S/C'] || 0, findProjectTaskPartner_ResourceSecondary?.hourlyRate || 0, parameterModel[0]?.hoursPerday || 0, condition)
-      const r2MSCvalueSub = allSubsections?.resultValueMSC *  ((100 - split) || 0)/100;
+      const r2MSCvalueSub = allSubsections?.resultValueMSC *  ((split) || 0)/100;
       // condition ? 
       //   subCal['M/S/C'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S/C'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate
@@ -96,9 +106,15 @@ export const generateEstimateResourceValue = (
         numberOfResources,
       }
     } else {
-      ProjectTasktModel?.length && ProjectTasktModel.find((item: any, index: number) => {        
+      ProjectTasktModel?.length && ProjectTasktModel.find((item: any, index: number) => { 
+        if (name === 'Project Manager') {
+          console.log('Project Manager 2', item?.projectTaskPartner_Name);
+          
+        }       
         return item?.projectTaskPartner_Name == name
       });
+      console.log('eeeeeee', name);
+      
       throw new Error();
     }
   } catch (error) {
@@ -224,8 +240,16 @@ export const calculateSubTotal = async(
 }
 
 
-export const calculateProjectManagerEstimateResource = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, totalOfSub: any) => {
+export const calculateProjectManagerEstimateResource = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, totalOfSub: any, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
+  let hasParameters = settingParameters && isSnapshotModeEnable;
+
   const {parameterModel} = inititlaData;
+  let {hoursPerday} = parameterModel[0]
+  if (hasParameters) {
+    hoursPerday = parseInt(settingParameters?.formattedData[
+      parameterKeyIndex.hoursPerDay
+    ]?.currentValue || '0');
+  }
 
   const returnObject = {
     resultValue: 0,
@@ -249,7 +273,7 @@ export const calculateProjectManagerEstimateResource = async(inititlaData: any, 
     (analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValueMSC || 0) + 
     (analisisDesignPre?.responseCustomisationDesign.customisationBuild?.resultValueMSC || 0) + 
     (analisisDesignPre?.responseIntegration.integration?.resultValueMSC || 0)
-  const F4Parameter = parameterModel[0]?.hoursPerday * 5;
+  const F4Parameter = hoursPerday * 5;
   const O37 = 0// to find this we need to complete Estimate Avg Rate Milestone table
   const H6 = 29// if days === c2 => O37/5 else (O37/8)/5
   const h8 = 1123.176 // need to gets it from api
@@ -257,34 +281,73 @@ export const calculateProjectManagerEstimateResource = async(inititlaData: any, 
   const f8 = 1406.438
   
   try {
-    if (percentData?.[parameterModel[0]?.projectManagementType] === percentData?.[100000001]) {
-      // "projectManagement": 20.0000000000,
-      //       "projectManagementType": 100000001,
-      //(totalOfSub?.['M_Resource1] + totalOfSub?.['M_Resource2]) * (parameterModel[0].projectManagement /100)
-      
-      returnObject.resultValue = (totalOfSub?.['M']) * (parameterModel[0].projectManagement /100)
-      returnObject.resultValueMS = (totalOfSub?.['M/S']) * (parameterModel[0].projectManagement /100)
-      returnObject.resultValueMSC = (totalOfSub?.['M/S/C']) * (parameterModel[0].projectManagement /100)
-    } else {
-      //
-      // not done yet
-      if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000001]) {
-        // solutionArchitecture
-        returnObject.resultValue = mustCal * (parameterModel[0]?.solutionArchitecture/100);
-        returnObject.resultValueMS = mustShouldCal * (parameterModel[0]?.solutionArchitecture/100);
-        returnObject.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.solutionArchitecture/100);
-      } else if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000002]) { // hours
+    if (hasParameters) {
+      const projectManagementValue = parseInt(settingParameters?.formattedData[
+        parameterKeyIndex.projectManagement
+      ]?.currentValue || '0')
+      const projectManagementTypeValue = parseInt(settingParameters?.formattedData[
+        parameterKeyIndex.projectManagement
+      ]?.typeValueCurrent)
+
+      if (percentData?.[projectManagementTypeValue] == percentData?.[100000001]) {
+        // "projectManagement": 20.0000000000,
+        //       "projectManagementType": 100000001,
+        //(totalOfSub?.['M_Resource1] + totalOfSub?.['M_Resource2]) * (parameterModel[0].projectManagement /100)
         
-        returnObject.resultValue = romParameter == "Hours" ? parameterModel[0]?.solutionArchitecture : parameterModel[0]?.solutionArchitecture/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
-        returnObject.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.solutionArchitecture : parameterModel[0]?.solutionArchitecture/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
-        returnObject.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.solutionArchitecture : parameterModel[0]?.solutionArchitecture/parameterModel[0]?.hoursPerday
-      } else if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000000]) { // FTE
-        // dont need yet
-        returnObject.resultValue = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture * h8) : (parameterModel[0]?.solutionArchitecture * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
-        returnObject.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture * g8) : (parameterModel[0]?.solutionArchitecture * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
-        returnObject.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture * f8) : (parameterModel[0]?.solutionArchitecture * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
+        returnObject.resultValue = (totalOfSub?.['M']) * (projectManagementValue /100)
+        returnObject.resultValueMS = (totalOfSub?.['M/S']) * (projectManagementValue /100)
+        returnObject.resultValueMSC = (totalOfSub?.['M/S/C']) * (projectManagementValue /100)
+      } else {
+        //
+        // not done yet
+        if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000001]) {
+          // solutionArchitecture
+          returnObject.resultValue = mustCal * (parameterModel[0]?.solutionArchitecture/100);
+          returnObject.resultValueMS = mustShouldCal * (parameterModel[0]?.solutionArchitecture/100);
+          returnObject.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.solutionArchitecture/100);
+        } else if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000002]) { // hours
+          
+          returnObject.resultValue = romParameter == "Hours" ? parameterModel[0]?.solutionArchitecture : parameterModel[0]?.solutionArchitecture/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.solutionArchitecture : parameterModel[0]?.solutionArchitecture/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.solutionArchitecture : parameterModel[0]?.solutionArchitecture/hoursPerday
+        } else if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000000]) { // FTE
+          // dont need yet
+          returnObject.resultValue = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture * h8) : (parameterModel[0]?.solutionArchitecture * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
+          returnObject.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture * g8) : (parameterModel[0]?.solutionArchitecture * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
+          returnObject.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture * f8) : (parameterModel[0]?.solutionArchitecture * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
+        }
+      }
+    } else {
+      if (percentData?.[parameterModel[0]?.projectManagementType] === percentData?.[100000001]) {
+        // "projectManagement": 20.0000000000,
+        //       "projectManagementType": 100000001,
+        //(totalOfSub?.['M_Resource1] + totalOfSub?.['M_Resource2]) * (parameterModel[0].projectManagement /100)
+        
+        returnObject.resultValue = (totalOfSub?.['M']) * (parameterModel[0].projectManagement /100)
+        returnObject.resultValueMS = (totalOfSub?.['M/S']) * (parameterModel[0].projectManagement /100)
+        returnObject.resultValueMSC = (totalOfSub?.['M/S/C']) * (parameterModel[0].projectManagement /100)
+      } else {
+        //
+        // not done yet
+        if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000001]) {
+          // solutionArchitecture
+          returnObject.resultValue = mustCal * (parameterModel[0]?.solutionArchitecture/100);
+          returnObject.resultValueMS = mustShouldCal * (parameterModel[0]?.solutionArchitecture/100);
+          returnObject.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.solutionArchitecture/100);
+        } else if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000002]) { // hours
+          
+          returnObject.resultValue = romParameter == "Hours" ? parameterModel[0]?.solutionArchitecture : parameterModel[0]?.solutionArchitecture/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.solutionArchitecture : parameterModel[0]?.solutionArchitecture/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.solutionArchitecture : parameterModel[0]?.solutionArchitecture/parameterModel[0]?.hoursPerday
+        } else if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000000]) { // FTE
+          // dont need yet
+          returnObject.resultValue = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture * h8) : (parameterModel[0]?.solutionArchitecture * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
+          returnObject.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture * g8) : (parameterModel[0]?.solutionArchitecture * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
+          returnObject.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture * f8) : (parameterModel[0]?.solutionArchitecture * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
+        }
       }
     }
+    
     
     return returnObject
   } catch (error) {

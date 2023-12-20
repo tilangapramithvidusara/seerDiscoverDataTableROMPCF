@@ -44,6 +44,9 @@ export const generateDocumentationMValue = async(inititlaData: any, analisisDesi
       const mustShouldCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValueMS + analisisDesignPre?.responseAnalisisDesign?.resultValueMS + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMS
       const mustShouldCouldCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValueMSC + analisisDesignPre?.responseAnalisisDesign?.resultValueMSC + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMSC
 
+      const mustCalMilestone = analisisDesignPre?.responseCustomRequirementDesign.customRequirementMilestone?.resultValue + analisisDesignPre?.responseAnalisisDesign?.resultValue + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValue
+      const mustShouldCalMilestone = analisisDesignPre?.responseCustomRequirementDesign.customRequirementMilestone?.resultValueMS + analisisDesignPre?.responseAnalisisDesign?.resultValueMS + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMS
+      const mustShouldCouldCalMilestone = analisisDesignPre?.responseCustomRequirementDesign.customRequirementMilestone?.resultValueMSC + analisisDesignPre?.responseAnalisisDesign?.resultValueMSC + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMSC
       let {hoursPerday} = parameterModel[0]
       if (hasParameters) {
         hoursPerday = parseInt(settingParameters?.formattedData[

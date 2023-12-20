@@ -1,9 +1,7 @@
 import * as React from "react";
-import TableComponent from './components/Table/App';
-import { DataSet } from "./Constants/SampleData";
-import AdvancedTable from "./components/Table/AdvancedTable";
-
 import TabComponent from "./components/index";
+// const TabComponent = React.lazy(() => import('./components/index'));
+
 import { arrayGenerator } from "./Utils/SetupDataArray/analysis.design.array.utils";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteOutputSetAsync, fetchInitialDataAsync } from "./redux/report/reportAsycn";

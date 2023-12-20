@@ -73,31 +73,77 @@ export const generateCRPMValue = async(inititlaData: any, analisisDesignPre: {re
       
       // not done yet
       if (fte) {
-        if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000001]) {
-          returnObject.crpAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.conferenceRoomPilot/100);
-          returnObject.crpAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
-          returnObject.crpAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
-        } else {
-          returnObject.crpAveRateMilestone.resultValue = mustCal * (para_d4); // not conferenceRoomPilot it need to get from backend
-          returnObject.crpAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
-          returnObject.crpAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
-        }
-      } else {
-        if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000001]) {
+        if (hasParameters) {
+          const crpValue = parseInt(settingParameters?.formattedData[
+            parameterKeyIndex.crp
+          ]?.currentValue || '0')
+          const crpTypeValue = parseInt(settingParameters?.formattedData[
+            parameterKeyIndex.crp
+          ]?.typeValueCurrent)
 
-          returnObject.crp.resultValue = mustCal * (parameterModel[0]?.conferenceRoomPilot/100);
-          returnObject.crp.resultValueMS = mustShouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
-          returnObject.crp.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
-        } else if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000002]) { // hours
-          
-          returnObject.crp.resultValue = romParameter == "Hours" ? parameterModel[0]?.conferenceRoomPilot : parameterModel[0]?.conferenceRoomPilot/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot
-          returnObject.crp.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.conferenceRoomPilot : parameterModel[0]?.conferenceRoomPilot/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot
-          returnObject.crp.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.conferenceRoomPilot : parameterModel[0]?.conferenceRoomPilot/parameterModel[0]?.hoursPerday
-        } else if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000000]) { // FTE
-          // dont need yet
-          returnObject.crp.resultValue = romParameter == "Hours" ? (parameterModel[0]?.conferenceRoomPilot * h8) : (parameterModel[0]?.conferenceRoomPilot * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.conferenceRoomPilot * h8)  // need to find H8
-          returnObject.crp.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.conferenceRoomPilot * g8) : (parameterModel[0]?.conferenceRoomPilot * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot * g8  // need to find G8
-          returnObject.crp.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.conferenceRoomPilot * f8) : (parameterModel[0]?.conferenceRoomPilot * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot * f8  // need to find F8
+          if (percentData?.[crpTypeValue] == percentData?.[100000001]) {
+            returnObject.crpAveRateMilestone.resultValue = mustCal * (crpValue/100);
+            returnObject.crpAveRateMilestone.resultValueMS = mustShouldCal * (crpValue/100);
+            returnObject.crpAveRateMilestone.resultValueMSC = mustShouldCouldCal * (crpValue/100);
+          } else {
+            returnObject.crpAveRateMilestone.resultValue = mustCal * (para_d4); // not conferenceRoomPilot it need to get from backend
+            returnObject.crpAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
+            returnObject.crpAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
+          }
+        } else {
+          if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000001]) {
+            returnObject.crpAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.conferenceRoomPilot/100);
+            returnObject.crpAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
+            returnObject.crpAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
+          } else {
+            returnObject.crpAveRateMilestone.resultValue = mustCal * (para_d4); // not conferenceRoomPilot it need to get from backend
+            returnObject.crpAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
+            returnObject.crpAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
+          }
+        }
+        
+      } else {
+        if (hasParameters) {
+          const crpValue = parseInt(settingParameters?.formattedData[
+            parameterKeyIndex.crp
+          ]?.currentValue || '0')
+          const crpTypeValue = parseInt(settingParameters?.formattedData[
+            parameterKeyIndex.crp
+          ]?.typeValueCurrent)
+
+          if (percentData?.[crpTypeValue] == percentData?.[100000001]) {
+
+            returnObject.crp.resultValue = mustCal * (crpValue/100);
+            returnObject.crp.resultValueMS = mustShouldCal * (crpValue/100);
+            returnObject.crp.resultValueMSC = mustShouldCouldCal * (crpValue/100);
+          } else if (percentData?.[crpTypeValue] == percentData?.[100000002]) { // hours
+            
+            returnObject.crp.resultValue = romParameter == "Hours" ? crpValue : crpValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot
+            returnObject.crp.resultValueMS = romParameter == "Hours" ? crpValue : crpValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot
+            returnObject.crp.resultValueMSC = romParameter == "Hours" ? crpValue : crpValue/hoursPerday
+          } else if (percentData?.[crpTypeValue] == percentData?.[100000000]) { // FTE
+            // dont need yet
+            returnObject.crp.resultValue = romParameter == "Hours" ? (crpValue * h8) : (crpValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.conferenceRoomPilot * h8)  // need to find H8
+            returnObject.crp.resultValueMS = romParameter == "Hours" ? (crpValue * g8) : (crpValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot * g8  // need to find G8
+            returnObject.crp.resultValueMSC = romParameter == "Hours" ? (crpValue * f8) : (crpValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot * f8  // need to find F8
+          }
+        } else {
+          if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000001]) {
+
+            returnObject.crp.resultValue = mustCal * (parameterModel[0]?.conferenceRoomPilot/100);
+            returnObject.crp.resultValueMS = mustShouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
+            returnObject.crp.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.conferenceRoomPilot/100);
+          } else if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000002]) { // hours
+            
+            returnObject.crp.resultValue = romParameter == "Hours" ? parameterModel[0]?.conferenceRoomPilot : parameterModel[0]?.conferenceRoomPilot/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot
+            returnObject.crp.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.conferenceRoomPilot : parameterModel[0]?.conferenceRoomPilot/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot
+            returnObject.crp.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.conferenceRoomPilot : parameterModel[0]?.conferenceRoomPilot/parameterModel[0]?.hoursPerday
+          } else if (percentData?.[parameterModel[0]?.conferenceRoomPilotType] === percentData?.[100000000]) { // FTE
+            // dont need yet
+            returnObject.crp.resultValue = romParameter == "Hours" ? (parameterModel[0]?.conferenceRoomPilot * h8) : (parameterModel[0]?.conferenceRoomPilot * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.conferenceRoomPilot * h8)  // need to find H8
+            returnObject.crp.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.conferenceRoomPilot * g8) : (parameterModel[0]?.conferenceRoomPilot * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot * g8  // need to find G8
+            returnObject.crp.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.conferenceRoomPilot * f8) : (parameterModel[0]?.conferenceRoomPilot * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.conferenceRoomPilot * f8  // need to find F8
+          }
         }
       }
       

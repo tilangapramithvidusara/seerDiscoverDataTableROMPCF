@@ -41,9 +41,12 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
       }
     if (inititlaData) {
       // Must Custom Requirement
-      const mustCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValue + analisisDesignPre?.responseAnalisisDesign?.resultValue + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValue + analisisDesignPre?.responseDocumentation.documentation?.resultValue
-      const mustShouldCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValueMS + analisisDesignPre?.responseAnalisisDesign?.resultValueMS + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMS + analisisDesignPre?.responseDocumentation.documentation?.resultValueMS
-      const mustShouldCouldCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValueMSC + analisisDesignPre?.responseAnalisisDesign?.resultValueMSC + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMSC + + analisisDesignPre?.responseDocumentation.documentation?.resultValueMSC
+      const mustCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValue + analisisDesignPre?.responseAnalisisDesign?.resultValue + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValue 
+      // + analisisDesignPre?.responseDocumentation.documentation?.resultValue
+      const mustShouldCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValueMS + analisisDesignPre?.responseAnalisisDesign?.resultValueMS + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMS 
+      // + analisisDesignPre?.responseDocumentation.documentation?.resultValueMS
+      const mustShouldCouldCal = analisisDesignPre?.responseCustomRequirementDesign.customRequirement?.resultValueMSC + analisisDesignPre?.responseAnalisisDesign?.resultValueMSC + analisisDesignPre?.responseCustomisationDesign.customisation?.resultValueMSC 
+      // + analisisDesignPre?.responseDocumentation.documentation?.resultValueMSC
       const F4Parameter = hoursPerday * 5;
       const O37 = 0// to find this we need to complete Estimate Avg Rate Milestone table
       const H6 = 29// if days === c2 => O37/5 else (O37/8)/5
@@ -53,9 +56,14 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
       const h8 = h7 * hoursPerWeek
       const g8 = g7 * hoursPerWeek
       const f8 = f7 * hoursPerWeek
-
+      console.log('====> ', parameterModel[0]?.designReview);
+      
       if (fte) {
+        console.log('1');
+        
         if (hasParameters) {
+          console.log('2');
+          
           const designValue = parseInt(settingParameters?.formattedData[
             parameterKeyIndex.designReview
           ]?.currentValue || '0')
@@ -72,6 +80,8 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
             returnObject.designReviewAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
           }
         } else {
+          console.log('3', parameterModel[0]?.designReviewType, mustCal, mustShouldCal, mustShouldCouldCal);
+          
           if (percentData?.[parameterModel[0]?.designReviewType] === percentData?.[100000001]) {
             returnObject.designReviewAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.designReview/100);
             returnObject.designReviewAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.designReview/100);
@@ -84,7 +94,11 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
         }
         
       } else {
+        console.log('4');
+        
         if (hasParameters) {
+          console.log('5');
+          
           const designValue = parseInt(settingParameters?.formattedData[
             parameterKeyIndex.designReview
           ]?.currentValue || '0')
@@ -107,8 +121,11 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
             returnObject.designReview.resultValueMSC = romParameter == "Hours" ? (designValue * f8) : (designValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview * f8  // need to find F8
           }
         } else {
+          console.log('6');
+          
           if (percentData?.[parameterModel[0]?.designReviewType] === percentData?.[100000001]) {
-
+            console.log('desi rev => ', mustCal, parameterModel[0]?.designReview, mustCal * (parameterModel[0]?.designReview/100));
+            
             returnObject.designReview.resultValue = mustCal * (parameterModel[0]?.designReview/100);
             returnObject.designReview.resultValueMS = mustShouldCal * (parameterModel[0]?.designReview/100);
             returnObject.designReview.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.designReview/100);
@@ -127,6 +144,8 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
       }
       
       await Promise.all([returnObject])
+      console.log('de=> ',returnObject);
+      
       return returnObject;
     } else {
       return returnObject;

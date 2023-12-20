@@ -4,6 +4,8 @@ import type { TabsProps } from 'antd';
 import InputLabel from '@mui/material/InputLabel';
 
 import AdvancedTable from "./Table/AdvancedTable";
+// Use
+// const AdvancedTable = React.lazy(() => import('./Table/AdvancedTable'));
 import RatesAndResources from "./RatesAndResources";
 import RiskFactors from "./RiskFactors";
 import ProjectROM from "./ProjectROM";
@@ -20,7 +22,7 @@ import { fetchInitialDataAsync } from "../redux/report/reportAsycn";
 import { initialFetchFailure, initialFetchSuccess } from "../redux/report/reportSlice";
 import Loader from "./Loader/Loader";
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
-import { Settings } from "@mui/icons-material";
+import Settings from "@mui/icons-material/Settings";
 import DyanamicTable from "./Table/DyanamicTable";
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
@@ -174,9 +176,14 @@ const App = ({
       )}
       <Grid className="flex-wrap">
         <div className="flex-wrpa-start">
-          <span className="blue-text">Snapshot Name: </span>
-          <span className="gray-text">Unsaved</span>
+        {selectedButton == 'button2' && (
+          <div >
+            <span className="blue-text">Snapshot Name: </span>
+            <span className="gray-text">Unsaved</span>
+          </div>
+        )}
         </div>
+        
         <div className="flex-wrap-end">
           <Box sx={{ m: 2 }} className="flex-wrap-justify m-0">
             <Stack direction="row" className="custom-grid mr-15">

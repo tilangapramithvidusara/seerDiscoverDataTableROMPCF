@@ -20,11 +20,18 @@ import { romParameter } from "../../Constants/fteConstants";
 import { checkTypeParseInt } from "../setting.values.convertor.utils";
 import { parameterKeyIndex } from "../../Constants/parametersSetting";
 
-const para_d4 = 10/100;
+let para_d4 = 10/100;
 
 export const generateIColoumnValueFte = async(inititlaData: any, title?: string, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   const condition = romParameter === "Days";
   const hasParameters = settingParameters && isSnapshotModeEnable;
+  if (hasParameters) {
+    para_d4 = parseInt(settingParameters?.formattedData[
+      parameterKeyIndex.fteBase
+    ]?.currentValue || '0')
+    console.log("doc ==> ", para_d4);
+    
+  }
   // formattedData
   // ################################ESTIMATE AVERAGE RATE################################
   // ANALYSIS AND DESIGN
@@ -452,6 +459,15 @@ export const checkConditionAndGenerateValue = (calculatedValue: number, hourlyRa
 // C5 value generate
 export const generateAnalysisDesignMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
    // need to check with 'Estimate - Resource Milestone'!$C$1
+  let hasParameters = settingParameters && isSnapshotModeEnable;
+  if (hasParameters) {
+    para_d4 = parseInt(settingParameters?.formattedData[
+      parameterKeyIndex.fteBase
+    ]?.currentValue || '0')
+    console.log("doc ==> ", para_d4);
+    
+  }
+
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -511,7 +527,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel} = inititlaData
     let {hourlyRate, hoursPerday} = parameterModel[0];
-    if (settingParameters && isSnapshotModeEnable) {
+    if (hasParameters) {
       hoursPerday = checkTypeParseInt(settingParameters?.formattedData[
         parameterKeyIndex.hoursPerDay
       ]?.currentValue || '0');

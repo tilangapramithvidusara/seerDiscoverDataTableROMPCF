@@ -2,7 +2,6 @@ import * as React from 'react'
 import { useState, useEffect, useCallback } from 'react';
 import { MaterialReactTable } from 'material-react-table';
 import { TextField, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
 import { parameterSettingColumns, parameterBaseSettingColumns } from '../../Constants/parametersSetting';
 import { setSettingParameterAttributes, setSettingParameters, setStateSnapshot } from '../../redux/snapshotReport/snapshotReportSlice';

@@ -35,7 +35,9 @@ export const fetchInitialDataAsync = async() => {
     const isoString = currentDate?.toISOString();
     
     const requestBody = {
-      "accountid": queryParameters?.get("accountId") || "c514b3d1-a45b-ee11-8def-002248015232",
+      "accountid": '63b776a5-0c82-ee11-8179-002248015232',
+      // "63b776a5-0c82-ee11-8179-002248015232",
+      // queryParameters?.get("accountId") || "c514b3d1-a45b-ee11-8def-002248015232",
       // "c514b3d1-a45b-ee11-8def-002248015232",
       // "1857b6d8-1d72-ee11-8179-002248015232",
       // queryParameters?.get("id") || "c514b3d1-a45b-ee11-8def-002248015232",

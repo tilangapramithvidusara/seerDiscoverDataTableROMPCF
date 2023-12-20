@@ -23,6 +23,7 @@ import {
   estimateResourceMustShouldCouldColumnDetailsHours
 } from '../../Constants/estimateResource';
 import SwipeableTemporaryDrawer from '../SwipeableDrawer';
+// const SwipeableTemporaryDrawer = React.lazy(() => import('../SwipeableDrawer'));
 import { dayHoursText, defaultText } from '../../Constants';
 import { columnRequirementData } from '../../Constants/requirementsData';
 import { columnCustomisationData } from '../../Constants/cutomisationData';
