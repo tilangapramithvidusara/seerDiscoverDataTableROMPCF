@@ -224,24 +224,60 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
     const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable)
     const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
 
-    const responseDocumentation = await generateDocumentationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
-    const responseDesignReview = await generateDesignReviewMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseDocumentation}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
+    const responseDocumentation = await generateDocumentationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable)
+    const responseDesignReview = await generateDesignReviewMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseDocumentation}, condition, 
+      // hasFteValue,
+      false, 
+      settingParameters, isSnapshotModeEnable);
 
     const responseIntegration = await generateIntegrationMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
     const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
-    const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
-    const responseDataMigration = await generateDataMigrationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
-    const responseCRP = await generateCRPMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
-    const responseTesting = await generateTestingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
+    const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable)
+    const responseDataMigration = await generateDataMigrationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable);
+    const responseCRP = await generateCRPMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable);
+    const responseTesting = await generateTestingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable);
 
     // In "train the trainer" has to 0 when "End user train" has value --- Keith said it hold for now
-    const responseTrainTheTrainer = await generateTrainTheTrainerMValue(inititlaData, {responseAnalisisDesign}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
+    const responseTrainTheTrainer = await generateTrainTheTrainerMValue(inititlaData, {responseAnalisisDesign}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable);
 // UAT ENV MISSING
-    const responseUATEnvironmentPreparation = await generateUATEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
-    const responseUATSupport = await generateUATSupportMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
-    const responseProdEnvironmentPreparation = await generateProdEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
-    const responseSupportHandover = await generateSupportHandoverMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
-    const responsePostGoLive = await generatePostGoLiveMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
+    const responseUATEnvironmentPreparation = await generateUATEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable);
+    const responseUATSupport = await generateUATSupportMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable)
+    const responseProdEnvironmentPreparation = await generateProdEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable)
+    const responseSupportHandover = await generateSupportHandoverMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable)
+    const responsePostGoLive = await generatePostGoLiveMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable);
 
     // const responseProjectManagementSub = await calculateProjectManagerEstimateResource(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration});
     const {parameterModel} = inititlaData;
@@ -687,7 +723,8 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
           'M/S': (responseCRP?.crp?.resultValueMS || 0),
           "M/S/C": (responseCRP?.crp?.resultValueMSC || 0),
         },
-        responseCRP?.crp?.resultValue,
+        responseCRP?.crp,
+        // ?.resultValue,
         'CRP',
         'All',
         condition,

@@ -8,3 +8,5 @@ export const removeDuplicates : any = (array: any, removeKey: any) => {
       return unique;
     }, []);
 }
+
+export const executeAfterGivenDilay = (task: () => void, timeout = 0) => setTimeout(task, timeout);

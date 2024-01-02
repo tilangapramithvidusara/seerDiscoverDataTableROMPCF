@@ -27,6 +27,7 @@ import DyanamicTable from "./Table/DyanamicTable";
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
 import { setSettingParameters, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
+import { loadSelectedSnapshotAsync, loadSnapshotsAsync } from "../redux/snapshotReport/snapshoAsync";
 
 
 const App = ({
@@ -111,6 +112,7 @@ const App = ({
   const [isComLoading, setComIsloading] = React.useState<boolean>(isRefreshing || false);
   const [openSettingPopup, setOpenSettingPopup] = React.useState<boolean>(false);
   const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
+  // selectedSnapshot
   const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
   
@@ -145,6 +147,10 @@ const App = ({
     } 
     setOpenSettingPopup(true)
   }
+
+  const getSnapshotsListHandler = React.useCallback((info) => {
+    loadSnapshotsAsync(info)
+  }, [dispatch])
 
   // only for check
   React.useMemo(() => {
@@ -190,17 +196,31 @@ const App = ({
               <Grid className="flex-wrap">
                 {/* <InputLabel className="label mr-10">Mode</InputLabel> */}
               </Grid>
+              {/* buttonTitles */}
               <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton} />
             </Stack>
-            <DropDownButtons selectedButton={selectedButton} />
+            {/* <DropDownButtons selectedButton={selectedButton} /> */}
           </Box>
-          <div className='text-right'
+          <div 
+          className="flex-wrap-end"
+          // className='text-right'
           // style={{margin: '2px', height: '10px !important', fontSize: '11px !important'}}
           >
             <Button title="Refresh" className='btn-primary btn-small mr-10' onClick={(e) => initialTriggerHandler(e)}><AutorenewOutlinedIcon className="btn-icon" /></Button>
             {selectedButton == 'button2' && (
-              <Button title="Setting" className='btn-primary btn-small' onClick={(e) => formattedSettingHandler(e, initialFetchData)}><Settings className="btn-icon" /></Button>
+              <div className='text-right'>
+                <DropDownButtons selectedButton={selectedButton} />
+                <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
+                formattedSettingHandler(e, initialFetchData);
+                getSnapshotsListHandler(initialFetchData);
+              }}><Settings className="btn-icon" /></Button>
+              </div>
+              // <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
+              //   formattedSettingHandler(e, initialFetchData);
+              //   getSnapshotsListHandler(initialFetchData);
+              // }}><Settings className="btn-icon" /></Button>
             )}
+            
           </div>
         </div> 
       </Grid> 

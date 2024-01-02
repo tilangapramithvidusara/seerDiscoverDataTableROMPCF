@@ -8,6 +8,7 @@ import { deleteOutputSetAsync, fetchInitialDataAsync } from "./redux/report/repo
 import { initialFetchFailure, initialFetchSuccess, setEstimateAveRateAnalysisDesign, setEstimateAveRateConfiguration, setEstimateAveRateCusomisationDesign, setEstimateAveRateCustomRequirementBuild, setEstimateAveRateCustomerRequirementDesign, setEstimateAveRateCustomisationBuild, setEstimateAveRateDesignReview, setEstimateAveRateDocumentLayout, setEstimateAveRateIntegration, setImageUrl } from "./redux/report/reportSlice";
 import Loader from "./components/Loader/Loader";
 import { dataMapper } from "./Utils/RequirmentData/requirement.data.utils";
+import { saveSnapshotAsync } from "./redux/snapshotReport/snapshoAsync";
 
 
 function Index({tableContent, context, imageUrl}: {tableContent: any, context: any, imageUrl?: any}) {
@@ -27,6 +28,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
 
   React.useEffect(() => {
     initialTriggerHandler();
+    saveSnapshotAsync(imageUrl)
   }, []);
   
   React.useMemo(() => {    

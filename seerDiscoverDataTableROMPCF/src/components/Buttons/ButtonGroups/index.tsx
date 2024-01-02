@@ -36,7 +36,7 @@ const index = (
           className='custom-toggle'
         >
 
-          {buttonTitles.map((item: any, index: number) => {
+          {buttonTitles?.map((item: any, index: number) => {
             return(
             <ToggleButton className='toggle-btn' value={`${item?.title}`} aria-label={`Button ${index}`}>
               {item?.value}

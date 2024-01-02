@@ -9,13 +9,17 @@ import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import DownloadingOutlinedIcon from '@mui/icons-material/DownloadingOutlined';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 import UpdateOutlined from '@mui/icons-material/UpdateOutlined';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSelectSnapshot } from '../../../redux/snapshotReport/snapshotReportSlice';
 
-const index = ({selectedButton, hasSnapshots}: {selectedButton: any, hasSnapshots?: boolean}) => {
+const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent}: 
+  {selectedButton: any, hasSnapshots?: boolean, selectItem?: any, selectedItemParent?: string}) => {
   const dispatch = useDispatch()
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedItem, setSelectedItem] = useState(""); // Initialize the state for selected item
+
+  const snapshotsList = useSelector((state: any) => state.snapshot.snapshotsList)
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -25,14 +29,21 @@ const index = ({selectedButton, hasSnapshots}: {selectedButton: any, hasSnapshot
     setAnchorEl(null);
   };
 
+  const setSelectSnapshotHandler = React.useCallback((info) => {
+    dispatch(setSelectSnapshot(info))
+  }, [dispatch])
+
   const handleMenuItemClick = (itemValue: any) => {
+    console.log('itemValue => ', itemValue);
     
     setSelectedItem(itemValue); // Update the selected item in state
+    selectItem(itemValue);
+    setSelectSnapshotHandler(itemValue);
     handleClose(); // Close the menu
   };
 
   const optionList: any = {
-    "item1": "Load Snapshots Option 1",
+    "item1": "Load Snapshots Option List 1",
     "item2": "Load Snapshots Option 2",
     "item3": "Load Snapshots Option 3"
   }
@@ -53,17 +64,25 @@ const index = ({selectedButton, hasSnapshots}: {selectedButton: any, hasSnapshot
               aria-haspopup="true" onClick={handleClick}>
               <DownloadingOutlinedIcon className='btn-icon'/> 
             </Button>
-            <Menu
-              id="dropdown-menu"
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              className='custom-dropdown-menu'
-            >
-              <MenuItem value="item1" onClick={() => handleMenuItemClick("item1")}>Load Snapshots Option 1</MenuItem>
-              <MenuItem value="item2" onClick={() => handleMenuItemClick("item2")}>Load Snapshots Option 2</MenuItem>
-              <MenuItem value="item3" onClick={() => handleMenuItemClick("item3")}>Load Snapshots Option 3</MenuItem>
-            </Menu>
+            {snapshotsList && snapshotsList?.length && (
+              <Menu
+                id="dropdown-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                className='custom-dropdown-menu'
+              >
+                {
+                  snapshotsList?.map((optionItem: any, ) => (
+                    <MenuItem value={snapshotsList?.value} onClick={() => handleMenuItemClick(snapshotsList?.value)}>Load Snapshots Option 1</MenuItem>
+                  ))
+                }
+                {/* <MenuItem value="item1" onClick={() => handleMenuItemClick("item1")}>Load Snapshots Option 1</MenuItem>
+                <MenuItem value="item2" onClick={() => handleMenuItemClick("item2")}>Load Snapshots Option 2</MenuItem>
+                <MenuItem value="item3" onClick={() => handleMenuItemClick("item3")}>Load Snapshots Option 3</MenuItem> */}
+              </Menu>
+            )}
+            
           </>
         )}
         {

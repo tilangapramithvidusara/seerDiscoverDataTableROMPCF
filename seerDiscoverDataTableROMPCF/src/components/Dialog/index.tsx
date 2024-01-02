@@ -37,7 +37,7 @@ export default function SimpleDialog(props: SimpleDialogProps) {
       className='custom-modal'
     >
       <DialogTitle className='modal-title'>Settings</DialogTitle>
-      <DyanamicTable/>
+      <DyanamicTable handleClose={handleClose}/>
     </Dialog>
   );
 }

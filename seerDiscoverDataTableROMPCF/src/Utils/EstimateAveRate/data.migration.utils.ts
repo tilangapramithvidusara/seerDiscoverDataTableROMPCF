@@ -67,6 +67,11 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
       const h8 = h7 * hoursPerWeek
       const g8 = g7 * hoursPerWeek
       const f8 = f7 * hoursPerWeek
+
+      // STRAT NEW DATA MIGRATION
+      // Variables for When it moscow
+
+      // END NEW DATA MIRATION
       
       // not done yet
       if (fte) {
@@ -122,6 +127,8 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
             returnObject.dataMigration.resultValue = romParameter == "Hours" ? (dataMigrationValue * h8) : (dataMigrationValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.dataMigration * h8)  // need to find H8
             returnObject.dataMigration.resultValueMS = romParameter == "Hours" ? (dataMigrationValue * g8) : (dataMigrationValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * g8  // need to find G8
             returnObject.dataMigration.resultValueMSC = romParameter == "Hours" ? (dataMigrationValue * f8) : (dataMigrationValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * f8  // need to find F8
+          } else { // MOSCOW
+            // 
           }
         } else {
           if (percentData?.[parameterModel[0]?.dataMigrationType] === percentData?.[100000001]) {
@@ -139,6 +146,8 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
             returnObject.dataMigration.resultValue = romParameter == "Hours" ? (parameterModel[0]?.dataMigration * h8) : (parameterModel[0]?.dataMigration * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.dataMigration * h8)  // need to find H8
             returnObject.dataMigration.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.dataMigration * g8) : (parameterModel[0]?.dataMigration * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * g8  // need to find G8
             returnObject.dataMigration.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.dataMigration * f8) : (parameterModel[0]?.dataMigration * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * f8  // need to find F8
+          } else {// MOSCOW
+            //
           }
         }
       }

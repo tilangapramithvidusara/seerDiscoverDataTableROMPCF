@@ -24,6 +24,8 @@ export const generateEstimateResourceValue = (
       return item?.projectTaskPartner_Name == name || item?.projectTaskCustomer_Name == name || item?.name == name
       
     });
+    console.log('filteredValue ==> ', filteredValue);
+    
     if (filteredValue) {
       //
       const {

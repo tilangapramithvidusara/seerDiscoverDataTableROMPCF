@@ -7,8 +7,11 @@ import { parameterSettingColumns, parameterBaseSettingColumns } from '../../Cons
 import { setSettingParameterAttributes, setSettingParameters, setStateSnapshot } from '../../redux/snapshotReport/snapshotReportSlice';
 import { Parameter } from '../../Utils/setting.values.convertor.utils';
 import { fteDropdown } from '../../Constants/dropdownConstants';
+import { saveSnapshotAsync } from '../../redux/snapshotReport/snapshoAsync';
 
-const DyanamicTable = () => {
+const DyanamicTable = ({
+  handleClose
+}:{handleClose: any}) => {
   const dispatch = useDispatch();  
   const [isBaesline, setIsBaseline] = useState(false);
   const [columns, setColumns] = useState(parameterSettingColumns);
@@ -34,6 +37,10 @@ const DyanamicTable = () => {
 
   const handleSetSettingParameters = useCallback((info) => {
     dispatch(setSettingParameters(info))
+  }, [dispatch])
+
+  const saveHandler = useCallback((info: any) => {
+    saveSnapshotAsync(info)
   }, [dispatch])
 
   useEffect(() => {
@@ -161,8 +168,9 @@ const DyanamicTable = () => {
         </tbody>
       </table>
       <div className='modal-footer'>
-        <Button className='btn-gray-outline mr-10'>Cancel</Button>
-        <Button className='btn-primary'>Save</Button>
+        {/* btn-gray-outline */}
+        <Button className='btn-primary mr-10' onClick={() => handleClose()}>Cancel</Button>
+        <Button className='btn-primary' onClick={() => saveHandler(settingParameters)}>Save</Button>
       </div>
     </div>
   );
