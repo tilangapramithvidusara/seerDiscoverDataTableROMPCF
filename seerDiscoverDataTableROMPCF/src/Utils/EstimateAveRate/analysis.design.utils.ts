@@ -19,9 +19,12 @@ import { generateTrainTheTrainerMValue } from "./train.the.trainer.utils";
 import { generateUATEnvironmentPreparationMValue } from "./uat.environment.preparation.utils";
 import { generateUATSupportMValue } from "./uat.support.utils";
 import { setEstimateAveRateAnalysisDesign } from "../../redux/report/reportSlice";
+import { parameterKeyIndex } from "../../Constants/parametersSetting";
+import { checkTypeParseInt } from "../setting.values.convertor.utils";
 
 export const generateIColoumnValue = async(inititlaData: any, title: string, dispatch: any, hasFteValue?: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
-  
+  console.log('pppp ==> ', settingParameters, isSnapshotModeEnable);
+  const hasParameters = settingParameters && isSnapshotModeEnable;
   const condition = romParameter === "Days";
   // ################################ESTIMATE AVERAGE RATE################################
   // ANALYSIS AND DESIGN
@@ -221,31 +224,88 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
     const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable)
     const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
 
-    const responseDocumentation = await generateDocumentationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
-    const responseDesignReview = await generateDesignReviewMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseDocumentation}, condition, settingParameters, isSnapshotModeEnable);
+    const responseDocumentation = await generateDocumentationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable)
+    const responseDesignReview = await generateDesignReviewMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseDocumentation}, condition, 
+      // hasFteValue,
+      false, 
+      settingParameters, isSnapshotModeEnable);
 
     const responseIntegration = await generateIntegrationMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
     const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
-    const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
-    const responseDataMigration = await generateDataMigrationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
-    const responseCRP = await generateCRPMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
-    const responseTesting = await generateTestingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
+    const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable)
+    const responseDataMigration = await generateDataMigrationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable);
+    const responseCRP = await generateCRPMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable);
+    const responseTesting = await generateTestingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable);
 
     // In "train the trainer" has to 0 when "End user train" has value --- Keith said it hold for now
-    const responseTrainTheTrainer = await generateTrainTheTrainerMValue(inititlaData, {responseAnalisisDesign}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
+    const responseTrainTheTrainer = await generateTrainTheTrainerMValue(inititlaData, {responseAnalisisDesign}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable);
 // UAT ENV MISSING
-    const responseUATEnvironmentPreparation = await generateUATEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
-    const responseUATSupport = await generateUATSupportMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
-    const responseProdEnvironmentPreparation = await generateProdEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
-    const responseSupportHandover = await generateSupportHandoverMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable)
-    const responsePostGoLive = await generatePostGoLiveMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, hasFteValue, settingParameters, isSnapshotModeEnable);
+    const responseUATEnvironmentPreparation = await generateUATEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable);
+    const responseUATSupport = await generateUATSupportMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable)
+    const responseProdEnvironmentPreparation = await generateProdEnvironmentPreparationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable)
+    const responseSupportHandover = await generateSupportHandoverMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable)
+    const responsePostGoLive = await generatePostGoLiveMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
+      // hasFteValue, 
+      false,
+      settingParameters, isSnapshotModeEnable);
 
     // const responseProjectManagementSub = await calculateProjectManagerEstimateResource(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration});
     const {parameterModel} = inititlaData;
     if (parameterModel?.length) {
       // ################################ESTIMATE AVERAGE RATE################################
-      const { hoursPerday, hourlyRate } = parameterModel[0];
+      let { hoursPerday, hourlyRate } = parameterModel[0];
+      
+      
+      if (hasParameters) {
+        console.log('q1q1q1q1q ==> ', settingParameters?.formattedData[
+          parameterKeyIndex?.hourlyRate
+        ]?.currentValue, parameterKeyIndex?.hourlyRate);
+        hoursPerday = checkTypeParseInt(settingParameters?.formattedData[
+          parameterKeyIndex.hoursPerDay
+        ]?.currentValue || '0')
+        hourlyRate = {
+          ...hourlyRate,
+          value: parseInt(settingParameters?.formattedData[
+            parameterKeyIndex.hourlyRate
+          ]?.currentValue || '0')
+        }
+
+        console.log('hourlyRate',hourlyRate);
+        
+      }
       resultValueAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValue, hourlyRate?.value, hoursPerday, condition)
+      console.log('peeek ', hourlyRate?.value, hoursPerday,responseAnalisisDesign?.resultValue);
+      
       resultValueMSAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValueMS, hourlyRate?.value, hoursPerday, condition)
       resultValueMSCAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValueMSC, hourlyRate?.value, hoursPerday, condition)
       resultValueAnalisisDesignBase = checkConditionAndGenerateValue(responseAnalisisDesign?.resultBaseValue, hourlyRate?.value, hoursPerday, condition)
@@ -496,8 +556,12 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseAnalisisDesign,
         'Analysis and Design',
         'All',
-        condition
-      );      
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
+      );   
+      console.log('resultValueAnalisisDesignEstimateResource ==>', resultValueAnalisisDesignEstimateResource);
+         
 
       resultValueCustomisationDesignEstimateResource = generateEstimateResourceValue(
         inititlaData, {
@@ -508,7 +572,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseCustomisationDesign?.customisation,
         'Customisations (Design)',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueCustomRequirementDesignEstimateResource = generateEstimateResourceValue(
@@ -520,7 +586,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseCustomRequirementDesign?.customRequirement,
         'Custom Requirements (Design)',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueDocumentationEstimateResource = generateEstimateResourceValue(
@@ -532,7 +600,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseDocumentation?.documentation,
         'Documentation',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueDesignReviewEstimateResource = generateEstimateResourceValue(
@@ -544,7 +614,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseDesignReview?.designReview,
         'Design Review',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueConfigurationEstimateResource = generateEstimateResourceValue(
@@ -556,7 +628,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseAnalisisDesign?.configuration,
         'Configuration',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueIntegrationEstimateResource = generateEstimateResourceValue(
@@ -568,7 +642,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseIntegration?.integration,
         'Integrations',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable,
       );
 
       resultValueCustomisationBuildEstimateResource = generateEstimateResourceValue(
@@ -580,7 +656,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseCustomisationDesign?.customisationBuild,
         'Customisations (Build)',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueCustomRequirementBuildEstimateResource = generateEstimateResourceValue(
@@ -592,7 +670,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseCustomRequirementDesign?.customRequirementBuild,
         'Custom Requirements (Build)',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueDocumentLayoutEstimateResource = generateEstimateResourceValue(
@@ -604,7 +684,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseDocumentLayout?.documentLayout,
         'Document Layouts',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueReportingEstimateResource = generateEstimateResourceValue(
@@ -616,7 +698,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseReporting?.reporting,
         'Reporting',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueDataMigrationEstimateResource = generateEstimateResourceValue(
@@ -628,7 +712,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseDataMigration?.dataMigration,
         'Data Migration',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueCRPEstimateResource = generateEstimateResourceValue(
@@ -637,10 +723,13 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
           'M/S': (responseCRP?.crp?.resultValueMS || 0),
           "M/S/C": (responseCRP?.crp?.resultValueMSC || 0),
         },
-        responseCRP?.crp?.resultValue,
+        responseCRP?.crp,
+        // ?.resultValue,
         'CRP',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueTestingEstimateResource = generateEstimateResourceValue(
@@ -652,7 +741,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseTesting?.testing,
         'Testing',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueTrainTheTrainerEstimateResource = generateEstimateResourceValue(
@@ -664,7 +755,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseTrainTheTrainer?.trainTheTrainer,
         'Train-the-trainer',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueUATEnvironmentPreparationEstimateResource = generateEstimateResourceValue(
@@ -676,7 +769,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseUATEnvironmentPreparation?.uatEnvironmentPreparation,
         'UAT Environment Preparation',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueUATSupportEstimateResource = generateEstimateResourceValue(
@@ -688,7 +783,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseUATSupport?.uatSupport,
         'UAT Support',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueProdEnvironmentPreparationEstimateResource = generateEstimateResourceValue(
@@ -700,7 +797,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseProdEnvironmentPreparation?.prodEnvironmentPreparation,
         'PROD Environment Preparation',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueSupportHandoverEstimateResource = generateEstimateResourceValue(
@@ -712,7 +811,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseSupportHandover?.supportHandover,
         'Support Handover',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValueEndUserTrainingEstimateResource = generateEstimateResourceValue(
@@ -724,7 +825,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseDocumentLayout?.endUserTraining,
         'End user training',
         'All',
-        condition
+        condition,
+        settingParameters, 
+        isSnapshotModeEnable
       );
 
       resultValuePostGoLiveEstimateResource = generateEstimateResourceValue(
@@ -736,7 +839,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responsePostGoLive?.postGoLive,
         'Post Go-Live Support',
         'All',
-        condition
+        condition,
+        settingParameters,
+        isSnapshotModeEnable
       );
       
       let totalOfSub = await calculateSubTotal(
@@ -763,7 +868,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         responseAnalisisDesign,
       );      
 
-      const responseProjectManagementSub = await calculateProjectManagerEstimateResource(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, totalOfSub);
+      const responseProjectManagementSub = await calculateProjectManagerEstimateResource(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, totalOfSub, settingParameters, isSnapshotModeEnable);
 
 
       resultValueProjectManagerEstimateResource = generateEstimateResourceValue(
@@ -775,7 +880,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         {},
         'Project Manager',
         'All',
-        condition
+        condition,
+        settingParameters,
+        isSnapshotModeEnable
       );
 
     }
@@ -1031,6 +1138,7 @@ export const checkConditionAndGenerateValue = (calculatedValue: number, hourlyRa
 // C5 value generate
 export const generateAnalysisDesignMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
    // need to check with 'Estimate - Resource Milestone'!$C$1
+  const hasParameters = settingParameters && isSnapshotModeEnable
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -1110,27 +1218,51 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
   let resultConfigurationValueMSC = 0;
 
   let buildEstimateConfigurationValueFromBaseData = 0;
+  let primaryResourceConfigurationValueFromBaseData = 0
+  let secondaryResourceConfigurationValueFromBaseData = 0
   let buildEstimateConfigurationValueFromModlueData = 0;
+  let primaryResourceConfigurationValueFromModuleData = 0;
+  let secondaryResourceConfigurationValueFromModuleData = 0;
 
   let buildEstimateConfigurationValueFromBaseDataMS = 0;
+  let primaryResourceConfigurationValueFromBaseDataMS = 0
+  let secondaryResourceConfigurationValueFromBaseDataMS = 0
   let buildEstimateConfigurationValueFromModlueDataMS = 0;
+  let primaryResourceConfigurationValueFromModuleDataMS = 0;
+  let secondaryResourceConfigurationValueFromModuleDataMS = 0;
 
   let buildEstimateConfigurationValueFromBaseDataMSC = 0;
+  let primaryResourceConfigurationValueFromBaseDataMSC = 0
+  let secondaryResourceConfigurationValueFromBaseDataMSC = 0
   let buildEstimateConfigurationValueFromModlueDataMSC = 0;
+  let primaryResourceConfigurationValueFromModuleDataMSC = 0;
+  let secondaryResourceConfigurationValueFromModuleDataMSC = 0;
 
   const seenModuleConfigurationMIds = new Set();
   const seenModuleConfigurationMSIds = new Set();
   const seenModuleConfigurationMSCIds = new Set();
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel} = inititlaData
+    let {hoursPerday} = parameterModel[0];
+    if (hasParameters) {
+      hoursPerday = parseInt(settingParameters?.formattedData[
+        parameterKeyIndex.hoursPerDay
+      ]?.currentValue || '0')
+    }
+
+    console.log('hoursPerday design ==> ', hoursPerday, hasParameters);
+    
     if (inititlaData) {
 
       // BASE DATA LOOP
       const baseLoop = await BaseData && BaseData.length && BaseData.map(async(baseItem: any, baseIndex: number) => {
         const {allResources} = baseItem;
+        console.log('baseItem ==> ', baseItem);
+        
         // ANALYSIS AND DESING
         // Must
-        if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
+        if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && fitGapData[baseItem?.fitGap] != fitGapData[100000001]
+          ) {
           //
           if (baseItem?.entityName != 'Master') {
             overidesBaseAnalysisDesign.push(baseItem);
@@ -1178,8 +1310,14 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             baseConfiguration.push(baseItem);
           }
           // (baseItem?.designEstimate * (baseItem?.resourceSplit / 100)) * baseItem?.quantity
+          // new addding
+          const res = baseReaderConfiguration(baseItem, primaryResourceConfigurationValueFromBaseData, secondaryResourceConfigurationValueFromBaseData, x);
+          primaryResourceConfigurationValueFromBaseData = res.primaryResourceConfigurationValueFromBaseData;
+          secondaryResourceConfigurationValueFromBaseData = res.secondaryResourceConfigurationValueFromBaseData;
+
           buildEstimateConfigurationValueFromBaseData += 
           baseItem?.quantity > 0 ? baseItem?.buildEstimate * (baseItem?.resourceSplit / 100) * baseItem?.quantity : baseItem?.buildEstimate * (baseItem?.resourceSplit / 100)
+          
         }
 
         // Must Should
@@ -1189,6 +1327,11 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           } else {
             baseConfigurationMS.push(baseItem);
           }
+          // new addding
+          const res = baseReaderConfiguration(baseItem, primaryResourceConfigurationValueFromBaseDataMS, secondaryResourceConfigurationValueFromBaseDataMS, x);
+          primaryResourceConfigurationValueFromBaseDataMS = res.primaryResourceConfigurationValueFromBaseData;
+          secondaryResourceConfigurationValueFromBaseDataMS = res.secondaryResourceConfigurationValueFromBaseData;
+
           buildEstimateConfigurationValueFromBaseDataMS += 
           baseItem?.quantity > 0 ? baseItem?.buildEstimate * (baseItem?.resourceSplit / 100) * baseItem?.quantity : baseItem?.buildEstimate * (baseItem?.resourceSplit / 100)
         }
@@ -1200,6 +1343,11 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           } else {
             baseConfigurationMSC.push(baseItem);
           }
+          // new addding
+          const res = baseReaderConfiguration(baseItem, primaryResourceConfigurationValueFromBaseDataMSC, secondaryResourceConfigurationValueFromBaseDataMSC, x);
+          primaryResourceConfigurationValueFromBaseDataMSC = res.primaryResourceConfigurationValueFromBaseData;
+          secondaryResourceConfigurationValueFromBaseDataMSC = res.secondaryResourceConfigurationValueFromBaseData;
+
           buildEstimateConfigurationValueFromBaseDataMSC += 
           baseItem?.quantity > 0 ? baseItem?.buildEstimate * (baseItem?.resourceSplit / 100) * baseItem?.quantity : baseItem?.buildEstimate * (baseItem?.resourceSplit / 100)
         }
@@ -1268,10 +1416,15 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           }
           if (!seenModuleConfigurationMIds.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
             seenModuleConfigurationMIds.add(moduleDataItem?.fitGapProductSeerModule?.id)
-            buildEstimateConfigurationValueFromModlueData += (
-              moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * (moduleDataItem?.moduleSeerResourceSplit / 100)
-              ) + 
-            (moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100))
+            // new part
+            const res = moduleReaderConfiguration(moduleDataItem, primaryResourceConfigurationValueFromModuleData, secondaryResourceConfigurationValueFromModuleData, y);
+            primaryResourceConfigurationValueFromModuleData = res.primaryResourceConfigurationValueFromModuleData;
+            secondaryResourceConfigurationValueFromModuleData = res.secondaryResourceConfigurationValueFromModuleData;
+
+            // buildEstimateConfigurationValueFromModlueData += (
+            //   moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * (moduleDataItem?.moduleSeerResourceSplit / 100)
+            //   ) + 
+            // (moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100))
           }
         }
 
@@ -1284,10 +1437,14 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           }
           if (!seenModuleConfigurationMSIds.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
             seenModuleConfigurationMSIds.add(moduleDataItem?.fitGapProductSeerModule?.id)
-            buildEstimateConfigurationValueFromModlueDataMS += (
-              moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * (moduleDataItem?.moduleSeerResourceSplit / 100)
-              ) + 
-            (moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100))
+            // new part
+            const res = moduleReaderConfiguration(moduleDataItem, primaryResourceConfigurationValueFromModuleDataMS, secondaryResourceConfigurationValueFromModuleDataMS, y);
+            primaryResourceConfigurationValueFromModuleDataMS = res.primaryResourceConfigurationValueFromModuleData;
+            secondaryResourceConfigurationValueFromModuleDataMS = res.secondaryResourceConfigurationValueFromModuleData;
+            // buildEstimateConfigurationValueFromModlueDataMS += (
+            //   moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * (moduleDataItem?.moduleSeerResourceSplit / 100)
+            //   ) + 
+            // (moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100))
           }
         }
 
@@ -1300,22 +1457,35 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           }
           if (!seenModuleConfigurationMSCIds.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
             seenModuleConfigurationMSCIds.add(moduleDataItem?.fitGapProductSeerModule?.id)
-            buildEstimateConfigurationValueFromModlueDataMSC += (
-              moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * (moduleDataItem?.moduleSeerResourceSplit / 100)
-              ) + 
-            (moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100))
+            // new part
+            const res = moduleReaderConfiguration(moduleDataItem, primaryResourceConfigurationValueFromModuleDataMSC, secondaryResourceConfigurationValueFromModuleDataMSC, y);
+            primaryResourceConfigurationValueFromModuleDataMSC = res.primaryResourceConfigurationValueFromModuleData;
+            secondaryResourceConfigurationValueFromModuleDataMSC = res.secondaryResourceConfigurationValueFromModuleData;
+
+            // buildEstimateConfigurationValueFromModlueDataMSC += (
+            //   moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * (moduleDataItem?.moduleSeerResourceSplit / 100)
+            //   ) + 
+            // (moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100))
           }
         }
       });
+      buildEstimateConfigurationValueFromBaseData = primaryResourceConfigurationValueFromBaseData + secondaryResourceConfigurationValueFromBaseData
+      buildEstimateConfigurationValueFromBaseDataMS = primaryResourceConfigurationValueFromBaseDataMS + secondaryResourceConfigurationValueFromBaseDataMS
+      buildEstimateConfigurationValueFromBaseDataMSC = primaryResourceConfigurationValueFromBaseDataMSC + secondaryResourceConfigurationValueFromBaseDataMSC 
+      buildEstimateConfigurationValueFromModlueData = primaryResourceConfigurationValueFromModuleData + secondaryResourceConfigurationValueFromModuleData
+      buildEstimateConfigurationValueFromModlueDataMS = primaryResourceConfigurationValueFromModuleDataMS + secondaryResourceConfigurationValueFromModuleDataMS
+      buildEstimateConfigurationValueFromModlueDataMSC = primaryResourceConfigurationValueFromModuleDataMSC + secondaryResourceConfigurationValueFromModuleDataMSC
       if (parameterModel?.length) {        
         resultValue = generateReturnValue(
           primaryResourceDesignValueFromBaseData,
           secondaryResourceDesignValueFromBaseData,
           primaryResourceDesignValueFromModuleData,
           secondaryResourceDesignValueFromModuleData,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         );
+        console.log('resultValue ==> ', resultValue);
+        
         // (
         //     primaryResourceDesignValueFromBaseData 
         //     + secondaryResourceDesignValueFromBaseData 
@@ -1328,7 +1498,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseDataMS,
           primaryResourceDesignValueFromModuleDataMS,
           secondaryResourceDesignValueFromModuleDataMS,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         );
         // (
@@ -1343,28 +1513,28 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseDataMSC,
           primaryResourceDesignValueFromModuleDataMSC,
           secondaryResourceDesignValueFromModuleDataMSC,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         );
 
         resultConfigurationValue = generateReturnValue(
           buildEstimateConfigurationValueFromBaseData, 
           buildEstimateConfigurationValueFromModlueData, 0, 0, 
-          parameterModel[0].hoursPerday, 
+          hoursPerday, 
           condition
         )
         // (buildEstimateConfigurationValueFromBaseData + buildEstimateConfigurationValueFromModlueData)/parameterModel[0].hoursPerday
         resultConfigurationValueMS = generateReturnValue(
           buildEstimateConfigurationValueFromBaseDataMS, 
           buildEstimateConfigurationValueFromModlueDataMS, 0, 0, 
-          parameterModel[0].hoursPerday, 
+          hoursPerday, 
           condition
         )
         //(buildEstimateConfigurationValueFromBaseDataMS + buildEstimateConfigurationValueFromModlueDataMS)/parameterModel[0].hoursPerday
         resultConfigurationValueMSC = generateReturnValue(
           buildEstimateConfigurationValueFromBaseDataMSC, 
           buildEstimateConfigurationValueFromModlueDataMSC, 0, 0, 
-          parameterModel[0].hoursPerday, 
+          hoursPerday, 
           condition
         )
         //(buildEstimateConfigurationValueFromBaseDataMSC + buildEstimateConfigurationValueFromModlueDataMSC)/parameterModel[0].hoursPerday
@@ -1395,7 +1565,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           0,
           primaryResourceDesignValueFromModuleData,
           secondaryResourceDesignValueFromModuleData,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         ),
         resultModuleValueMS: generateReturnValue(
@@ -1403,7 +1573,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           0,
           primaryResourceDesignValueFromModuleDataMS,
           secondaryResourceDesignValueFromModuleDataMS,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         ),
         resultModuleValueMSC: generateReturnValue(
@@ -1411,7 +1581,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           0,
           primaryResourceDesignValueFromModuleDataMSC,
           secondaryResourceDesignValueFromModuleDataMSC,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         ),
         resultBaseValue: generateReturnValue(
@@ -1419,7 +1589,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseData,
           0,
           0,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         ),
         resultBaseValueMS: generateReturnValue(
@@ -1427,7 +1597,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseDataMS,
           0,
           0,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         ),
         resultBaseValueMSC: generateReturnValue(
@@ -1435,7 +1605,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           secondaryResourceDesignValueFromBaseDataMSC,
           0,
           0,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         ),
         configuration: {
@@ -1459,7 +1629,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             0,
             0,
             buildEstimateConfigurationValueFromModlueData,
-            parameterModel[0].hoursPerday,
+            hoursPerday,
             condition
           ),
           resultModuleValueMS: generateReturnValue(
@@ -1467,7 +1637,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             0,
             0,
             buildEstimateConfigurationValueFromModlueDataMS,
-            parameterModel[0].hoursPerday,
+            hoursPerday,
             condition
           ),
           resultModuleValueMSC: generateReturnValue(
@@ -1475,7 +1645,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             0,
             0,
             buildEstimateConfigurationValueFromModlueDataMSC,
-            parameterModel[0].hoursPerday,
+            hoursPerday,
             condition
           ),
           resultBaseValue: generateReturnValue(
@@ -1483,7 +1653,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             0,
             0,
             0,
-            parameterModel[0].hoursPerday,
+            hoursPerday,
             condition
           ),
           resultBaseValueMS: generateReturnValue(
@@ -1491,7 +1661,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             0,
             0,
             0,
-            parameterModel[0].hoursPerday,
+            hoursPerday,
             condition
           ),
           resultBaseValueMSC: generateReturnValue(
@@ -1499,7 +1669,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             0,
             0,
             0,
-            parameterModel[0].hoursPerday,
+            hoursPerday,
             condition
           ),
         }
@@ -1676,11 +1846,78 @@ const baseReader = (baseItem: any, primaryResourceDesignValueFromBaseData: numbe
   return {primaryResourceDesignValueFromBaseData, secondaryResourceDesignValueFromBaseData}
 }
 
+const baseReaderConfiguration = (baseItem: any, primaryResourceConfigurationValueFromBaseData: number, secondaryResourceConfigurationValueFromBaseData: number, x: number) => {
+  x += 1;
+  if (baseItem?.quantity && baseItem?.quantity > 0) { // Quantity greaterthan 0
+    // (design*(split/100))*quantity    
+    primaryResourceConfigurationValueFromBaseData += (baseItem?.buildEstimate * (baseItem?.resourceSplit / 100)) * baseItem?.quantity
+  } else {
+    // design value
+    primaryResourceConfigurationValueFromBaseData += (baseItem?.buildEstimate * (baseItem?.resourceSplit / 100))
+  }
+
+  secondaryResourceConfigurationValueFromBaseData += (baseItem?.buildEstimate * ((100 - baseItem?.resourceSplit) / 100))
+  return {primaryResourceConfigurationValueFromBaseData, secondaryResourceConfigurationValueFromBaseData}
+}
+
 const moduleReader = (moduleDataItem: any, primaryResourceDesignValueFromModuleData: number, secondaryResourceDesignValueFromModuleData: number ,y: number) => {
   y += 1;
   // design*(split/100)
   // Design*((100-Split)/100)
-  primaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * (moduleDataItem?.moduleSeerResourceSplit / 100)
-  secondaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100)
+  // moduleSeerEstimateDesign moduleSeerResourceSplit
+  // moduleOverrideCustomerSeerEstimateDesign  moduleOverrideCustomerSeerResourceSplit
+  // moduleOverridePartnerSeerEstimateDesign moduleOverridePartnerSeerResourceSplit
+  if (moduleDataItem?.moduleOverrideCustomerSeerEstimateDesign > 0) {
+    primaryResourceDesignValueFromModuleData += 
+    moduleDataItem?.moduleOverrideCustomerSeerEstimateDesign * (moduleDataItem?.moduleOverrideCustomerSeerResourceSplit / 100)
+
+  secondaryResourceDesignValueFromModuleData += 
+    moduleDataItem?.moduleOverrideCustomerSeerEstimateDesign * ((100 - moduleDataItem?.moduleOverrideCustomerSeerResourceSplit) / 100) 
+
+  } else if (moduleDataItem?.moduleOverridePartnerSeerEstimateDesign > 0) {
+    primaryResourceDesignValueFromModuleData += 
+    moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * (moduleDataItem?.moduleOverridePartnerSeerResourceSplit / 100) 
+
+  secondaryResourceDesignValueFromModuleData += 
+    moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * ((100 - moduleDataItem?.moduleOverridePartnerSeerResourceSplit) / 100) 
+
+  } else {
+    primaryResourceDesignValueFromModuleData += 
+    moduleDataItem?.moduleSeerEstimateDesign * (moduleDataItem?.moduleSeerResourceSplit / 100)
+
+  secondaryResourceDesignValueFromModuleData += 
+    moduleDataItem?.moduleSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100)
+  }
+  // primaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * (moduleDataItem?.moduleSeerResourceSplit / 100)
+  // secondaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100)
   return {primaryResourceDesignValueFromModuleData, secondaryResourceDesignValueFromModuleData}
+}
+
+
+const moduleReaderConfiguration = (moduleDataItem: any, primaryResourceConfigurationValueFromModuleData: number, secondaryResourceConfigurationValueFromModuleData: number ,y: number) => {
+  y += 1;
+  if (moduleDataItem?.moduleOverrideCustomerSeerEstimateBuild > 0) {
+    primaryResourceConfigurationValueFromModuleData += 
+      moduleDataItem?.moduleOverrideCustomerSeerEstimateBuild * (moduleDataItem?.moduleOverrideCustomerSeerResourceSplit / 100)
+
+    secondaryResourceConfigurationValueFromModuleData += 
+      moduleDataItem?.moduleOverrideCustomerSeerEstimateBuild * ((100 - moduleDataItem?.moduleOverrideCustomerSeerResourceSplit) / 100) 
+
+  } else if (moduleDataItem?.moduleOverridePartnerSeerEstimateBuild > 0) {
+    primaryResourceConfigurationValueFromModuleData += 
+      moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * (moduleDataItem?.moduleOverridePartnerSeerResourceSplit / 100) 
+
+    secondaryResourceConfigurationValueFromModuleData += 
+      moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * ((100 - moduleDataItem?.moduleOverridePartnerSeerResourceSplit) / 100) 
+
+  } else {
+    primaryResourceConfigurationValueFromModuleData += 
+      moduleDataItem?.moduleSeerEstimateBuild * (moduleDataItem?.moduleSeerResourceSplit / 100)
+
+    secondaryResourceConfigurationValueFromModuleData += 
+      moduleDataItem?.moduleSeerEstimateBuild * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100)
+  }
+  // primaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * (moduleDataItem?.moduleSeerResourceSplit / 100)
+  // secondaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100)
+  return {primaryResourceConfigurationValueFromModuleData, secondaryResourceConfigurationValueFromModuleData}
 }

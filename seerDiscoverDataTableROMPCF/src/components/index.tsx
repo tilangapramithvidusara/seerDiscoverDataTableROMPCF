@@ -4,6 +4,8 @@ import type { TabsProps } from 'antd';
 import InputLabel from '@mui/material/InputLabel';
 
 import AdvancedTable from "./Table/AdvancedTable";
+// Use
+// const AdvancedTable = React.lazy(() => import('./Table/AdvancedTable'));
 import RatesAndResources from "./RatesAndResources";
 import RiskFactors from "./RiskFactors";
 import ProjectROM from "./ProjectROM";
@@ -20,11 +22,12 @@ import { fetchInitialDataAsync } from "../redux/report/reportAsycn";
 import { initialFetchFailure, initialFetchSuccess } from "../redux/report/reportSlice";
 import Loader from "./Loader/Loader";
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
-import { Settings } from "@mui/icons-material";
+import Settings from "@mui/icons-material/Settings";
 import DyanamicTable from "./Table/DyanamicTable";
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
-import { setSettingParameters } from "../redux/snapshotReport/snapshotReportSlice";
+import { setSettingParameters, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
+import { loadSelectedSnapshotAsync, loadSnapshotsAsync } from "../redux/snapshotReport/snapshoAsync";
 
 
 const App = ({
@@ -34,6 +37,7 @@ const App = ({
   dataEstimateResourceMilestone, 
   requirementData,
   customisationData,
+  arrayGeneratorHandler,
 }: {
   dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, 
   dataSetEstimateResource: any, 
@@ -41,6 +45,7 @@ const App = ({
   dataEstimateResourceMilestone: any, 
   requirementData: any,
   customisationData: any,
+  arrayGeneratorHandler: any,
 }) => { 
 
   const items: TabsProps['items'] = [
@@ -107,7 +112,9 @@ const App = ({
   const [isComLoading, setComIsloading] = React.useState<boolean>(isRefreshing || false);
   const [openSettingPopup, setOpenSettingPopup] = React.useState<boolean>(false);
   const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
+  // selectedSnapshot
   const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
+  const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
   
   const onChange = (key: string) => {
     console.log(key);
@@ -137,11 +144,31 @@ const App = ({
       const formatedData = parameterModelConvertToTableJson(initFetchedData?.parameterModel);
       dispatch(setSettingParameters(formatedData))
       console.log('formatedData => ', formatedData);
-    }
-    
+    } 
     setOpenSettingPopup(true)
-    
   }
+
+  const getSnapshotsListHandler = React.useCallback((info) => {
+    loadSnapshotsAsync(info)
+  }, [dispatch])
+
+  // only for check
+  React.useMemo(() => {
+    console.log('call meee', settingParameters && isSnapshotModeEnable);
+    console.log('isSnapshotModeEnable', isSnapshotModeEnable);
+    
+    if (settingParameters && isSnapshotModeEnable) {
+      // initialTriggerHandler(settingParameters);
+      arrayGeneratorHandler();
+      dispatch(setStateSnapshot(false))
+      // setTimeout(() => {
+      //   // arrayGeneratorHandler()
+      //   dispatch(setStateSnapshot(false))
+      // }, 1000)
+      
+    }
+  }, [settingParameters && isSnapshotModeEnable])
+  // export const arrayGenerator = async (initialDataSet: any, dispatch: any, settingParameters?: any, isSnapshotModeEnable?: boolean)
 
   return (
     <>
@@ -155,26 +182,45 @@ const App = ({
       )}
       <Grid className="flex-wrap">
         <div className="flex-wrpa-start">
-          <span className="blue-text">Snapshot Name: </span>
-          <span className="gray-text">Unsaved</span>
+        {selectedButton == 'button2' && (
+          <div >
+            <span className="blue-text">Snapshot Name: </span>
+            <span className="gray-text">Unsaved</span>
+          </div>
+        )}
         </div>
+        
         <div className="flex-wrap-end">
           <Box sx={{ m: 2 }} className="flex-wrap-justify m-0">
             <Stack direction="row" className="custom-grid mr-15">
               <Grid className="flex-wrap">
                 {/* <InputLabel className="label mr-10">Mode</InputLabel> */}
               </Grid>
+              {/* buttonTitles */}
               <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton} />
             </Stack>
-            <DropDownButtons selectedButton={selectedButton} />
+            {/* <DropDownButtons selectedButton={selectedButton} /> */}
           </Box>
-          <div className='text-right'
+          <div 
+          className="flex-wrap-end"
+          // className='text-right'
           // style={{margin: '2px', height: '10px !important', fontSize: '11px !important'}}
           >
             <Button title="Refresh" className='btn-primary btn-small mr-10' onClick={(e) => initialTriggerHandler(e)}><AutorenewOutlinedIcon className="btn-icon" /></Button>
             {selectedButton == 'button2' && (
-              <Button title="Setting" className='btn-primary btn-small' onClick={(e) => formattedSettingHandler(e, initialFetchData)}><Settings className="btn-icon" /></Button>
+              <div className='text-right'>
+                <DropDownButtons selectedButton={selectedButton} />
+                <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
+                formattedSettingHandler(e, initialFetchData);
+                getSnapshotsListHandler(initialFetchData);
+              }}><Settings className="btn-icon" /></Button>
+              </div>
+              // <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
+              //   formattedSettingHandler(e, initialFetchData);
+              //   getSnapshotsListHandler(initialFetchData);
+              // }}><Settings className="btn-icon" /></Button>
             )}
+            
           </div>
         </div> 
       </Grid> 

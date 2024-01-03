@@ -1,7 +1,9 @@
+import { parameterKeyIndex } from "../../Constants/parametersSetting";
 import { fitGapData, moscowsData } from "../../Constants/pickListData";
 
 export const generateDocumentLayoutMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
+  let hasParameters = settingParameters && isSnapshotModeEnable;
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -37,6 +39,12 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
   // wholeNumber
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, FactorsModel} = inititlaData
+    let {hoursPerday} = parameterModel[0]
+      if (hasParameters) {
+        hoursPerday = parseInt(settingParameters?.formattedData[
+          parameterKeyIndex.hoursPerDay
+        ]?.currentValue || '0');
+      }
     if (inititlaData) {
       
 
@@ -46,19 +54,47 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
         }
         if (factorItem?.ad_QuestionNumber == '201900') {
           if (factorItem?.answerChoice == 'End user training') {
-            if (condition) {
-              // d5 = parameterModel[0].hoursPerday
-              // d8 = parameterModel[0]?.totalLicenceCount
-              // d21 = endUserTrainingUsers
-              // d20 = endUserTraining
-              // (para d8/ parad21) * (para d20/ para d5)
-              endUserTrainingValue += 
-                ((parameterModel[0]?.totalLicenceCount || 0)/ (parameterModel[0]?.endUserTrainingUsers || 0)) *
-                 ((parameterModel[0]?.endUserTraining || 0)/(parameterModel[0].hoursPerday || 0))
+            if (hasParameters) {
+              const totalLicenceCountSettingValue = parseInt(settingParameters?.formattedData[
+                parameterKeyIndex.users
+              ]?.currentValue || '0')
+              const endUserTrainingUsersSettingValue = parseInt(settingParameters?.formattedData[
+                parameterKeyIndex.endUserTrainingUsers
+              ]?.currentValue || '0')
+              const endUserTrainingSettingValue = parseInt(settingParameters?.formattedData[
+                parameterKeyIndex.endUserTraining
+              ]?.currentValue || '0')
+              if (condition) {
+                // d5 = parameterModel[0].hoursPerday
+                // d8 = parameterModel[0]?.totalLicenceCount
+                // d21 = endUserTrainingUsers
+                // d20 = endUserTraining
+                // (para d8/ parad21) * (para d20/ para d5)
+  
+                endUserTrainingValue += 
+                  ((totalLicenceCountSettingValue || 0)/ (endUserTrainingUsersSettingValue || 0)) *
+                   ((endUserTrainingSettingValue || 0)/(hoursPerday || 0))
+              } else {
+                // (para d8/ parad21) * (para d20)
+                endUserTrainingValue += ((totalLicenceCountSettingValue || 0)/ (endUserTrainingUsersSettingValue || 0)) *
+                ((endUserTrainingSettingValue || 0))
+              }
             } else {
-              // (para d8/ parad21) * (para d20)
-              endUserTrainingValue += ((parameterModel[0]?.totalLicenceCount || 0)/ (parameterModel[0]?.endUserTrainingUsers || 0)) *
-              ((parameterModel[0]?.endUserTraining || 0))
+              if (condition) {
+                // d5 = parameterModel[0].hoursPerday
+                // d8 = parameterModel[0]?.totalLicenceCount
+                // d21 = endUserTrainingUsers
+                // d20 = endUserTraining
+                // (para d8/ parad21) * (para d20/ para d5)
+  
+                endUserTrainingValue += 
+                  ((parameterModel[0]?.totalLicenceCount || 0)/ (parameterModel[0]?.endUserTrainingUsers || 0)) *
+                   ((parameterModel[0]?.endUserTraining || 0)/(hoursPerday || 0))
+              } else {
+                // (para d8/ parad21) * (para d20)
+                endUserTrainingValue += ((parameterModel[0]?.totalLicenceCount || 0)/ (parameterModel[0]?.endUserTrainingUsers || 0)) *
+                ((parameterModel[0]?.endUserTraining || 0))
+              }
             }
           }
         }
@@ -139,19 +175,19 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
       if (parameterModel?.length) {
         returnObject.documentLayout.resultValue = generateReturnValue(
           layoutValue,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         
         returnObject.documentLayout.resultValueMS = generateReturnValue(
           layoutValue,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
 
         returnObject.documentLayout.resultValueMSC =  generateReturnValue(
           layoutValue,
-          parameterModel[0].hoursPerday,
+          hoursPerday,
           condition
         )
         returnObject.endUserTraining.resultValue = endUserTrainingValue;

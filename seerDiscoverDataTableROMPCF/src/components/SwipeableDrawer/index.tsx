@@ -9,14 +9,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-import MailIcon from "@mui/icons-material/Mail";
 import { useSelector } from "react-redux";
 import { removeDuplicates } from "../../Utils/commonFunc.utils";
 import { CommonUtils } from "../../Utils/SidePaneUtils/EstimateAverageRate/CommonUtils";
 import { Button } from "antd";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 type Anchor = "top" | "left" | "bottom" | "right";
 

@@ -6,6 +6,7 @@ import * as React from "react";
 
 import * as ReactDOM from "react-dom";
 import App from "./src/App";
+// const App = React.lazy(() => import('./src/App'));
 
 import { connect } from 'react-redux';
 

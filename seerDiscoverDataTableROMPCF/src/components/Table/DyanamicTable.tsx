@@ -2,14 +2,16 @@ import * as React from 'react'
 import { useState, useEffect, useCallback } from 'react';
 import { MaterialReactTable } from 'material-react-table';
 import { TextField, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
 import { parameterSettingColumns, parameterBaseSettingColumns } from '../../Constants/parametersSetting';
-import { setSettingParameterAttributes, setSettingParameters } from '../../redux/snapshotReport/snapshotReportSlice';
+import { setSettingParameterAttributes, setSettingParameters, setStateSnapshot } from '../../redux/snapshotReport/snapshotReportSlice';
 import { Parameter } from '../../Utils/setting.values.convertor.utils';
 import { fteDropdown } from '../../Constants/dropdownConstants';
+import { saveSnapshotAsync } from '../../redux/snapshotReport/snapshoAsync';
 
-const DyanamicTable = () => {
+const DyanamicTable = ({
+  handleClose
+}:{handleClose: any}) => {
   const dispatch = useDispatch();  
   const [isBaesline, setIsBaseline] = useState(false);
   const [columns, setColumns] = useState(parameterSettingColumns);
@@ -17,12 +19,28 @@ const DyanamicTable = () => {
 
   console.log('settingParameters', settingParameters);
 
+  const handleKeyDown = (event: any) => {
+    if (event.key === 'Enter') {
+      console.log('Sentence changed:');
+      dispatch(setStateSnapshot(true))
+    }
+  };
+
   const onChangeHanlder = useCallback((info) => {
     dispatch(setSettingParameterAttributes(info))
+    if (info?.isDropDown) {
+      dispatch(setStateSnapshot(true))
+    }
+    // example for checking
+    // dispatch(setStateSnapshot(true))
   }, [dispatch]);
 
   const handleSetSettingParameters = useCallback((info) => {
     dispatch(setSettingParameters(info))
+  }, [dispatch])
+
+  const saveHandler = useCallback((info: any) => {
+    saveSnapshotAsync(info)
   }, [dispatch])
 
   useEffect(() => {
@@ -74,7 +92,8 @@ const DyanamicTable = () => {
                               {
                                 ...settingItem,
                                 key: 'typeValueCurrent',
-                                value: e.target.value
+                                value: e.target.value,
+                                isDropDown: true,
                               }
                             )
                           }}
@@ -106,7 +125,8 @@ const DyanamicTable = () => {
                               {
                                 ...settingItem,
                                 key: 'currentValue',
-                                value: e.target.value
+                                value: e.target.value,
+                                isDropDown: true,
                               }
                             )
                           }}
@@ -126,6 +146,7 @@ const DyanamicTable = () => {
                           name="currentValue"
                           value={currentValue}
                           type="text"
+                          onKeyDown={handleKeyDown}
                           onChange={(e) => {
 
                             onChangeHanlder(
@@ -147,8 +168,9 @@ const DyanamicTable = () => {
         </tbody>
       </table>
       <div className='modal-footer'>
-        <Button className='btn-gray-outline mr-10'>Cancel</Button>
-        <Button className='btn-primary'>Save</Button>
+        {/* btn-gray-outline */}
+        <Button className='btn-primary mr-10' onClick={() => handleClose()}>Cancel</Button>
+        <Button className='btn-primary' onClick={() => saveHandler(settingParameters)}>Save</Button>
       </div>
     </div>
   );

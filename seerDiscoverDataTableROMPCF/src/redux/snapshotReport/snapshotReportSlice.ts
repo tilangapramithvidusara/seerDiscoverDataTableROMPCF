@@ -108,8 +108,8 @@ const snapshotSlice: any = createSlice({
     setSnapshotList: (state, action) => {
       state.snapshotsList = action.payload
     },
-    setSnapshotLoading: (state) => {
-      state.isLoadingSnapshot = true
+    setSnapshotLoading: (state, action) => {
+      state.isLoadingSnapshot = action.payload
     },
     setSelectSnapshot: (state, action) => {
       state.selectedSnapshot = action.payload
