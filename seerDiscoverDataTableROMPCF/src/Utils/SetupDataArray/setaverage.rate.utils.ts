@@ -1,11 +1,24 @@
+import { parameterKeyIndex } from "../../Constants/parametersSetting";
 import { generateProjectManagerMValue } from "../EstimateAveRate/project.manager.utils";
 import { calculateProjectManagerEstimateAvgRateMilestone } from "../EstimateAverageRateMilestone/project.manager.utils";
 import { generateEstimateResourceValue } from "../EstimateResource";
 
 export const setDataSetAveRate = async(data: any, dataEstimateAverageRateMilestone: any, analisisAndDesignCalculation: any, initialDataSet: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
-
+  let hasParameters = settingParameters && isSnapshotModeEnable;
   const {parameterModel} = initialDataSet;
-  const {hourlyRate, hoursPerday} = parameterModel[0];
+  let {hourlyRate, hoursPerday} = parameterModel[0];
+    if (hasParameters) {
+      hoursPerday = parseInt(settingParameters?.formattedData[
+        parameterKeyIndex.hoursPerDay
+      ]?.currentValue || '0');
+      hourlyRate = {
+        ...hourlyRate,
+        value: parseInt(settingParameters?.formattedData[
+          parameterKeyIndex.hourlyRate
+        ]?.currentValue || '0')
+      }
+    }
+    
   let subTotalMAnalysisDesignSub = 0;
   let subTotalMSAnalysisDesignSub = 0;
   let subTotalMSCAnalysisDesignSub = 0;

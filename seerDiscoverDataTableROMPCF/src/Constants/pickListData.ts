@@ -18,6 +18,7 @@ export const percentData: any = {
   '100000000': 'FTE',
   '100000001': "Percent",
   "100000002": "Hours",
+  "100000003": "Moscow"
 }
 
 export const complexityData: any = {
