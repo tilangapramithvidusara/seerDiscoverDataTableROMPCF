@@ -10,9 +10,7 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
   if (hasParameters) {
     para_d4 = parseInt(settingParameters?.formattedData[
       parameterKeyIndex.fteBase
-    ]?.currentValue || '0')
-    console.log("doc ==> ", para_d4);
-    
+    ]?.currentValue || '0')    
   }
   let resultValue = 0;
   let resultValueMS = 0;
@@ -34,7 +32,7 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
   }
   // seerMoscow
   try {
-    const {parameterModel, fteValue} = inititlaData
+    const {parameterModel, fteValue, DataMigrationModel} = inititlaData
     if (inititlaData) {
       let {hoursPerday} = parameterModel[0]
       if (hasParameters) {
@@ -112,11 +110,18 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
           const dataMigrationTypeValue = parseInt(settingParameters?.formattedData[
             parameterKeyIndex.dataMigration
           ]?.typeValueCurrent)
+
           if (percentData?.[dataMigrationTypeValue] === percentData?.[100000001]) {
 
             returnObject.dataMigration.resultValue = mustCal * (dataMigrationValue/100);
             returnObject.dataMigration.resultValueMS = mustShouldCal * (dataMigrationValue/100);
             returnObject.dataMigration.resultValueMSC = mustShouldCouldCal * (dataMigrationValue/100);
+          } else if (percentData?.[parameterModel[0]?.dataMigrationType] === percentData?.[100000003]) {
+            // moscow
+            const moscowCal = getMigratedMoscow(DataMigrationModel, romParameter, hoursPerday);
+            returnObject.dataMigration.resultValue = moscowCal?.mustValue;
+            returnObject.dataMigration.resultValueMS = moscowCal?.mustShouldValue;
+            returnObject.dataMigration.resultValueMSC = moscowCal?.mustShouldCouldValue;
           } else if (percentData?.[dataMigrationTypeValue] === percentData?.[100000002]) { // hours
             
             returnObject.dataMigration.resultValue = romParameter == "Hours" ? dataMigrationValue : dataMigrationValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration
@@ -127,8 +132,6 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
             returnObject.dataMigration.resultValue = romParameter == "Hours" ? (dataMigrationValue * h8) : (dataMigrationValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.dataMigration * h8)  // need to find H8
             returnObject.dataMigration.resultValueMS = romParameter == "Hours" ? (dataMigrationValue * g8) : (dataMigrationValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * g8  // need to find G8
             returnObject.dataMigration.resultValueMSC = romParameter == "Hours" ? (dataMigrationValue * f8) : (dataMigrationValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * f8  // need to find F8
-          } else { // MOSCOW
-            // 
           }
         } else {
           if (percentData?.[parameterModel[0]?.dataMigrationType] === percentData?.[100000001]) {
@@ -136,6 +139,12 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
             returnObject.dataMigration.resultValue = mustCal * (parameterModel[0]?.dataMigration/100);
             returnObject.dataMigration.resultValueMS = mustShouldCal * (parameterModel[0]?.dataMigration/100);
             returnObject.dataMigration.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.dataMigration/100);
+          } else if (percentData?.[parameterModel[0]?.dataMigrationType] === percentData?.[100000003]) {
+            // moscow
+            const moscowCal = getMigratedMoscow(DataMigrationModel, romParameter, parameterModel[0]?.hoursPerday);
+            returnObject.dataMigration.resultValue = moscowCal?.mustValue;
+            returnObject.dataMigration.resultValueMS = moscowCal?.mustShouldValue;
+            returnObject.dataMigration.resultValueMSC = moscowCal?.mustShouldCouldValue;
           } else if (percentData?.[parameterModel[0]?.dataMigrationType] === percentData?.[100000002]) { // hours
             
             returnObject.dataMigration.resultValue = romParameter == "Hours" ? parameterModel[0]?.dataMigration : parameterModel[0]?.dataMigration/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration
@@ -146,8 +155,6 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
             returnObject.dataMigration.resultValue = romParameter == "Hours" ? (parameterModel[0]?.dataMigration * h8) : (parameterModel[0]?.dataMigration * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.dataMigration * h8)  // need to find H8
             returnObject.dataMigration.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.dataMigration * g8) : (parameterModel[0]?.dataMigration * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * g8  // need to find G8
             returnObject.dataMigration.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.dataMigration * f8) : (parameterModel[0]?.dataMigration * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * f8  // need to find F8
-          } else {// MOSCOW
-            //
           }
         }
       }
@@ -161,4 +168,37 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
     console.log("generateAnalysisDesignMValue error ==> ", error);
     return returnObject;
   }
+}
+
+
+const getMigratedMoscow = (DataMigrationModel: any[], romParameter: string, hoursPerday: number) => {
+  
+  let mustValue = 0;
+  let mustShouldValue = 0;
+  let mustShouldCouldValue = 0;
+  DataMigrationModel?.map(async(dataMigrationItem: any) => {
+    if (moscowsData?.[dataMigrationItem?.seerMoscow] == moscowsData?.[100000000]) {
+      mustValue += generateMoscowCalcultaion(dataMigrationItem);
+    }
+    if (moscowsData?.[dataMigrationItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[dataMigrationItem?.seerMoscow] == moscowsData?.[100000001]) {
+      mustShouldValue += generateMoscowCalcultaion(dataMigrationItem); 
+    }
+    if ((moscowsData?.[dataMigrationItem?.seerMoscow] == moscowsData?.[100000000]) || (moscowsData?.[dataMigrationItem?.seerMoscow] == moscowsData?.[100000001]) || (moscowsData?.[dataMigrationItem?.seerMoscow] == moscowsData?.[100000002])) {
+      mustShouldCouldValue +=generateMoscowCalcultaion(dataMigrationItem); 
+    }
+  });
+
+  return {
+    mustValue: romParameter == 'Days' ? mustValue / hoursPerday : mustValue,
+    mustShouldValue: romParameter == 'Days' ? mustShouldValue / hoursPerday : mustShouldValue,
+    mustShouldCouldValue: romParameter == 'Days' ? mustShouldCouldValue / hoursPerday : mustShouldCouldValue,
+  }
+}
+
+const generateMoscowCalcultaion = (dataMigrationItem: any) => {
+  
+  return ((((dataMigrationItem?.seerEstimateDesign || 0) * (dataMigrationItem?.seerQuantity > 0 ? dataMigrationItem?.seerQuantity : 1)) * ((dataMigrationItem?.seerResourceSplit || 0)/100)) 
+  + (((dataMigrationItem?.seerEstimateDesign || 0) * (dataMigrationItem?.seerQuantity > 0 ? dataMigrationItem?.seerQuantity : 1)) * ((100 - (dataMigrationItem?.seerResourceSplit || 0))/100)) 
+  + (((dataMigrationItem?.seerEstimateBuild || 0) * (dataMigrationItem?.seerQuantity > 0 ? dataMigrationItem?.seerQuantity : 1)) * ((dataMigrationItem?.seerResourceSplit || 0)/100)) 
+  + (((dataMigrationItem?.seerEstimateBuild || 0) * (dataMigrationItem?.seerQuantity > 0 ? dataMigrationItem?.seerQuantity : 1)) * ((100 - (dataMigrationItem?.seerResourceSplit || 0))/100)));
 }
