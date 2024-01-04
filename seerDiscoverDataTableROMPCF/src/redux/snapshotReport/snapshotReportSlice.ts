@@ -88,7 +88,6 @@ const parameterModel = [
 
 const initialState: any = {
   isSnapshotModeEnable: false,
-  settingParameters: null,
   settingRated: null,
   currentEditingData: null,
   hasLoadedData: false,
@@ -96,6 +95,9 @@ const initialState: any = {
   isLoadingSnapshot: false,
   snapshotsList: null,
   selectedSnapshot: null,
+  baseJson: null,
+  snapshotSettingParameters: null,
+  settingParameters: null,
 }
 
 const snapshotSlice: any = createSlice({
