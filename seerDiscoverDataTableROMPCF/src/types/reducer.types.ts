@@ -60,3 +60,11 @@ export interface ReportState {
   estimateResourceStoreData: object | null,
   estimateResourceMilestoneStoreData: object | null
 }
+
+declare global {
+  interface Window {
+    webapi: any;
+    createDevopsWorkItemURL: any;
+    userId: any;
+  }
+}
