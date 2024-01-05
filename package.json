@@ -20,7 +20,6 @@
     "@mui/material": "^5.14.6",
     "@reduxjs/toolkit": "^1.9.7",
     "@types/to-json-schema": "^0.2.1",
-    "ajv": "^8.12.0",
     "antd": "^5.8.4",
     "axios": "^1.5.1",
     "material-react-table": "^1.15.1",
