@@ -88,7 +88,6 @@ const parameterModel = [
 
 const initialState: any = {
   isSnapshotModeEnable: false,
-  settingParameters: null,
   settingRated: null,
   currentEditingData: null,
   hasLoadedData: false,
@@ -96,6 +95,10 @@ const initialState: any = {
   isLoadingSnapshot: false,
   snapshotsList: null,
   selectedSnapshot: null,
+  baseJson: null,
+  snapshotSettingParameters: null,
+  settingParameters: null,
+  recordId: null,
 }
 
 const snapshotSlice: any = createSlice({
@@ -171,8 +174,12 @@ const snapshotSlice: any = createSlice({
     
         console.log('User edited successfully:', state.settingParameters);
       }
+    },
+    setRecordId: (state, action) => {
+      state.recordId = action.payload
     }
   }
+  
 });
 
 export const {
@@ -184,6 +191,7 @@ export const {
   setSnapshotList,
   setSettingParameters,
   setSettingParameterAttributes,
+  setRecordId,
 } = snapshotSlice.actions;
 
 

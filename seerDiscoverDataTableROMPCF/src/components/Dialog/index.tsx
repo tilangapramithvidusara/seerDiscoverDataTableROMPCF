@@ -4,8 +4,6 @@ import Dialog from '@mui/material/Dialog';
 import DyanamicTable from '../Table/DyanamicTable';
 // const DyanamicTable = React.lazy(() => import('../Table/DyanamicTable'));
 
-const emails = ['username@gmail.com', 'user02@gmail.com'];
-
 export interface SimpleDialogProps {
   open?: boolean;
   selectedValue?: string;
