@@ -58,7 +58,9 @@ export interface ReportState {
   },
   estimateAverageRateMilestoneStoreData: object | null,
   estimateResourceStoreData: object | null,
-  estimateResourceMilestoneStoreData: object | null
+  estimateResourceMilestoneStoreData: object | null,  
+  accountId: null | string,
+  contactId: null | string
 }
 
 declare global {

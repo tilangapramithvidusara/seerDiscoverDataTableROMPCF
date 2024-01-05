@@ -11,14 +11,24 @@ declare global {
 }
 
 export const saveInitialSnapshotRecordAsync = (info: any) => {
+  const url = new URL(window.location.href);
+  const queryParameters = url.searchParams;
+  // console.log('accountId -=> ', queryParameters.get("accountId"));
+  const accountId = queryParameters.get("accountId");
+  const contactId = queryParameters.get("contactId");
+
+  console.log("ACC ID", accountId);
+  console.log("COntact ID", contactId);
+  console.log("saveInitialSnapshotRecordAsync Info", info);
+
   return async (dispatch: (arg0: any) => void) => {
     try {
       dispatch(setSnapshotLoading(true));
       const record: any = {};
-      record["seer_account@odata.bind"] = "/accounts(b8357ad8-a499-ee11-be37-000d3a0be042)"; // Lookup
-      record["seer_contact@odata.bind"] = "/contacts(cedbb378-6d6d-ee11-9ae7-000d3a0be042)"; // Lookup
-      record.seer_name = "test"; // Text
-      record.seer_description = "test description"; // Text
+      record["seer_account@odata.bind"] = `/accounts(${accountId})`; // Lookup
+      record["seer_contact@odata.bind"] = `/contacts(${contactId})`; // Lookup
+      record.seer_name = info?.seerName; // Text
+      record.seer_description = info?.seerDescription; // Text
 
       window.parent.webapi.safeAjax({
           type: "POST",
@@ -45,6 +55,7 @@ export const saveInitialSnapshotRecordAsync = (info: any) => {
 }
 
 export const saveSnapshotAsync = (info: any) => {
+  console.log("Save snapshot Async", info)
   return async (dispatch: (arg0: any) => void) => {
     try {
       dispatch(setSnapshotLoading(true));
