@@ -88,6 +88,8 @@ const initialState: ReportState = {
     projectManager: null
   },
   estimateResourceMilestoneStoreData: null,
+  accountId: null,
+  contactId: null
 }
 
 const reportSlice: any = createSlice({
@@ -145,6 +147,12 @@ const reportSlice: any = createSlice({
     setEstimateAveRateDocumentLayout : (state, action) => {
       state.estimateAverageRateStoreData.documentLayout = action.payload
     }, 
+    setAccountId: (state, action) => {
+      state.accountId = action.payload;
+    },
+    setContactId: (state, action) => {
+      state.contactId = action.payload;
+    }
   },
 })
 
@@ -164,6 +172,8 @@ export const {
   setEstimateAveRateCustomisationBuild,
   setEstimateAveRateCustomRequirementBuild,
   setEstimateAveRateDocumentLayout,
+  setAccountId,
+  setContactId,
 } = reportSlice.actions;
 
 export default reportSlice.reducer;
