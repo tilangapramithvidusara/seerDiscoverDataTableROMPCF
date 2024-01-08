@@ -19,6 +19,7 @@ import {
   saveSnapshotAsync
 } from '../../redux/snapshotReport/snapshoAsync';
 import FormDialog from '../../components/Form/index';
+import { convertBase64ToJson, convertJsonToBase64 } from '../../Utils/commonFunc.utils';
 
 const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
   const dispatch = useDispatch();
@@ -74,14 +75,17 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
     }
   }, [isBaesline]);
 
-  const onSubmit = async () => {             
-    console.log('onSubmit', submitFormData);
-    if (submitFormData?.name && submitFormData?.description)
-      await saveInitialSnapshotRecordAsync({
-        seerName: submitFormData?.name,
-        seerDescription: submitFormData?.description
-      });
-  };
+
+    const onSubmit = () => {
+      if (submitFormData?.name && submitFormData?.description) {
+          dispatch(saveInitialSnapshotRecordAsync({
+            seerName: submitFormData?.name,
+            baseData: convertJsonToBase64({name: "Anuj"}), 
+            snapshotData: convertJsonToBase64({name: "Anuj"}),
+            seerDescription: submitFormData?.description
+          }))
+        }
+  }
 
   const onClose = () => {
     setShowSnapshotForm(false);
