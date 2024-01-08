@@ -19,7 +19,6 @@ import {
   saveSnapshotAsync
 } from '../../redux/snapshotReport/snapshoAsync';
 import FormDialog from '../../components/Form/index';
-import { utimes } from 'fs';
 import { convertBase64ToJson, convertJsonToBase64 } from '../../Utils/commonFunc.utils';
 
 const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
