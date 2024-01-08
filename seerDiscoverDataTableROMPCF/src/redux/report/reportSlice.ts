@@ -147,12 +147,12 @@ const reportSlice: any = createSlice({
     setEstimateAveRateDocumentLayout : (state, action) => {
       state.estimateAverageRateStoreData.documentLayout = action.payload
     }, 
-    setAccountId: (state, action) => {
-      state.accountId = action.payload;
-    },
-    setContactId: (state, action) => {
-      state.contactId = action.payload;
-    }
+    setAccountId : (state, action) => {
+      state.accountId = action.payload
+    }, 
+    setContactId : (state, action) => {
+      state.contactId = action.payload
+    }, 
   },
 })
 
@@ -173,7 +173,7 @@ export const {
   setEstimateAveRateCustomRequirementBuild,
   setEstimateAveRateDocumentLayout,
   setAccountId,
-  setContactId,
+  setContactId
 } = reportSlice.actions;
 
 export default reportSlice.reducer;

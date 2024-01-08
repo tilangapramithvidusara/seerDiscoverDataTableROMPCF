@@ -1,67 +1,104 @@
-import * as React from 'react'
+import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { MaterialReactTable } from 'material-react-table';
 import { TextField, Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { parameterSettingColumns, parameterBaseSettingColumns } from '../../Constants/parametersSetting';
-import { setSettingParameterAttributes, setSettingParameters, setStateSnapshot } from '../../redux/snapshotReport/snapshotReportSlice';
+import {
+  parameterSettingColumns,
+  parameterBaseSettingColumns
+} from '../../Constants/parametersSetting';
+import {
+  setSettingParameterAttributes,
+  setSettingParameters,
+  setStateSnapshot
+} from '../../redux/snapshotReport/snapshotReportSlice';
 import { Parameter } from '../../Utils/setting.values.convertor.utils';
 import { fteDropdown } from '../../Constants/dropdownConstants';
-import { saveSnapshotAsync } from '../../redux/snapshotReport/snapshoAsync';
+import {
+  saveInitialSnapshotRecordAsync,
+  saveSnapshotAsync
+} from '../../redux/snapshotReport/snapshoAsync';
+import FormDialog from '../../components/Form/index';
 
-const DyanamicTable = ({
-  handleClose
-}:{handleClose: any}) => {
-  const dispatch = useDispatch();  
+const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
+  const dispatch = useDispatch();
   const [isBaesline, setIsBaseline] = useState(false);
   const [columns, setColumns] = useState(parameterSettingColumns);
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
+  const [showSnapshotForm, setShowSnapshotForm] = useState(false);
+  const [submitFormData, setSubmitFormData] = useState<any>();
 
   console.log('settingParameters', settingParameters);
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
       console.log('Sentence changed:');
-      dispatch(setStateSnapshot(true))
+      dispatch(setStateSnapshot(true));
     }
   };
 
-  const onChangeHanlder = useCallback((info) => {
-    dispatch(setSettingParameterAttributes(info))
-    if (info?.isDropDown) {
-      dispatch(setStateSnapshot(true))
-    }
-    // example for checking
-    // dispatch(setStateSnapshot(true))
-  }, [dispatch]);
+  const onChangeHanlder = useCallback(
+    (info) => {
+      dispatch(setSettingParameterAttributes(info));
+      if (info?.isDropDown) {
+        dispatch(setStateSnapshot(true));
+      }
+      // example for checking
+      // dispatch(setStateSnapshot(true))
+    },
+    [dispatch]
+  );
 
-  const handleSetSettingParameters = useCallback((info) => {
-    dispatch(setSettingParameters(info))
-  }, [dispatch])
+  const handleSetSettingParameters = useCallback(
+    (info) => {
+      dispatch(setSettingParameters(info));
+    },
+    [dispatch]
+  );
 
-  const saveHandler = useCallback((info: any) => {
-    saveSnapshotAsync(info)
-  }, [dispatch])
+  // const saveHandler = useCallback((info: any) => {
+  //   saveSnapshotAsync(info);
+  //   setShowSnapshotForm(true);
+  // }, [dispatch])
+
+  const saveHandler = (info: any) => {
+    // saveSnapshotAsync(info);
+    setShowSnapshotForm(true);
+  };
 
   useEffect(() => {
     if (isBaesline) {
-      setColumns(parameterBaseSettingColumns)
+      setColumns(parameterBaseSettingColumns);
     } else {
-      setColumns(parameterSettingColumns)
+      setColumns(parameterSettingColumns);
     }
-  }, [isBaesline])
+  }, [isBaesline]);
+
+  const onSubmit = async () => {             
+    console.log('onSubmit', submitFormData);
+    if (submitFormData?.name && submitFormData?.description)
+      await saveInitialSnapshotRecordAsync({
+        seerName: submitFormData?.name,
+        seerDescription: submitFormData?.description
+      });
+  };
+
+  const onClose = () => {
+    setShowSnapshotForm(false);
+    setSubmitFormData({});
+  };
 
   return (
     <div className="containerManualTable">
       <table>
         <thead>
           <tr>
-            {columns?.map(({header, accessorKey}, index: number) => {
+            {columns?.map(({ header, accessorKey }, index: number) => {
               return (
                 // <div>
-                  <th key={`${isBaesline ? 'baseline' : 'setting'}${index}`}>{header}</th>
+                <th key={`${isBaesline ? 'baseline' : 'setting'}${index}`}>{header}</th>
                 // </div>
-              )
+              );
             })}
           </tr>
         </thead>
@@ -88,14 +125,12 @@ const DyanamicTable = ({
                           value={typeValueCurrent || ''}
                           onChange={(e) => {
                             // handleRoleChange(row.id, e.target.value)
-                            onChangeHanlder(
-                              {
-                                ...settingItem,
-                                key: 'typeValueCurrent',
-                                value: e.target.value,
-                                isDropDown: true,
-                              }
-                            )
+                            onChangeHanlder({
+                              ...settingItem,
+                              key: 'typeValueCurrent',
+                              value: e.target.value,
+                              isDropDown: true
+                            });
                           }}
                         >
                           {fteDropdown?.map((fteItem: any) => (
@@ -107,9 +142,7 @@ const DyanamicTable = ({
                         </select>
                       </div>
                     ) : (
-                      <div>
-                        {switchValue}
-                      </div>
+                      <div>{switchValue}</div>
                     )}
                   </div>
                 </td>
@@ -121,14 +154,12 @@ const DyanamicTable = ({
                           value={currentValue}
                           onChange={(e) => {
                             // handleRoleChange(row.id, e.target.value)
-                            onChangeHanlder(
-                              {
-                                ...settingItem,
-                                key: 'currentValue',
-                                value: e.target.value,
-                                isDropDown: true,
-                              }
-                            )
+                            onChangeHanlder({
+                              ...settingItem,
+                              key: 'currentValue',
+                              value: e.target.value,
+                              isDropDown: true
+                            });
                           }}
                         >
                           {currentValueDropdownValues?.map((currentItem: any) => (
@@ -148,14 +179,11 @@ const DyanamicTable = ({
                           type="text"
                           onKeyDown={handleKeyDown}
                           onChange={(e) => {
-
-                            onChangeHanlder(
-                              {
-                                ...settingItem,
-                                key: 'currentValue',
-                                value: e.target.value
-                              }
-                            )
+                            onChangeHanlder({
+                              ...settingItem,
+                              key: 'currentValue',
+                              value: e.target.value
+                            });
                           }}
                           placeholder="Current Value"
                         />
@@ -164,17 +192,31 @@ const DyanamicTable = ({
                   </div>
                 </td>
               </tr>
-            )})}
+            );
+          })}
         </tbody>
       </table>
-      <div className='modal-footer'>
+      <div className="modal-footer">
         {/* btn-gray-outline */}
-        <Button className='btn-primary mr-10' onClick={() => handleClose()}>Cancel</Button>
-        <Button className='btn-primary' onClick={() => saveHandler(settingParameters)}>Save</Button>
+        <Button className="btn-primary mr-10" onClick={() => handleClose()}>
+          Cancel
+        </Button>
+        <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
+          Save
+        </Button>
       </div>
+      {showSnapshotForm ? (
+        <FormDialog
+          handleClickOpen={true}
+          handleSubmit={onSubmit}
+          setSubmitFormData={setSubmitFormData}
+          handleClose={onClose}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
+};
 
-}
-
-export default DyanamicTable
+export default DyanamicTable;
