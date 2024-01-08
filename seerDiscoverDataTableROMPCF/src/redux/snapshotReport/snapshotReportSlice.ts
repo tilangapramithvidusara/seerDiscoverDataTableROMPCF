@@ -144,12 +144,14 @@ const snapshotSlice: any = createSlice({
       // }
     
       state.settingParameters = action.payload
+      state.snapshotSettingParameters = action.payload;
     },
     setSettingParameterAttributes: (state, action) => {
-      console.log('lloo ===--02 => ', action);
+      console.log('qaqa lloo ===--02 => ', action);
       const {payload: {key, value}} = action;
       const stateValue = current(state)
-      const parameterValues = stateValue?.settingParameters?.formattedData;
+      // const parameterValues = stateValue?.settingParameters?.formattedData;
+      const parameterValues = stateValue?.snapshotSettingParameters?.formattedData;
       console.log('ee',stateValue?.settingParameters);
       
       const paramerterIndex = parameterValues?.findIndex((item: any) => item.name === action?.payload?.name);
@@ -177,6 +179,9 @@ const snapshotSlice: any = createSlice({
     },
     setRecordId: (state, action) => {
       state.recordId = action.payload
+    },
+    setBaseJson: (state, action) => {
+      state.baseJson = action.payload
     }
   }
   
@@ -192,6 +197,7 @@ export const {
   setSettingParameters,
   setSettingParameterAttributes,
   setRecordId,
+  setBaseJson,
 } = snapshotSlice.actions;
 
 

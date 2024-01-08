@@ -12,14 +12,6 @@ declare global {
   }
 }
 
-declare global {
-  interface Window {
-    webapi: any;
-    createDevopsWorkItemURL: any;
-    userId: any;
-  }
-}
-
 export const saveInitialSnapshotRecordAsync : any = (info: any) => {
   const url = new URL(window.location.href);
   const queryParameters = url.searchParams;
