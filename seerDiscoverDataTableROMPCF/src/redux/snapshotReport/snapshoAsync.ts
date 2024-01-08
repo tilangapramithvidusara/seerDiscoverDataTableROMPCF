@@ -2,6 +2,7 @@ import axios from 'axios';
 import { setRecordId, setSnapshotLoading } from './snapshotReportSlice';
 import { executeAfterGivenDilay } from '../../Utils/commonFunc.utils';
 import { seerBasejson, seerUpdatedsnapshotdata } from '../../Constants/endPoints';
+import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
 
 declare global {
   interface Window {
@@ -23,8 +24,8 @@ export const saveInitialSnapshotRecordAsync : any = (info: any) => {
   const url = new URL(window.location.href);
   const queryParameters = url.searchParams;
   // console.log('accountId -=> ', queryParameters.get("accountId"));
-  const accountId = queryParameters.get("accountId");
-  const contactId = queryParameters.get("userId");
+  const accountId = queryParameters.get(snapshotAPIConstants.ACCOUNT_ID);
+  const contactId = queryParameters.get(snapshotAPIConstants.USER_ID);
 
   console.log("ACC ID", accountId);
   console.log("COntact ID", contactId);
@@ -35,8 +36,8 @@ export const saveInitialSnapshotRecordAsync : any = (info: any) => {
       console.log("saving....");
       dispatch(setSnapshotLoading(true));
       const record: any = {};
-      record["seer_account@odata.bind"] = `/accounts(${accountId})`; // Lookup
-      record["seer_contact@odata.bind"] = `/contacts(${contactId})`; // Lookup
+      record[snapshotAPIConstants.SEER_ACCOUNT_RECORD_ID] = `/accounts(${accountId})`; // Lookup
+      record[snapshotAPIConstants.SEER_CONTACT_RECORD_ID] = `/contacts(${contactId})`; // Lookup
       record.seer_name = info?.seerName; // Text
       record.seer_description = info?.seerDescription; // Text
       console.log("saving 1 ....");
@@ -44,7 +45,7 @@ export const saveInitialSnapshotRecordAsync : any = (info: any) => {
       window.parent.webapi.safeAjax({
           type: "POST",
           contentType: "application/json",
-          url: "/_api/seer_rominportalsnapshots",
+          url: snapshotAPIConstants.INITIAL_SNAPSHOT_URL,
           data: JSON.stringify(record),
           success: function (data: any, textStatus: any, xhr: any) {
               var newId = xhr.getResponseHeader("entityid");
@@ -74,7 +75,7 @@ export const saveSnapshotAsync = (info: any) => {
       const endPoint = requestNumber == 1 ? seerBasejson : seerUpdatedsnapshotdata;
       dispatch(setSnapshotLoading(true));
       var fileName = requestNumber == 1 ? encodeURIComponent(`baseJsonData${new Date()}`) : encodeURIComponent(`snapshotJsonData${new Date()}`); // The following characters are not allowed inside a file name: \ / : * ? " < > |
-      const url = `/_api/seer_rominportalsnapshots(${recodeId})/${endPoint}?x-ms-file-name=`
+      const url = `${snapshotAPIConstants.INITIAL_SNAPSHOT_URL}(${recodeId})/${endPoint}?x-ms-file-name=`
 
       // NOTE: the following code converts a Base 64 encoded string to binary data
       var base64Content = requestNumber == 1 ? baseData : snapshotData;
