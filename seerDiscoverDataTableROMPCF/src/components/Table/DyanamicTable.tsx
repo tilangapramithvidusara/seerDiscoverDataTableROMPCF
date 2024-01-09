@@ -83,8 +83,8 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
       if (submitFormData?.name && submitFormData?.description) {
           dispatch(saveInitialSnapshotRecordAsync({
             seerName: submitFormData?.name,
-            baseData: convertJsonToBase64(baseJson), 
-            snapshotData: convertJsonToBase64(snapshotSettingParameters),
+            // baseData: convertJsonToBase64(baseJson), 
+            // snapshotData: convertJsonToBase64(snapshotSettingParameters),
             seerDescription: submitFormData?.description
           }))
         }

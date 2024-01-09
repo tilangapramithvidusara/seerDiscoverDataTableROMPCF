@@ -99,6 +99,7 @@ const initialState: any = {
   snapshotSettingParameters: null,
   settingParameters: null,
   recordId: null,
+  selectedSnapshotFromDB: null
 }
 
 const snapshotSlice: any = createSlice({
@@ -109,6 +110,7 @@ const snapshotSlice: any = createSlice({
       state.isSnapshotModeEnable = action.payload
     },
     setSnapshotList: (state, action) => {
+      console.log("ACTION setSnapshotList", action)
       state.snapshotsList = action.payload
     },
     setSnapshotLoading: (state, action) => {

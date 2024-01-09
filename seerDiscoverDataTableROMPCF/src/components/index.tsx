@@ -149,7 +149,7 @@ const App = ({
   }
 
   const getSnapshotsListHandler = React.useCallback((info) => {
-    loadSnapshotsAsync(info)
+    // dispatch(loadSnapshotsAsync())
   }, [dispatch])
 
   // only for check
@@ -169,6 +169,11 @@ const App = ({
     }
   }, [settingParameters && isSnapshotModeEnable])
   // export const arrayGenerator = async (initialDataSet: any, dispatch: any, settingParameters?: any, isSnapshotModeEnable?: boolean)
+
+  React.useEffect(() => {
+    console.log("SELECTED BTN", selectedButton);
+    if(selectedButton === 'button2')  dispatch(loadSnapshotsAsync())
+  }, [selectedButton])
 
   return (
     <>
@@ -212,7 +217,7 @@ const App = ({
                 <DropDownButtons selectedButton={selectedButton} />
                 <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
                 formattedSettingHandler(e, initialFetchData);
-                getSnapshotsListHandler(initialFetchData);
+                // getSnapshotsListHandler(initialFetchData);
               }}><Settings className="btn-icon" /></Button>
               </div>
               // <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
