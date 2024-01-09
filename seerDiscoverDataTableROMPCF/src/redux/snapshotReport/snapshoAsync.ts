@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setRecordId, setSelectedSnaphotData, setSnapshotConfigList, setSnapshotLoading } from './snapshotReportSlice';
+import { setRecordId, setBaseJson, setSnapshotLoading } from './snapshotReportSlice';
 import { executeAfterGivenDilay } from '../../Utils/commonFunc.utils';
 import { seerBasejson, seerUpdatedsnapshotdata } from '../../Constants/endPoints';
 import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
@@ -135,7 +135,7 @@ export const loadSelectedSnapshotAsync = (info: any) => {
             console.log(result);
             // Columns
             var seer_rominportalsnapshotid = result["seer_rominportalsnapshotid"];
-            dispatch(setSelectedSnaphotData(result));
+            dispatch(setBaseJson(result));
             dispatch(getSnapshotFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid}))
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
@@ -167,7 +167,7 @@ export const loadSnapshotsAsync = () => {
         success: function (data: any, textStatus: any, xhr: any) {
             var results = data;
             console.log(results);
-            setSnapshotConfigList("List results", results?.value);
+            // setSnapshotConfigList("List results", results?.value);
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
             console.log(xhr);
@@ -200,7 +200,7 @@ export const getSnapshotFile = (info: any) => {
             console.log("File retrieved. Name: " + fileName);
             console.log("File fileContent. Name: " + fileContent);
             console.log("File uploaded");
-            dispatch(setSelectedSnaphotData({...info, fileContent:fileContent, recordId: recodeId}));
+            dispatch(setBaseJson({...info, fileContent:fileContent, recordId: recodeId}));
             // if(requestNumber === 1){ 
             //   console.log("Success 1", requestNumber)
             //   dispatch(getSnapshotFile({...info, requestNumber: 2}))
