@@ -110,6 +110,7 @@ const snapshotSlice: any = createSlice({
       state.isSnapshotModeEnable = action.payload
     },
     setSnapshotList: (state, action) => {
+      console.log("ACTION setSnapshotList", action)
       state.snapshotsList = action.payload
     },
     setSnapshotLoading: (state, action) => {

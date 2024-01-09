@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { setRecordId, setBaseJson, setSnapshotLoading } from './snapshotReportSlice';
-import { executeAfterGivenDilay } from '../../Utils/commonFunc.utils';
+import { setRecordId, setBaseJson, setSnapshotLoading, setSettingParameters, setLoadedSnapshot, setSnapshotList } from './snapshotReportSlice';
+import { convertBase64ToJson, executeAfterGivenDilay } from '../../Utils/commonFunc.utils';
 import { seerBasejson, seerUpdatedsnapshotdata } from '../../Constants/endPoints';
 import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
+import { CommonUtils } from '../../Utils/SidePaneUtils/EstimateAverageRate/CommonUtils';
 
 declare global {
   interface Window {
@@ -111,41 +112,8 @@ export const saveSnapshotAsync = (info: any) => {
   }
 }
 
-export const loadSelectedSnapshotAsync = (info: any) => {
-  return async (dispatch: (arg0: any) => void) => {
-    try {
-      dispatch(setSnapshotLoading(true))
-      window.parent.webapi.safeAjax({
-        type: "GET",
-        url: `/_api/seer_rominportalsnapshots(${info?.snapshotId})?$select=seer_rominportalsnapshotid,_seer_account_value,seer_basejson,seer_basejson_name,_seer_contact_value,createdon,modifiedon,seer_name,seer_updatedsnapshotdata,seer_updatedsnapshotdata_name`,
-        contentType: "application/json",
-        headers: {
-            "Prefer": "odata.include-annotations=*"
-        },
-        success: function (data: any, textStatus: any, xhr: any) {
-            var result = data;
-            console.log(result);
-            // Columns
-            var seer_rominportalsnapshotid = result["seer_rominportalsnapshotid"];
-            dispatch(setBaseJson(result));
-            dispatch(getSnapshotFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid}))
-        },
-        error: function (xhr: any, textStatus: any, errorThrown: any) {
-            console.log(xhr);
-        }
-    });
-    
-    } catch (error) {
-      console.log('save snapshot error: ');
-    } finally {
-      executeAfterGivenDilay(() => {
-        dispatch(setSnapshotLoading(false))
-      });
-    }
-  }
-}
-
-export const loadSnapshotsAsync = () => {
+export const loadSnapshotsAsync: any = () => {
+  console.log("loadSnapshotsAsync Calling... ")
   return async (dispatch: (arg0: any) => void) => {
     try {
       dispatch(setSnapshotLoading(true));
@@ -159,6 +127,7 @@ export const loadSnapshotsAsync = () => {
         success: function (data: any, textStatus: any, xhr: any) {
             var results = data;
             console.log(results);
+            dispatch(setSnapshotList(results?.value));
             // setSnapshotConfigList("List results", results?.value);
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
@@ -175,7 +144,41 @@ export const loadSnapshotsAsync = () => {
   }
 }
 
-export const getSnapshotFile = (info: any) => {
+export const loadSelectedSnapshotAsync = (info: any) => {
+  return async (dispatch: (arg0: any) => void) => {
+    try {
+      dispatch(setSnapshotLoading(true))
+      window.parent.webapi.safeAjax({
+        type: "GET",
+        url: `/_api/seer_rominportalsnapshots(${info?.snapshotId})?$select=seer_rominportalsnapshotid,_seer_account_value,seer_basejson,seer_basejson_name,_seer_contact_value,createdon,modifiedon,seer_name,seer_updatedsnapshotdata,seer_updatedsnapshotdata_name`,
+        contentType: "application/json",
+        headers: {
+            "Prefer": "odata.include-annotations=*"
+        },
+        success: function (data: any, textStatus: any, xhr: any) {
+            var result = data;
+            console.log(result);
+            // Columns
+            var seer_rominportalsnapshotid = result["seer_rominportalsnapshotid"];
+            dispatch(getSnapshotBaseJSONFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid}))
+            dispatch(getUpdatedSnapshotFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid}))
+        },
+        error: function (xhr: any, textStatus: any, errorThrown: any) {
+            console.log(xhr);
+        }
+    });
+    
+    } catch (error) {
+      console.log('save snapshot error: ');
+    } finally {
+      executeAfterGivenDilay(() => {
+        dispatch(setSnapshotLoading(false))
+      });
+    }
+  }
+}
+
+export const getSnapshotBaseJSONFile = (info: any) => {
   const {requestNumber, recodeId} = info;
 
   return async (dispatch: (arg0: any) => void) => {
@@ -192,13 +195,43 @@ export const getSnapshotFile = (info: any) => {
             console.log("File retrieved. Name: " + fileName);
             console.log("File fileContent. Name: " + fileContent);
             console.log("File uploaded");
-            dispatch(setBaseJson({...info, fileContent:fileContent, recordId: recodeId}));
-            // if(requestNumber === 1){ 
-            //   console.log("Success 1", requestNumber)
-            //   dispatch(getSnapshotFile({...info, requestNumber: 2}))
-            //   dispatch(setSelectedSnaphotData({...info, fileContent:fileContent}));
-            // }
-            // else {console.log("Success 2", requestNumber)}
+            // dispatch(setBaseJson({...info, fileContent:fileContent, recordId: recodeId}));
+            const convertedJSONData = convertBase64ToJson(fileContent);
+            dispatch(setBaseJson(convertedJSONData));
+        },
+        error: function (xhr: any, textStatus: any, errorThrown: any) {
+            console.log(xhr);
+        }
+    });
+    } catch (error) {
+      console.log('save snapshot error: ');
+    } finally {
+      executeAfterGivenDilay(() => {
+        dispatch(setSnapshotLoading(false))
+      });
+    }
+  }
+}
+
+export const getUpdatedSnapshotFile = (info: any) => {
+  const {requestNumber, recodeId} = info;
+
+  return async (dispatch: (arg0: any) => void) => {
+    try {
+      dispatch(setSnapshotLoading(true));
+      window.parent.webapi.safeAjax({
+        type: "GET",
+        url: `/_api/seer_rominportalsnapshots(${recodeId})/seer_updatedsnapshotdata`,
+        contentType: "application/json",
+        success: function (data: any, textStatus: any, xhr: any) {
+            var fileContent = data["value"]; // Base 64
+            var fileName = "file.bin"; // default name
+    
+            console.log("File retrieved. Name: " + fileName);
+            console.log("File fileContent. Name: " + fileContent);
+            console.log("File uploaded");
+            const convertedJSONData = convertBase64ToJson(fileContent);
+            dispatch(setSettingParameters(convertedJSONData));
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
             console.log(xhr);

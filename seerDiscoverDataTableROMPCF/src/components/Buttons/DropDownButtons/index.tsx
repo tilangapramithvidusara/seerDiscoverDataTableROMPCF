@@ -21,6 +21,7 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent}:
 
   const snapshotsList = useSelector((state: any) => state.snapshot.snapshotsList)
 
+  console.log("snapshotsListState", snapshotsList)
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
@@ -47,6 +48,7 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent}:
     "item2": "Load Snapshots Option 2",
     "item3": "Load Snapshots Option 3"
   }
+
   return (
     <div>
       <div style={{ display: 'flex' }}>
@@ -74,7 +76,7 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent}:
               >
                 {
                   snapshotsList?.map((optionItem: any, ) => (
-                    <MenuItem value={snapshotsList?.value} onClick={() => handleMenuItemClick(snapshotsList?.value)}>Load Snapshots Option 1</MenuItem>
+                    <MenuItem value={optionItem?.seer_rominportalsnapshotid} onClick={() => handleMenuItemClick(optionItem?.seer_rominportalsnapshotid)}>{optionItem?.seer_name}</MenuItem>
                   ))
                 }
                 {/* <MenuItem value="item1" onClick={() => handleMenuItemClick("item1")}>Load Snapshots Option 1</MenuItem>
