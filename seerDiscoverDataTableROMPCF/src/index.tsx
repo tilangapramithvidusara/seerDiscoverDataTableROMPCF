@@ -9,6 +9,7 @@ import { initialFetchFailure, initialFetchSuccess, setEstimateAveRateAnalysisDes
 import Loader from "./components/Loader/Loader";
 import { dataMapper } from "./Utils/RequirmentData/requirement.data.utils";
 import { saveSnapshotAsync } from "./redux/snapshotReport/snapshoAsync";
+import { setBaseJson } from "./redux/snapshotReport/snapshotReportSlice";
 
 
 function Index({tableContent, context, imageUrl}: {tableContent: any, context: any, imageUrl?: any}) {
@@ -40,6 +41,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     const inititalData = await fetchInitialDataAsync();
     if (!inititalData.error) {
       dispatch(initialFetchSuccess(inititalData?.result));
+      dispatch(setBaseJson(inititalData?.result))
     } else {
       setIsloading(false)
       dispatch(initialFetchFailure(inititalData?.result));
