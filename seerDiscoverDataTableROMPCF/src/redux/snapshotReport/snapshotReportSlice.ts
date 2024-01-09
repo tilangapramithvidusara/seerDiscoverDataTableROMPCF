@@ -99,6 +99,7 @@ const initialState: any = {
   snapshotSettingParameters: null,
   settingParameters: null,
   recordId: null,
+  selectedSnapshotFromDB: null
 }
 
 const snapshotSlice: any = createSlice({
@@ -177,6 +178,17 @@ const snapshotSlice: any = createSlice({
     },
     setRecordId: (state, action) => {
       state.recordId = action.payload
+    },
+    setSelectedSnaphotData: (state, action) => {
+      console.log('setSelectedSnaphotData ===--02action ', action);
+      console.log('setSelectedSnaphotData ===--02state ', state);
+
+      state.selectedSnapshotFromDB = action.payload
+    },
+    setSnapshotConfigList: (state, action) => {
+      console.log('setSnapshotConfigList ===--02action ', action);
+      console.log('setSnapshotConfigList ===--02state ', state);
+      state.selectedSnapshotFromDB = action.payload
     }
   }
   
@@ -192,6 +204,8 @@ export const {
   setSettingParameters,
   setSettingParameterAttributes,
   setRecordId,
+  setSelectedSnaphotData,
+  setSnapshotConfigList
 } = snapshotSlice.actions;
 
 

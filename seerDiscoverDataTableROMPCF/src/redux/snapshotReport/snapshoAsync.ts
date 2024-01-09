@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setRecordId, setSnapshotLoading } from './snapshotReportSlice';
+import { setRecordId, setSelectedSnaphotData, setSnapshotConfigList, setSnapshotLoading } from './snapshotReportSlice';
 import { executeAfterGivenDilay } from '../../Utils/commonFunc.utils';
 import { seerBasejson, seerUpdatedsnapshotdata } from '../../Constants/endPoints';
 import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
@@ -123,38 +123,25 @@ export const loadSelectedSnapshotAsync = (info: any) => {
   return async (dispatch: (arg0: any) => void) => {
     try {
       dispatch(setSnapshotLoading(true))
-    //   window.parent.webapi.safeAjax({
-    //     type: "GET",
-    //     url: "/_api/seer_rominportalsnapshots(7efbb810-faad-ee11-a569-002248015232)?$select=seer_rominportalsnapshotid,_seer_account_value,seer_basejson,seer_basejson_name,_seer_contact_value,createdon,modifiedon,seer_name,seer_updatedsnapshotdata,seer_updatedsnapshotdata_name",
-    //     contentType: "application/json",
-    //     headers: {
-    //         "Prefer": "odata.include-annotations=*"
-    //     },
-    //     success: function (data, textStatus, xhr) {
-    //         var result = data;
-    //         console.log(result);
-    //         // Columns
-    //         var seer_rominportalsnapshotid = result["seer_rominportalsnapshotid"]; // Guid
-    //         var seer_account = result["_seer_account_value"]; // Lookup
-    //         var seer_account_formatted = result["_seer_account_value@OData.Community.Display.V1.FormattedValue"];
-    //         var seer_account_lookuplogicalname = result["_seer_account_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
-    //         var seer_basejson = result["seer_basejson"]; // File
-    //         var seer_basejson_name = result["seer_basejson_name"]; // Text
-    //         var seer_contact = result["_seer_contact_value"]; // Lookup
-    //         var seer_contact_formatted = result["_seer_contact_value@OData.Community.Display.V1.FormattedValue"];
-    //         var seer_contact_lookuplogicalname = result["_seer_contact_value@Microsoft.Dynamics.CRM.lookuplogicalname"];
-    //         var createdon = result["createdon"]; // Date Time
-    //         var createdon_formatted = result["createdon@OData.Community.Display.V1.FormattedValue"];
-    //         var modifiedon = result["modifiedon"]; // Date Time
-    //         var modifiedon_formatted = result["modifiedon@OData.Community.Display.V1.FormattedValue"];
-    //         var seer_name = result["seer_name"]; // Text
-    //         var seer_updatedsnapshotdata = result["seer_updatedsnapshotdata"]; // File
-    //         var seer_updatedsnapshotdata_name = result["seer_updatedsnapshotdata_name"]; // Text
-    //     },
-    //     error: function (xhr, textStatus, errorThrown) {
-    //         console.log(xhr);
-    //     }
-    // });
+      window.parent.webapi.safeAjax({
+        type: "GET",
+        url: `/_api/seer_rominportalsnapshots(${info?.snapshotId})?$select=seer_rominportalsnapshotid,_seer_account_value,seer_basejson,seer_basejson_name,_seer_contact_value,createdon,modifiedon,seer_name,seer_updatedsnapshotdata,seer_updatedsnapshotdata_name`,
+        contentType: "application/json",
+        headers: {
+            "Prefer": "odata.include-annotations=*"
+        },
+        success: function (data: any, textStatus: any, xhr: any) {
+            var result = data;
+            console.log(result);
+            // Columns
+            var seer_rominportalsnapshotid = result["seer_rominportalsnapshotid"];
+            dispatch(setSelectedSnaphotData(result));
+            dispatch(getSnapshotFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid}))
+        },
+        error: function (xhr: any, textStatus: any, errorThrown: any) {
+            console.log(xhr);
+        }
+    });
     
     } catch (error) {
       console.log('save snapshot error: ');
@@ -166,10 +153,65 @@ export const loadSelectedSnapshotAsync = (info: any) => {
   }
 }
 
-export const loadSnapshotsAsync = (info: any) => {
+export const loadSnapshotsAsync = () => {
   return async (dispatch: (arg0: any) => void) => {
     try {
-      dispatch(setSnapshotLoading(true))
+      dispatch(setSnapshotLoading(true));
+      window.parent.webapi.safeAjax({
+        type: "GET",
+        url: "/_api/seer_rominportalsnapshots?$select=seer_rominportalsnapshotid,_seer_account_value,_seer_contact_value,createdon,seer_description,modifiedon,seer_name&$orderby=createdon desc,modifiedon desc",
+        contentType: "application/json",
+        headers: {
+            "Prefer": "odata.include-annotations=*"
+        },
+        success: function (data: any, textStatus: any, xhr: any) {
+            var results = data;
+            console.log(results);
+            setSnapshotConfigList("List results", results?.value);
+        },
+        error: function (xhr: any, textStatus: any, errorThrown: any) {
+            console.log(xhr);
+        }
+    });
+    } catch (error) {
+      console.log('save snapshot error: ');
+    } finally {
+      executeAfterGivenDilay(() => {
+        dispatch(setSnapshotLoading(false))
+      });
+    }
+  }
+}
+
+export const getSnapshotFile = (info: any) => {
+  const {requestNumber, recodeId} = info;
+
+  return async (dispatch: (arg0: any) => void) => {
+    try {
+      dispatch(setSnapshotLoading(true));
+      window.parent.webapi.safeAjax({
+        type: "GET",
+        url: `/_api/seer_rominportalsnapshots(${recodeId})/seer_basejson`,
+        contentType: "application/json",
+        success: function (data: any, textStatus: any, xhr: any) {
+            var fileContent = data["value"]; // Base 64
+            var fileName = "file.bin"; // default name
+    
+            console.log("File retrieved. Name: " + fileName);
+            console.log("File fileContent. Name: " + fileContent);
+            console.log("File uploaded");
+            dispatch(setSelectedSnaphotData({...info, fileContent:fileContent, recordId: recodeId}));
+            // if(requestNumber === 1){ 
+            //   console.log("Success 1", requestNumber)
+            //   dispatch(getSnapshotFile({...info, requestNumber: 2}))
+            //   dispatch(setSelectedSnaphotData({...info, fileContent:fileContent}));
+            // }
+            // else {console.log("Success 2", requestNumber)}
+        },
+        error: function (xhr: any, textStatus: any, errorThrown: any) {
+            console.log(xhr);
+        }
+    });
     } catch (error) {
       console.log('save snapshot error: ');
     } finally {
