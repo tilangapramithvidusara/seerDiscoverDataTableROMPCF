@@ -25,11 +25,13 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
   const dispatch = useDispatch();
   const [isBaesline, setIsBaseline] = useState(false);
   const [columns, setColumns] = useState(parameterSettingColumns);
+  const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
+  const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
   const [showSnapshotForm, setShowSnapshotForm] = useState(false);
   const [submitFormData, setSubmitFormData] = useState<any>();
 
-  console.log('settingParameters', settingParameters);
+  console.log('settingParameters', settingParameters, snapshotSettingParameters);
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
@@ -41,15 +43,16 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
   const onChangeHanlder = useCallback(
     (info) => {
       dispatch(setSettingParameterAttributes(info));
-      if (info?.isDropDown) {
-        dispatch(setStateSnapshot(true));
-      }
+      // if (info?.isDropDown) {
+      //   dispatch(setStateSnapshot(true));
+      // }
       // example for checking
       // dispatch(setStateSnapshot(true))
     },
     [dispatch]
   );
 
+  // call this when retrive success
   const handleSetSettingParameters = useCallback(
     (info) => {
       dispatch(setSettingParameters(info));
@@ -80,8 +83,8 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
       if (submitFormData?.name && submitFormData?.description) {
           dispatch(saveInitialSnapshotRecordAsync({
             seerName: submitFormData?.name,
-            baseData: convertJsonToBase64({name: "Anuj"}), 
-            snapshotData: convertJsonToBase64({name: "Anuj"}),
+            baseData: convertJsonToBase64(baseJson), 
+            snapshotData: convertJsonToBase64(snapshotSettingParameters),
             seerDescription: submitFormData?.description
           }))
         }
@@ -181,7 +184,7 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
                           name="currentValue"
                           value={currentValue}
                           type="text"
-                          onKeyDown={handleKeyDown}
+                          // onKeyDown={handleKeyDown}
                           onChange={(e) => {
                             onChangeHanlder({
                               ...settingItem,
