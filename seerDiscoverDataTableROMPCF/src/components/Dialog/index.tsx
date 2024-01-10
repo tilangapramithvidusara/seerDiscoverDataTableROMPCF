@@ -5,6 +5,7 @@ import DyanamicTable from '../Table/DyanamicTable';
 // const DyanamicTable = React.lazy(() => import('../Table/DyanamicTable'));
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
+import './style.css'
 
 export interface SimpleDialogProps {
   open?: boolean;
@@ -40,7 +41,7 @@ export default function SimpleDialog(props: SimpleDialogProps) {
     {
       key: '2',
       label: 'Rates',
-      children: '  ',
+      children: <div style={{ height: '200px' }}></div>,
     },
   ];
 
