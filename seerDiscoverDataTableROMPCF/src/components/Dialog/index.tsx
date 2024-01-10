@@ -3,6 +3,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DyanamicTable from '../Table/DyanamicTable';
 // const DyanamicTable = React.lazy(() => import('../Table/DyanamicTable'));
+import { Tabs } from 'antd';
+import type { TabsProps } from 'antd';
 
 export interface SimpleDialogProps {
   open?: boolean;
@@ -25,6 +27,23 @@ export default function SimpleDialog(props: SimpleDialogProps) {
     setOpenSettingPopup(false)
   };
 
+  const onChange = (key: string) => {
+    console.log("Current Tab:",key);
+  };
+
+  const tabItems: TabsProps['items'] = [
+    {
+      key: '1',
+      label: 'Parameters',
+      children: <DyanamicTable handleClose={handleClose} />,
+    },
+    {
+      key: '2',
+      label: 'Rates',
+      children: '  ',
+    },
+  ];
+
   return (
     <Dialog 
       onClose={handleClose} 
@@ -35,7 +54,11 @@ export default function SimpleDialog(props: SimpleDialogProps) {
       className='custom-modal'
     >
       <DialogTitle className='modal-title'>Settings</DialogTitle>
-      <DyanamicTable handleClose={handleClose}/>
+      <Tabs defaultActiveKey="1" 
+      items={tabItems} 
+      onChange={onChange} 
+      style={{ padding: '12px' }}
+      />
     </Dialog>
   );
 }
