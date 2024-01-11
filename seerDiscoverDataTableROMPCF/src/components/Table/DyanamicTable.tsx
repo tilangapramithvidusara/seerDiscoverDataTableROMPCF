@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
-import { MaterialReactTable } from 'material-react-table';
-import { TextField, Button } from '@mui/material';
+import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   parameterSettingColumns,
@@ -18,20 +17,18 @@ import {
   saveInitialSnapshotRecordAsync,
   saveSnapshotAsync
 } from '../../redux/snapshotReport/snapshoAsync';
-import FormDialog from '../../components/Form/index';
 import { convertBase64ToJson, convertJsonToBase64 } from '../../Utils/commonFunc.utils';
+
 
 const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
   const dispatch = useDispatch();
+  const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
   const [isBaesline, setIsBaseline] = useState(false);
   const [columns, setColumns] = useState(parameterSettingColumns);
-  const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
   const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
   const [showSnapshotForm, setShowSnapshotForm] = useState(false);
   const [submitFormData, setSubmitFormData] = useState<any>();
-
-  console.log('settingParameters', settingParameters, snapshotSettingParameters);
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
@@ -39,6 +36,7 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
       dispatch(setStateSnapshot(true));
     }
   };
+
 
   const onChangeHanlder = useCallback(
     (info) => {
@@ -78,22 +76,21 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
     }
   }, [isBaesline]);
 
+  const onSubmit = () => {
+    if (submitFormData?.name && submitFormData?.description) {
+        dispatch(saveInitialSnapshotRecordAsync({
+          seerName: submitFormData?.name,
+          baseData: convertJsonToBase64(baseJson), 
+          snapshotData: convertJsonToBase64(snapshotSettingParameters),
+          seerDescription: submitFormData?.description
+        }))
+      }
+}
 
-    const onSubmit = () => {
-      if (submitFormData?.name && submitFormData?.description) {
-          dispatch(saveInitialSnapshotRecordAsync({
-            seerName: submitFormData?.name,
-            // baseData: convertJsonToBase64(baseJson), 
-            // snapshotData: convertJsonToBase64(snapshotSettingParameters),
-            seerDescription: submitFormData?.description
-          }))
-        }
-  }
-
-  const onClose = () => {
-    setShowSnapshotForm(false);
-    setSubmitFormData({});
-  };
+const onClose = () => {
+  setShowSnapshotForm(false);
+  setSubmitFormData({});
+};
 
   return (
     <div className="containerManualTable">
@@ -208,11 +205,14 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
         <Button className="btn-primary mr-10" onClick={() => handleClose()}>
           Cancel
         </Button>
-        <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
+        {/* <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
+          Save
+        </Button> */}
+        <Button className="btn-primary">
           Save
         </Button>
       </div>
-      {showSnapshotForm ? (
+      {/* {showSnapshotForm ? (
         <FormDialog
           handleClickOpen={true}
           handleSubmit={onSubmit}
@@ -221,7 +221,7 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
         />
       ) : (
         <></>
-      )}
+      )} */}
     </div>
   );
 };

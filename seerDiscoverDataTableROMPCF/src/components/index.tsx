@@ -1,11 +1,13 @@
 import * as React from "react";
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
-import InputLabel from '@mui/material/InputLabel';
-
 import AdvancedTable from "./Table/AdvancedTable";
-// Use
+//Use
 // const AdvancedTable = React.lazy(() => import('./Table/AdvancedTable'));
+import DropDownButtons from "./Buttons/DropDownButtons";
+import ButtonGroups from "./Buttons/ButtonGroups";
+import { Box, Button, Grid, Stack} from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import RatesAndResources from "./RatesAndResources";
 import RiskFactors from "./RiskFactors";
 import ProjectROM from "./ProjectROM";
@@ -13,22 +15,18 @@ import ProjectMargin from "./ProjectMargin";
 import Governance from "./Governance";
 import ROMByPhase from "./ROMByPhase";
 import FitOrGap from "./FitOrGap";
-
-import DropDownButtons from "./Buttons/DropDownButtons";
-import ButtonGroups from "./Buttons/ButtonGroups";
-import { Box, Button, Chip, Grid, Stack, Typography } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
 import { fetchInitialDataAsync } from "../redux/report/reportAsycn";
 import { initialFetchFailure, initialFetchSuccess } from "../redux/report/reportSlice";
 import Loader from "./Loader/Loader";
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import Settings from "@mui/icons-material/Settings";
-import DyanamicTable from "./Table/DyanamicTable";
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
 import { setSettingParameters, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
-import { loadSelectedSnapshotAsync, loadSnapshotsAsync } from "../redux/snapshotReport/snapshoAsync";
-
+import { loadSnapshotsAsync, saveInitialSnapshotRecordAsync } from "../redux/snapshotReport/snapshoAsync";
+import FormDialog from "./Form";
+import { convertJsonToBase64 } from "../Utils/commonFunc.utils";
+import SnapShotPopup from "./SnapshotPopup/SnapshotPopup";
 
 const App = ({
   dataSet, onRefreshHandler, isRefreshing, 
@@ -114,8 +112,15 @@ const App = ({
   const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
   // selectedSnapshot
   const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
+  const [openSaveSnapshotPopup, setOpenSaveSnapshotPopup] = React.useState(false);
+  const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
-  
+  const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
+  const [submitFormData, setSubmitFormData] = React.useState({name: "", description: ""});
+  const snapshotsList = useSelector((state: any) => state.snapshot.snapshotsList);
+  const [openLoadSnapshotModal, setOpenLoadSnapshotModal] = React.useState(false); // Initialize the state for selected item
+  const isLoadingSnapshot = useSelector((state: any) => state?.snapshot?.isLoadingSnapshot || []);
+
   const onChange = (key: string) => {
     console.log(key);
   };
@@ -152,6 +157,7 @@ const App = ({
     // dispatch(loadSnapshotsAsync())
   }, [dispatch])
 
+
   // only for check
   React.useMemo(() => {
     console.log('call meee', settingParameters && isSnapshotModeEnable);
@@ -171,10 +177,34 @@ const App = ({
   // export const arrayGenerator = async (initialDataSet: any, dispatch: any, settingParameters?: any, isSnapshotModeEnable?: boolean)
 
   React.useEffect(() => {
-    console.log("SELECTED BTN", selectedButton);
     if(selectedButton === 'button2')  dispatch(loadSnapshotsAsync())
   }, [selectedButton])
 
+  const handleSaveSnapshot = () => {
+    console.log("handleSaveSnapshot");
+    setOpenSaveSnapshotPopup(true);
+  }
+
+  const onSubmit = () => {
+    console.log("Submitted", submitFormData);
+    if (submitFormData?.name && submitFormData?.description) {
+      dispatch(saveInitialSnapshotRecordAsync({
+        seerName: submitFormData?.name,
+        baseData: convertJsonToBase64(baseJson), 
+        snapshotData: convertJsonToBase64(snapshotSettingParameters),
+        seerDescription: submitFormData?.description
+      }))
+    }
+  }
+
+  React.useEffect(() => {
+    console.log("isLoadingSnapshot BTN", isLoadingSnapshot);
+    if(!isLoadingSnapshot) setOpenSaveSnapshotPopup(false);
+  }, [isLoadingSnapshot])
+
+  const handleClosePopup = () => {
+    setOpenLoadSnapshotModal(false);
+  }
   return (
     <>
       {(isRefreshing || isComLoading || loading) && (
@@ -214,9 +244,10 @@ const App = ({
             <Button title="Refresh" className='btn-primary btn-small mr-10' onClick={(e) => initialTriggerHandler(e)}><AutorenewOutlinedIcon className="btn-icon" /></Button>
             {selectedButton == 'button2' && (
               <div className='text-right'>
-                <DropDownButtons selectedButton={selectedButton} />
+                <DropDownButtons selectedButton={selectedButton} handleSaveSnapshot={handleSaveSnapshot} />
                 <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
                 formattedSettingHandler(e, initialFetchData);
+              
                 // getSnapshotsListHandler(initialFetchData);
               }}><Settings className="btn-icon" /></Button>
               </div>
@@ -225,7 +256,11 @@ const App = ({
               //   getSnapshotsListHandler(initialFetchData);
               // }}><Settings className="btn-icon" /></Button>
             )}
-            
+            {
+              openLoadSnapshotModal ? 
+              <SnapShotPopup snapshots = {snapshotsList} handleClose={handleClosePopup} open={openLoadSnapshotModal}/> : <></>
+              
+              }
           </div>
         </div> 
       </Grid> 
@@ -235,6 +270,15 @@ const App = ({
         )}
       </div>
       <Tabs size="small" defaultActiveKey="1" items={items} onChange={onChange} />
+      {
+         openSaveSnapshotPopup ? 
+         <FormDialog
+         handleClickOpen={true}
+         handleSubmit={onSubmit}
+         setSubmitFormData={setSubmitFormData}
+         handleClose={() => setOpenSaveSnapshotPopup(false)}
+       /> : <> </>
+      }
     </>
   )
 }
