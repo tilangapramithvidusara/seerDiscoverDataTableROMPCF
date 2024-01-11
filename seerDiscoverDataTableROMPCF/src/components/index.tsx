@@ -2,11 +2,19 @@ import * as React from "react";
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import AdvancedTable from "./Table/AdvancedTable";
+//Use
 // const AdvancedTable = React.lazy(() => import('./Table/AdvancedTable'));
 import DropDownButtons from "./Buttons/DropDownButtons";
 import ButtonGroups from "./Buttons/ButtonGroups";
 import { Box, Button, Grid, Stack} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import RatesAndResources from "./RatesAndResources";
+import RiskFactors from "./RiskFactors";
+import ProjectROM from "./ProjectROM";
+import ProjectMargin from "./ProjectMargin";
+import Governance from "./Governance";
+import ROMByPhase from "./ROMByPhase";
+import FitOrGap from "./FitOrGap";
 import { fetchInitialDataAsync } from "../redux/report/reportAsycn";
 import { initialFetchFailure, initialFetchSuccess } from "../redux/report/reportSlice";
 import Loader from "./Loader/Loader";
@@ -96,10 +104,13 @@ const App = ({
 
   const dispatch = useDispatch();
   const loading = useSelector((state: any) => state.report.loading)
+  const imageUrl = useSelector((state: any) => state.report.imageUrl)
   const initialFetchData = useSelector((state: any) => state.report.initialFetchData);
   const hasLoadedData = useSelector((state: any) => state?.report?.hasLoadedData)
   const [isComLoading, setComIsloading] = React.useState<boolean>(isRefreshing || false);
   const [openSettingPopup, setOpenSettingPopup] = React.useState<boolean>(false);
+  const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
+  // selectedSnapshot
   const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
   const [openSaveSnapshotPopup, setOpenSaveSnapshotPopup] = React.useState(false);
   const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
@@ -141,6 +152,11 @@ const App = ({
     } 
     setOpenSettingPopup(true)
   }
+
+  const getSnapshotsListHandler = React.useCallback((info) => {
+    // dispatch(loadSnapshotsAsync())
+  }, [dispatch])
+
 
   // only for check
   React.useMemo(() => {
