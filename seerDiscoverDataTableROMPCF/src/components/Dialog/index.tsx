@@ -20,11 +20,7 @@ export default function SimpleDialog(props: SimpleDialogProps) {
   const handleClose = () => {
     setOpenSettingPopup(false)
   };
-
-  const handleListItemClick = (value: string) => {
-    setOpenSettingPopup(false)
-  };
-
+  
   const onChange = (key: string) => {};
 
   const tabItems: TabsProps['items'] = [

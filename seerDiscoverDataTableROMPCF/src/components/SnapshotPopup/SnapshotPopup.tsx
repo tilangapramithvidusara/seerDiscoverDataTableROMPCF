@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import { Space, Select, Modal, Input } from 'antd';
 import { useState } from 'react';
 
@@ -9,7 +8,10 @@ export default function SnapShotPopup({ snapshots, handleClose, open }: any) {
   return (
     <Modal open={open} title="Load Snapshot" onOk={open} onCancel={handleClose}>
       <Space wrap>
-        <div style={{ display: 'flex-column', fontSize: '15px' }}>
+        <div style={{ 
+          display: 'flex-column', 
+          fontSize: '15px' 
+          }}>
           <div>Select Snapshot</div>
           <Select
             style={{ width: 450 }}

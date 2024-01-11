@@ -1,37 +1,24 @@
 import * as React from "react";
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
-import InputLabel from '@mui/material/InputLabel';
-
 import AdvancedTable from "./Table/AdvancedTable";
-// Use
 // const AdvancedTable = React.lazy(() => import('./Table/AdvancedTable'));
-import RatesAndResources from "./RatesAndResources";
-import RiskFactors from "./RiskFactors";
-import ProjectROM from "./ProjectROM";
-import ProjectMargin from "./ProjectMargin";
-import Governance from "./Governance";
-import ROMByPhase from "./ROMByPhase";
-import FitOrGap from "./FitOrGap";
-
 import DropDownButtons from "./Buttons/DropDownButtons";
 import ButtonGroups from "./Buttons/ButtonGroups";
-import { Box, Button, Chip, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Grid, Stack} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchInitialDataAsync } from "../redux/report/reportAsycn";
 import { initialFetchFailure, initialFetchSuccess } from "../redux/report/reportSlice";
 import Loader from "./Loader/Loader";
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import Settings from "@mui/icons-material/Settings";
-import DyanamicTable from "./Table/DyanamicTable";
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
-import { setLoadedSnapshot, setSettingParameters, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
-import { loadSelectedSnapshotAsync, loadSnapshotsAsync, saveInitialSnapshotRecordAsync } from "../redux/snapshotReport/snapshoAsync";
+import { setSettingParameters, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
+import { loadSnapshotsAsync, saveInitialSnapshotRecordAsync } from "../redux/snapshotReport/snapshoAsync";
 import FormDialog from "./Form";
 import { convertJsonToBase64 } from "../Utils/commonFunc.utils";
 import SnapShotPopup from "./SnapshotPopup/SnapshotPopup";
-
 
 const App = ({
   dataSet, onRefreshHandler, isRefreshing, 
@@ -109,22 +96,17 @@ const App = ({
 
   const dispatch = useDispatch();
   const loading = useSelector((state: any) => state.report.loading)
-  const imageUrl = useSelector((state: any) => state.report.imageUrl)
   const initialFetchData = useSelector((state: any) => state.report.initialFetchData);
   const hasLoadedData = useSelector((state: any) => state?.report?.hasLoadedData)
   const [isComLoading, setComIsloading] = React.useState<boolean>(isRefreshing || false);
   const [openSettingPopup, setOpenSettingPopup] = React.useState<boolean>(false);
-  const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
-  // selectedSnapshot
   const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
   const [openSaveSnapshotPopup, setOpenSaveSnapshotPopup] = React.useState(false);
   const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
   const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
-
   const [submitFormData, setSubmitFormData] = React.useState({name: "", description: ""});
   const snapshotsList = useSelector((state: any) => state.snapshot.snapshotsList);
-  
   const [openLoadSnapshotModal, setOpenLoadSnapshotModal] = React.useState(false); // Initialize the state for selected item
   const isLoadingSnapshot = useSelector((state: any) => state?.snapshot?.isLoadingSnapshot || []);
 
@@ -159,10 +141,6 @@ const App = ({
     } 
     setOpenSettingPopup(true)
   }
-
-  const getSnapshotsListHandler = React.useCallback((info) => {
-    // dispatch(loadSnapshotsAsync())
-  }, [dispatch])
 
   // only for check
   React.useMemo(() => {

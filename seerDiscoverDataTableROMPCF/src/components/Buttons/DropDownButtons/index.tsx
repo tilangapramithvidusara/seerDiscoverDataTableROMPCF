@@ -1,13 +1,9 @@
 import * as React from 'react'
 import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import { useState } from 'react';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import DownloadingOutlinedIcon from '@mui/icons-material/DownloadingOutlined';
-import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 import UpdateOutlined from '@mui/icons-material/UpdateOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectSnapshot } from '../../../redux/snapshotReport/snapshotReportSlice';
@@ -39,7 +35,6 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
 
   const handleMenuItemClick = (itemValue: any) => {
     console.log('itemValue => ', itemValue);
-    
     setSelectedItem(itemValue); // Update the selected item in state
     selectItem(itemValue);
     setSelectSnapshotHandler(itemValue);
@@ -92,10 +87,8 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
               //   {/* <MenuItem value="item1" onClick={() => handleMenuItemClick("item1")}>Load Snapshots Option 1</MenuItem>
               //   <MenuItem value="item2" onClick={() => handleMenuItemClick("item2")}>Load Snapshots Option 2</MenuItem>
               //   <MenuItem value="item3" onClick={() => handleMenuItemClick("item3")}>Load Snapshots Option 3</MenuItem> */}
-              // </Menu>
-              
+              // </Menu> 
             )}
-            
           </>
         )}
         {
@@ -127,7 +120,6 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
           <InputLabel className='label  ptb-10'>{optionList?.[selectedItem]}</InputLabel>
         )}
       </div>
-    
     </div>
   );
 }

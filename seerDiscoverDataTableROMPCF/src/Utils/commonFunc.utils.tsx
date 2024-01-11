@@ -19,8 +19,6 @@ export const convertJsonToBase64: any = (jsonData: any) => {
   return objJsonB64
 };
 
-
-
 export const convertBase64ToJson : any = (base64Data: any) => {
   console.log("base64Data", base64Data);
   console.log("Converted Data", atob(base64Data))

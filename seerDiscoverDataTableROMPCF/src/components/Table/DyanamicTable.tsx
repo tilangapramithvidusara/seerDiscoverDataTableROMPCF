@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
-import { MaterialReactTable } from 'material-react-table';
-import { TextField, Button } from '@mui/material';
+import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   parameterSettingColumns,
@@ -9,33 +8,15 @@ import {
 } from '../../Constants/parametersSetting';
 import {
   setSettingParameterAttributes,
-  setSettingParameters,
-  setStateSnapshot
 } from '../../redux/snapshotReport/snapshotReportSlice';
 import { Parameter } from '../../Utils/setting.values.convertor.utils';
 import { fteDropdown } from '../../Constants/dropdownConstants';
-import {
-  saveInitialSnapshotRecordAsync,
-  saveSnapshotAsync
-} from '../../redux/snapshotReport/snapshoAsync';
-import { convertBase64ToJson, convertJsonToBase64 } from '../../Utils/commonFunc.utils';
 
 const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
   const dispatch = useDispatch();
   const [isBaesline, setIsBaseline] = useState(false);
   const [columns, setColumns] = useState(parameterSettingColumns);
-  const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
-  const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
-  const [showSnapshotForm, setShowSnapshotForm] = useState(false);
-  const [submitFormData, setSubmitFormData] = useState<any>();
-
-  const handleKeyDown = (event: any) => {
-    if (event.key === 'Enter') {
-      console.log('Sentence changed:');
-      dispatch(setStateSnapshot(true));
-    }
-  };
 
   const onChangeHanlder = useCallback(
     (info) => {
@@ -49,23 +30,10 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
     [dispatch]
   );
 
-  // call this when retrive success
-  const handleSetSettingParameters = useCallback(
-    (info) => {
-      dispatch(setSettingParameters(info));
-    },
-    [dispatch]
-  );
-
   // const saveHandler = useCallback((info: any) => {
   //   saveSnapshotAsync(info);
   //   setShowSnapshotForm(true);
   // }, [dispatch])
-
-  const saveHandler = (info: any) => {
-    // saveSnapshotAsync(info);
-    setShowSnapshotForm(true);
-  };
 
   useEffect(() => {
     if (isBaesline) {
@@ -74,23 +42,6 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
       setColumns(parameterSettingColumns);
     }
   }, [isBaesline]);
-
-
-    const onSubmit = () => {
-      if (submitFormData?.name && submitFormData?.description) {
-          dispatch(saveInitialSnapshotRecordAsync({
-            seerName: submitFormData?.name,
-            baseData: convertJsonToBase64(baseJson), 
-            snapshotData: convertJsonToBase64(snapshotSettingParameters),
-            seerDescription: submitFormData?.description
-          }))
-        }
-  }
-
-  const onClose = () => {
-    setShowSnapshotForm(false);
-    setSubmitFormData({});
-  };
 
   return (
     <div className="containerManualTable">
@@ -111,12 +62,9 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
             let name = settingItem?.name;
             let switchValue = settingItem?.switch;
             let currentValue = settingItem?.currentValue;
-            let baslineValue = settingItem?.baslineValue;
             let type = settingItem?.type;
-            let dropdownValues = settingItem?.dropdownValues;
             let currentValueType = settingItem?.currentValueType;
             let typeValueCurrent = settingItem?.typeValueCurrent;
-            let typeValueBasline = settingItem?.typeValueBasline;
             let currentValueDropdownValues = settingItem?.currentValueDropdownValues;
             return (
               <tr key={id}>
