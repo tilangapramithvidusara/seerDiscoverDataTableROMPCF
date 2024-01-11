@@ -18,7 +18,6 @@ import {
   saveInitialSnapshotRecordAsync,
   saveSnapshotAsync
 } from '../../redux/snapshotReport/snapshoAsync';
-import FormDialog from '../../components/Form/index';
 import { convertBase64ToJson, convertJsonToBase64 } from '../../Utils/commonFunc.utils';
 
 const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
@@ -30,8 +29,6 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
   const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
   const [showSnapshotForm, setShowSnapshotForm] = useState(false);
   const [submitFormData, setSubmitFormData] = useState<any>();
-
-  console.log('settingParameters', settingParameters, snapshotSettingParameters);
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
@@ -83,8 +80,8 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
       if (submitFormData?.name && submitFormData?.description) {
           dispatch(saveInitialSnapshotRecordAsync({
             seerName: submitFormData?.name,
-            // baseData: convertJsonToBase64(baseJson), 
-            // snapshotData: convertJsonToBase64(snapshotSettingParameters),
+            baseData: convertJsonToBase64(baseJson), 
+            snapshotData: convertJsonToBase64(snapshotSettingParameters),
             seerDescription: submitFormData?.description
           }))
         }
@@ -208,11 +205,14 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
         <Button className="btn-primary mr-10" onClick={() => handleClose()}>
           Cancel
         </Button>
-        <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
+        {/* <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
+          Save
+        </Button> */}
+        <Button className="btn-primary">
           Save
         </Button>
       </div>
-      {showSnapshotForm ? (
+      {/* {showSnapshotForm ? (
         <FormDialog
           handleClickOpen={true}
           handleSubmit={onSubmit}
@@ -221,7 +221,7 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
         />
       ) : (
         <></>
-      )}
+      )} */}
     </div>
   );
 };

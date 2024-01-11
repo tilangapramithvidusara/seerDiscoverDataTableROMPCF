@@ -91,6 +91,7 @@ export const saveSnapshotAsync = (info: any) => {
               if(requestNumber === 1){ 
                 console.log("Success 1", requestNumber)
                 dispatch(saveSnapshotAsync({...info, requestNumber: 2}))
+                dispatch(setSnapshotLoading(false));
               }
               else {console.log("Success 2", requestNumber)}
           },
