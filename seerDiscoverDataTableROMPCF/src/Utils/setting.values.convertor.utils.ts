@@ -52,6 +52,8 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
     hoursPerdayCurrent: parameterObject?.hoursPerday,
     postGoLiveSupportCurrent: parameterObject?.postGoLiveSupport,
     postGoLiveSupportTypeCurrent: parameterObject?.postGoLiveSupportType,
+    // documnentLayoutCurrent: parameterObject?.documnentLayout,
+    // documnentLayoutTypeCurrent: parameterObject?.documnentLayoutType,
   }
 
   const formattedData: Parameter[] = [
@@ -277,6 +279,17 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       type: null, // dropdown | string | null
       dropdownValues: [],
     },
+    // {
+    //   name: 'Document Layout',
+    //   switch: null,
+    //   currentValue: null,
+    //   baslineValue: null,
+    //   type: 'dropdown', // dropdown | string | null
+    //   typeValueCurrent: parameterObject?.documentLayoutType,
+    //   typeValueBasline: parameterObject?.documentLayoutType,
+    //   dropdownValues: fteDropdown,
+    // },
+    // 
   ];
   return {formattedData, parameterObject}
 }
@@ -308,6 +321,8 @@ export const tableJsonConvertToparameterModel = (formattedData: Parameter[], cur
     hoursPerday: parameterObject?.hoursPerday,
     postGoLiveSupport: parameterObject?.postGoLiveSupport,
     postGoLiveSupportType: parameterObject?.postGoLiveSupportType,
+    // documnentLayout: parameterObject?.documnentLayout,
+    // documnentLayoutType: parameterObject?.documnentLayoutType,
   }
 }
 

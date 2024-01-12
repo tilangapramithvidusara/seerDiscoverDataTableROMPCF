@@ -171,7 +171,7 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
 }
 
 
-const getMigratedMoscow = (DataMigrationModel: any[], romParameter: string, hoursPerday: number) => {
+export const getMigratedMoscow = (DataMigrationModel: any[], romParameter: string, hoursPerday: number) => {
   
   let mustValue = 0;
   let mustShouldValue = 0;
@@ -195,7 +195,7 @@ const getMigratedMoscow = (DataMigrationModel: any[], romParameter: string, hour
   }
 }
 
-const generateMoscowCalcultaion = (dataMigrationItem: any) => {
+export const generateMoscowCalcultaion = (dataMigrationItem: any) => {
   
   return ((((dataMigrationItem?.seerEstimateDesign || 0) * (dataMigrationItem?.seerQuantity > 0 ? dataMigrationItem?.seerQuantity : 1)) * ((dataMigrationItem?.seerResourceSplit || 0)/100)) 
   + (((dataMigrationItem?.seerEstimateDesign || 0) * (dataMigrationItem?.seerQuantity > 0 ? dataMigrationItem?.seerQuantity : 1)) * ((100 - (dataMigrationItem?.seerResourceSplit || 0))/100)) 

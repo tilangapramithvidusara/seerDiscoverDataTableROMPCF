@@ -59,6 +59,7 @@ export const parameterKeyIndex = {
   'projectManagement': 21,
   'endUserTraining': 22,
   'endUserTrainingUsers': 23,
+  'documnentLayout': 24,
   // '21': '',
   // '22': '',
   // '23': '',

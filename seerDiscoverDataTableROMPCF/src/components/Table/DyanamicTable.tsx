@@ -21,7 +21,7 @@ import {
 import FormDialog from '../../components/Form/index';
 import { convertBase64ToJson, convertJsonToBase64 } from '../../Utils/commonFunc.utils';
 
-const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
+const DyanamicTable = ({ handleClose, tableNumber }: { handleClose: any, tableNumber?: number }) => {
   const dispatch = useDispatch();
   const [isBaesline, setIsBaseline] = useState(false);
   const [columns, setColumns] = useState(parameterSettingColumns);

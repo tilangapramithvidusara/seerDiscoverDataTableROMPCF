@@ -5,7 +5,6 @@ import DyanamicTable from '../Table/DyanamicTable';
 // const DyanamicTable = React.lazy(() => import('../Table/DyanamicTable'));
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
-import './style.css'
 
 export interface SimpleDialogProps {
   open?: boolean;

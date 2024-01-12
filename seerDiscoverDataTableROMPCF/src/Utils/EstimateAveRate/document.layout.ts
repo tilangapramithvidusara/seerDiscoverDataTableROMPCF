@@ -1,5 +1,7 @@
+import { romParameter } from "../../Constants/fteConstants";
 import { parameterKeyIndex } from "../../Constants/parametersSetting";
-import { fitGapData, moscowsData } from "../../Constants/pickListData";
+import { fitGapData, moscowsData, percentData } from "../../Constants/pickListData";
+import { getMigratedMoscow } from "./data.migration.utils";
 
 export const generateDocumentLayoutMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
@@ -38,16 +40,21 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
   // ad_QuestionNumber
   // wholeNumber
   try {
-    const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, FactorsModel} = inititlaData
-    let {hoursPerday} = parameterModel[0]
+    const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, FactorsModel, DataMigrationModel} = inititlaData
+    let {hoursPerday, dataMigrationType, dataMigration} = parameterModel[0]
       if (hasParameters) {
         hoursPerday = parseInt(settingParameters?.formattedData[
           parameterKeyIndex.hoursPerDay
         ]?.currentValue || '0');
+        // need to change as document layout
+        dataMigration = parseInt(settingParameters?.formattedData[
+          parameterKeyIndex.dataMigration
+        ]?.currentValue || '0')
+        dataMigrationType = parseInt(settingParameters?.formattedData[
+          parameterKeyIndex.dataMigration
+        ]?.typeValueCurrent)
       }
     if (inititlaData) {
-      
-
       const customizationLoop = await FactorsModel && FactorsModel.length && FactorsModel.map(async(factorItem: any, factorIndex: number) => {
         if (factorItem?.ad_QuestionNumber == '500000' || factorItem?.ad_QuestionNumber == '500100') {
           layoutValue += factorItem?.wholeNumber
@@ -173,23 +180,32 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
       }
       
       if (parameterModel?.length) {
-        returnObject.documentLayout.resultValue = generateReturnValue(
-          layoutValue,
-          hoursPerday,
-          condition
-        )
+        if (percentData?.[dataMigrationType] === percentData?.[100000003]) {
+          // moscow
+          const moscowCal = getMigratedMoscow(DataMigrationModel, romParameter, hoursPerday);
+          returnObject.documentLayout.resultValue = moscowCal?.mustValue;
+          returnObject.documentLayout.resultValueMS = moscowCal?.mustShouldValue;
+          returnObject.documentLayout.resultValueMSC = moscowCal?.mustShouldCouldValue;
+        } else {
+          returnObject.documentLayout.resultValue = generateReturnValue(
+            layoutValue,
+            hoursPerday,
+            condition
+          )
+          
+          returnObject.documentLayout.resultValueMS = generateReturnValue(
+            layoutValue,
+            hoursPerday,
+            condition
+          )
+  
+          returnObject.documentLayout.resultValueMSC =  generateReturnValue(
+            layoutValue,
+            hoursPerday,
+            condition
+          )
+        }
         
-        returnObject.documentLayout.resultValueMS = generateReturnValue(
-          layoutValue,
-          hoursPerday,
-          condition
-        )
-
-        returnObject.documentLayout.resultValueMSC =  generateReturnValue(
-          layoutValue,
-          hoursPerday,
-          condition
-        )
         returnObject.endUserTraining.resultValue = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMS = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMSC = endUserTrainingValue;
