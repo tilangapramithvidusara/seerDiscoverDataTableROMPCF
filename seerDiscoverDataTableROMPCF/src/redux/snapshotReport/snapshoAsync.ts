@@ -1,9 +1,7 @@
-import axios from 'axios';
 import { setRecordId, setBaseJson, setSnapshotLoading, setSettingParameters, setLoadedSnapshot, setSnapshotList } from './snapshotReportSlice';
 import { convertBase64ToJson, executeAfterGivenDilay } from '../../Utils/commonFunc.utils';
 import { seerBasejson, seerUpdatedsnapshotdata } from '../../Constants/endPoints';
 import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
-import { CommonUtils } from '../../Utils/SidePaneUtils/EstimateAverageRate/CommonUtils';
 
 declare global {
   interface Window {
@@ -91,6 +89,7 @@ export const saveSnapshotAsync = (info: any) => {
               if(requestNumber === 1){ 
                 console.log("Success 1", requestNumber)
                 dispatch(saveSnapshotAsync({...info, requestNumber: 2}))
+                dispatch(setSnapshotLoading(false));
               }
               else {console.log("Success 2", requestNumber)}
           },

@@ -40,8 +40,8 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
   // ad_QuestionNumber
   // wholeNumber
   try {
-    const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, FactorsModel, DataMigrationModel} = inititlaData
-    let {hoursPerday, dataMigrationType, dataMigration} = parameterModel[0]
+    const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, FactorsModel, DocumentlayoutModel} = inititlaData
+    let {hoursPerday, documentlayoutstype, dataMigration} = parameterModel[0]
       if (hasParameters) {
         hoursPerday = parseInt(settingParameters?.formattedData[
           parameterKeyIndex.hoursPerDay
@@ -50,9 +50,9 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
         dataMigration = parseInt(settingParameters?.formattedData[
           parameterKeyIndex.dataMigration
         ]?.currentValue || '0')
-        dataMigrationType = parseInt(settingParameters?.formattedData[
-          parameterKeyIndex.dataMigration
-        ]?.typeValueCurrent)
+        // documentlayoutstype = parseInt(settingParameters?.formattedData[
+        //   parameterKeyIndex.dataMigration
+        // ]?.typeValueCurrent)
       }
     if (inititlaData) {
       const customizationLoop = await FactorsModel && FactorsModel.length && FactorsModel.map(async(factorItem: any, factorIndex: number) => {
@@ -180,9 +180,9 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
       }
       
       if (parameterModel?.length) {
-        if (percentData?.[dataMigrationType] === percentData?.[100000003]) {
+        if (percentData?.[documentlayoutstype] === percentData?.[100000003]) {
           // moscow
-          const moscowCal = getMigratedMoscow(DataMigrationModel, romParameter, hoursPerday);
+          const moscowCal = getMigratedMoscow(DocumentlayoutModel, romParameter, hoursPerday);
           returnObject.documentLayout.resultValue = moscowCal?.mustValue;
           returnObject.documentLayout.resultValueMS = moscowCal?.mustShouldValue;
           returnObject.documentLayout.resultValueMSC = moscowCal?.mustShouldCouldValue;

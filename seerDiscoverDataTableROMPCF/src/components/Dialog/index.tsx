@@ -15,21 +15,17 @@ export interface SimpleDialogProps {
 }
 
 export default function SimpleDialog(props: SimpleDialogProps) {
-  const { onClose, selectedValue, open, setOpenSettingPopup, openSettingPopup } = props;
+  const { setOpenSettingPopup, openSettingPopup } = props;
 
   const handleClose = () => {
-    // onClose(selectedValue);
     setOpenSettingPopup(false)
   };
 
   const handleListItemClick = (value: string) => {
-    // onClose(value);
     setOpenSettingPopup(false)
   };
 
-  const onChange = (key: string) => {
-    console.log("Current Tab:",key);
-  };
+  const onChange = (key: string) => {};
 
   const tabItems: TabsProps['items'] = [
     {
