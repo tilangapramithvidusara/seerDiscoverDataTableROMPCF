@@ -457,3 +457,19 @@ table {
 .containerManualTable .mr-10 {
   margin-right: 10px;
 }
+
+.seerDiscoverROM .requrinemntSubTabs {
+  display: 'flex';
+  margin-left: 10px
+}
+
+.requrinemntSubTabs {
+  display: 'flex';
+  margin-left: 10px
+}
+
+.reqTabBtn {
+  margin-right: '10px';
+  font-size: '10px';
+  text-transform: 'none' 
+}

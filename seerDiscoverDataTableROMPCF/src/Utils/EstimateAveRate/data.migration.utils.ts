@@ -6,6 +6,7 @@ let para_d4 = 10/100;
 export const generateDataMigrationMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean, isFte?: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
   let hasParameters = settingParameters && isSnapshotModeEnable;
+  console.log("settingParameters", settingParameters)
   let fte = isFte ? true : false;
   if (hasParameters) {
     para_d4 = parseInt(settingParameters?.formattedData[
@@ -73,6 +74,8 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
       
       // not done yet
       if (fte) {
+        console.log("With FTE", mustCal)
+
         if (hasParameters) {
           const dataMigrationValue = parseInt(settingParameters?.formattedData[
             parameterKeyIndex.dataMigration
@@ -103,6 +106,7 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
         }
         
       } else {
+        console.log("Without FTE", hasParameters)
         if (hasParameters) {
           const dataMigrationValue = parseInt(settingParameters?.formattedData[
             parameterKeyIndex.dataMigration
@@ -112,7 +116,7 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
           ]?.typeValueCurrent)
 
           if (percentData?.[dataMigrationTypeValue] === percentData?.[100000001]) {
-
+            console.log("MUSTCALL", mustCal)
             returnObject.dataMigration.resultValue = mustCal * (dataMigrationValue/100);
             returnObject.dataMigration.resultValueMS = mustShouldCal * (dataMigrationValue/100);
             returnObject.dataMigration.resultValueMSC = mustShouldCouldCal * (dataMigrationValue/100);
@@ -134,8 +138,12 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
             returnObject.dataMigration.resultValueMSC = romParameter == "Hours" ? (dataMigrationValue * f8) : (dataMigrationValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * f8  // need to find F8
           }
         } else {
-          if (percentData?.[parameterModel[0]?.dataMigrationType] === percentData?.[100000001]) {
+          console.log("MUSTCALL mustCal", mustCal);
+          console.log("MUSTCALL parameterModel", parameterModel)
+          console.log("MUSTCALL percentData", percentData)
 
+          if (percentData?.[parameterModel[0]?.dataMigrationType] === percentData?.[100000001]) {
+           
             returnObject.dataMigration.resultValue = mustCal * (parameterModel[0]?.dataMigration/100);
             returnObject.dataMigration.resultValueMS = mustShouldCal * (parameterModel[0]?.dataMigration/100);
             returnObject.dataMigration.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.dataMigration/100);

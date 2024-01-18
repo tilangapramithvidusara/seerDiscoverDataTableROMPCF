@@ -745,7 +745,7 @@ const getSubTotalAndRiskSub = async(dataEstimateResourceMilestone: any, fColmnVa
   (dataEstimateResourceMilestone[17]?.['M/S_Resource2_H'] || 0) +
   (dataEstimateResourceMilestone[6]?.['M/S_Resource2_H'] || 0);
 
-  const mscr1 = (dataEstimateResourceMilestone[28]?.['M/S/C_Resource2_H'] || 0) +
+  const mscr1 = (dataEstimateResourceMilestone[28]?.['M/S/C_Resource1_H'] || 0) +
   (dataEstimateResourceMilestone[24]?.['M/S/C_Resource1_H'] || 0) + 
   (dataEstimateResourceMilestone[17]?.['M/S/C_Resource1_H'] || 0) +
   (dataEstimateResourceMilestone[6]?.['M/S/C_Resource1_H'] || 0);

@@ -21,6 +21,8 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   const [dataSetEstimateResource, setDataSetEstimateResource] = React.useState<any []>([])
   const [dataEstimateAverageRateMilestone, setDataEstimateAverageRateMilestone] = React.useState<any[]>([])
   const [dataEstimateResourceMilestone, setDataEstimateResourceMilestone] = React.useState<any []>([]);
+  const [documentLayouts, setDocumentLayouts] = React.useState<any []>([]);
+  const [dataMigrations, setDataMigrations] = React.useState<any []>([]);
   const [requirementData, setRequirementData] = React.useState([])
   const [customisationData, setCustomisationData] = React.useState([]);
   const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
@@ -53,8 +55,19 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     
     const requirment: any = dataMapper(data?.OutputData);
     const customisation: any = dataMapper(data?.CustomisationModels, 'customisation');
-    if (requirment?.length)
-      setRequirementData(requirment);
+    const documentLayouts: any = dataMapper(data?.DocumentlayoutModel, 'documentLayouts');
+    const dataMigrations: any = dataMapper(data?.DataMigrationModel, 'dataMigrations')
+
+    if (requirment?.length) {
+      setRequirementData(requirment?.filter((req: {seer_FitGap: string}) => req?.seer_FitGap !== 'Gap'));
+    }
+    if (dataMigrations?.length) {
+      setDataMigrations(dataMigrations);
+    }
+    if (documentLayouts?.length) {
+      setDocumentLayouts(documentLayouts);
+    }
+
     if (customisation?.length) {
       setCustomisationData(customisation)
     }
@@ -64,7 +77,8 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
       .then(async(result: any) => {
         // Handle the result here
         console.log('llll', result?.reducerValues);
-        
+        console.log('ResultDTA', result);
+
         setDataSet(result?.dataEstimateAverageRate ? result?.dataEstimateAverageRate : []);
         setDataSetEstimateResource(result?.dataEstimateResource ? result?.dataEstimateResource : [])
         setDataEstimateAverageRateMilestone(result?.dataEstimateAverageRateMilestone ? result?.dataEstimateAverageRateMilestone : [])
@@ -124,6 +138,8 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
           requirementData={requirementData}
           customisationData={customisationData}
           arrayGeneratorHandler={arrayGeneratorHandler}
+          documentLayoutsData={documentLayouts}
+          dataMigrationData={dataMigrations}
         />}
       {/* <TabComponent dataSet={dataSet} isRefreshing={loading || isLoading}/> */}
     </div>
