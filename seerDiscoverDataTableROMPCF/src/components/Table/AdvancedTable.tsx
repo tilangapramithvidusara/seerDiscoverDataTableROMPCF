@@ -168,10 +168,13 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
                 )}
               </div>
               <div className='text-right'>
-                <ButtonGroups selectedButton={tableMode} setSelectedButton={
-                  setTableMode
-                } numberOfButtons={2} buttonTitles={[
-                  {title: defaultText, value: 'Cost'}, {title: dayHoursText, value: 'Effort'}
+                <ButtonGroups
+                selectedButton={tableMode} 
+                setSelectedButton={setTableMode} 
+                numberOfButtons={2} 
+                buttonTitles={[
+                  {title: defaultText, value: 'Cost'}, 
+                  {title: dayHoursText, value: 'Effort'}
                 ]}/>
               </div>
               {/* <div className='text-right'>
