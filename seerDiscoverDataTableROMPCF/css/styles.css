@@ -100,9 +100,9 @@ tr:nth-child(even) {
 }
 
 .seerDiscoverROM .toggle-btn.Mui-selected {
-  background-color: #FC804A !important;
+  background-color: #0093FE !important;
   color: #ffffff !important;
-  border-color: #FC804A !important;
+  border-color: #0093FE !important;
 }
 
 .seerDiscoverROM  .mr-10 {
@@ -296,6 +296,7 @@ tr:nth-child(even) {
 
 .seerDiscoverROM .custom-toggle-button .MuiButtonBase-root {
   width: 50px;
+  background-color: #0093FE;
 }
 
 .MuiDrawer-modal .MuiPaper-elevation {
