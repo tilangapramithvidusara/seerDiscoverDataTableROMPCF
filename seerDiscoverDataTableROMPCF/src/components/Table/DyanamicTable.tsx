@@ -118,10 +118,14 @@ const onClose = () => {
             let typeValueCurrent = settingItem?.typeValueCurrent;
             let typeValueBasline = settingItem?.typeValueBasline;
             let currentValueDropdownValues = settingItem?.currentValueDropdownValues;
+            let colorName = settingItem?.colorName;
+            let colorSwitch = settingItem?.colorSwitch;
+            let colorCurrentValueBorder = settingItem?.colorCurrentValueBorder;
+            let colorCurrentValue = settingItem?.colorCurrentValue;
             return (
               <tr key={id}>
-                <td>{name}</td>
-                <td>
+                <td style={{ backgroundColor : colorName as string}}>{name}</td>
+                <td style={{ backgroundColor: colorSwitch as string }}>
                   <div>
                     {type == 'dropdown' ? (
                       <div>
@@ -150,7 +154,7 @@ const onClose = () => {
                     )}
                   </div>
                 </td>
-                <td>
+                <td style={{ backgroundColor: colorCurrentValue as string, border: `1px solid ${colorCurrentValueBorder as string}` }}>
                   <div>
                     {currentValueType == 'dropdown' ? (
                       <div>
