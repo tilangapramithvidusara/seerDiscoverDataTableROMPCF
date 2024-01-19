@@ -21,7 +21,11 @@ export interface Parameter {
   currentValueType?: string | null;
   typeValueCurrent?: string | null;
   typeValueBasline?: string | null;
-  currentValueDropdownValues?: string[]
+  currentValueDropdownValues?: string[];
+  colorName?: string | null;
+  colorSwitch?: string | null;
+  colorCurrentValue?: string | null;
+  colorCurrentValueBorder?: string | null;
 }
 
 
@@ -62,6 +66,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       baslineValue: '',
       type: null, // dropdown | string | null
       dropdownValues: [],
+      colorName:'#E6BB27',
+      colorSwitch: '#E6BB27',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'Hours Per Day',
@@ -70,6 +77,8 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       baslineValue: parameterObject?.hoursPerday,
       type: null, // dropdown | string | null
       dropdownValues: [],
+      colorSwitch: '#444444',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'Hourly Rate',
@@ -78,6 +87,8 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       baslineValue: parameterObject?.hourlyRate?.value,
       type: null, // dropdown | string | null
       dropdownValues: [],
+      colorSwitch: '#444444',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'Currency',
@@ -88,6 +99,8 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       currentValueDropdownValues: currencyDropdown, // add currency mapping
       type: null, // dropdown | string | null
       dropdownValues: [],
+      colorSwitch: '#444444',
+      colorCurrentValue: '#008FB5'
     },
     { // NOT FINISH YET = Total license count
       name: 'Users',
@@ -96,6 +109,8 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       baslineValue: parameterObject?.totalLicenceCount,
       type: null, // dropdown | string | null
       dropdownValues: [],
+      colorSwitch: '#444444',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'High',
@@ -104,6 +119,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       baslineValue: parameterObject?.romComplexityHigh,
       type: null, // dropdown | string | null
       dropdownValues: [],
+      colorName:'#444444',
+      colorSwitch: '#444444',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'Medium',
@@ -112,6 +130,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       baslineValue: parameterObject?.romComplexityMedium,
       type: null, // dropdown | string | null
       dropdownValues: [],
+      colorName:'#444444',
+      colorSwitch: '#444444',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'Low',
@@ -120,6 +141,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       baslineValue: parameterObject?.romComplexityLow,
       type: null, // dropdown | string | null
       dropdownValues: [],
+      colorName:'#444444',
+      colorSwitch: '#444444',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'None',
@@ -128,6 +152,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       baslineValue: parameterObject?.romComplexityNone,
       type: null, // dropdown | string | null
       dropdownValues: [],
+      colorName:'#444444',
+      colorSwitch: '#444444',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'Documentation',
@@ -138,6 +165,10 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       typeValueCurrent: parameterObject?.collateRequirmentType,
       typeValueBasline: parameterObject?.collateRequirmentType,
       dropdownValues: fteDropdown,
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
+
     },
     {
       name: 'Design Review',
@@ -148,6 +179,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       typeValueCurrent: parameterObject?.designReviewType,
       typeValueBasline: parameterObject?.designReviewType,
       dropdownValues: fteDropdown,
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'Reporting',
@@ -158,6 +192,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       typeValueCurrent: parameterObject?.reportingType,
       typeValueBasline: parameterObject?.reportingType,
       dropdownValues: fteDropdown,
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'Data Migration',
@@ -168,6 +205,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       typeValueCurrent: parameterObject?.dataMigrationType,
       typeValueBasline: parameterObject?.dataMigrationType,
       dropdownValues: fteDropdown,
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'CRP',
@@ -178,6 +218,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       typeValueCurrent: parameterObject?.conferenceRoomPilotType,
       typeValueBasline: parameterObject?.conferenceRoomPilotType,
       dropdownValues: fteDropdown,
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'Testing',
@@ -188,6 +231,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       typeValueCurrent: parameterObject?.testingType,
       typeValueBasline: parameterObject?.testingType,
       dropdownValues: fteDropdown,
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'Train-The-Trainer',
@@ -198,6 +244,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       typeValueCurrent: parameterObject?.trainTheTrainerType,
       typeValueBasline: parameterObject?.trainTheTrainerType,
       dropdownValues: fteDropdown,
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'UAT Environment Preparation',
@@ -208,6 +257,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       typeValueCurrent: parameterObject?.deployUatType,
       typeValueBasline: parameterObject?.deployUatType,
       dropdownValues: fteDropdown,
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'PROD Environment Preparation',
@@ -218,6 +270,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       typeValueCurrent: parameterObject?.deployProdType,
       typeValueBasline: parameterObject?.deployProdType,
       dropdownValues: fteDropdown,
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'UAT Support',
@@ -228,6 +283,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       typeValueCurrent: parameterObject?.uatSupportType,
       typeValueBasline: parameterObject?.uatSupportType,
       dropdownValues: fteDropdown,
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'Support Handover',
@@ -238,6 +296,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       typeValueCurrent: parameterObject?.supportHandOverType,
       typeValueBasline: parameterObject?.supportHandOverType,
       dropdownValues: fteDropdown,
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'Post Go-Live Support',
@@ -250,6 +311,9 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       dropdownValues: fteDropdown,
       // "endUserTraining": 5.0000000000,
       // "endUserTrainingUsers": 10.0000000000,
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
       name: 'Project Manager',
@@ -260,22 +324,31 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       typeValueCurrent: parameterObject?.projectManagementType,
       typeValueBasline: parameterObject?.projectManagementType,
       dropdownValues: fteDropdown,
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
-      name: 'Trainin Hours',
+      name: 'Training Hours',
       switch: null,
       currentValue: parameterObject?.endUserTraining,
       baslineValue: parameterObject?.endUserTraining,
       type: null, // dropdown | string | null
       dropdownValues: [],
+      colorName:'#E6BB27',
+      colorSwitch: '#008FB5',
+      colorCurrentValueBorder: '#007FFF'
     },
     {
-      name: 'Trainin Users',
+      name: 'Training Users',
       switch: null,
       currentValue: parameterObject?.endUserTrainingUsers,
       baslineValue: parameterObject?.endUserTrainingUsers,
       type: null, // dropdown | string | null
       dropdownValues: [],
+      colorName:'#E6BB27',
+      colorSwitch: '#007FFF',
+      colorCurrentValueBorder: '#007FFF'
     },
   ];
   return {formattedData, parameterObject}
