@@ -50,9 +50,9 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
       const F4Parameter = hoursPerday * 5;
       const O37 = 0// to find this we need to complete Estimate Avg Rate Milestone table
       const H6 = 29// if days === c2 => O37/5 else (O37/8)/5
-      const h7 = fteValue?.totalFte // need to gets it from api
-      const g7 = fteValue?.totalFteMS
-      const f7 = fteValue?.totalFteMSC
+      const h7 = fteValue?.totalFte || 0;// need to gets it from api
+      const g7 = fteValue?.totalFteMS|| 0;
+      const f7 = fteValue?.totalFteMSC|| 0;
       const h8 = h7 * hoursPerWeek
       const g8 = g7 * hoursPerWeek
       const f8 = f7 * hoursPerWeek
