@@ -37,7 +37,7 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
       // interfaces_Crf96_json
       const {interfaces_Crf96_json} = IntegrationModel[0];
       const IntegrationDataSet = JSON.parse(interfaces_Crf96_json?.value)
-      
+      if(IntegrationDataSet?.length) {
       const integrationLoop = IntegrationDataSet && IntegrationDataSet.length && IntegrationDataSet.map((integrationItem: any, itegrationIndex: number) => {
         let k2 = integrationItem?.['305110'];
         console.log(k2);
@@ -129,6 +129,7 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
       console.log(integrationValue);
       
       await Promise.all(integrationLoop);
+    }
       
       if (parameterModel?.length) {
         returnObject.integration.resultValue = generateReturnValue(
@@ -150,7 +151,7 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
         )
         
       }
-      await Promise.all([integrationLoop])
+      // await Promise.all([integrationLoop])
       console.log('hjhjhj ==.', returnObject);
       
       return returnObject;

@@ -56,9 +56,9 @@ const index = (
           <ToggleButton className='toggle-btn' value="button1" aria-label="Button 1">
             Live Data
           </ToggleButton>
-          <ToggleButton className='toggle-btn' value="button2" aria-label="Button 2">
+          {/* <ToggleButton className='toggle-btn' value="button2" aria-label="Button 2">
               SnapShot
-          </ToggleButton>  
+          </ToggleButton>   */}
         </ToggleButtonGroup>
       )}
     </>

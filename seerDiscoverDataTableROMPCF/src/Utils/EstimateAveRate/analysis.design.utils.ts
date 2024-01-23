@@ -234,7 +234,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
       settingParameters, isSnapshotModeEnable);
 
     const responseIntegration = await generateIntegrationMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
-    const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
+    const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
     const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
       // hasFteValue, 
       false,
@@ -1263,7 +1263,10 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         // Assembly - BC
         // ANALYSIS AND DESING
         // Must
-        if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && (fitGapData[baseItem?.fitGap] != fitGapData[100000001]) && (baseItem?.module?.name != "Cost Accounting - BC")
+        // Removed this "Cost Accounting - BC" 18 jan 
+        // if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && (fitGapData[baseItem?.fitGap] != fitGapData[100000001]) && (baseItem?.module?.name != "Cost Accounting - BC")
+
+        if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && (fitGapData[baseItem?.fitGap] != fitGapData[100000001])
           ) {
           //
           if (baseItem?.entityName != 'Master') {
@@ -1277,7 +1280,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         }
 
         // Must Should
-        if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001] && baseItem?.module?.name != "Cost Accounting - BC") {
+        if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
           //
           if (baseItem?.entityName != 'Master') {
             overidesBaseAnalysisDesignMS.push(baseItem);
@@ -1290,7 +1293,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         }
 
         // Must Should Could
-        if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001] && baseItem?.module?.name != "Cost Accounting - BC") {
+        if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
           //
           if (baseItem?.entityName != 'Master') {
             overidesBaseAnalysisDesignMSC.push(baseItem);
@@ -1304,8 +1307,9 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
 
         // CONFIGURATION
         // Must
-
-        if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && fitGapData[baseItem?.fitGap] != fitGapData[100000001] && baseItem?.module?.name != "Cost Accounting - BC") {
+        // Removed this Cost Accounting - BC
+        // if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && fitGapData[baseItem?.fitGap] != fitGapData[100000001] && baseItem?.module?.name != "Cost Accounting - BC") {
+          if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
           if (baseItem?.entityName != 'Master') {
             overidesBaseConfiguration.push(baseItem);
           } else {
@@ -1323,7 +1327,8 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         }
 
         // Must Should
-        if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001] && baseItem?.module?.name != "Cost Accounting - BC") {
+        if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
+        // if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001] && baseItem?.module?.name != "Cost Accounting - BC") {
           if (baseItem?.entityName != 'Master') {
             overidesBaseConfigurationMS.push(baseItem);
           } else {
@@ -1339,8 +1344,9 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         }
 
         // Must Should Could
-        if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001] && baseItem?.module?.name != "Cost Accounting - BC") {
-          if (baseItem?.entityName != 'Master') {
+        // if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001] && baseItem?.module?.name != "Cost Accounting - BC") {
+        if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
+        if (baseItem?.entityName != 'Master') {
             overidesBaseConfigurationMSC.push(baseItem);
           } else {
             baseConfigurationMSC.push(baseItem);
@@ -1376,8 +1382,9 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         }
 
         // Must Should
-        if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001]) && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
-          //
+        // if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001]) && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
+          if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001])) {
+        //
           if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
             overidesModulesAnalysisDesignMS.push(moduleDataItem);
           } else {
@@ -1392,8 +1399,10 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         }
 
         // Must Should Could
-        if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002]) && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
-          //
+        // if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002]) && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
+          if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002])) {
+
+        //
           if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
             overidesModulesAnalysisDesignMSC.push(moduleDataItem);
           } else {
@@ -1411,7 +1420,8 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         // CONFIGURATION  moduleOverrideCustomerSeerEstimateBuild  moduleSeerEstimateBuild moduleOverridePartnerSeerEstimateBuild
 
         // Must
-        if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000]) && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
+        // if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000]) && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
+          if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000])) {
           if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
             overidesModulesConfiguration.push(moduleDataItem);
           } else {
@@ -1432,8 +1442,9 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         }
 
         // Must Should
-        if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001]) && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
-          if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
+        // if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001]) && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
+        if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001])) {
+        if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
             overidesModulesConfigurationMS.push(moduleDataItem);
           } else {
             modulesConfigurationMS.push(moduleDataItem);
@@ -1452,8 +1463,9 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         }
 
         // Must Should Could
-        if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002]) && moduleDataItem?.moduleSeerModuleName != "Cost Accounting - BC") {
-          if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
+        // if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002]) && moduleDataItem?.moduleSeerModuleName != "Cost Accounting - BC") {
+        if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002])) {
+        if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
             overidesModulesConfigurationMSC.push(moduleDataItem);
           } else {
             modulesConfigurationMSC.push(moduleDataItem);

@@ -3,7 +3,7 @@ import { parameterKeyIndex } from "../../Constants/parametersSetting";
 import { fitGapData, moscowsData, percentData } from "../../Constants/pickListData";
 import { getMigratedMoscow } from "./data.migration.utils";
 
-export const generateDocumentLayoutMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
+export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean, isFte?: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
   let hasParameters = settingParameters && isSnapshotModeEnable;
   let resultValue = 0;
@@ -41,7 +41,7 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
   // wholeNumber
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, FactorsModel, DocumentlayoutModel} = inititlaData
-    let {hoursPerday, documentlayoutstype, dataMigration} = parameterModel[0]
+    let {hoursPerday, documentlayoutstype, dataMigration, documentlayouts } = parameterModel[0]
       if (hasParameters) {
         hoursPerday = parseInt(settingParameters?.formattedData[
           parameterKeyIndex.hoursPerDay
@@ -55,10 +55,30 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
         // ]?.typeValueCurrent)
       }
     if (inititlaData) {
-      const customizationLoop = await FactorsModel && FactorsModel.length && FactorsModel.map(async(factorItem: any, factorIndex: number) => {
+      const mustCal = 
+      (analisisDesignPre?.responseCustomRequirementDesign?.customRequirementBuild?.resultValue || 0) + 
+      (analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValue || 0) + 
+      (analisisDesignPre?.responseCustomisationDesign?.customisationBuild?.resultValue || 0) + 
+      (analisisDesignPre?.responseIntegration?.integration?.resultValue || 0)
+    const mustShouldCal = 
+      (analisisDesignPre?.responseCustomRequirementDesign?.customRequirementBuild?.resultValueMS || 0) + 
+      (analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValueMS || 0) + 
+      (analisisDesignPre?.responseCustomisationDesign?.customisationBuild?.resultValueMS || 0) + 
+      (analisisDesignPre?.responseIntegration?.integration?.resultValueMS || 0)
+    const mustShouldCouldCal = 
+      (analisisDesignPre?.responseCustomRequirementDesign?.customRequirementBuild?.resultValueMSC || 0) +
+      (analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValueMSC || 0) + 
+      (analisisDesignPre?.responseCustomisationDesign?.customisationBuild?.resultValueMSC || 0) + 
+      (analisisDesignPre?.responseIntegration?.integration?.resultValueMSC || 0)
+      console.log("Configured 1", FactorsModel)
+
+      if(FactorsModel?.length) {
+      const customizationLoop = await FactorsModel && FactorsModel?.length && FactorsModel?.map(async(factorItem: any, factorIndex: number) => {
         if (factorItem?.ad_QuestionNumber == '500000' || factorItem?.ad_QuestionNumber == '500100') {
           layoutValue += factorItem?.wholeNumber
         }
+
+        console.log("GHGH 1")
         if (factorItem?.ad_QuestionNumber == '201900') {
           if (factorItem?.answerChoice == 'End user training') {
             if (hasParameters) {
@@ -165,11 +185,19 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
           }
         }
         
+      
       });
+
+      console.log("GETGG VALL", getGColValue)
+
       await Promise.all(customizationLoop);
-      if (getGColValue == 43) {
-        getFcolValue = 0;
-      } else if (getGColValue >= 70) {
+    }
+      // if (getGColValue == 43) {
+      //   getFcolValue = 0;
+      // }
+
+
+       if (getGColValue >= 70) {
         getFcolValue = 5/100;
       } else if (getGColValue >= 50 && getGColValue < 70) {
         getFcolValue = 10/100;
@@ -178,8 +206,16 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
       } else if (getGColValue < 30) {
         getFcolValue = 20/100;
       }
-      
+
+
+      console.log("GETFF VALL", getFcolValue)
+      console.log("parameterModel VALL", getFcolValue)
+
       if (parameterModel?.length) {
+        console.log("parameterModel", parameterModel);
+        console.log("percentData", percentData);
+        console.log("documentlayoutstype", documentlayoutstype);
+
         if (percentData?.[documentlayoutstype] === percentData?.[100000003]) {
           // moscow
           const moscowCal = getMigratedMoscow(DocumentlayoutModel, romParameter, hoursPerday);
@@ -187,23 +223,43 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
           returnObject.documentLayout.resultValueMS = moscowCal?.mustShouldValue;
           returnObject.documentLayout.resultValueMSC = moscowCal?.mustShouldCouldValue;
         } else {
-          returnObject.documentLayout.resultValue = generateReturnValue(
-            layoutValue,
-            hoursPerday,
-            condition
-          )
+          console.log("layoutValue", layoutValue);
+          console.log("parameterModel[0]", parameterModel[0]);
+          console.log("hoursPerday[0]", hoursPerday)
+          console.log("condition[0]", condition)
+          console.log("mustCal[0]", mustCal)
+
+          if (percentData?.[parameterModel[0]?.documentlayoutstype] === percentData?.[100000001]) {
+            returnObject.documentLayout.resultValue = mustCal * (documentlayouts/100);
+            returnObject.documentLayout.resultValueMS = mustShouldCal * (documentlayouts/100);
+            returnObject.documentLayout.resultValueMSC = mustShouldCouldCal * (documentlayouts/100);
+          } else if (percentData?.[parameterModel[0]?.documentlayoutstype] === percentData?.[100000002]) {
+            returnObject.documentLayout.resultValue = romParameter == "Hours" ? documentlayouts : documentlayouts/hoursPerday;
+            returnObject.documentLayout.resultValueMS = romParameter == "Hours" ? documentlayouts : documentlayouts/hoursPerday;
+            returnObject.documentLayout.resultValueMSC = romParameter == "Hours" ? documentlayouts : (documentlayouts/hoursPerday);
+          } 
+          // else {
+            // returnObject.documentLayout.resultValue = mustCal * (para_d4); // not dataMigration it need to get from backend
+            // returnObject.documentLayout.resultValueMS = mustShouldCal * (para_d4);
+            // returnObject.documentLayout.resultValueMSC = mustShouldCouldCal * (para_d4);
+          // }
+          // returnObject.documentLayout.resultValue = generateReturnValue(
+          //   documentlayouts,
+          //   hoursPerday,
+          //   condition
+          // )
           
-          returnObject.documentLayout.resultValueMS = generateReturnValue(
-            layoutValue,
-            hoursPerday,
-            condition
-          )
+          // returnObject.documentLayout.resultValueMS = generateReturnValue(
+          //   documentlayouts,
+          //   hoursPerday,
+          //   condition
+          // )
   
-          returnObject.documentLayout.resultValueMSC =  generateReturnValue(
-            layoutValue,
-            hoursPerday,
-            condition
-          )
+          // returnObject.documentLayout.resultValueMSC =  generateReturnValue(
+          //   documentlayouts,
+          //   hoursPerday,
+          //   condition
+          // )
         }
         
         returnObject.endUserTraining.resultValue = endUserTrainingValue;
@@ -213,7 +269,7 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, condition: 
         returnObject.projectRisk.estimateAveRate = getFcolValue;
         
       }
-      await Promise.all([customizationLoop])
+      // await Promise.all([customizationLoop])
       return returnObject;
     } else {
       return returnObject;

@@ -22,6 +22,8 @@ import { parameterKeyIndex } from "../../Constants/parametersSetting";
 
 let para_d4 = 10/100;
 
+let para_d4_copy = 10/100;
+
 export const generateIColoumnValueFte = async(inititlaData: any, title?: string, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   const condition = romParameter === "Days";
   const hasParameters = settingParameters && isSnapshotModeEnable;
@@ -199,7 +201,7 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
     const responseDesignReview = await generateDesignReviewMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseDocumentation}, condition, true, settingParameters, isSnapshotModeEnable);
 
     const responseIntegration = await generateIntegrationMValue(inititlaData, condition);
-    const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, condition);
+    const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
     const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable)
     const responseDataMigration = await generateDataMigrationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
     const responseCRP = await generateCRPMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
@@ -223,15 +225,20 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       resultValueAnalisisDesign = responseAnalisisDesign?.resultValue
       resultValueMSAnalisisDesign = responseAnalisisDesign?.resultValueMS
       resultValueMSCAnalisisDesign = responseAnalisisDesign?.resultValueMSC
+      console.log("resultValueAnalisisDesign", resultValueAnalisisDesign)
 
       resultValueCustomisationDesign = responseCustomisationDesign?.customisation?.resultValue
       resultValueMSCustomisationDesign = responseCustomisationDesign?.customisation?.resultValueMS
       resultValueMSCCustomisationDesign = responseCustomisationDesign?.customisation?.resultValueMSC
+      console.log("resultValueCustomisationDesign", resultValueCustomisationDesign)
 
       resultValueCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValue
       resultValueMSCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValueMS
       resultValueMSCCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValueMSC
+      console.log("resultValueCustomRequirementDesign", resultValueCustomRequirementDesign)
+      console.log("Total FTE For Estimate AVG rate", resultValueAnalisisDesign + resultValueCustomisationDesign + resultValueCustomRequirementDesign)
 
+      
       resultValueDocumentation = responseDocumentation?.documentationAveRateMilestone?.resultValue
       resultValueMSDocumentation = responseDocumentation?.documentationAveRateMilestone?.resultValueMS
       resultValueMSCDocumentation = responseDocumentation?.documentationAveRateMilestone?.resultValueMSC
@@ -256,14 +263,14 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
         + resultValueMSCDocumentation
         + resultValueMSCDesignReview;
 
-      projectManagerAnalysisDesign = totalOfSubAnalysisDesign * para_d4;
-      projectManagerAnalysisDesignMS = totalOfSubAnalysisDesignMS * para_d4;
-      projectManagerAnalysisDesignMSC = totalOfSubAnalysisDesignMSC * para_d4;
+      projectManagerAnalysisDesign = totalOfSubAnalysisDesign * para_d4_copy;
+      projectManagerAnalysisDesignMS = totalOfSubAnalysisDesignMS * para_d4_copy;
+      projectManagerAnalysisDesignMSC = totalOfSubAnalysisDesignMSC * para_d4_copy;
 
       totalOfAnalysisDesign = totalOfSubAnalysisDesign + projectManagerAnalysisDesign;
       totalOfAnalysisDesignMS = totalOfSubAnalysisDesignMS + projectManagerAnalysisDesignMS;
       totalOfAnalysisDesignMSC = totalOfSubAnalysisDesignMSC + projectManagerAnalysisDesignMSC;
-
+      console.log("totalOfAnalysisDesign", totalOfAnalysisDesign)
       totalFte += totalOfAnalysisDesign
       totalFteMS += totalOfAnalysisDesignMS
       totalFteMSC += totalOfAnalysisDesignMSC
@@ -341,6 +348,7 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       totalOfBuild = totalOfSubBuild + projectManagerBuild;
       totalOfBuildMS = totalOfSubBuildMS + projectManagerBuildMS;
       totalOfBuildMSC = totalOfSubBuildMSC + projectManagerBuildMSC;
+      console.log("totalOfBuild", totalOfBuild)
 
       totalFte += totalOfBuild
       totalFteMS += totalOfBuildMS
@@ -393,6 +401,7 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       totalOfDeploy = totalOfSubDeploy + projectManagerDeploy;
       totalOfDeployMS = totalOfSubDeployMS + projectManagerDeployMS;
       totalOfDeployMSC = totalOfSubDeployMSC + projectManagerDeployMSC;
+      console.log("totalOfDeploy", totalOfDeploy)
 
       totalFte += totalOfDeploy
       totalFteMS += totalOfDeployMS
@@ -421,6 +430,7 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       totalOfOperation = totalOfSubOperation + projectManagerOperation;
       totalOfOperationMS = totalOfSubOperationMS + projectManagerOperationMS;
       totalOfOperationMSC = totalOfSubOperationMSC + projectManagerOperationMSC;
+      console.log("totalOfOperation", totalOfOperation)
 
       totalFte += totalOfOperation
       totalFteMS += totalOfOperationMS
@@ -433,7 +443,7 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
     }
 
     ////////////////ESTIMATE RESOURCE MILESTONE START///////////////
-    
+    console.log("FTEEEEEE totalFte", totalFte)
     return {
       totalFte,
       totalFteMS,

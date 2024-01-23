@@ -27,15 +27,18 @@ import SwipeableTemporaryDrawer from '../SwipeableDrawer';
 import { dayHoursText, defaultText } from '../../Constants';
 import { columnRequirementData } from '../../Constants/requirementsData';
 import { columnCustomisationData } from '../../Constants/cutomisationData';
+import { columnDataLayoutData } from '../../Constants/dataLayouts';
 
 const buttonTitles= [
     {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
   ]
 
-const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: string}) => {  
+const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {data?: any, isLoading?: boolean, type: string, dataMigrationData?: any, documentLayoutsData?: any}) => {  
   const dispatch = useDispatch();
   const [isOpenSideDrawer, setIsOpenSideDrawer] = React.useState<boolean>(false);
   const [selectedRow, setSelectedRow] = React.useState();
+  const [tabData, setTabData] = React.useState(data);
+
   const [tableMode, setTableMode] = React.useState(defaultText);
   // const loading = useSelector((state: any) => state.report.loading)
   // const imageUrl = useSelector((state: any) => state.report.imageUrl)
@@ -97,7 +100,10 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
   const columnCreator = () => {
     
     const columnCreator = (type == 'CustomisationData') ? columnCustomisationData : 
-      (type == 'RequirementData') ? columnRequirementData : (type === 'Estimate Average Rate' && tableMode == defaultText) ? columnDetails : 
+      (type == 'RequirementData') ? columnRequirementData : 
+      (type === 'Estimate Average Rate' && tableMode == defaultText) ? columnDetails : 
+      (type === 'DocumentLayoutsData') ? columnDataLayoutData :
+      (type === 'DataMigrationData') ? columnDataLayoutData :
       (type === 'Estimate Average Rate' && tableMode == dayHoursText) ? columnDetailsHOURS : 
       (type === 'Estimate Average Rate Milestone' && tableMode == defaultText) ? columnDetails :
       (type === 'Estimate Average Rate Milestone' && tableMode == dayHoursText) ? columnDetailsHOURS :
@@ -117,11 +123,25 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
   }, [resourceType, type, tableMode]) // resourceType
   
   const columns = useMemo<MRT_ColumnDef<any>[]>(
-    () => columnFixed(columnsSet, data, currency),
+    () => columnFixed(columnsSet, tabData, currency),
     [columnsSet],
   );//columnsSet
   console.log('llop', columns);
   
+  const handleSubTab = (type: string) => {
+    if(type === 'RQ') {
+      setColumnSet(columnRequirementData);
+      setTabData(data);
+    }
+    if(type === 'DM') {
+      setColumnSet(columnDataLayoutData);
+      setTabData(dataMigrationData);
+    }
+    if(type === 'DL') {
+      setColumnSet(columnDataLayoutData);
+      setTabData(documentLayoutsData);
+    }
+  }
   return (
     <>
       {/* {
@@ -148,10 +168,13 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
                 )}
               </div>
               <div className='text-right'>
-                <ButtonGroups selectedButton={tableMode} setSelectedButton={
-                  setTableMode
-                } numberOfButtons={2} buttonTitles={[
-                  {title: defaultText, value: 'Cost'}, {title: dayHoursText, value: 'Effort'}
+                <ButtonGroups
+                selectedButton={tableMode} 
+                setSelectedButton={setTableMode} 
+                numberOfButtons={2} 
+                buttonTitles={[
+                  {title: defaultText, value: 'Cost'}, 
+                  {title: dayHoursText, value: 'Effort'}
                 ]}/>
               </div>
               {/* <div className='text-right'>
@@ -174,13 +197,21 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
         )}
         <div style={{ flexGrow: 0 }}>
           {columns?.length ? (
-
+            <>
+            <div> {type === "RequirementData" && 
+              <div style={{ display: 'flex', marginLeft: '12px' }}>
+                <Button style={{ marginRight: '10px', fontSize: '10px', textTransform: 'none'  }} onClick={() => handleSubTab("RQ")} variant="contained">Requirements</Button>
+                <Button style={{ marginRight: '10px', fontSize: '10px', textTransform: 'none'  }} onClick={() => handleSubTab("DM")} variant="contained">Data Migrations</Button>
+                <Button style={{ fontSize: '10px', textTransform: 'none' }} onClick={() => handleSubTab("DL")} variant="contained">Data Layouts</Button>
+              </div>
+            } 
+            </div>
             <MaterialReactTable
             // header-mrt_row_expand-size
             columns={
               columns
             }
-            data={data}
+            data={tabData}
             // defaultColumn ={{
             //   // maxSize: 400,
             //   // minSize: 10,
@@ -189,13 +220,13 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
             columnResizeMode={'onEnd'}
             enableColumnResizing={true}
             // layoutMode= 'grid-no-grow'
-            enableGrouping={(type != 'RequirementData' && type != 'CustomisationData') ? true : false}
+            enableGrouping={(type != 'RequirementData' && type != 'CustomisationData' && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? true : false}
             enableStickyHeader
             enableStickyFooter
             initialState={{
               density: 'compact',
               expanded: true, //expand all groups by default   'M', "M/S", "M/S/C", 
-              grouping: (type != 'RequirementData' && type != 'CustomisationData') ? ['nameCategory'] : [], //an array of columns to group by by default (can be multiple)
+              grouping: (type != 'RequirementData' && type != 'CustomisationData'  && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? ['nameCategory'] : [], //an array of columns to group by by default (can be multiple)
               pagination: { pageIndex: 0, pageSize: 100 },
               // sorting: [{ id: 'state', desc: false }, { id: 'state', desc: false }], //sort by state by default
             }}
@@ -274,6 +305,7 @@ const AdvancedTable = ({data, type}: {data?: any, isLoading?: boolean, type: str
               },
             })}
           />
+          </>
           ) : (
             <>
           <div className="blur-background"></div>

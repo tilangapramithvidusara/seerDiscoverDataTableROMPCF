@@ -20,6 +20,7 @@ export const checkHasFte = async(parameterModel: any) => {
       if (obj?.technicalArchitectType == 100000000) return true;
       if (obj?.trainTheTrainerType == 100000000) return true;
       if (obj?.uatSupportType == 100000000) return true;
+      if (obj?.documentlayoutstype == 100000000) return true;
     });
     return hasValue;
   } catch (error) {

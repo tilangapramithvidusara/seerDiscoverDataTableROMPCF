@@ -108,12 +108,23 @@ export const generateEstimateResourceValue = (
       //   subCal['M/S'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate
 
       const r1MSCvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S/C'] || 0) *  (split || 0)/100 : generateValue((split) || 0, subCal['M/S/C'] || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, hoursPerday || 0, condition)
+     if(priority === 'Estimate Resource Milestone' ) {
+      console.log("r1MSCvalue", r1MSCvalue)
+     }
+    
       const r1MSCvalueSub = allSubsections?.resultValueMSC *  ((split) || 0)/100;
+      if(priority === 'Estimate Resource Milestone' ) {
+        console.log("r1MSCvalueSub", r1MSCvalueSub)
+       }
+     
+
       // condition ? 
       //   subCal['M/S/C'] * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S/C'] * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate
 
       const r2MSCvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S/C'] || 0) *  (secondarySplit || 0)/100 : generateValue((100 - split) || 0, subCal['M/S/C'] || 0, findProjectTaskPartner_ResourceSecondary?.hourlyRate || 0, hoursPerday || 0, condition)
+      // console.log("r1MSCvalue r2MSCvalue", r1MSCvalue)
+
       const r2MSCvalueSub = allSubsections?.resultValueMSC *  ((secondarySplit) || 0)/100;
       // condition ? 
       //   subCal['M/S/C'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate * parameterModel?.hoursPerday :

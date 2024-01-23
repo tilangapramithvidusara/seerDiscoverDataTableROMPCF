@@ -36,6 +36,8 @@ const App = ({
   requirementData,
   customisationData,
   arrayGeneratorHandler,
+  documentLayoutsData,
+  dataMigrationData
 }: {
   dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, 
   dataSetEstimateResource: any, 
@@ -44,6 +46,8 @@ const App = ({
   requirementData: any,
   customisationData: any,
   arrayGeneratorHandler: any,
+  documentLayoutsData: any,
+  dataMigrationData: any
 }) => { 
 
   const items: TabsProps['items'] = [
@@ -78,13 +82,23 @@ const App = ({
     { // requirementData
       key: '5',
       label: 'Requirements',
-      children: <AdvancedTable data={requirementData} type={'RequirementData'} isLoading={isRefreshing}/>,
+      children: <AdvancedTable data={requirementData} type={'RequirementData'} isLoading={isRefreshing} dataMigrationData={dataMigrationData} documentLayoutsData={documentLayoutsData} />,
     },
     {
       key: '6',
       label: 'Customisations',
       children: <AdvancedTable data={customisationData} type={'CustomisationData'} isLoading={isRefreshing}/>,
-    },
+    }
+    // {
+    //   key: '7',
+    //   label: 'Document Layouts',
+    //   children: <AdvancedTable data={documentLayoutsData} type={'DocumentLayoutsData'} isLoading={isRefreshing}/>,
+    // },
+    // {
+    //   key: '8',
+    //   label: 'Data Migrations',
+    //   children: <AdvancedTable data={dataMigrationData} type={'DataMigrationData'} isLoading={isRefreshing}/>,
+    // }
     // {
     //   key: '7',
     //   label: 'Governance',
