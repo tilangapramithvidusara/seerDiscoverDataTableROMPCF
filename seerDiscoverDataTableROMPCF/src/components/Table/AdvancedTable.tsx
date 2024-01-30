@@ -55,6 +55,8 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
   const [cellDataForSidePane, setCellDataForSidePane] = React.useState<any>();
   const [sidePaneEnable, setSidePaneEnable] = React.useState(false);
 
+  const [selectedTab, setSelectedTab] = React.useState<string>('RQ')
+
   console.log(reportReducerValues);
   
   // const averageM = useMemo(
@@ -141,6 +143,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
       setColumnSet(columnDataLayoutData);
       setTabData(documentLayoutsData);
     }
+    setSelectedTab(type);
   }
   return (
     <>
@@ -200,9 +203,23 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
             <>
             <div> {type === "RequirementData" && 
               <div style={{ display: 'flex', marginLeft: '12px' }}>
-                <Button style={{ marginRight: '10px', fontSize: '10px', textTransform: 'none'  }} onClick={() => handleSubTab("RQ")} variant="contained">Requirements</Button>
-                <Button style={{ marginRight: '10px', fontSize: '10px', textTransform: 'none'  }} onClick={() => handleSubTab("DM")} variant="contained">Data Migrations</Button>
-                <Button style={{ fontSize: '10px', textTransform: 'none' }} onClick={() => handleSubTab("DL")} variant="contained">Data Layouts</Button>
+                <Button style={{ 
+                  marginRight: '10px', 
+                  fontSize: '10px', 
+                  textTransform: 'none' ,
+                  backgroundColor: selectedTab === 'RQ' ? '#015BA1' : '#676767', // Change 'green' to the color you want
+                  }} onClick={() => handleSubTab("RQ")} variant="contained">Requirements</Button>
+                <Button style={{ 
+                  marginRight: '10px', 
+                  fontSize: '10px', 
+                  textTransform: 'none',
+                  backgroundColor: selectedTab === 'DM' ? '#015BA1' : '#676767', // Change 'blue' to the color you want
+                  }} onClick={() => handleSubTab("DM")} variant="contained">Data Migrations</Button>
+                <Button style={{
+                  fontSize: '10px',
+                  textTransform: 'none',
+                  backgroundColor: selectedTab === 'DL' ? '#015BA1' : '#676767', // Change 'red' to the color you want
+                  }} onClick={() => handleSubTab("DL")} variant="contained">Data Layouts</Button>
               </div>
             } 
             </div>
@@ -217,6 +234,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
             //   // minSize: 10,
             //   // size: 345, //default size is usually 180
             // }}
+            enableColumnVirtualization={false}
             columnResizeMode={'onEnd'}
             enableColumnResizing={true}
             // layoutMode= 'grid-no-grow'
@@ -236,18 +254,17 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
             //   width: '10px'
             // }}
             // pageSizeOptions={[5, 10]}
-            muiTableFooterRowProps={{ sx: { backgroundColor: ' #015BA1' } }}
+            // muiTableFooterRowProps={{ sx: { backgroundColor: ' #015BA1' } }}
             muiToolbarAlertBannerChipProps={{ color: 'primary' }}
             muiTableContainerProps={{ sx: { maxHeight: 700 } }}
             muiTableFooterProps={{
               title: 'Total',
               color: 'white',
             }}
-            // muiTableFooterRowProps={{
-            //   // title: 'Total',
-            //   footerGroup: 'Total'
-            // }}
+
             muiTableBodyRowProps={({ row }: {row: any}) => {
+              // type === 'Estimate Resource Milestone'
+              // Estimate Resource Milestone
               return({
               onClick: (event) => {
                 // openSidePane('', row.id, row?.original, false);
@@ -262,6 +279,10 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
                 // height: row.original.nameCategory == 'Project Manager' ? 0 : 10,
                 // lineHeight: row.original.nameCategory == 'Project Manager' ? 0 : 'normal',
                 visibility: 
+                  // (type === 'Estimate Resource Milestone' || 
+                  //   type === "Estimate Average Rate Milestone") && (
+                  //     row?.id.includes('nameCategory:')
+                  //   ) ? 'hidden' :
                   ((row?.original?.nameCategory == 'Project Manager' && !row.getIsGrouped()) || 
                   (row?.original?.nameCategory == 'Sub Total' && !row.getIsGrouped()) ||
                   (row?.original?.nameCategory == 'Project Risk' && !row.getIsGrouped()))
@@ -279,13 +300,32 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
                   // row.original.nameCategory == 'Sub Total'
                   )
                   ? "#FFD042" : row?.original?.nameCategory == 'Sub Total' && row.getIsGrouped() ? '#0E94FD' : (!row.getIsGrouped() && row.original.name == '') ? '#E6E2E1' : row.getIsGrouped() ? '#C1BDBD' : 'white',
-                  
-              },
-              
+
+                color:
+                  ((type === 'Estimate Resource Milestone' || 
+                    type === "Estimate Average Rate Milestone") && (
+                      row?.id.includes('nameCategory:')
+                    )) ?
+                    'red' : 'red', // Set text color to transparent to hide it
+                },              
               })
             }}
-          
-            muiTableBodyCellProps= {({ cell }) => ({
+
+            muiTableFooterRowProps={{ sx: { backgroundColor: ' #015BA1', }, title: 'Total', prefix: 'Total' }}
+
+            muiTableBodyCellProps= {({ cell }) => {              
+              return({
+                sx: {
+                  color:
+                  ((type === 'Estimate Resource Milestone' || 
+                    type === "Estimate Average Rate Milestone") && (
+                      cell?.id.includes('nameCategory:') && 
+                      cell?.id.includes('_M') && 
+                      !cell?.id.includes('Sub Total') && 
+                      !cell?.id.includes('Project Risk')
+                    )) ?
+                    'transparent' : 'black',
+                },
               onClick: () => {
                 console.log("CCCCCCCC", cell, cell?.row?.original?.nameCategory, cell?.row?.original?.nameCategory);
                 if ((cell?.row?.original?.nameCategory == 'ANALYSIS & DESIGN' || cell?.row?.original?.nameCategory == 'BUILD') && tableMode === defaultText && type === 'Estimate Average Rate') {
@@ -303,7 +343,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
                   name: cell?.row?.original?.name,
                 });
               },
-            })}
+            })}}
           />
           </>
           ) : (

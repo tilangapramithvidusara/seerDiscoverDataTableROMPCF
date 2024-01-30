@@ -218,9 +218,12 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
   let estimageAveRateCustomerCustomisationBuildSidePane: any;
   let estimageAveRateCustomerCustomRequirementBuildSidePane: any;
   let estimageAveRateDocumentLayoutSidePane: any;
+  console.log('===hasFteValue===>', hasFteValue);
   
   try {
     const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
+    console.log('o', responseAnalisisDesign);
+    
     const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable)
     const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
 
@@ -234,7 +237,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
       settingParameters, isSnapshotModeEnable);
 
     const responseIntegration = await generateIntegrationMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
-    const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
+    const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, false, settingParameters, isSnapshotModeEnable);
     const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
       // hasFteValue, 
       false,
@@ -481,6 +484,8 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         resultValueMSC: responseCustomRequirementDesign?.customRequirementBuild?.resultValueMSC,
       }, hourlyRate?.value, hoursPerday, condition)
 
+      console.log(responseDocumentLayout?.documentLayout?.resultValue);
+      
       resultValueDocumentLayout = checkConditionAndGenerateValue(responseDocumentLayout?.documentLayout?.resultValue, hourlyRate?.value, hoursPerday, condition);
       resultValueMSDocumentLayout = checkConditionAndGenerateValue(responseDocumentLayout?.documentLayout?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCDocumentLayout = checkConditionAndGenerateValue(responseDocumentLayout?.documentLayout?.resultValueMSC, hourlyRate?.value, hoursPerday, condition);
@@ -1847,7 +1852,7 @@ const calculateResultValue = (
 };
 
 
-const baseReader = (baseItem: any, primaryResourceDesignValueFromBaseData: number, secondaryResourceDesignValueFromBaseData: number, x: number) => {
+export const baseReader = (baseItem: any, primaryResourceDesignValueFromBaseData: number, secondaryResourceDesignValueFromBaseData: number, x: number) => {
   x += 1;
   if (baseItem?.quantity && baseItem?.quantity > 0) { // Quantity greaterthan 0
     // (design*(split/100))*quantity    
@@ -1861,7 +1866,7 @@ const baseReader = (baseItem: any, primaryResourceDesignValueFromBaseData: numbe
   return {primaryResourceDesignValueFromBaseData, secondaryResourceDesignValueFromBaseData}
 }
 
-const baseReaderConfiguration = (baseItem: any, primaryResourceConfigurationValueFromBaseData: number, secondaryResourceConfigurationValueFromBaseData: number, x: number) => {
+export const baseReaderConfiguration = (baseItem: any, primaryResourceConfigurationValueFromBaseData: number, secondaryResourceConfigurationValueFromBaseData: number, x: number) => {
   x += 1;
   if (baseItem?.quantity && baseItem?.quantity > 0) { // Quantity greaterthan 0
     // (design*(split/100))*quantity    
@@ -1875,7 +1880,7 @@ const baseReaderConfiguration = (baseItem: any, primaryResourceConfigurationValu
   return {primaryResourceConfigurationValueFromBaseData, secondaryResourceConfigurationValueFromBaseData}
 }
 
-const moduleReader = (moduleDataItem: any, primaryResourceDesignValueFromModuleData: number, secondaryResourceDesignValueFromModuleData: number ,y: number) => {
+export const moduleReader = (moduleDataItem: any, primaryResourceDesignValueFromModuleData: number, secondaryResourceDesignValueFromModuleData: number ,y: number) => {
   y += 1;
   // design*(split/100)
   // Design*((100-Split)/100)
@@ -1909,7 +1914,7 @@ const moduleReader = (moduleDataItem: any, primaryResourceDesignValueFromModuleD
 }
 
 
-const moduleReaderConfiguration = (moduleDataItem: any, primaryResourceConfigurationValueFromModuleData: number, secondaryResourceConfigurationValueFromModuleData: number ,y: number) => {
+export const moduleReaderConfiguration = (moduleDataItem: any, primaryResourceConfigurationValueFromModuleData: number, secondaryResourceConfigurationValueFromModuleData: number ,y: number) => {
   y += 1;
   if (moduleDataItem?.moduleOverrideCustomerSeerEstimateBuild > 0) {
     primaryResourceConfigurationValueFromModuleData += 

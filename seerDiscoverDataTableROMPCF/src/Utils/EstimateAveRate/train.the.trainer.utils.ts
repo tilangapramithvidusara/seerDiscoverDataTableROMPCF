@@ -52,9 +52,12 @@ export const generateTrainTheTrainerMValue = async(inititlaData: any, analisisDe
       const h7 = fteValue?.totalFte // need to gets it from api
       const g7 = fteValue?.totalFteMS
       const f7 = fteValue?.totalFteMSC
-      const h8 = h7 * hoursPerWeek
-      const g8 = g7 * hoursPerWeek
-      const f8 = f7 * hoursPerWeek
+      const h8 = h7 * F4Parameter
+      // hoursPerWeek
+      const g8 = g7 * F4Parameter
+      // hoursPerWeek
+      const f8 = f7 * F4Parameter
+      // hoursPerWeek
 
       if (fte) {
         if (hasParameters) {
@@ -75,6 +78,8 @@ export const generateTrainTheTrainerMValue = async(inititlaData: any, analisisDe
             returnObject.trainTheTrainerAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
           }
         } else {
+          console.log('parameterModel[0]?.trainTheTrainerType', parameterModel[0]?.trainTheTrainerType);
+          
           if (percentData?.[parameterModel[0]?.trainTheTrainerType] === percentData?.[100000001]) {
             returnObject.trainTheTrainerAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.trainTheTrainer/100);
             returnObject.trainTheTrainerAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.trainTheTrainer/100);

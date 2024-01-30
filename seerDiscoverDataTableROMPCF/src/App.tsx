@@ -6,6 +6,8 @@ import { store } from "./redux/store";
 
 // OutputSetId
 function App({tableContent, context, imageUrl}: {tableContent: any, context: any, imageUrl?: any}) {
+  console.log('context ==> ', context);
+  
   return (
     <Provider store={store}>
       <Index tableContent={tableContent} context={context} imageUrl={imageUrl} />

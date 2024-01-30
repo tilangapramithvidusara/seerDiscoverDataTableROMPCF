@@ -159,7 +159,8 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
       // )
     } :  null,
 
-      Footer: columnItem?.showBottomTotal ? () => {
+      Footer: columnItem?.showBottomTotal ? (props: any) => {
+        
         if (columnItem?.showBottomTotal) {
           // if (columnItem?.isCalcultionEnabled) {
             if (columnItem?.accessorKey?.includes('_H')) {
@@ -202,7 +203,17 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
           // )
         }
         
-      } :  null,
+      } : (props: any) => {
+        // nameCategory  column
+        if (props?.column?.id.includes('nameCategory')) {
+          return(
+            <Box color="white" sx={{textAlign: 'left'}}>
+              Total
+            </Box>
+          )
+        } else return null
+      },
+        // null,
 
     }
     return itemObjec;

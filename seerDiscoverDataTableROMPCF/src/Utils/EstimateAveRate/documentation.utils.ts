@@ -8,6 +8,8 @@ export const generateDocumentationMValue = async(inititlaData: any, analisisDesi
   let fte = isFte ? true : false;
   let hasParameters = settingParameters && isSnapshotModeEnable;
   console.log('doc ==> ', hasParameters, settingParameters, isSnapshotModeEnable);
+  console.log('fte === documentation ', fte);
+  
   
   if (hasParameters) {
     para_d4 = parseInt(settingParameters?.formattedData[
@@ -56,14 +58,19 @@ export const generateDocumentationMValue = async(inititlaData: any, analisisDesi
       console.log('doc hoursPerday ==> ', hoursPerday, fteValue);
       
       const F4Parameter = hoursPerday * 5;
+      
       const O37 = 0// to find this we need to complete Estimate Avg Rate Milestone table
       const H6 = 29// if days === c2 => O37/5 else (O37/8)/5
       const h7 = fteValue?.totalFte || 0 // need to gets it from api
       const g7 = fteValue?.totalFteMS || 0
       const f7 = fteValue?.totalFteMSC || 0
-      const h8 = h7 * hoursPerWeek
-      const g8 = g7 * hoursPerWeek
-      const f8 = f7 * hoursPerWeek
+      console.log('f4 ==> ', F4Parameter, h7);
+      const h8 = h7 * F4Parameter
+      // hoursPerWeek
+      const g8 = g7 * F4Parameter
+      // hoursPerWeek
+      const f8 = f7 * F4Parameter
+      // hoursPerWeek
 
       if (fte) {
         if (hasParameters) {
@@ -97,6 +104,8 @@ export const generateDocumentationMValue = async(inititlaData: any, analisisDesi
             returnObject.documentationAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.collateRequirment/100);
             returnObject.documentationAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.collateRequirment/100);
           } else {
+            console.log('rwwwww ==> ', mustCal * (para_d4), mustCal, para_d4);
+            
             returnObject.documentationAveRateMilestone.resultValue = mustCal * (para_d4); // not collateRequirment it need to get from backend
             returnObject.documentationAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
             returnObject.documentationAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
@@ -140,6 +149,10 @@ export const generateDocumentationMValue = async(inititlaData: any, analisisDesi
             returnObject.documentation.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.collateRequirment :  parameterModel[0]?.collateRequirment/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.collateRequirment
             returnObject.documentation.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.collateRequirment :  parameterModel[0]?.collateRequirment/parameterModel[0]?.hoursPerday
           } else if (percentData?.[parameterModel[0]?.collateRequirmentType] === percentData?.[100000000]) { // FTE
+            console.log('FTE ====> ', parameterModel[0]?.collateRequirment, h8, parameterModel[0]?.hoursPerday);
+            console.log('12221212121 ===> ', romParameter == "Hours" ? (parameterModel[0]?.collateRequirment * h8) : (parameterModel[0]?.collateRequirment * h8)/parameterModel[0]?.hoursPerday);
+            
+            
             returnObject.documentation.resultValue = romParameter == "Hours" ? (parameterModel[0]?.collateRequirment * h8) : (parameterModel[0]?.collateRequirment * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.collateRequirment * h8)  // need to find H8
             returnObject.documentation.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.collateRequirment * g8) : (parameterModel[0]?.collateRequirment * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.collateRequirment * g8  // need to find G8
             returnObject.documentation.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.collateRequirment * f8) :  (parameterModel[0]?.collateRequirment * f8)/parameterModel[0]?.hoursPerday

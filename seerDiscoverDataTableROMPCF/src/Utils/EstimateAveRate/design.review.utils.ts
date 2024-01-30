@@ -53,9 +53,12 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
       const h7 = fteValue?.totalFte || 0;// need to gets it from api
       const g7 = fteValue?.totalFteMS|| 0;
       const f7 = fteValue?.totalFteMSC|| 0;
-      const h8 = h7 * hoursPerWeek
-      const g8 = g7 * hoursPerWeek
-      const f8 = f7 * hoursPerWeek
+      const h8 = h7 * F4Parameter
+      // hoursPerWeek
+      const g8 = g7 * F4Parameter
+      // hoursPerWeek
+      const f8 = f7 * F4Parameter
+      // hoursPerWeek
       console.log('====> ', parameterModel[0]?.designReview);
       
       if (fte) {

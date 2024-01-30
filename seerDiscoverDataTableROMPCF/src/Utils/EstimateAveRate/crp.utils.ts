@@ -67,9 +67,12 @@ export const generateCRPMValue = async(inititlaData: any, analisisDesignPre: {re
       const h7 = fteValue?.totalFte // need to gets it from api
       const g7 = fteValue?.totalFteMS
       const f7 = fteValue?.totalFteMSC
-      const h8 = h7 * hoursPerWeek
-      const g8 = g7 * hoursPerWeek
-      const f8 = f7 * hoursPerWeek
+      const h8 = h7 * F4Parameter
+      // hoursPerWeek
+      const g8 = g7 * F4Parameter
+      // hoursPerWeek
+      const f8 = f7 * F4Parameter
+      // hoursPerWeek
       
       // not done yet
       if (fte) {

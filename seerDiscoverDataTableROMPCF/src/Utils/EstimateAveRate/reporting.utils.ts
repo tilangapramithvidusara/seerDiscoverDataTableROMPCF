@@ -65,9 +65,12 @@ export const generateReportingMValue = async(inititlaData: any, analisisDesignPr
       const h7 = fteValue?.totalFte // need to gets it from api
       const g7 = fteValue?.totalFteMS
       const f7 = fteValue?.totalFteMSC
-      const h8 = h7 * hoursPerWeek
-      const g8 = g7 * hoursPerWeek
-      const f8 = f7 * hoursPerWeek
+      const h8 = h7 * F4Parameter
+      // hoursPerWeek
+      const g8 = g7 * F4Parameter
+      // hoursPerWeek
+      const f8 = f7 * F4Parameter
+      // hoursPerWeek
 
       if (fte) {
         if (hasParameters) {
@@ -78,6 +81,8 @@ export const generateReportingMValue = async(inititlaData: any, analisisDesignPr
             parameterKeyIndex.reporting
           ]?.typeValueCurrent)
           if (percentData?.[reportingTypeValue] == percentData?.[100000001]) {
+            console.log(mustCal, reportingValue);
+            
             returnObject.reportingAveRateMilestone.resultValue = mustCal * (reportingValue/100);
             returnObject.reportingAveRateMilestone.resultValueMS = mustShouldCal * (reportingValue/100);
             returnObject.reportingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (reportingValue/100);
@@ -87,11 +92,13 @@ export const generateReportingMValue = async(inititlaData: any, analisisDesignPr
             returnObject.reportingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
           }
         } else {
-          if (percentData?.[parameterModel[0]?.reportingType] === percentData?.[100000001]) {
+          if (percentData?.[parameterModel[0]?.reportingType] == percentData?.[100000001]) {
+            console.log(mustCal, parameterModel[0]?.reporting);
             returnObject.reportingAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.reporting/100);
             returnObject.reportingAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.reporting/100);
             returnObject.reportingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.reporting/100);
           } else {
+            console.log(mustCal, parameterModel[0]?.reporting, parameterModel[0]?.reportingType);
             returnObject.reportingAveRateMilestone.resultValue = mustCal * (para_d4); // not reporting it need to get from backend
             returnObject.reportingAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
             returnObject.reportingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
@@ -107,7 +114,7 @@ export const generateReportingMValue = async(inititlaData: any, analisisDesignPr
             parameterKeyIndex.reporting
           ]?.typeValueCurrent)
           if (percentData?.[reportingTypeValue] == percentData?.[100000001]) {
-
+            console.log(mustCal, reportingValue);
             returnObject.reporting.resultValue = mustCal * (reportingValue/100);
             returnObject.reporting.resultValueMS = mustShouldCal * (reportingValue/100);
             returnObject.reporting.resultValueMSC = mustShouldCouldCal * (reportingValue/100);

@@ -63,9 +63,12 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
       const h7 = fteValue?.totalFte || 0; // need to gets it from api
       const g7 = fteValue?.totalFteMS || 0;
       const f7 = fteValue?.totalFteMSC || 0;
-      const h8 = h7 * hoursPerWeek
-      const g8 = g7 * hoursPerWeek
-      const f8 = f7 * hoursPerWeek
+      const h8 = h7 * F4Parameter
+      // hoursPerWeek
+      const g8 = g7 * F4Parameter
+      // hoursPerWeek
+      const f8 = f7 * F4Parameter
+      // hoursPerWeek
 
       // STRAT NEW DATA MIGRATION
       // Variables for When it moscow
