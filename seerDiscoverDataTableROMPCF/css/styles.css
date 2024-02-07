@@ -475,6 +475,6 @@ table {
   text-transform: 'none' 
 }
 
-.seerDiscoverROM .MuiMenuItem-root .MuiBox-root {
+.MuiMenuItem-root .MuiBox-root {
   font-size: 13px;
 }
