@@ -22,11 +22,12 @@ import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import Settings from "@mui/icons-material/Settings";
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
-import { setSettingParameters, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
+import { setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
 import { loadSnapshotsAsync, saveInitialSnapshotRecordAsync } from "../redux/snapshotReport/snapshoAsync";
 import FormDialog from "./Form";
 import { convertJsonToBase64 } from "../Utils/commonFunc.utils";
 import SnapShotPopup from "./SnapshotPopup/SnapshotPopup";
+import { missingSnapshot } from "../Constants/messages";
 
 const App = ({
   dataSet, onRefreshHandler, isRefreshing, 
@@ -126,6 +127,9 @@ const App = ({
   const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
   // selectedSnapshot
   const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
+  const showSaveParameters = useSelector((state: any) => state?.snapshot?.showSaveParameters)
+  const showLoadedParameters = useSelector((state: any) => state?.snapshot?.showLoadedParameters)
+  const isLiveModeEnable = useSelector((state: any) => state?.snapshot?.isLiveModeEnable)
   const [openSaveSnapshotPopup, setOpenSaveSnapshotPopup] = React.useState(false);
   const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
@@ -141,6 +145,8 @@ const App = ({
 
   const initialTriggerHandler = async(e: any) => {
     // e.preventDefault()
+    dispatch(setShowSaveParameters(false))
+    dispatch(setShowLoadedParameters(false));
     setComIsloading(true)
     const inititalData = await fetchInitialDataAsync();
     if (!inititalData.error) {
@@ -151,12 +157,14 @@ const App = ({
     }
   }
 
-  const [selectedButton, setSelectedButton] = React.useState('button1');
+  const [selectedButton, setSelectedButton] = React.useState((!isLiveModeEnable && showSaveParameters) ? 'button2' : 'button1');
   React.useEffect(() => {    
     setComIsloading(isRefreshing)
   }, [isRefreshing]);
 
   const formattedSettingHandler = (event: any, initFetchedData: any) => {
+    console.log('call formattedSettingHandler');
+    
     if (hasLoadedData) {
       // set retrived data as setSettingParameter
     } else {
@@ -175,9 +183,12 @@ const App = ({
   // only for check
   React.useMemo(() => {
     console.log('call meee', settingParameters && isSnapshotModeEnable);
-    console.log('isSnapshotModeEnable', isSnapshotModeEnable);
-    
-    if (settingParameters && isSnapshotModeEnable) {
+    console.log('isSnapshotModeEnable', isSnapshotModeEnable, showSaveParameters, showLoadedParameters);
+    // if (isLiveModeEnable) {
+    //   arrayGeneratorHandler(isLiveModeEnable);
+    // }
+    // if (settingParameters && isSnapshotModeEnable || showSaveParameters || showLoadedParameters) {
+    if (isSnapshotModeEnable && (showSaveParameters || showLoadedParameters)) {
       // initialTriggerHandler(settingParameters);
       arrayGeneratorHandler();
       dispatch(setStateSnapshot(false))
@@ -187,20 +198,31 @@ const App = ({
       // }, 1000)
       
     }
-  }, [settingParameters && isSnapshotModeEnable])
+  }, [
+    // settingParameters,
+    isSnapshotModeEnable,
+    showSaveParameters,
+    showLoadedParameters,
+    isLiveModeEnable,
+  ])
   // export const arrayGenerator = async (initialDataSet: any, dispatch: any, settingParameters?: any, isSnapshotModeEnable?: boolean)
 
   React.useEffect(() => {
     if(selectedButton === 'button2')  dispatch(loadSnapshotsAsync())
+    // else if (selectedButton === 'button1') arrayGeneratorHandler(true);
   }, [selectedButton])
 
   const handleSaveSnapshot = () => {
     console.log("handleSaveSnapshot");
-    setOpenSaveSnapshotPopup(true);
+    if (snapshotSettingParameters.length) {
+      setOpenSaveSnapshotPopup(true);
+    } else {
+      alert(missingSnapshot);
+    }
   }
 
   const onSubmit = () => {
-    console.log("Submitted", submitFormData);
+    console.log("Submitted", submitFormData, snapshotSettingParameters);
     if (submitFormData?.name && submitFormData?.description) {
       dispatch(saveInitialSnapshotRecordAsync({
         seerName: submitFormData?.name,
@@ -246,7 +268,7 @@ const App = ({
                 {/* <InputLabel className="label mr-10">Mode</InputLabel> */}
               </Grid>
               {/* buttonTitles */}
-              <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton} />
+              <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton} arrayGeneratorHandler={arrayGeneratorHandler} />
             </Stack>
             {/* <DropDownButtons selectedButton={selectedButton} /> */}
           </Box>

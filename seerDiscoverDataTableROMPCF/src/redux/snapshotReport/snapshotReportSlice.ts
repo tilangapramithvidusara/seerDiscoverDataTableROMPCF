@@ -99,7 +99,10 @@ const initialState: any = {
   snapshotSettingParameters: null,
   settingParameters: null,
   recordId: null,
-  selectedSnapshotFromDB: null
+  selectedSnapshotFromDB: null,
+  showSaveParameters: false,
+  showLoadedParameters: false,
+  isLiveModeEnable: true,
 }
 
 const snapshotSlice: any = createSlice({
@@ -108,6 +111,9 @@ const snapshotSlice: any = createSlice({
   reducers: {
     setStateSnapshot: (state, action) => {
       state.isSnapshotModeEnable = action.payload
+    },
+    setIsLiveModeEnable: (state, action) => {
+      state.isLiveModeEnable = action.payload
     },
     setSnapshotList: (state, action) => {
       console.log("ACTION setSnapshotList", action)
@@ -146,7 +152,10 @@ const snapshotSlice: any = createSlice({
       // }
     
       state.settingParameters = action.payload
-      state.snapshotSettingParameters = action.payload;
+      if (!state.showSaveParameters) {
+        state.snapshotSettingParameters = action.payload;
+      }
+      
     },
     setSettingParameterAttributes: (state, action) => {
       console.log('qaqa lloo ===--02 => ', action);
@@ -170,13 +179,13 @@ const snapshotSlice: any = createSlice({
         
     
         // // Update the array with the new object
-        state.settingParameters.formattedData = [
+        state.snapshotSettingParameters.formattedData = [
           ...parameterValues.slice(0, paramerterIndex),
           updatedPrameter,
           ...parameterValues.slice(paramerterIndex + 1),
         ];
     
-        console.log('User edited successfully:', state.settingParameters);
+        console.log('User edited successfully:', state.snapshotSettingParameters);
       }
     },
     setRecordId: (state, action) => {
@@ -184,6 +193,14 @@ const snapshotSlice: any = createSlice({
     },
     setBaseJson: (state, action) => {
       state.baseJson = action.payload
+    },
+    setShowSaveParameters: (state, action) => {
+      console.log('www setShowSaveParameters == >', action.payload);
+      
+      state.showSaveParameters = action.payload
+    },
+    setShowLoadedParameters: (state, action) => {
+      state.showLoadedParameters = action.payload
     }
   }
   
@@ -200,6 +217,9 @@ export const {
   setSettingParameterAttributes,
   setRecordId,
   setBaseJson,
+  setShowSaveParameters,
+  setShowLoadedParameters,
+  setIsLiveModeEnable,
 } = snapshotSlice.actions;
 
 

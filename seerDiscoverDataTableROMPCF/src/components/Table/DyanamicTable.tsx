@@ -9,6 +9,7 @@ import {
 import {
   setSettingParameterAttributes,
   setSettingParameters,
+  setShowSaveParameters,
   setStateSnapshot
 } from '../../redux/snapshotReport/snapshotReportSlice';
 import { Parameter } from '../../Utils/setting.values.convertor.utils';
@@ -64,7 +65,13 @@ const DyanamicTable = ({ handleClose, tableNumber }: { handleClose: any, tableNu
 
   const saveHandler = (info: any) => {
     // saveSnapshotAsync(info);
+    console.log('2222222222111 ===> ');
+    
     setShowSnapshotForm(true);
+    console.log('22222222221112222 ===> ');
+    dispatch(setShowSaveParameters(true))
+    dispatch(setStateSnapshot(true))
+    console.log('22222222221113333 ===> ');
   };
 
   useEffect(() => {
@@ -106,7 +113,9 @@ const onClose = () => {
           </tr>
         </thead>
         <tbody>
-          {settingParameters?.formattedData?.map((settingItem: Parameter, id: number) => {
+          {snapshotSettingParameters?.formattedData?.map((settingItem: Parameter, id: number) => {
+            console.log('seeeee ===> ', settingItem?.name == 'Data Migration' && settingItem);
+            
             let name = settingItem?.name;
             let switchValue = settingItem?.switch;
             let currentValue = settingItem?.currentValue;
@@ -136,7 +145,7 @@ const onClose = () => {
                             });
                           }}
                         >
-                          {fteDropdown?.map((fteItem: any) => (
+                          {dropdownValues?.map((fteItem: any) => (
                             <option value={fteItem?.value}>{fteItem?.label}</option>
                           ))}
                           {/* <option value="Admin">Admin</option>
@@ -204,12 +213,12 @@ const onClose = () => {
         <Button className="btn-primary mr-10" onClick={() => handleClose()}>
           Cancel
         </Button>
-        {/* <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
-          Save
-        </Button> */}
-        <Button className="btn-primary">
+        <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
           Save
         </Button>
+        {/* <Button className="btn-primary">
+          Save
+        </Button> */}
       </div>
       {/* {showSnapshotForm ? (
         <FormDialog

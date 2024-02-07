@@ -8,6 +8,7 @@ import UpdateOutlined from '@mui/icons-material/UpdateOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectSnapshot } from '../../../redux/snapshotReport/snapshotReportSlice';
 import SnapShotPopup from '../../SnapshotPopup/SnapshotPopup';
+import { loadSelectedSnapshotAsync } from '../../../redux/snapshotReport/snapshoAsync';
 
 const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, handleSaveSnapshot}: 
   {selectedButton: any, hasSnapshots?: boolean, selectItem?: any, selectedItemParent?: string, handleSaveSnapshot?: any}) => {
@@ -20,6 +21,12 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
   const snapshotsList = useSelector((state: any) => state.snapshot.snapshotsList)
   // const snapshotsList = [{seer_name: "test", seer_description: "Des", seer_rominportalsnapshotid: "idd", createdOn: "2024-01-10T09:37:11Z"}, {seer_name: "teeest", seer_description: "Deseee", seer_rominportalsnapshotid: "iddss", createdOn: "2024-01-10T09:37:11Z"}];
 
+  // seer_name
+  // : 
+  // "Test Snapshot 1"
+  // seer_rominportalsnapshotid
+  // : 
+  // "1996f51d-ebc3-ee11-9079-002248015232"
   console.log("snapshotsListState", snapshotsList)
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -33,11 +40,21 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
     dispatch(setSelectSnapshot(info))
   }, [dispatch])
 
+  const loadSelectedSnapshotHandler = React.useCallback((info) => {
+    dispatch(loadSelectedSnapshotAsync({snapshotId: info}))
+  }, [dispatch])
+
   const handleMenuItemClick = (itemValue: any) => {
     console.log('itemValue => ', itemValue);
     setSelectedItem(itemValue); // Update the selected item in state
-    selectItem(itemValue);
+    console.log('itemValue 22 => ', itemValue);
+    // selectItem(itemValue);
+    console.log('itemValue 33 => ', itemValue);
+    loadSelectedSnapshotHandler(itemValue);
+    console.log('itemValue 44 => ', itemValue);
+    // dispatch(loadSelectedSnapshotAsync({snapshotId: itemValue?.value}))
     setSelectSnapshotHandler(itemValue);
+    console.log('itemValue 55 => ', itemValue);
     handleClose(); // Close the menu
   };
 
@@ -64,14 +81,18 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
               variant="contained" 
               color="primary" 
               className='btn-blue-outline btn-small mr-10'  
-              aria-haspopup="true" onClick={handleClick}>
+              aria-haspopup="true" 
+              // onClick={handleClick}
+              onClick={() => setOpenLoadSnapshotModal(!openLoadSnapshotModal)}
+            >
               <DownloadingOutlinedIcon className='btn-icon'/> 
             </Button>
-            {snapshotsList && snapshotsList?.length && (   <div>
-        {
-          openLoadSnapshotModal ? <SnapShotPopup snapshots = {snapshotsList} handleClose={handleClosePopup} open={openLoadSnapshotModal}/> : <></>
-        }
-      </div>
+            {snapshotsList && snapshotsList?.length && (   
+            <div>
+              {
+                openLoadSnapshotModal ? <SnapShotPopup snapshots = {snapshotsList} handleClose={handleClosePopup} onSelect={handleMenuItemClick} open={openLoadSnapshotModal}/> : <></>
+              }
+            </div>
               // <Menu
               //   id="dropdown-menu"
               //   anchorEl={anchorEl}
@@ -109,7 +130,7 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
             variant="contained" 
             color="primary" 
             className='btn-gray-outline btn-small mr-10'
-            onClick={() => setOpenLoadSnapshotModal(true)}
+            onClick={() => {}}
           >
             <UpdateOutlined className='btn-icon'/> 
           </Button>

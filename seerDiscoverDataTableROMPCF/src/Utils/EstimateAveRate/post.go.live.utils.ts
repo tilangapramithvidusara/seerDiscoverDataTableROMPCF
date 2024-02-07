@@ -8,13 +8,7 @@ export const generatePostGoLiveMValue = async(inititlaData: any, analisisDesignP
   let hasParameters = settingParameters && isSnapshotModeEnable;
 
   let fte = isFte ? true : false;
-  if (hasParameters) {
-    para_d4 = parseInt(settingParameters?.formattedData[
-      parameterKeyIndex.fteBase
-    ]?.currentValue || '0')
-    console.log("doc ==> ", para_d4);
-    
-  }
+
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -36,11 +30,22 @@ export const generatePostGoLiveMValue = async(inititlaData: any, analisisDesignP
   // seerMoscow
   try {
     const {parameterModel, fteValue} = inititlaData
-    let {hoursPerday} = parameterModel[0]
+    let {hoursPerday, postGoLiveSupportType, postGoLiveSupport} = parameterModel[0];
+    let postGoLiveValue = postGoLiveSupport;
+    let postGoLiveTypeValue = postGoLiveSupportType;
       if (hasParameters) {
-        hoursPerday = parseInt(settingParameters?.formattedData[
+        para_d4 = parseFloat(settingParameters?.formattedData[
+          parameterKeyIndex.fteBase
+        ]?.currentValue || '0')
+        hoursPerday = parseFloat(settingParameters?.formattedData[
           parameterKeyIndex.hoursPerDay
         ]?.currentValue || '0');
+        postGoLiveValue = parseFloat(settingParameters?.formattedData[
+          parameterKeyIndex.postGoLiveSupport
+        ]?.currentValue || '0')
+        postGoLiveTypeValue = parseFloat(settingParameters?.formattedData[
+          parameterKeyIndex.postGoLiveSupport
+        ]?.typeValueCurrent)
       }
     if (inititlaData) {
       // Must Custom Requirement
@@ -73,80 +78,105 @@ export const generatePostGoLiveMValue = async(inititlaData: any, analisisDesignP
       // hoursPerWeek
 
       if (fte) {
-        if (hasParameters) {
-          const postGoLiveValue = parseInt(settingParameters?.formattedData[
-            parameterKeyIndex.postGoLiveSupport
-          ]?.currentValue || '0')
-          const postGoLiveTypeValue = parseInt(settingParameters?.formattedData[
-            parameterKeyIndex.postGoLiveSupport
-          ]?.typeValueCurrent)
-
-          if (percentData?.[postGoLiveTypeValue] == percentData?.[100000001]) {
-            returnObject.postGoLiveAveRateMilestone.resultValue = mustCal * (postGoLiveValue/100);
-            returnObject.postGoLiveAveRateMilestone.resultValueMS = mustShouldCal * (postGoLiveValue/100);
-            returnObject.postGoLiveAveRateMilestone.resultValueMSC = mustShouldCouldCal * (postGoLiveValue/100);
-          } else {
-            returnObject.postGoLiveAveRateMilestone.resultValue = mustCal * (para_d4); // not postGoLiveSupport it need to get from backend
-            returnObject.postGoLiveAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
-            returnObject.postGoLiveAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
-          }
-
+        if (percentData?.[postGoLiveTypeValue] == percentData?.[100000001]) {
+          returnObject.postGoLiveAveRateMilestone.resultValue = mustCal * (postGoLiveValue/100);
+          returnObject.postGoLiveAveRateMilestone.resultValueMS = mustShouldCal * (postGoLiveValue/100);
+          returnObject.postGoLiveAveRateMilestone.resultValueMSC = mustShouldCouldCal * (postGoLiveValue/100);
         } else {
-          if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000001]) {
-            returnObject.postGoLiveAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.postGoLiveSupport/100);
-            returnObject.postGoLiveAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.postGoLiveSupport/100);
-            returnObject.postGoLiveAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.postGoLiveSupport/100);
-          } else {
-            returnObject.postGoLiveAveRateMilestone.resultValue = mustCal * (para_d4); // not postGoLiveSupport it need to get from backend
-            returnObject.postGoLiveAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
-            returnObject.postGoLiveAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
-          }
+          returnObject.postGoLiveAveRateMilestone.resultValue = mustCal * (para_d4); // not postGoLiveSupport it need to get from backend
+          returnObject.postGoLiveAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
+          returnObject.postGoLiveAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
         }
+        // if (hasParameters) {
+        //   const postGoLiveValue = parseFloat(settingParameters?.formattedData[
+        //     parameterKeyIndex.postGoLiveSupport
+        //   ]?.currentValue || '0')
+        //   const postGoLiveTypeValue = parseFloat(settingParameters?.formattedData[
+        //     parameterKeyIndex.postGoLiveSupport
+        //   ]?.typeValueCurrent)
+
+        //   if (percentData?.[postGoLiveTypeValue] == percentData?.[100000001]) {
+        //     returnObject.postGoLiveAveRateMilestone.resultValue = mustCal * (postGoLiveValue/100);
+        //     returnObject.postGoLiveAveRateMilestone.resultValueMS = mustShouldCal * (postGoLiveValue/100);
+        //     returnObject.postGoLiveAveRateMilestone.resultValueMSC = mustShouldCouldCal * (postGoLiveValue/100);
+        //   } else {
+        //     returnObject.postGoLiveAveRateMilestone.resultValue = mustCal * (para_d4); // not postGoLiveSupport it need to get from backend
+        //     returnObject.postGoLiveAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
+        //     returnObject.postGoLiveAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
+        //   }
+
+        // } else {
+        //   if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000001]) {
+        //     returnObject.postGoLiveAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.postGoLiveSupport/100);
+        //     returnObject.postGoLiveAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.postGoLiveSupport/100);
+        //     returnObject.postGoLiveAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.postGoLiveSupport/100);
+        //   } else {
+        //     returnObject.postGoLiveAveRateMilestone.resultValue = mustCal * (para_d4); // not postGoLiveSupport it need to get from backend
+        //     returnObject.postGoLiveAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
+        //     returnObject.postGoLiveAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
+        //   }
+        // }
         
       } else {
-        // not done yet
-        if (hasParameters) {
-          const postGoLiveValue = parseInt(settingParameters?.formattedData[
-            parameterKeyIndex.postGoLiveSupport
-          ]?.currentValue || '0')
-          const postGoLiveTypeValue = parseInt(settingParameters?.formattedData[
-            parameterKeyIndex.postGoLiveSupport
-          ]?.typeValueCurrent)
+        if (percentData?.[postGoLiveTypeValue] == percentData?.[100000001]) {
 
-          if (percentData?.[postGoLiveTypeValue] == percentData?.[100000001]) {
-
-            returnObject.postGoLive.resultValue = mustCal * (postGoLiveValue/100);
-            returnObject.postGoLive.resultValueMS = mustShouldCal * (postGoLiveValue/100);
-            returnObject.postGoLive.resultValueMSC = mustShouldCouldCal * (postGoLiveValue/100);
-          } else if (percentData?.[postGoLiveTypeValue] == percentData?.[100000002]) { // hours
-            
-            returnObject.postGoLive.resultValue = romParameter == "Hours" ? postGoLiveValue :  postGoLiveValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
-            returnObject.postGoLive.resultValueMS = romParameter == "Hours" ? postGoLiveValue :  postGoLiveValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
-            returnObject.postGoLive.resultValueMSC = romParameter == "Hours" ? postGoLiveValue :  postGoLiveValue/hoursPerday
-          } else if (percentData?.[postGoLiveTypeValue] == percentData?.[100000000]) { // FTE
-            // dont need yet
-            returnObject.postGoLive.resultValue = romParameter == "Hours" ? (postGoLiveValue * h8) : (postGoLiveValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.postGoLiveSupport * h8)  // need to find H8
-            returnObject.postGoLive.resultValueMS = romParameter == "Hours" ? (postGoLiveValue * g8) : (postGoLiveValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * g8  // need to find G8
-            returnObject.postGoLive.resultValueMSC = romParameter == "Hours" ? (postGoLiveValue * f8) : (postGoLiveValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * f8  // need to find F8
-          }
-        } else {
-          if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000001]) {
-
-            returnObject.postGoLive.resultValue = mustCal * (parameterModel[0]?.postGoLiveSupport/100);
-            returnObject.postGoLive.resultValueMS = mustShouldCal * (parameterModel[0]?.postGoLiveSupport/100);
-            returnObject.postGoLive.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.postGoLiveSupport/100);
-          } else if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000002]) { // hours
-            
-            returnObject.postGoLive.resultValue = romParameter == "Hours" ? parameterModel[0]?.postGoLiveSupport :  parameterModel[0]?.postGoLiveSupport/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
-            returnObject.postGoLive.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.postGoLiveSupport :  parameterModel[0]?.postGoLiveSupport/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
-            returnObject.postGoLive.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.postGoLiveSupport :  parameterModel[0]?.postGoLiveSupport/parameterModel[0]?.hoursPerday
-          } else if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000000]) { // FTE
-            // dont need yet
-            returnObject.postGoLive.resultValue = romParameter == "Hours" ? (parameterModel[0]?.postGoLiveSupport * h8) : (parameterModel[0]?.postGoLiveSupport * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.postGoLiveSupport * h8)  // need to find H8
-            returnObject.postGoLive.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.postGoLiveSupport * g8) : (parameterModel[0]?.postGoLiveSupport * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * g8  // need to find G8
-            returnObject.postGoLive.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.postGoLiveSupport * f8) : (parameterModel[0]?.postGoLiveSupport * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * f8  // need to find F8
-          }
+          returnObject.postGoLive.resultValue = mustCal * (postGoLiveValue/100);
+          returnObject.postGoLive.resultValueMS = mustShouldCal * (postGoLiveValue/100);
+          returnObject.postGoLive.resultValueMSC = mustShouldCouldCal * (postGoLiveValue/100);
+        } else if (percentData?.[postGoLiveTypeValue] == percentData?.[100000002]) { // hours
+          
+          returnObject.postGoLive.resultValue = romParameter == "Hours" ? postGoLiveValue :  postGoLiveValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
+          returnObject.postGoLive.resultValueMS = romParameter == "Hours" ? postGoLiveValue :  postGoLiveValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
+          returnObject.postGoLive.resultValueMSC = romParameter == "Hours" ? postGoLiveValue :  postGoLiveValue/hoursPerday
+        } else if (percentData?.[postGoLiveTypeValue] == percentData?.[100000000]) { // FTE
+          // dont need yet
+          returnObject.postGoLive.resultValue = romParameter == "Hours" ? (postGoLiveValue * h8) : (postGoLiveValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.postGoLiveSupport * h8)  // need to find H8
+          returnObject.postGoLive.resultValueMS = romParameter == "Hours" ? (postGoLiveValue * g8) : (postGoLiveValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * g8  // need to find G8
+          returnObject.postGoLive.resultValueMSC = romParameter == "Hours" ? (postGoLiveValue * f8) : (postGoLiveValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * f8  // need to find F8
         }
+        // not done yet
+        // if (hasParameters) {
+        //   const postGoLiveValue = parseFloat(settingParameters?.formattedData[
+        //     parameterKeyIndex.postGoLiveSupport
+        //   ]?.currentValue || '0')
+        //   const postGoLiveTypeValue = parseFloat(settingParameters?.formattedData[
+        //     parameterKeyIndex.postGoLiveSupport
+        //   ]?.typeValueCurrent)
+
+        //   if (percentData?.[postGoLiveTypeValue] == percentData?.[100000001]) {
+
+        //     returnObject.postGoLive.resultValue = mustCal * (postGoLiveValue/100);
+        //     returnObject.postGoLive.resultValueMS = mustShouldCal * (postGoLiveValue/100);
+        //     returnObject.postGoLive.resultValueMSC = mustShouldCouldCal * (postGoLiveValue/100);
+        //   } else if (percentData?.[postGoLiveTypeValue] == percentData?.[100000002]) { // hours
+            
+        //     returnObject.postGoLive.resultValue = romParameter == "Hours" ? postGoLiveValue :  postGoLiveValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
+        //     returnObject.postGoLive.resultValueMS = romParameter == "Hours" ? postGoLiveValue :  postGoLiveValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
+        //     returnObject.postGoLive.resultValueMSC = romParameter == "Hours" ? postGoLiveValue :  postGoLiveValue/hoursPerday
+        //   } else if (percentData?.[postGoLiveTypeValue] == percentData?.[100000000]) { // FTE
+        //     // dont need yet
+        //     returnObject.postGoLive.resultValue = romParameter == "Hours" ? (postGoLiveValue * h8) : (postGoLiveValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.postGoLiveSupport * h8)  // need to find H8
+        //     returnObject.postGoLive.resultValueMS = romParameter == "Hours" ? (postGoLiveValue * g8) : (postGoLiveValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * g8  // need to find G8
+        //     returnObject.postGoLive.resultValueMSC = romParameter == "Hours" ? (postGoLiveValue * f8) : (postGoLiveValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * f8  // need to find F8
+        //   }
+        // } else {
+        //   if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000001]) {
+
+        //     returnObject.postGoLive.resultValue = mustCal * (parameterModel[0]?.postGoLiveSupport/100);
+        //     returnObject.postGoLive.resultValueMS = mustShouldCal * (parameterModel[0]?.postGoLiveSupport/100);
+        //     returnObject.postGoLive.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.postGoLiveSupport/100);
+        //   } else if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000002]) { // hours
+            
+        //     returnObject.postGoLive.resultValue = romParameter == "Hours" ? parameterModel[0]?.postGoLiveSupport :  parameterModel[0]?.postGoLiveSupport/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
+        //     returnObject.postGoLive.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.postGoLiveSupport :  parameterModel[0]?.postGoLiveSupport/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport
+        //     returnObject.postGoLive.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.postGoLiveSupport :  parameterModel[0]?.postGoLiveSupport/parameterModel[0]?.hoursPerday
+        //   } else if (percentData?.[parameterModel[0]?.postGoLiveSupportType] === percentData?.[100000000]) { // FTE
+        //     // dont need yet
+        //     returnObject.postGoLive.resultValue = romParameter == "Hours" ? (parameterModel[0]?.postGoLiveSupport * h8) : (parameterModel[0]?.postGoLiveSupport * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.postGoLiveSupport * h8)  // need to find H8
+        //     returnObject.postGoLive.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.postGoLiveSupport * g8) : (parameterModel[0]?.postGoLiveSupport * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * g8  // need to find G8
+        //     returnObject.postGoLive.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.postGoLiveSupport * f8) : (parameterModel[0]?.postGoLiveSupport * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.postGoLiveSupport * f8  // need to find F8
+        //   }
+        // }
         
       }
       

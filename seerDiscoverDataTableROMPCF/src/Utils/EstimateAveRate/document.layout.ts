@@ -44,16 +44,20 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
     const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, FactorsModel, DocumentlayoutModel, fteValue} = inititlaData
     let {hoursPerday, documentlayoutstype, dataMigration, documentlayouts } = parameterModel[0]
       if (hasParameters) {
-        hoursPerday = parseInt(settingParameters?.formattedData[
+        console.log('dododod ==> ', settingParameters?.formattedData[
+          parameterKeyIndex.documnentLayout
+        ]);
+        
+        hoursPerday = parseFloat(settingParameters?.formattedData[
           parameterKeyIndex.hoursPerDay
         ]?.currentValue || '0');
         // need to change as document layout
-        // documentlayouts = parseInt(settingParameters?.formattedData[
-        //   parameterKeyIndex.documentlayouts
-        // ]?.currentValue || '0')
-        // documentlayoutstype = parseInt(settingParameters?.formattedData[
-        //   parameterKeyIndex.dataMigration
-        // ]?.typeValueCurrent)
+        documentlayouts = parseFloat(settingParameters?.formattedData[
+          parameterKeyIndex.documnentLayout
+        ]?.currentValue || '0')
+        documentlayoutstype = parseFloat(settingParameters?.formattedData[
+          parameterKeyIndex.documnentLayout
+        ]?.typeValueCurrent)
       }
       const F4Parameter = hoursPerday * 5;
       
@@ -87,6 +91,8 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
       (analisisDesignPre?.responseCustomisationDesign?.customisationBuild?.resultValueMSC || 0) + 
       (analisisDesignPre?.responseIntegration?.integration?.resultValueMSC || 0)
       console.log("Configured 1", FactorsModel)
+      console.log(isFte);
+      
     if (isFte) {
       const customizationLoop = await FactorsModel && FactorsModel.length && FactorsModel.map(async(factorItem: any, factorIndex: number) => {
         if (factorItem?.ad_QuestionNumber == '500000' || factorItem?.ad_QuestionNumber == '500100') {
@@ -95,13 +101,13 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
         if (factorItem?.ad_QuestionNumber == '201900') {
           if (factorItem?.answerChoice == 'End user training') {
             if (hasParameters) {
-              const totalLicenceCountSettingValue = parseInt(settingParameters?.formattedData[
+              const totalLicenceCountSettingValue = parseFloat(settingParameters?.formattedData[
                 parameterKeyIndex.users
               ]?.currentValue || '0')
-              const endUserTrainingUsersSettingValue = parseInt(settingParameters?.formattedData[
+              const endUserTrainingUsersSettingValue = parseFloat(settingParameters?.formattedData[
                 parameterKeyIndex.endUserTrainingUsers
               ]?.currentValue || '0')
-              const endUserTrainingSettingValue = parseInt(settingParameters?.formattedData[
+              const endUserTrainingSettingValue = parseFloat(settingParameters?.formattedData[
                 parameterKeyIndex.endUserTraining
               ]?.currentValue || '0')
               if (condition) {
@@ -233,7 +239,8 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
         returnObject.endUserTraining.resultValue = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMS = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMSC = endUserTrainingValue;
-
+        console.log(getFcolValue);
+        
         returnObject.projectRisk.estimateAveRate = getFcolValue;
         
       }
@@ -243,30 +250,26 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
       if (parameterModel?.length) {
         console.log("parameterModel", parameterModel);
         console.log("percentData", percentData);
-        console.log("documentlayoutstype", documentlayoutstype);
-
-        if (percentData?.[documentlayoutstype] === percentData?.[100000003]) {
+        console.log('documentlayoutstype ==> ', documentlayoutstype);
+        
+        if (percentData?.[documentlayoutstype] == percentData?.[100000003]) {
           // moscow
           const moscowCal = getMigratedMoscow(DocumentlayoutModel, romParameter, hoursPerday);
           returnObject.documentLayout.resultValue = moscowCal?.mustValue;
           returnObject.documentLayout.resultValueMS = moscowCal?.mustShouldValue;
           returnObject.documentLayout.resultValueMSC = moscowCal?.mustShouldCouldValue;
         } else {
-          console.log("layoutValue", layoutValue);
-          console.log("parameterModel[0]", parameterModel[0]);
-          console.log("hoursPerday[0]", hoursPerday)
-          console.log("condition[0]", condition)
-          console.log("mustCal[0]", mustCal)
-
-          if (percentData?.[parameterModel[0]?.documentlayoutstype] === percentData?.[100000001]) {
+          if (percentData?.[documentlayoutstype] == percentData?.[100000001]) {
             returnObject.documentLayout.resultValue = mustCal * (documentlayouts/100);
             returnObject.documentLayout.resultValueMS = mustShouldCal * (documentlayouts/100);
             returnObject.documentLayout.resultValueMSC = mustShouldCouldCal * (documentlayouts/100);
-          } else if (percentData?.[parameterModel[0]?.documentlayoutstype] === percentData?.[100000002]) {
+          } else if (percentData?.[documentlayoutstype] == percentData?.[100000002]) {
             returnObject.documentLayout.resultValue = romParameter == "Hours" ? documentlayouts : documentlayouts/hoursPerday;
             returnObject.documentLayout.resultValueMS = romParameter == "Hours" ? documentlayouts : documentlayouts/hoursPerday;
             returnObject.documentLayout.resultValueMSC = romParameter == "Hours" ? documentlayouts : (documentlayouts/hoursPerday);
           } else if (percentData?.[documentlayoutstype] == percentData?.[100000000]) { // FTE
+            console.log('==== fte =====> ', documentlayouts, h8, hoursPerday);
+            
             returnObject.documentLayout.resultValue = romParameter == "Hours" ? (documentlayouts * h8) : (documentlayouts * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.collateRequirment * h8)  // need to find H8
             returnObject.documentLayout.resultValueMS = romParameter == "Hours" ? (documentlayouts * g8) : (documentlayouts * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.collateRequirment * g8  // need to find G8
             returnObject.documentLayout.resultValueMSC = romParameter == "Hours" ? (documentlayouts * f8) :  (documentlayouts * f8)/hoursPerday
@@ -304,13 +307,13 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
             if (factorItem?.ad_QuestionNumber == '201900') {
               if (factorItem?.answerChoice == 'End user training') {
                 if (hasParameters) {
-                  const totalLicenceCountSettingValue = parseInt(settingParameters?.formattedData[
+                  const totalLicenceCountSettingValue = parseFloat(settingParameters?.formattedData[
                     parameterKeyIndex.users
                   ]?.currentValue || '0')
-                  const endUserTrainingUsersSettingValue = parseInt(settingParameters?.formattedData[
+                  const endUserTrainingUsersSettingValue = parseFloat(settingParameters?.formattedData[
                     parameterKeyIndex.endUserTrainingUsers
                   ]?.currentValue || '0')
-                  const endUserTrainingSettingValue = parseInt(settingParameters?.formattedData[
+                  const endUserTrainingSettingValue = parseFloat(settingParameters?.formattedData[
                     parameterKeyIndex.endUserTraining
                   ]?.currentValue || '0')
                   if (condition) {
@@ -436,8 +439,6 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
         returnObject.endUserTraining.resultValueMS = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMSC = endUserTrainingValue;
 
-      //   returnObject.projectRisk.estimateAveRate = getFcolValue;
-
         returnObject.projectRisk.estimateAveRate = getFcolValue;
         
       }
@@ -452,13 +453,13 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
     //     if (factorItem?.ad_QuestionNumber == '201900') {
     //       if (factorItem?.answerChoice == 'End user training') {
     //         if (hasParameters) {
-    //           const totalLicenceCountSettingValue = parseInt(settingParameters?.formattedData[
+    //           const totalLicenceCountSettingValue = parseFloat(settingParameters?.formattedData[
     //             parameterKeyIndex.users
     //           ]?.currentValue || '0')
-    //           const endUserTrainingUsersSettingValue = parseInt(settingParameters?.formattedData[
+    //           const endUserTrainingUsersSettingValue = parseFloat(settingParameters?.formattedData[
     //             parameterKeyIndex.endUserTrainingUsers
     //           ]?.currentValue || '0')
-    //           const endUserTrainingSettingValue = parseInt(settingParameters?.formattedData[
+    //           const endUserTrainingSettingValue = parseFloat(settingParameters?.formattedData[
     //             parameterKeyIndex.endUserTraining
     //           ]?.currentValue || '0')
     //           if (condition) {

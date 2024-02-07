@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Space, Select, Modal, Input } from 'antd';
 import { useState } from 'react';
 
-export default function SnapShotPopup({ snapshots, handleClose, open }: any) {
-  const [selectSnapshot, setSelectSnapshot] = useState();
+export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }: any) {
+  const [selectSnapshot, setSelectSnapshot] = useState(null);
 
   return (
-    <Modal open={open} title="Load Snapshot" onOk={open} onCancel={handleClose}>
+    <Modal open={open} title="Load Snapshot" onOk={() => selectSnapshot ? onSelect(selectSnapshot) : alert('Please select the snapshot')} onCancel={handleClose}>
       <Space wrap>
         <div style={{ 
           display: 'flex-column', 
@@ -15,7 +15,11 @@ export default function SnapShotPopup({ snapshots, handleClose, open }: any) {
           <div>Select Snapshot</div>
           <Select
             style={{ width: 450 }}
-            onSelect={(e) => setSelectSnapshot(e)}
+            onSelect={(e) => {
+              console.log('selelelelelelele ==> ', e)
+              setSelectSnapshot(e)
+              // onSelect(e)
+            }}
             options={snapshots?.map((snapshot: any) => {
               return {
                 value: snapshot?.seer_rominportalsnapshotid,
