@@ -279,7 +279,7 @@ const App = ({
           >
             <Button title="Refresh" className='btn-primary btn-small mr-10' onClick={(e) => initialTriggerHandler(e)}><AutorenewOutlinedIcon className="btn-icon" /></Button>
             {selectedButton == 'button2' && (
-              <div className='text-right'>
+              <div className='text-right flex-wrap-end'>
                 <DropDownButtons selectedButton={selectedButton} handleSaveSnapshot={handleSaveSnapshot} />
                 <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
                 formattedSettingHandler(e, initialFetchData);

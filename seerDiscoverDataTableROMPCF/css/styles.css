@@ -486,3 +486,7 @@ table {
   content: "" !important;
   display: none !important;
 }
+
+.MuiTooltip-popper {
+  font-size: 13px !important;
+}
