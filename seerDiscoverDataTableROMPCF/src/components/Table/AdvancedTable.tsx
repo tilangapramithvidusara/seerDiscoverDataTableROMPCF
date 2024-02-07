@@ -211,7 +211,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
           {columns?.length ? (
             <>
             <div> {type === "RequirementData" && 
-              <div style={{ display: 'flex', marginLeft: '12px' }}>
+              <div style={{ display: 'flex', padding: '10px 0' }}>
                 <Button style={{ 
                   marginRight: '10px', 
                   fontSize: '10px', 

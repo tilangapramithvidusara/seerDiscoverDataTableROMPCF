@@ -475,6 +475,9 @@ table {
   text-transform: 'none' 
 }
 
+.MuiMenuItem-root .MuiBox-root {
+  font-size: 13px;
+}
 .grouping-title {
   font-weight: bold;
 }
@@ -482,4 +485,12 @@ table {
 .MuiTableCell-root.MuiTableCell-body.MuiTableCell-sizeMedium.css-1dbaf3q-MuiTableCell-root::after {
   content: "" !important;
   display: none !important;
+}
+
+.MuiTooltip-popper {
+  font-size: 13px !important;
+}
+
+.loader-container {
+  min-height: 90vh;
 }
