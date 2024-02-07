@@ -490,3 +490,7 @@ table {
 .MuiTooltip-popper {
   font-size: 13px !important;
 }
+
+.loader-container {
+  min-height: 90vh;
+}
