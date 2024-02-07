@@ -8,13 +8,7 @@ export const generateSupportHandoverMValue = async(inititlaData: any, analisisDe
   let hasParameters = settingParameters && isSnapshotModeEnable;
 
   let fte = isFte ? true : false;
-  if (hasParameters) {
-    para_d4 = parseInt(settingParameters?.formattedData[
-      parameterKeyIndex.fteBase
-    ]?.currentValue || '0')
-    console.log("doc ==> ", para_d4);
-    
-  }
+
   let resultValue = 0;
   let resultValueMS = 0;
   let resultValueMSC = 0;
@@ -36,11 +30,22 @@ export const generateSupportHandoverMValue = async(inititlaData: any, analisisDe
   // seerMoscow
   try {
     const {parameterModel, fteValue} = inititlaData
-    let {hoursPerday} = parameterModel[0]
+    let {hoursPerday, supportHandOverType, supportHandOver} = parameterModel[0];
+    let supportHandOverValue = supportHandOver;
+    let supportHandOverTypeValue = supportHandOverType;
       if (hasParameters) {
-        hoursPerday = parseInt(settingParameters?.formattedData[
+        para_d4 = parseFloat(settingParameters?.formattedData[
+          parameterKeyIndex.fteBase
+        ]?.currentValue || '0')
+        hoursPerday = parseFloat(settingParameters?.formattedData[
           parameterKeyIndex.hoursPerDay
         ]?.currentValue || '0');
+        supportHandOverValue = parseFloat(settingParameters?.formattedData[
+          parameterKeyIndex.supportHandover
+        ]?.currentValue || '0')
+        supportHandOverTypeValue = parseFloat(settingParameters?.formattedData[
+          parameterKeyIndex.supportHandover
+        ]?.typeValueCurrent)
       }
     if (inititlaData) { // condition && 
       // Must Custom Requirement
@@ -73,79 +78,104 @@ export const generateSupportHandoverMValue = async(inititlaData: any, analisisDe
       // hoursPerWeek
 
       if (fte) {
-        if (hasParameters) {
-          const supportHandOverValue = parseInt(settingParameters?.formattedData[
-            parameterKeyIndex.supportHandover
-          ]?.currentValue || '0')
-          const supportHandOverTypeValue = parseInt(settingParameters?.formattedData[
-            parameterKeyIndex.supportHandover
-          ]?.typeValueCurrent)
-
-          if (percentData?.[supportHandOverTypeValue] == percentData?.[100000001]) {
-            returnObject.supportHandoverAveRateMilestone.resultValue = mustCal * (supportHandOverValue/100);
-            returnObject.supportHandoverAveRateMilestone.resultValueMS = mustShouldCal * (supportHandOverValue/100);
-            returnObject.supportHandoverAveRateMilestone.resultValueMSC = mustShouldCouldCal * (supportHandOverValue/100);
-          } else {
-            returnObject.supportHandoverAveRateMilestone.resultValue = mustCal * (para_d4); // not testing it need to get from backend
-            returnObject.supportHandoverAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
-            returnObject.supportHandoverAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
-          }
+        if (percentData?.[supportHandOverTypeValue] == percentData?.[100000001]) {
+          returnObject.supportHandoverAveRateMilestone.resultValue = mustCal * (supportHandOverValue/100);
+          returnObject.supportHandoverAveRateMilestone.resultValueMS = mustShouldCal * (supportHandOverValue/100);
+          returnObject.supportHandoverAveRateMilestone.resultValueMSC = mustShouldCouldCal * (supportHandOverValue/100);
         } else {
-          if (percentData?.[parameterModel[0]?.supportHandOverType] === percentData?.[100000001]) {
-            returnObject.supportHandoverAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.supportHandOver/100);
-            returnObject.supportHandoverAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.supportHandOver/100);
-            returnObject.supportHandoverAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.supportHandOver/100);
-          } else {
-            returnObject.supportHandoverAveRateMilestone.resultValue = mustCal * (para_d4); // not testing it need to get from backend
-            returnObject.supportHandoverAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
-            returnObject.supportHandoverAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
-          }
+          returnObject.supportHandoverAveRateMilestone.resultValue = mustCal * (para_d4); // not testing it need to get from backend
+          returnObject.supportHandoverAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
+          returnObject.supportHandoverAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
         }
+        // if (hasParameters) {
+        //   const supportHandOverValue = parseFloat(settingParameters?.formattedData[
+        //     parameterKeyIndex.supportHandover
+        //   ]?.currentValue || '0')
+        //   const supportHandOverTypeValue = parseFloat(settingParameters?.formattedData[
+        //     parameterKeyIndex.supportHandover
+        //   ]?.typeValueCurrent)
+
+        //   if (percentData?.[supportHandOverTypeValue] == percentData?.[100000001]) {
+        //     returnObject.supportHandoverAveRateMilestone.resultValue = mustCal * (supportHandOverValue/100);
+        //     returnObject.supportHandoverAveRateMilestone.resultValueMS = mustShouldCal * (supportHandOverValue/100);
+        //     returnObject.supportHandoverAveRateMilestone.resultValueMSC = mustShouldCouldCal * (supportHandOverValue/100);
+        //   } else {
+        //     returnObject.supportHandoverAveRateMilestone.resultValue = mustCal * (para_d4); // not testing it need to get from backend
+        //     returnObject.supportHandoverAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
+        //     returnObject.supportHandoverAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
+        //   }
+        // } else {
+        //   if (percentData?.[parameterModel[0]?.supportHandOverType] === percentData?.[100000001]) {
+        //     returnObject.supportHandoverAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.supportHandOver/100);
+        //     returnObject.supportHandoverAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.supportHandOver/100);
+        //     returnObject.supportHandoverAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.supportHandOver/100);
+        //   } else {
+        //     returnObject.supportHandoverAveRateMilestone.resultValue = mustCal * (para_d4); // not testing it need to get from backend
+        //     returnObject.supportHandoverAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
+        //     returnObject.supportHandoverAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
+        //   }
+        // }
         
       } else {
-        if (hasParameters) {
-          const supportHandOverValue = parseInt(settingParameters?.formattedData[
-            parameterKeyIndex.supportHandover
-          ]?.currentValue || '0')
-          const supportHandOverTypeValue = parseInt(settingParameters?.formattedData[
-            parameterKeyIndex.supportHandover
-          ]?.typeValueCurrent)
+        if (percentData?.[supportHandOverTypeValue] == percentData?.[100000001]) {
 
-          if (percentData?.[supportHandOverTypeValue] == percentData?.[100000001]) {
-
-            returnObject.supportHandover.resultValue = mustCal * (supportHandOverValue/100);
-            returnObject.supportHandover.resultValueMS = mustShouldCal * (supportHandOverValue/100);
-            returnObject.supportHandover.resultValueMSC = mustShouldCouldCal * (supportHandOverValue/100);
-          } else if (percentData?.[supportHandOverTypeValue] == percentData?.[100000002]) { // hours
-            
-            returnObject.supportHandover.resultValue = romParameter == "Hours" ? supportHandOverValue : supportHandOverValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver
-            returnObject.supportHandover.resultValueMS = romParameter == "Hours" ? supportHandOverValue : supportHandOverValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver
-            returnObject.supportHandover.resultValueMSC = romParameter == "Hours" ? supportHandOverValue : supportHandOverValue/hoursPerday
-          } else if (percentData?.[supportHandOverTypeValue] == percentData?.[100000000]) { // FTE
-            // dont need yet
-            returnObject.supportHandover.resultValue = romParameter == "Hours" ? (supportHandOverValue * h8) : (supportHandOverValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.supportHandOver * h8)  // need to find H8
-            returnObject.supportHandover.resultValueMS = romParameter == "Hours" ? (supportHandOverValue * g8) : (supportHandOverValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver * g8  // need to find G8
-            returnObject.supportHandover.resultValueMSC = romParameter == "Hours" ? (supportHandOverValue * f8) : (supportHandOverValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver * f8  // need to find F8
-          }
-
-        } else {
-          if (percentData?.[parameterModel[0]?.supportHandOverType] === percentData?.[100000001]) {
-
-            returnObject.supportHandover.resultValue = mustCal * (parameterModel[0]?.supportHandOver/100);
-            returnObject.supportHandover.resultValueMS = mustShouldCal * (parameterModel[0]?.supportHandOver/100);
-            returnObject.supportHandover.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.supportHandOver/100);
-          } else if (percentData?.[parameterModel[0]?.supportHandOverType] === percentData?.[100000002]) { // hours
-            
-            returnObject.supportHandover.resultValue = romParameter == "Hours" ? parameterModel[0]?.supportHandOver : parameterModel[0]?.supportHandOver/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver
-            returnObject.supportHandover.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.supportHandOver : parameterModel[0]?.supportHandOver/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver
-            returnObject.supportHandover.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.supportHandOver : parameterModel[0]?.supportHandOver/parameterModel[0]?.hoursPerday
-          } else if (percentData?.[parameterModel[0]?.supportHandOverType] === percentData?.[100000000]) { // FTE
-            // dont need yet
-            returnObject.supportHandover.resultValue = romParameter == "Hours" ? (parameterModel[0]?.supportHandOver * h8) : (parameterModel[0]?.supportHandOver * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.supportHandOver * h8)  // need to find H8
-            returnObject.supportHandover.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.supportHandOver * g8) : (parameterModel[0]?.supportHandOver * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver * g8  // need to find G8
-            returnObject.supportHandover.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.supportHandOver * f8) : (parameterModel[0]?.supportHandOver * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver * f8  // need to find F8
-          }
+          returnObject.supportHandover.resultValue = mustCal * (supportHandOverValue/100);
+          returnObject.supportHandover.resultValueMS = mustShouldCal * (supportHandOverValue/100);
+          returnObject.supportHandover.resultValueMSC = mustShouldCouldCal * (supportHandOverValue/100);
+        } else if (percentData?.[supportHandOverTypeValue] == percentData?.[100000002]) { // hours
+          
+          returnObject.supportHandover.resultValue = romParameter == "Hours" ? supportHandOverValue : supportHandOverValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver
+          returnObject.supportHandover.resultValueMS = romParameter == "Hours" ? supportHandOverValue : supportHandOverValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver
+          returnObject.supportHandover.resultValueMSC = romParameter == "Hours" ? supportHandOverValue : supportHandOverValue/hoursPerday
+        } else if (percentData?.[supportHandOverTypeValue] == percentData?.[100000000]) { // FTE
+          // dont need yet
+          returnObject.supportHandover.resultValue = romParameter == "Hours" ? (supportHandOverValue * h8) : (supportHandOverValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.supportHandOver * h8)  // need to find H8
+          returnObject.supportHandover.resultValueMS = romParameter == "Hours" ? (supportHandOverValue * g8) : (supportHandOverValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver * g8  // need to find G8
+          returnObject.supportHandover.resultValueMSC = romParameter == "Hours" ? (supportHandOverValue * f8) : (supportHandOverValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver * f8  // need to find F8
         }
+        // if (hasParameters) {
+        //   const supportHandOverValue = parseFloat(settingParameters?.formattedData[
+        //     parameterKeyIndex.supportHandover
+        //   ]?.currentValue || '0')
+        //   const supportHandOverTypeValue = parseFloat(settingParameters?.formattedData[
+        //     parameterKeyIndex.supportHandover
+        //   ]?.typeValueCurrent)
+
+        //   if (percentData?.[supportHandOverTypeValue] == percentData?.[100000001]) {
+
+        //     returnObject.supportHandover.resultValue = mustCal * (supportHandOverValue/100);
+        //     returnObject.supportHandover.resultValueMS = mustShouldCal * (supportHandOverValue/100);
+        //     returnObject.supportHandover.resultValueMSC = mustShouldCouldCal * (supportHandOverValue/100);
+        //   } else if (percentData?.[supportHandOverTypeValue] == percentData?.[100000002]) { // hours
+            
+        //     returnObject.supportHandover.resultValue = romParameter == "Hours" ? supportHandOverValue : supportHandOverValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver
+        //     returnObject.supportHandover.resultValueMS = romParameter == "Hours" ? supportHandOverValue : supportHandOverValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver
+        //     returnObject.supportHandover.resultValueMSC = romParameter == "Hours" ? supportHandOverValue : supportHandOverValue/hoursPerday
+        //   } else if (percentData?.[supportHandOverTypeValue] == percentData?.[100000000]) { // FTE
+        //     // dont need yet
+        //     returnObject.supportHandover.resultValue = romParameter == "Hours" ? (supportHandOverValue * h8) : (supportHandOverValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.supportHandOver * h8)  // need to find H8
+        //     returnObject.supportHandover.resultValueMS = romParameter == "Hours" ? (supportHandOverValue * g8) : (supportHandOverValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver * g8  // need to find G8
+        //     returnObject.supportHandover.resultValueMSC = romParameter == "Hours" ? (supportHandOverValue * f8) : (supportHandOverValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver * f8  // need to find F8
+        //   }
+
+        // } else {
+        //   if (percentData?.[parameterModel[0]?.supportHandOverType] === percentData?.[100000001]) {
+
+        //     returnObject.supportHandover.resultValue = mustCal * (parameterModel[0]?.supportHandOver/100);
+        //     returnObject.supportHandover.resultValueMS = mustShouldCal * (parameterModel[0]?.supportHandOver/100);
+        //     returnObject.supportHandover.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.supportHandOver/100);
+        //   } else if (percentData?.[parameterModel[0]?.supportHandOverType] === percentData?.[100000002]) { // hours
+            
+        //     returnObject.supportHandover.resultValue = romParameter == "Hours" ? parameterModel[0]?.supportHandOver : parameterModel[0]?.supportHandOver/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver
+        //     returnObject.supportHandover.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.supportHandOver : parameterModel[0]?.supportHandOver/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver
+        //     returnObject.supportHandover.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.supportHandOver : parameterModel[0]?.supportHandOver/parameterModel[0]?.hoursPerday
+        //   } else if (percentData?.[parameterModel[0]?.supportHandOverType] === percentData?.[100000000]) { // FTE
+        //     // dont need yet
+        //     returnObject.supportHandover.resultValue = romParameter == "Hours" ? (parameterModel[0]?.supportHandOver * h8) : (parameterModel[0]?.supportHandOver * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.supportHandOver * h8)  // need to find H8
+        //     returnObject.supportHandover.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.supportHandOver * g8) : (parameterModel[0]?.supportHandOver * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver * g8  // need to find G8
+        //     returnObject.supportHandover.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.supportHandOver * f8) : (parameterModel[0]?.supportHandOver * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.supportHandOver * f8  // need to find F8
+        //   }
+        // }
         
       }
       

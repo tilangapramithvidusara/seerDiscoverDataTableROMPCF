@@ -20,7 +20,7 @@ import { generateUATEnvironmentPreparationMValue } from "./uat.environment.prepa
 import { generateUATSupportMValue } from "./uat.support.utils";
 import { setEstimateAveRateAnalysisDesign } from "../../redux/report/reportSlice";
 import { parameterKeyIndex } from "../../Constants/parametersSetting";
-import { checkTypeParseInt } from "../setting.values.convertor.utils";
+import { checkTypeparseFloat } from "../setting.values.convertor.utils";
 
 export const generateIColoumnValue = async(inititlaData: any, title: string, dispatch: any, hasFteValue?: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   console.log('pppp ==> ', settingParameters, isSnapshotModeEnable);
@@ -222,7 +222,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
   
   try {
     const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
-    console.log('o', responseAnalisisDesign);
+    console.log('o===', responseAnalisisDesign);
     
     const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable)
     const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
@@ -293,12 +293,12 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         console.log('q1q1q1q1q ==> ', settingParameters?.formattedData[
           parameterKeyIndex?.hourlyRate
         ]?.currentValue, parameterKeyIndex?.hourlyRate);
-        hoursPerday = checkTypeParseInt(settingParameters?.formattedData[
+        hoursPerday = checkTypeparseFloat(settingParameters?.formattedData[
           parameterKeyIndex.hoursPerDay
         ]?.currentValue || '0')
         hourlyRate = {
           ...hourlyRate,
-          value: parseInt(settingParameters?.formattedData[
+          value: parseFloat(settingParameters?.formattedData[
             parameterKeyIndex.hourlyRate
           ]?.currentValue || '0')
         }
@@ -893,6 +893,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
     }
 
     ////////////////ESTIMATE RESOURCE MILESTONE START///////////////
+    console.log('resultValueAnalisisDesign ==> ', resultValueAnalisisDesign);
     
     return {
       analysisDesing: {
@@ -1250,7 +1251,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
     const {BaseData, resourceModelData, ModuleData, parameterModel} = inititlaData
     let {hoursPerday} = parameterModel[0];
     if (hasParameters) {
-      hoursPerday = parseInt(settingParameters?.formattedData[
+      hoursPerday = parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.hoursPerDay
       ]?.currentValue || '0')
     }

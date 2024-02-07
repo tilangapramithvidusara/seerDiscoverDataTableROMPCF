@@ -27,11 +27,14 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   const [customisationData, setCustomisationData] = React.useState([]);
   const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
   const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
+  const showSaveParameters = useSelector((state: any) => state?.snapshot?.showSaveParameters)
+  const showLoadedParameters = useSelector((state: any) => state?.snapshot?.showLoadedParameters)
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
+  const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
 
   React.useEffect(() => {
     initialTriggerHandler();
-    saveSnapshotAsync(imageUrl)
+    // saveSnapshotAsync(imageUrl)
   }, []);
   
   React.useMemo(() => {    
@@ -50,7 +53,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     }
   }
 
-  const arrayGeneratorHandler = async() => {
+  const arrayGeneratorHandler = async(isLive?: boolean) => {
     setIsloading(true)
     
     const requirment: any = dataMapper(data?.OutputData);
@@ -72,8 +75,11 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
       setCustomisationData(customisation)
     }
     console.log('+++', isSnapshotModeEnable && settingParameters);
+    const modeStatus = isLive ? !isLive : (isSnapshotModeEnable || showSaveParameters || showLoadedParameters);
+    const parameterSet = showSaveParameters ? snapshotSettingParameters : settingParameters;
+    console.log('parameterSet => ', parameterSet, modeStatus);
     
-    arrayGenerator(data, dispatch, settingParameters, isSnapshotModeEnable)
+    arrayGenerator(data, dispatch, parameterSet, modeStatus)
       .then(async(result: any) => {
         // Handle the result here
         console.log('llll', result?.reducerValues);

@@ -8,12 +8,12 @@ export const setDataSetAveRate = async(data: any, dataEstimateAverageRateMilesto
   const {parameterModel} = initialDataSet;
   let {hourlyRate, hoursPerday} = parameterModel[0];
     if (hasParameters) {
-      hoursPerday = parseInt(settingParameters?.formattedData[
+      hoursPerday = parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.hoursPerDay
       ]?.currentValue || '0');
       hourlyRate = {
         ...hourlyRate,
-        value: parseInt(settingParameters?.formattedData[
+        value: parseFloat(settingParameters?.formattedData[
           parameterKeyIndex.hourlyRate
         ]?.currentValue || '0')
       }

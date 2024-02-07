@@ -10,6 +10,8 @@ import { useSelector } from 'react-redux';
 
 
 export const columnFixed = (columnArray: any, data: any, currency: string) => {
+  console.log('columnFixed currency ==> ', currency);
+  
     
   // const AggregatedGroupRow = ({ row }) => {
   //   const customRowStyle = {
@@ -107,7 +109,22 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
             }
           }
         }
-      } : null,
+      } : 
+      // (props: any) => {
+      //   // nameCategory  column
+      //   console.log('990i00-', props);
+        
+      //   if (props?.row?.groupingValue) {
+      //     return(
+      //       <Box sx={{textAlign: 'left', fontWeight: 'bold', textDecorationColor: 'black', color: 'black'}}>
+      //         {
+      //           props?.row?.groupingValue
+      //         }
+      //       </Box>
+      //     )
+      //   } else return null
+      // },
+      null,
       aggregationFn: columnItem?.aggregationFn ? columnItem?.aggregationFn : null,
       AggregatedCell: columnItem?.aggregationFn ? ({ cell, table }: { cell: any, table: any }) => {
         const clickable = cell?.row?._valuesCache?.name == 'Analysis and Design';        
@@ -157,7 +174,7 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
       //       </Box>
       //     </div>
       // )
-    } :  null,
+    } : null,
 
       Footer: columnItem?.showBottomTotal ? (props: any) => {
         
@@ -176,7 +193,7 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
               )
             } else {
               return(
-                <Box color="white" sx={{textAlign: 'right'}} >
+                <Box color="white" sx={{textAlign: 'right', fontWeight: 'bold'}} >
                 {totalColumn(columnItem?.accessorKey)?.toLocaleString?.('en-US', {
                 style: 'currency',
                   currency: (currency || 'GBP'),
@@ -207,7 +224,7 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
         // nameCategory  column
         if (props?.column?.id.includes('nameCategory')) {
           return(
-            <Box color="white" sx={{textAlign: 'left'}}>
+            <Box color="white" sx={{textAlign: 'left', fontWeight: 'bold'}}>
               Total
             </Box>
           )

@@ -28,6 +28,7 @@ import { dayHoursText, defaultText } from '../../Constants';
 import { columnRequirementData } from '../../Constants/requirementsData';
 import { columnCustomisationData } from '../../Constants/cutomisationData';
 import { columnDataLayoutData } from '../../Constants/dataLayouts';
+import { parameterKeyIndex } from '../../Constants/parametersSetting';
 
 const buttonTitles= [
     {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
@@ -45,7 +46,13 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
   // const [isRefreshing, setIsRefreshing] = React.useState<boolean>(isLoading || false);
   // const [isComLoading, setComIsloading] = React.useState<boolean>(isLoading || false);
   const [resourceType, setResourceType] = React.useState<string>('Must');  
-  const currency = useSelector((state: any) => state?.report?.currency)
+  const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
+  const isLiveModeEnable = useSelector((state: any) => state?.snapshot?.isLiveModeEnable)
+  const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
+  const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
+  const showSaveParameters = useSelector((state: any) => state?.snapshot?.showSaveParameters)
+  const showLoadedParameters = useSelector((state: any) => state?.snapshot?.showLoadedParameters)
+  let currency = useSelector((state: any) => state?.report?.currency)
   const [typeLoader, setTypeLoader] = React.useState(false);
   const [columnsSet, setColumnSet] = React.useState(type == 'RequirementData' ? columnRequirementData : type !== 'Estimate Resource' ? columnDetails : 
   estimateResourceMustColumnDetails
@@ -125,8 +132,10 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
   }, [resourceType, type, tableMode]) // resourceType
   
   const columns = useMemo<MRT_ColumnDef<any>[]>(
-    () => columnFixed(columnsSet, tabData, currency),
-    [columnsSet],
+    () => columnFixed(columnsSet, tabData, (!isLiveModeEnable && showSaveParameters) ? snapshotSettingParameters?.formattedData[
+      parameterKeyIndex.currency
+    ]?.currentValue || 'GBP' : currency),
+    [columnsSet, currency, showSaveParameters, isLiveModeEnable],
   );//columnsSet
   console.log('llop', columns);
   

@@ -17,12 +17,12 @@ export const generateEstimateResourceValue = (
     const {ProjectTasktModel, resourceModelData, parameterModel} = inititlaData;
     let {hoursPerday, hourlyRate} = parameterModel[0]
     if (hasParameters) {
-      hoursPerday = parseInt(settingParameters?.formattedData[
+      hoursPerday = parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.hoursPerDay
       ]?.currentValue || '0');
       hourlyRate = {
         ...hourlyRate,
-        value: parseInt(settingParameters?.formattedData[
+        value: parseFloat(settingParameters?.formattedData[
           parameterKeyIndex.hourlyRate
         ]?.currentValue || '0')
       }
@@ -306,7 +306,7 @@ export const calculateProjectManagerEstimateResource = async(inititlaData: any, 
   const {parameterModel} = inititlaData;
   let {hoursPerday} = parameterModel[0]
   if (hasParameters) {
-    hoursPerday = parseInt(settingParameters?.formattedData[
+    hoursPerday = parseFloat(settingParameters?.formattedData[
       parameterKeyIndex.hoursPerDay
     ]?.currentValue || '0');
   }
@@ -342,10 +342,10 @@ export const calculateProjectManagerEstimateResource = async(inititlaData: any, 
   
   try {
     if (hasParameters) {
-      const projectManagementValue = parseInt(settingParameters?.formattedData[
+      const projectManagementValue = parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.projectManagement
       ]?.currentValue || '0')
-      const projectManagementTypeValue = parseInt(settingParameters?.formattedData[
+      const projectManagementTypeValue = parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.projectManagement
       ]?.typeValueCurrent)
 

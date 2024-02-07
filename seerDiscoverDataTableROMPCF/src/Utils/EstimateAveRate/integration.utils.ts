@@ -28,7 +28,7 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
     const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, FactorsModel, IntegrationModel} = inititlaData
     let {hoursPerday} = parameterModel[0]
       if (hasParameters) {
-        hoursPerday = parseInt(settingParameters?.formattedData[
+        hoursPerday = parseFloat(settingParameters?.formattedData[
           parameterKeyIndex.hoursPerDay
         ]?.currentValue || '0');
       }
@@ -96,10 +96,10 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
             // Check if the type is "Size" and the lookup is less than or equal to 9
             console.log('1q1q1q1==> ', param.type === 'Size' && param.lookup <= r2.toString(), param.type, param.lookup);
             if (param.type === 'Size') {
-              console.log('1q1q1q==> ', parseInt(param?.lookup) <= r2, param.type, param.lookup, parseInt(param?.lookup), r2);
-              if (parseInt(param?.lookup) <= r2) {
+              console.log('1q1q1q==> ', parseFloat(param?.lookup) <= r2, param.type, param.lookup, parseFloat(param?.lookup), r2);
+              if (parseFloat(param?.lookup) <= r2) {
                 // Update maxObject if the current lookup is greater
-                if (!maxObject || parseInt(param.lookup) > parseInt(maxObject.lookup)) {
+                if (!maxObject || parseFloat(param.lookup) > parseFloat(maxObject.lookup)) {
                   maxObject = param;
                 }
               }
