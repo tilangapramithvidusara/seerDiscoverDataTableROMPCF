@@ -22,7 +22,7 @@ import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import Settings from "@mui/icons-material/Settings";
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
-import { setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
+import { setResourceModelDataParameters, setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
 import { loadSnapshotsAsync, saveInitialSnapshotRecordAsync } from "../redux/snapshotReport/snapshoAsync";
 import FormDialog from "./Form";
 import { convertJsonToBase64 } from "../Utils/commonFunc.utils";
@@ -170,6 +170,7 @@ const App = ({
     } else {
       const formatedData = parameterModelConvertToTableJson(initFetchedData?.parameterModel);
       dispatch(setSettingParameters(formatedData))
+      dispatch(setResourceModelDataParameters(initFetchedData?.resourceModelData))
       console.log('formatedData => ', formatedData);
     } 
     setOpenSettingPopup(true)

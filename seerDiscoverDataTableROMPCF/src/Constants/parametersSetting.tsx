@@ -72,3 +72,17 @@ export const parameterKeyIndex = {
   // '30': '',
   // '31': '',
 }
+
+
+// RESOURCE TABLE HEADINGS
+export const resourceParameterColumn = [
+  {
+    header: 'Name',
+  },
+  {
+    header: 'Rate'
+  },
+  {
+    header: 'Cost'
+  }
+]
