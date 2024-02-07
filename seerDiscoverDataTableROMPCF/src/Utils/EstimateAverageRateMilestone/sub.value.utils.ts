@@ -17,7 +17,7 @@ import { generateTrainTheTrainerMValue } from "../EstimateAveRate/train.the.trai
 import { generateUATEnvironmentPreparationMValue } from "../EstimateAveRate/uat.environment.preparation.utils";
 import { generateUATSupportMValue } from "../EstimateAveRate/uat.support.utils";
 import { romParameter } from "../../Constants/fteConstants";
-import { checkTypeParseInt } from "../setting.values.convertor.utils";
+import { checkTypeparseFloat } from "../setting.values.convertor.utils";
 import { parameterKeyIndex } from "../../Constants/parametersSetting";
 import { baseReader, baseReaderConfiguration, moduleReader, moduleReaderConfiguration } from "../EstimateAveRate/analysis.design.utils";
 
@@ -29,7 +29,7 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
   const condition = romParameter === "Days";
   const hasParameters = settingParameters && isSnapshotModeEnable;
   if (hasParameters) {
-    para_d4 = parseInt(settingParameters?.formattedData[
+    para_d4 = parseFloat(settingParameters?.formattedData[
       parameterKeyIndex.fteBase
     ]?.currentValue || '0')
     console.log("doc ==> ", para_d4);
@@ -225,12 +225,12 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
     const {parameterModel} = inititlaData;
     let {hourlyRate, hoursPerday} = parameterModel[0];
     if (hasParameters) {
-      hoursPerday = parseInt(settingParameters?.formattedData[
+      hoursPerday = parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.hoursPerDay
       ]?.currentValue || '0');
       hourlyRate = {
         ...hourlyRate,
-        value: parseInt(settingParameters?.formattedData[
+        value: parseFloat(settingParameters?.formattedData[
           parameterKeyIndex.hourlyRate
         ]?.currentValue || '0')
       }
@@ -534,7 +534,7 @@ export const checkConditionAndGenerateValue = (calculatedValue: number, hourlyRa
 //    // need to check with 'Estimate - Resource Milestone'!$C$1
 //   let hasParameters = settingParameters && isSnapshotModeEnable;
 //   if (hasParameters) {
-//     para_d4 = parseInt(settingParameters?.formattedData[
+//     para_d4 = parseFloat(settingParameters?.formattedData[
 //       parameterKeyIndex.fteBase
 //     ]?.currentValue || '0')
 //     console.log("doc ==> ", para_d4);
@@ -601,12 +601,12 @@ export const checkConditionAndGenerateValue = (calculatedValue: number, hourlyRa
 //     const {BaseData, resourceModelData, ModuleData, parameterModel} = inititlaData
 //     let {hourlyRate, hoursPerday} = parameterModel[0];
 //     if (hasParameters) {
-//       hoursPerday = checkTypeParseInt(settingParameters?.formattedData[
+//       hoursPerday = checkTypeparseFloat(settingParameters?.formattedData[
 //         parameterKeyIndex.hoursPerDay
 //       ]?.currentValue || '0');
 //       hourlyRate = {
 //         ...hourlyRate,
-//         value: parseInt(settingParameters?.formattedData[
+//         value: parseFloat(settingParameters?.formattedData[
 //           parameterKeyIndex.hourlyRate
 //         ]?.currentValue || '0')
 //       }
@@ -934,7 +934,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
    const {BaseData, resourceModelData, ModuleData, parameterModel} = inititlaData
    let {hoursPerday} = parameterModel[0];
    if (hasParameters) {
-     hoursPerday = parseInt(settingParameters?.formattedData[
+     hoursPerday = parseFloat(settingParameters?.formattedData[
        parameterKeyIndex.hoursPerDay
      ]?.currentValue || '0')
    }

@@ -73,7 +73,7 @@ export const generateCustomRequirementMValue = async(inititlaData: any, conditio
     const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, CustomRequirmentModel} = inititlaData
     let {hoursPerday} = parameterModel[0]
     if (hasParameters) {
-      hoursPerday = parseInt(settingParameters?.formattedData[
+      hoursPerday = parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.hoursPerDay
       ]?.currentValue || '0');
     }

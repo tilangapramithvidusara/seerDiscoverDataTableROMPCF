@@ -38,12 +38,12 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
     console.log('a', hourlyRate);
     hourlyRate = {
       ...hourlyRate,
-      value: parseInt(settingParameters?.formattedData[
+      value: parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.hourlyRate
       ]?.currentValue || '0')
     }
     console.log('b');
-    hoursPerday = parseInt(settingParameters?.formattedData[
+    hoursPerday = parseFloat(settingParameters?.formattedData[
       parameterKeyIndex.hoursPerDay
     ]?.currentValue || '0');
     console.log('c');
@@ -71,6 +71,7 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
     }
     
     const analisisAndDesignCalculation: any = await generateIColoumnValue({...initialDataSet, fteValue}, analysisAndDesign.row, dispatch, hasFteValue, settingParameters, isSnapshotModeEnable);
+    // data[0] = Object.assign({}, data[0], { M: analisisAndDesignCalculation?.analysisDesing?.resultValue });
     (data[0] as any).M = analisisAndDesignCalculation?.analysisDesing?.resultValue;
     (data[0] as any)['M/S'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMS;
     (data[0] as any)['M/S/C'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMSC;

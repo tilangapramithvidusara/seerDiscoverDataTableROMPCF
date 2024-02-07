@@ -13,6 +13,25 @@ export const fteDropdown: any = [
   }
 ]
 
+export const fteDropdownWithMoscow: any = [
+  {
+    label: 'Percent',
+    value: '100000001'
+  },
+  {
+    label: 'Hours',
+    value: '100000002'
+  },
+  {
+    label: 'FTE',
+    value: '100000000'
+  },
+  {
+    label: 'MoSCoW',
+    value: '100000003'
+  },
+]
+
 export const currencyDropdown: any = [
   {
     value: 'AUD',

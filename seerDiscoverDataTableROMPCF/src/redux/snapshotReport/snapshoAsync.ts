@@ -2,6 +2,7 @@ import { setRecordId, setBaseJson, setSnapshotLoading, setSettingParameters, set
 import { convertBase64ToJson, executeAfterGivenDilay } from '../../Utils/commonFunc.utils';
 import { seerBasejson, seerUpdatedsnapshotdata } from '../../Constants/endPoints';
 import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
+import { showAlertError, showAlertSuccess } from '../../Utils/Alerts';
 
 declare global {
   interface Window {
@@ -39,13 +40,16 @@ export const saveInitialSnapshotRecordAsync : any = (info: any) => {
           url: snapshotAPIConstants.INITIAL_SNAPSHOT_URL,
           data: JSON.stringify(record),
           success: function (data: any, textStatus: any, xhr: any) {
+            console.log('snapshot success ===> ', data, textStatus);
+            
               var newId = xhr.getResponseHeader("entityid");
               console.log("newId", newId);
               dispatch(setRecordId(newId))
               dispatch(saveSnapshotAsync({requestNumber: 1, recodeId: newId, ...info}))
           },
           error: function (xhr: any, textStatus: any, errorThrown: any) {
-            console.log("xhr", xhr);
+            console.log("snapshot failed xhr", xhr);
+            console.log("snapshot failed", textStatus, errorThrown);
           }
       });
     } catch (error) {
@@ -87,15 +91,24 @@ export const saveSnapshotAsync = (info: any) => {
           success: function (data: any, textStatus: any, xhr: any) {
               console.log("File uploaded");
               if(requestNumber === 1){ 
-                console.log("Success 1", requestNumber)
+                console.log("Success 1", requestNumber, data, xhr)
+                console.log('Success one textStatus', textStatus);
+                
                 dispatch(saveSnapshotAsync({...info, requestNumber: 2}))
                 dispatch(setSnapshotLoading(false));
               }
-              else {console.log("Success 2", requestNumber)}
+              else {
+                console.log("Success 2", requestNumber, data, xhr)
+                console.log('Success two textStatus', textStatus);
+                // alert("Snapshot saved succesfully!")
+                dispatch(setSettingParameters(snapshotData))
+                showAlertSuccess("Snapshot saved succesfully!")
+              }
           },
           error: function (xhr: any, textStatus: any, errorThrown: any) {
             console.log("Error Request", requestNumber);
-              console.log(xhr);
+            console.log(xhr);
+            showAlertError("Snapshot failed to save!")
           }
       });
 
@@ -103,6 +116,7 @@ export const saveSnapshotAsync = (info: any) => {
       // loadSnapshotsAsync();
     } catch (error) {
       console.log('save snapshot error: ', error);
+      showAlertError("Snapshot failed to save!")
     } finally {
       executeAfterGivenDilay(() => {
         dispatch(setSnapshotLoading(false))
@@ -143,7 +157,7 @@ export const loadSnapshotsAsync: any = () => {
   }
 }
 
-export const loadSelectedSnapshotAsync = (info: any) => {
+export const loadSelectedSnapshotAsync: any = (info: any) => {
   return async (dispatch: (arg0: any) => void) => {
     try {
       dispatch(setSnapshotLoading(true))
@@ -156,14 +170,14 @@ export const loadSelectedSnapshotAsync = (info: any) => {
         },
         success: function (data: any, textStatus: any, xhr: any) {
             var result = data;
-            console.log(result);
+            console.log("loadSelectedSnapshotAsync success", result);
             // Columns
             var seer_rominportalsnapshotid = result["seer_rominportalsnapshotid"];
             dispatch(getSnapshotBaseJSONFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid}))
             dispatch(getUpdatedSnapshotFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid}))
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
-            console.log(xhr);
+            console.log("loadSelectedSnapshotAsync failed", xhr);
         }
     });
     
@@ -193,7 +207,7 @@ export const getSnapshotBaseJSONFile = (info: any) => {
     
             console.log("File retrieved. Name: " + fileName);
             console.log("File fileContent. Name: " + fileContent);
-            console.log("File uploaded");
+            console.log("File retrived success");
             // dispatch(setBaseJson({...info, fileContent:fileContent, recordId: recodeId}));
             const convertedJSONData = convertBase64ToJson(fileContent);
             dispatch(setBaseJson(convertedJSONData));
