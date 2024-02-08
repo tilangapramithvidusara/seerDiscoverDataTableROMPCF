@@ -392,22 +392,27 @@ table {
   width: 100%;
 }
 
+.seerDiscoverROM .MuiInput-root:focus {
+  background-color: #ffffff;
+}
+
 .seerDiscoverROM input {
-  font-size: 16px;
+  font-size: 13px;
   background-color: transparent;
   border: none;
   width: 91%;
-  padding: 12px 12px;
+  padding: 7px 12px;
   font-family: 'Poppins', sans-serif;
 }
 
-.seerDiscoverROM input:hover {
-  background-color: #fffaf3;
+.seerDiscoverROM input:hover, .seerDiscoverROM input:focus {
+  background-color: transparent !important;
+  outline: none !important;
 }
 
 .seerDiscoverROM input:focus {
-  outline: 1px solid #ccc;
-  border: 1px solid #ccc;
+  background-color: #ffffff !important;
+  outline: none !important;
 }
 
 .seerDiscoverROM .ant-tabs th {
@@ -491,6 +496,10 @@ table {
   font-size: 13px !important;
 }
 
-.loader-container {
-  min-height: 90vh;
+.seerDiscoverROM {
+  min-height: 71vh;
+}
+
+.MuiFormControl-root.MuiFormControl-fullWidth.MuiTextField-root:focus {
+  background-color: #ffffff;
 }
