@@ -55,10 +55,6 @@ tr:nth-child(even) {
   z-index: 1000; /* Ensure it's above the blurred background */
 }
 
-.seerDiscoverROM {
-  font-family: 'Roboto', sans-serif !important;
-}
-
 .seerDiscoverROM .flex-wrap {
   display: flex;
   align-items: center;
