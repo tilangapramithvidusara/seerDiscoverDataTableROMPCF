@@ -6,15 +6,16 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
   const [selectSnapshot, setSelectSnapshot] = useState(null);
 
   return (
-    <Modal open={open} title="Load Snapshot" onOk={() => selectSnapshot ? onSelect(selectSnapshot) : alert('Please select the snapshot')} onCancel={handleClose}>
-      <Space wrap>
+    <Modal className='snapshot-modal' open={open} title="Load Snapshot" onOk={() => selectSnapshot ? onSelect(selectSnapshot) : alert('Please select the snapshot')} onCancel={handleClose}>
+      <Space wrap style={{width: '100%'}}>
         <div style={{ 
           display: 'flex-column', 
-          fontSize: '15px' 
+          fontSize: '14px',
+          marginBottom: '5px'
           }}>
           <div>Select Snapshot</div>
           <Select
-            style={{ width: 450 }}
+            style={{ width: '100%' }}
             onSelect={(e) => {
               console.log('selelelelelelele ==> ', e)
               setSelectSnapshot(e)
@@ -27,7 +28,7 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
               };
             })}
           />
-          <div style={{ marginTop: '5px' }}>
+          <div style={{ marginTop: '10px' }}>
             Description:{' '}
             <Input
               placeholder="Description"
@@ -41,7 +42,7 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
               }
             />
           </div>
-          <div style={{ marginTop: '5px' }}>
+          <div style={{ marginTop: '10px' }}>
             Created At:{' '}
             <Input
               placeholder="Created At"
