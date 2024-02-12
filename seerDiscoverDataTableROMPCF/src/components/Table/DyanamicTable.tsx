@@ -7,6 +7,9 @@ import {
   parameterBaseSettingColumns
 } from '../../Constants/parametersSetting';
 import {
+  setCurrentChangingParameters,
+  setCurrentSavedParameters,
+  setDoCalculation,
   setSettingParameterAttributes,
   setSettingParameters,
   setShowSaveParameters,
@@ -30,6 +33,9 @@ const DyanamicTable = ({ handleClose, tableNumber }: { handleClose: any, tableNu
   const [showSnapshotForm, setShowSnapshotForm] = useState(false);
   const [submitFormData, setSubmitFormData] = useState<any>();
 
+  // NEW STATE
+  const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters)
+
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
       console.log('Sentence changed:');
@@ -40,7 +46,10 @@ const DyanamicTable = ({ handleClose, tableNumber }: { handleClose: any, tableNu
 
   const onChangeHanlder = useCallback(
     (info) => {
-      dispatch(setSettingParameterAttributes(info));
+      // dispatch(setSettingParameterAttributes(info));
+      // NEW STATE
+
+      dispatch(setCurrentChangingParameters(info));
       // if (info?.isDropDown) {
       //   dispatch(setStateSnapshot(true));
       // }
@@ -71,6 +80,10 @@ const DyanamicTable = ({ handleClose, tableNumber }: { handleClose: any, tableNu
     console.log('22222222221112222 ===> ');
     dispatch(setShowSaveParameters(true))
     dispatch(setStateSnapshot(true))
+    dispatch(setCurrentSavedParameters(currentChangingParameters))
+    setTimeout(() => {
+      dispatch(setDoCalculation(true))
+    }, 2);
     console.log('22222222221113333 ===> ');
   };
 
@@ -82,16 +95,16 @@ const DyanamicTable = ({ handleClose, tableNumber }: { handleClose: any, tableNu
     }
   }, [isBaesline]);
 
-  const onSubmit = () => {
-    if (submitFormData?.name && submitFormData?.description) {
-        dispatch(saveInitialSnapshotRecordAsync({
-          seerName: submitFormData?.name,
-          baseData: convertJsonToBase64(baseJson), 
-          snapshotData: convertJsonToBase64(snapshotSettingParameters),
-          seerDescription: submitFormData?.description
-        }))
-      }
-}
+  // const onSubmit = () => {
+  //   if (submitFormData?.name && submitFormData?.description) {
+  //     dispatch(saveInitialSnapshotRecordAsync({
+  //       seerName: submitFormData?.name,
+  //       baseData: convertJsonToBase64(baseJson), 
+  //       snapshotData: convertJsonToBase64(snapshotSettingParameters),
+  //       seerDescription: submitFormData?.description
+  //     }))
+  //   }
+  // }
 
 const onClose = () => {
   setShowSnapshotForm(false);
@@ -113,7 +126,9 @@ const onClose = () => {
           </tr>
         </thead>
         <tbody>
-          {snapshotSettingParameters?.formattedData?.map((settingItem: Parameter, id: number) => {
+          {
+          // snapshotSettingParameters
+          currentChangingParameters?.formattedData?.map((settingItem: Parameter, id: number) => {
             console.log('seeeee ===> ', settingItem?.name == 'Data Migration' && settingItem);
             
             let name = settingItem?.name;

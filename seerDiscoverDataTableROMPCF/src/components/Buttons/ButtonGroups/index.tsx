@@ -2,7 +2,7 @@ import * as React from 'react'
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
-import { setIsLiveModeEnable, setStateSnapshot } from '../../../redux/snapshotReport/snapshotReportSlice';
+import { setDoCalculation, setIsLiveModeEnable, setStateSnapshot } from '../../../redux/snapshotReport/snapshotReportSlice';
 import { useDispatch } from 'react-redux';
 
 const index = (
@@ -27,6 +27,9 @@ const index = (
     if (newValue == 'button2')
       dispatch(setIsLiveModeEnable(false))
     else if (newValue == 'button1') {
+      // if (!buttonTitles || !buttonTitles.length) {
+      //   dispatch(setDoCalculation(true))
+      // }
       dispatch(setIsLiveModeEnable(true));
     }
     // setSelectedButton(newValue);
@@ -35,9 +38,9 @@ const index = (
       // }
     setTimeout(() => {
       setSelectedButton(newValue);
-      if (newValue == 'button1') {
-        arrayGeneratorHandler(true);
-      }
+      // if (newValue == 'button1') {
+      //   arrayGeneratorHandler(true);
+      // }
     }, 10);
     // setTimeout(() => {
     //   if (newValue == 'button1') {

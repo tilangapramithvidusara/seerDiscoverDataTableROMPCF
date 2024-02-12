@@ -9,7 +9,7 @@ import { initialFetchFailure, initialFetchSuccess, setEstimateAveRateAnalysisDes
 import Loader from "./components/Loader/Loader";
 import { dataMapper } from "./Utils/RequirmentData/requirement.data.utils";
 import { saveSnapshotAsync } from "./redux/snapshotReport/snapshoAsync";
-import { setBaseJson } from "./redux/snapshotReport/snapshotReportSlice";
+import { setBaseJson, setLiveBase, setSnapshotBase } from "./redux/snapshotReport/snapshotReportSlice";
 
 
 function Index({tableContent, context, imageUrl}: {tableContent: any, context: any, imageUrl?: any}) {
@@ -31,6 +31,17 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   const showLoadedParameters = useSelector((state: any) => state?.snapshot?.showLoadedParameters)
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
   const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
+  const selectedSnapshotFromDB = useSelector((state: any) => state?.snapshot?.selectedSnapshotFromDB);
+  const selectedBaseJson = useSelector((state: any) => state?.snapshot?.baseJson);
+
+  // NEW STATE
+  const liveParameters = useSelector((state: any) => state?.snapshot?.liveParameters);
+  const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters);
+  // const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters);
+  const snapshotParameters = useSelector((state: any) => state?.snapshot?.snapshotParameters);
+  const isLiveValue: boolean = useSelector((state: any) => state?.snapshot?.isLive);
+  const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
+  const liveBase = useSelector((state: any) => state?.snapshot?.liveBase)
 
   React.useEffect(() => {
     initialTriggerHandler();
@@ -47,6 +58,10 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     if (!inititalData.error) {
       dispatch(initialFetchSuccess(inititalData?.result));
       dispatch(setBaseJson(inititalData?.result))
+
+      // NEW STATE
+      dispatch(setLiveBase(inititalData?.result));
+      dispatch(setSnapshotBase(inititalData?.result));
     } else {
       setIsloading(false)
       dispatch(initialFetchFailure(inititalData?.result));
@@ -75,11 +90,17 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
       setCustomisationData(customisation)
     }
     console.log('+++', isSnapshotModeEnable && settingParameters);
-    const modeStatus = isLive ? !isLive : (isSnapshotModeEnable || showSaveParameters || showLoadedParameters);
-    const parameterSet = showSaveParameters ? snapshotSettingParameters : settingParameters;
-    console.log('parameterSet => ', parameterSet, modeStatus);
+    const modeStatus = !isLiveValue
+    console.log('j modeStatus ==> ', modeStatus, isLiveValue);
     
-    arrayGenerator(data, dispatch, parameterSet, modeStatus)
+    const parameterSet = modeStatus ? currentSavedParameters : liveParameters;
+    // showSaveParameters ? snapshotSettingParameters : settingParameters;
+    // console.log('parameterSet => ', parameterSet, modeStatus);
+    const dataBundle = modeStatus ? snapshotBase : (liveBase || data);
+    // console.log('(selectedSnapshotFromDB && modeStatus) ==> ', (selectedSnapshotFromDB && modeStatus));
+    // console.log('selectedBaseJson opo ==> ', selectedBaseJson);
+    
+    arrayGenerator(dataBundle, dispatch, parameterSet, modeStatus)
       .then(async(result: any) => {
         // Handle the result here
         console.log('llll', result?.reducerValues);

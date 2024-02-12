@@ -1,4 +1,4 @@
-import { setRecordId, setBaseJson, setSnapshotLoading, setSettingParameters, setLoadedSnapshot, setSnapshotList } from './snapshotReportSlice';
+import { setRecordId, setBaseJson, setSnapshotLoading, setSettingParameters, setLoadedSnapshot, setSnapshotList, setShowSaveParameters, setResourceModelDataParameters, setSelectedSnapshotFromDB, setStateSnapshot, setIsSnapshotLoading, setLoadedSnapshotId, setCurrentSavedParameters, setInitiallyCurrentChangingParameters, setCurrentSavedResources, setInitiallyCurrentChangingResources, setCurrentSavedProjectTasks, setInitiallyCurrentChangingProjectTasks, setSnapshotBase, setLoadedSnapshotDetails, setLoadedSnapshotDetailsWhenSave, setDoCalculation, setShowLoadedSnapshotBase, setShowLoadedSnapshotPametersNRates, setSnapshotParameters } from './snapshotReportSlice';
 import { convertBase64ToJson, executeAfterGivenDilay } from '../../Utils/commonFunc.utils';
 import { seerBasejson, seerUpdatedsnapshotdata } from '../../Constants/endPoints';
 import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
@@ -27,6 +27,9 @@ export const saveInitialSnapshotRecordAsync : any = (info: any) => {
     try {
       console.log("saving....");
       dispatch(setSnapshotLoading(true));
+
+      // NEW STATE
+      dispatch(setIsSnapshotLoading(true));
       const record: any = {};
       record[snapshotAPIConstants.SEER_ACCOUNT_RECORD_ID] = `/accounts(${accountId})`; // Lookup
       record[snapshotAPIConstants.SEER_CONTACT_RECORD_ID] = `/contacts(${contactId})`; // Lookup
@@ -50,21 +53,28 @@ export const saveInitialSnapshotRecordAsync : any = (info: any) => {
           error: function (xhr: any, textStatus: any, errorThrown: any) {
             console.log("snapshot failed xhr", xhr);
             console.log("snapshot failed", textStatus, errorThrown);
+            showAlertError("Failed to save snapshot");
+            dispatch(setIsSnapshotLoading(false))
+            dispatch(setSnapshotLoading(false))
           }
       });
     } catch (error) {
       console.log('save snapshot initial error: ', error);
+      showAlertError("Failed to save snapshot");
+      dispatch(setIsSnapshotLoading(false))
+      dispatch(setSnapshotLoading(false))
     } finally {
       executeAfterGivenDilay(() => {
         dispatch(setSnapshotLoading(false))
+        dispatch(setIsSnapshotLoading(false))
       });
     }
   }
 }
 
-export const saveSnapshotAsync = (info: any) => {
+export const saveSnapshotAsync: any = (info: any) => {
   console.log("Save snapshot Async", info)
-  return async (dispatch: (arg0: any) => void) => {
+  return async (dispatch: any) => {
     try {
       const {requestNumber, recodeId, baseData, snapshotData} = info;
       const endPoint = requestNumber == 1 ? seerBasejson : seerUpdatedsnapshotdata;
@@ -102,13 +112,30 @@ export const saveSnapshotAsync = (info: any) => {
                 console.log('Success two textStatus', textStatus);
                 // alert("Snapshot saved succesfully!")
                 dispatch(setSettingParameters(snapshotData))
+
+                // NEW STATES
+                dispatch(setLoadedSnapshotId(recodeId))
+                dispatch(setSnapshotBase(baseData));
+                dispatch(setLoadedSnapshotDetailsWhenSave({
+                  seer_rominportalsnapshotid: recodeId,
+                  seer_name: info?.seerName,
+                }));
+                
                 showAlertSuccess("Snapshot saved succesfully!")
+
+                // NEW STATES
+                dispatch(loadSnapshotsAsync());
+                
+                // TO NOT SHOWING CHANGE DATA AFTER SUCCESSFULLY SAVED
+                dispatch(setShowSaveParameters(false))
+                dispatch(setIsSnapshotLoading(false));
               }
           },
           error: function (xhr: any, textStatus: any, errorThrown: any) {
             console.log("Error Request", requestNumber);
             console.log(xhr);
             showAlertError("Snapshot failed to save!")
+            dispatch(setIsSnapshotLoading(false));
           }
       });
 
@@ -117,9 +144,11 @@ export const saveSnapshotAsync = (info: any) => {
     } catch (error) {
       console.log('save snapshot error: ', error);
       showAlertError("Snapshot failed to save!")
+      dispatch(setIsSnapshotLoading(false))
     } finally {
       executeAfterGivenDilay(() => {
         dispatch(setSnapshotLoading(false))
+        dispatch(setIsSnapshotLoading(false))
       });
     }
   }
@@ -144,7 +173,7 @@ export const loadSnapshotsAsync: any = () => {
             // setSnapshotConfigList("List results", results?.value);
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
-            console.log(xhr);
+          console.log(xhr);
         }
     });
     } catch (error) {
@@ -161,20 +190,20 @@ export const loadSelectedSnapshotAsync: any = (info: any) => {
   return async (dispatch: (arg0: any) => void) => {
     try {
       dispatch(setSnapshotLoading(true))
-      window.parent.webapi.safeAjax({
+      await window.parent.webapi.safeAjax({
         type: "GET",
         url: `/_api/seer_rominportalsnapshots(${info?.snapshotId})?$select=seer_rominportalsnapshotid,_seer_account_value,seer_basejson,seer_basejson_name,_seer_contact_value,createdon,modifiedon,seer_name,seer_updatedsnapshotdata,seer_updatedsnapshotdata_name`,
         contentType: "application/json",
         headers: {
             "Prefer": "odata.include-annotations=*"
         },
-        success: function (data: any, textStatus: any, xhr: any) {
+        success: async function (data: any, textStatus: any, xhr: any) {
             var result = data;
             console.log("loadSelectedSnapshotAsync success", result);
             // Columns
             var seer_rominportalsnapshotid = result["seer_rominportalsnapshotid"];
             dispatch(getSnapshotBaseJSONFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid}))
-            dispatch(getUpdatedSnapshotFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid}))
+            // dispatch(getUpdatedSnapshotFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid}))
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
             console.log("loadSelectedSnapshotAsync failed", xhr);
@@ -197,11 +226,11 @@ export const getSnapshotBaseJSONFile = (info: any) => {
   return async (dispatch: (arg0: any) => void) => {
     try {
       dispatch(setSnapshotLoading(true));
-      window.parent.webapi.safeAjax({
+      await window.parent.webapi.safeAjax({
         type: "GET",
         url: `/_api/seer_rominportalsnapshots(${recodeId})/seer_basejson`,
         contentType: "application/json",
-        success: function (data: any, textStatus: any, xhr: any) {
+        success: async function (data: any, textStatus: any, xhr: any) {
             var fileContent = data["value"]; // Base 64
             var fileName = "file.bin"; // default name
     
@@ -209,8 +238,9 @@ export const getSnapshotBaseJSONFile = (info: any) => {
             console.log("File fileContent. Name: " + fileContent);
             console.log("File retrived success");
             // dispatch(setBaseJson({...info, fileContent:fileContent, recordId: recodeId}));
-            const convertedJSONData = convertBase64ToJson(fileContent);
+            const convertedJSONData = await convertBase64ToJson(fileContent);
             dispatch(setBaseJson(convertedJSONData));
+            dispatch(getUpdatedSnapshotFile({requestNumber: 1, recodeId, convertedJSONData}))
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
             console.log(xhr);
@@ -227,27 +257,47 @@ export const getSnapshotBaseJSONFile = (info: any) => {
 }
 
 export const getUpdatedSnapshotFile = (info: any) => {
-  const {requestNumber, recodeId} = info;
+  const {requestNumber, recodeId, convertedJSONData} = info;
 
   return async (dispatch: (arg0: any) => void) => {
     try {
       dispatch(setSnapshotLoading(true));
-      window.parent.webapi.safeAjax({
+      await window.parent.webapi.safeAjax({
         type: "GET",
         url: `/_api/seer_rominportalsnapshots(${recodeId})/seer_updatedsnapshotdata`,
         contentType: "application/json",
-        success: function (data: any, textStatus: any, xhr: any) {
+        success: async function (data: any, textStatus: any, xhr: any) {
             var fileContent = data["value"]; // Base 64
             var fileName = "file.bin"; // default name
     
-            console.log("File retrieved. Name: " + fileName);
-            console.log("File fileContent. Name: " + fileContent);
+            console.log("File snapshot retrieved. Name: " + fileName);
+            console.log("File snapshot fileContent. Name: " + fileContent);
             console.log("File uploaded");
-            const convertedJSONData = convertBase64ToJson(fileContent);
-            dispatch(setSettingParameters(convertedJSONData));
+            const convertedJSONData = await convertBase64ToJson(fileContent);
+            const {snapshotResourceModelDataParameters, ...rest} = convertedJSONData;
+            dispatch(setSettingParameters(rest));
+            dispatch(setResourceModelDataParameters(snapshotResourceModelDataParameters));
+            dispatch(setSelectedSnapshotFromDB(recodeId));
+            dispatch(setShowSaveParameters(true));
+            dispatch(setStateSnapshot(true))
+
+            // NEW STATE
+            dispatch(setLoadedSnapshotId(recodeId));
+            dispatch(setLoadedSnapshotDetails(recodeId))
+            dispatch(setCurrentSavedParameters(rest));
+            dispatch(setInitiallyCurrentChangingParameters(rest))
+            dispatch(setSnapshotParameters(rest))
+            // dispatch(setCurrentSavedResources())
+            // dispatch(setInitiallyCurrentChangingResources())
+            // dispatch(setCurrentSavedProjectTasks())
+            // dispatch(setInitiallyCurrentChangingProjectTasks())
+            dispatch(setSnapshotBase(convertedJSONData));
+            dispatch(setDoCalculation(true));
+            dispatch(setShowLoadedSnapshotBase(true));
+            dispatch(setShowLoadedSnapshotPametersNRates(true));
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
-            console.log(xhr);
+          console.log(xhr);
         }
     });
     } catch (error) {

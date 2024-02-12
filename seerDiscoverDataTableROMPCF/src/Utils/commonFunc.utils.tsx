@@ -11,7 +11,7 @@ export const removeDuplicates : any = (array: any, removeKey: any) => {
 
 export const executeAfterGivenDilay = (task: () => void, timeout = 0) => setTimeout(task, timeout);
 
-export const convertJsonToBase64: any = (jsonData: any) => {
+export const convertJsonToBase64: any = async(jsonData: any) => {
   console.log('JSON Data', jsonData);
   let objJsonStr = JSON.stringify(jsonData);
   let objJsonB64 = Buffer.from(objJsonStr).toString("base64");
@@ -19,8 +19,11 @@ export const convertJsonToBase64: any = (jsonData: any) => {
   return objJsonB64
 };
 
-export const convertBase64ToJson : any = (base64Data: any) => {
+export const convertBase64ToJson : any = async(base64Data: any) => {
   console.log("base64Data", base64Data);
+  const convertValue = atob(base64Data)
+  console.log('type of  ==> ', typeof convertValue);
+  
   console.log("Converted Data", atob(base64Data))
   return JSON.parse(atob(base64Data))
 }
