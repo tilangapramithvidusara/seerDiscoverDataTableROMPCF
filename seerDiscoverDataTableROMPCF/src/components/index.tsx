@@ -22,12 +22,14 @@ import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import Settings from "@mui/icons-material/Settings";
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
-import { setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
-import { loadSnapshotsAsync, saveInitialSnapshotRecordAsync } from "../redux/snapshotReport/snapshoAsync";
+import { setCurrentSavedParameters, setDoCalculation, setInitiallyCurrentChangingParameters, setIsLive, setIsSnapshotEnable, setIsSnapshotLoading, setLiveBase, setLiveParameters, setResourceModelDataParameters, setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setSnapshotBase, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
+import { loadSnapshotsAsync, saveInitialSnapshotRecordAsync, saveSnapshotAsync } from "../redux/snapshotReport/snapshoAsync";
 import FormDialog from "./Form";
 import { convertJsonToBase64 } from "../Utils/commonFunc.utils";
 import SnapShotPopup from "./SnapshotPopup/SnapshotPopup";
-import { missingSnapshot } from "../Constants/messages";
+import { cancel, createNew, missingSnapshot, snapshotSaveConfirmMessage, updateExisting } from "../Constants/messages";
+import CustomDialog from "./Dialog/CommonDialog";
+import { checkDuplicates } from "../Utils/Validations/check.duplication.utils";
 
 const App = ({
   dataSet, onRefreshHandler, isRefreshing, 
@@ -134,10 +136,25 @@ const App = ({
   const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
   const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
-  const [submitFormData, setSubmitFormData] = React.useState({name: "", description: ""});
+  const resourceModelDataParameters = useSelector((state: any) => state?.snapshot?.resourceModelDataParameters || []);
+  const snapshotResourceModelDataParameters = useSelector((state: any) => state?.snapshot?.snapshotResourceModelDataParameters || []);  const [submitFormData, setSubmitFormData] = React.useState({name: "", description: ""});
   const snapshotsList = useSelector((state: any) => state.snapshot.snapshotsList);
   const [openLoadSnapshotModal, setOpenLoadSnapshotModal] = React.useState(false); // Initialize the state for selected item
   const isLoadingSnapshot = useSelector((state: any) => state?.snapshot?.isLoadingSnapshot || []);
+  const selectedSnapshotFromDB = useSelector((state: any) => state?.snapshot?.selectedSnapshotFromDB);
+
+  // new states
+  const [renderCount, setRenderCount] = React.useState(0);
+  const [openCustomDialog, setOpenCustomDialog] = React.useState(false);
+  const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters);
+  const currentSavedResources = useSelector((state: any) => state?.snapshot?.currentSavedResources);
+  const currentSavedProjectTasks = useSelector((state: any) => state?.snapshot?.currentSavedProjectTasks);
+  const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
+  const loadedSnapshotId = useSelector((state: any) => state?.snapshot?.loadedSnapshotId);
+  const doCalculation = useSelector((state: any) => state?.snapshot?.doCalculation);
+  const isLive = useSelector((state: any) => state?.snapshot?.isLive);
+  const loadedSnapshotDetails = useSelector((state: any) => state?.snapshot?.loadedSnapshotDetails);
+  const isSnapshotLoading = useSelector((state: any) => state?.snapshot?.isSnapshotLoading)
 
   const onChange = (key: string) => {
     console.log(key);
@@ -151,13 +168,20 @@ const App = ({
     const inititalData = await fetchInitialDataAsync();
     if (!inititalData.error) {
       dispatch(initialFetchSuccess(inititalData?.result));
+
+      // NEW STATE
+      dispatch(setLiveBase(inititalData?.result));
+      dispatch(setSnapshotBase(inititalData?.result));
     } else {
       setComIsloading(false)
       dispatch(initialFetchFailure(inititalData?.result));
     }
   }
 
-  const [selectedButton, setSelectedButton] = React.useState((!isLiveModeEnable && showSaveParameters) ? 'button2' : 'button1');
+  const [selectedButton, setSelectedButton] = React.useState(
+    // (!isLiveModeEnable && showSaveParameters) 
+    !isLive
+    ? 'button2' : 'button1');
   React.useEffect(() => {    
     setComIsloading(isRefreshing)
   }, [isRefreshing]);
@@ -169,10 +193,29 @@ const App = ({
       // set retrived data as setSettingParameter
     } else {
       const formatedData = parameterModelConvertToTableJson(initFetchedData?.parameterModel);
-      dispatch(setSettingParameters(formatedData))
-      console.log('formatedData => ', formatedData);
-    } 
+      console.log('pppp222 ==> ', formatedData);
+      
+      // dispatch(setSettingParameters(formatedData))
+      // dispatch(setResourceModelDataParameters(initFetchedData?.resourceModelData))
+      // console.log('formatedData => ', formatedData);
+
+      // NEW STATE
+      if (!loadedSnapshotId) {
+        console.log('dooom');
+        const formatedData = parameterModelConvertToTableJson(initFetchedData?.parameterModel);
+        dispatch(setLiveParameters(formatedData));
+        if (!currentSavedParameters) {
+          dispatch(setCurrentSavedParameters(formatedData));
+          dispatch(setInitiallyCurrentChangingParameters(formatedData))
+        }
+        
+        console.log('dooom2');
+      }
+    }
+    console.log('p0012122');
+     
     setOpenSettingPopup(true)
+    console.log('p00121221q1q1q');
   }
 
   const getSnapshotsListHandler = React.useCallback((info) => {
@@ -180,42 +223,167 @@ const App = ({
   }, [dispatch])
 
 
+  console.log('112322221==> ', doCalculation,
+  snapshotBase,
+  currentSavedParameters);
+  
   // only for check
-  React.useMemo(() => {
-    console.log('call meee', settingParameters && isSnapshotModeEnable);
-    console.log('isSnapshotModeEnable', isSnapshotModeEnable, showSaveParameters, showLoadedParameters);
-    // if (isLiveModeEnable) {
-    //   arrayGeneratorHandler(isLiveModeEnable);
-    // }
-    // if (settingParameters && isSnapshotModeEnable || showSaveParameters || showLoadedParameters) {
-    if (isSnapshotModeEnable && (showSaveParameters || showLoadedParameters)) {
-      // initialTriggerHandler(settingParameters);
-      arrayGeneratorHandler();
-      dispatch(setStateSnapshot(false))
-      // setTimeout(() => {
-      //   // arrayGeneratorHandler()
-      //   dispatch(setStateSnapshot(false))
-      // }, 1000)
+  // React.useEffect(() => {
+  //   console.log('call meee', settingParameters && isSnapshotModeEnable);
+  //   console.log('isSnapshotModeEnable', isSnapshotModeEnable, showSaveParameters, showLoadedParameters, selectedSnapshotFromDB);
+  //   // if (isLiveModeEnable) {
+  //   //   arrayGeneratorHandler(isLiveModeEnable);
+  //   // }
+  //   // if (settingParameters && isSnapshotModeEnable || showSaveParameters || showLoadedParameters) {
+
+  //   // old 
+  //   // if (isSnapshotModeEnable && (showSaveParameters || showLoadedParameters || selectedSnapshotFromDB)) {
+  //   //   // initialTriggerHandler(settingParameters);
+  //   //   arrayGeneratorHandler();
+  //   //   dispatch(setStateSnapshot(false))
+  //   //   // setTimeout(() => {
+  //   //   //   // arrayGeneratorHandler()
+  //   //   //   dispatch(setStateSnapshot(false))
+  //   //   // }, 1000)
       
-    }
-  }, [
-    // settingParameters,
-    isSnapshotModeEnable,
-    showSaveParameters,
-    showLoadedParameters,
-    isLiveModeEnable,
-  ])
+  //   // }
+  //   // new
+  //   if (doCalculation && currentSavedParameters && snapshotBase) {
+  //     console.log('fkflflflflf', currentSavedParameters);
+  //     dispatch(setDoCalculation(false))
+  //     // arrayGeneratorHandler();
+  //     // setTimeout(() => {
+  //     //   arrayGeneratorHandler();
+  //     // }, 1);
+  //   }
+  // }, [
+  //   // settingParameters,
+  //   // isSnapshotModeEnable,
+  //   // showSaveParameters,
+  //   // showLoadedParameters,
+  //   // isLiveModeEnable,
+  //   // selectedSnapshotFromDB,
+
+  //   doCalculation |
+  //   snapshotBase |
+  //   currentSavedParameters 
+  // ])
   // export const arrayGenerator = async (initialDataSet: any, dispatch: any, settingParameters?: any, isSnapshotModeEnable?: boolean)
 
-  React.useEffect(() => {
-    if(selectedButton === 'button2')  dispatch(loadSnapshotsAsync())
-    // else if (selectedButton === 'button1') arrayGeneratorHandler(true);
-  }, [selectedButton])
+  // React.useEffect(() => {
+  //   if(selectedButton === 'button2')  {
+  //     // NEW STATES CHANGES
+  //     dispatch(setIsLive(false))
+  //     dispatch(setIsSnapshotEnable(true))
+  //     // if (currentSavedParameters || loadedSnapshotId) {
+  //     //   // dispatch(setDoCalculation(true))
+  //     //   console.log('lo=4');
+        
+  //     //   arrayGeneratorHandler(false, {...currentSavedParameters, base: snapshotBase})
+  //     // }
+        
+
+  //     // old
+  //     dispatch(loadSnapshotsAsync())
+  //   } else if (selectedButton === 'button1') {
+  //     dispatch(setIsLive(true))
+  //     dispatch(setIsSnapshotEnable(false))
+  //     if (renderCount > 0) {
+  //       console.log('lo=5');
+  //       arrayGeneratorHandler(true);
+  //       // dispatch(setDoCalculation(true))
+  //     }
+        
+  //   }
+  //   setRenderCount(renderCount + 1);
+  //   // else if (selectedButton === 'button1') arrayGeneratorHandler(true);
+  // }, [selectedButton])
+
+  const modeHanlder = (buttonValue: string) => {
+    setSelectedButton(buttonValue);
+    if(buttonValue == 'button2')  {
+      // NEW STATES CHANGES
+      dispatch(setIsLive(false))
+      dispatch(setIsSnapshotEnable(true))
+      // if (currentSavedParameters || loadedSnapshotId) {
+      //   // dispatch(setDoCalculation(true))
+      //   console.log('lo=4');
+        
+      //   arrayGeneratorHandler(false, {...currentSavedParameters, base: snapshotBase})
+      // }
+        
+
+      // old
+      dispatch(loadSnapshotsAsync())
+    } else if (buttonValue == 'button1') {
+      dispatch(setIsLive(true))
+      dispatch(setIsSnapshotEnable(false))
+      if (renderCount > 0) {
+        console.log('lo=5');
+        // arrayGeneratorHandler(true);
+        // dispatch(setDoCalculation(true))
+      }
+        
+    }
+    setRenderCount(renderCount + 1);
+  }
+
+  const onClickYes = () => {
+    dispatch(setIsSnapshotLoading(true))
+    setOpenCustomDialog(false)
+    dispatch(saveSnapshotAsync({
+      requestNumber: 1,
+      recodeId: loadedSnapshotId,
+      seerName: submitFormData?.name,
+      baseData: convertJsonToBase64(snapshotBase), 
+      snapshotData: convertJsonToBase64({
+        ...currentSavedParameters, 
+        // currentSavedResources,
+        // currentSavedProjectTasks,
+      }),
+      seerDescription: submitFormData?.description,
+      arrayGeneratorHandler,
+    }));
+    // setOpenCustomDialog(false)
+  }
+
+  const onClickNo = () => {
+    setOpenSaveSnapshotPopup(true);
+    setOpenCustomDialog(false)
+  }
 
   const handleSaveSnapshot = () => {
     console.log("handleSaveSnapshot");
-    if (snapshotSettingParameters.length) {
-      setOpenSaveSnapshotPopup(true);
+    // if (snapshotSettingParameters && snapshotResourceModelDataParameters) {
+    //   setOpenSaveSnapshotPopup(true);
+    // } else {
+    //   alert(missingSnapshot);
+    // }
+
+    // NEW STATES
+    if (currentSavedParameters 
+      // && currentSavedResources && currentSavedProjectTasks
+      ) {
+        if (loadedSnapshotId) {
+          setOpenCustomDialog(true)
+          // dispatch(setIsSnapshotLoading(true))
+          // dispatch(saveSnapshotAsync({
+          //   requestNumber: 1,
+          //   recodeId: loadedSnapshotId,
+          //   seerName: submitFormData?.name,
+          //   baseData: convertJsonToBase64(snapshotBase), 
+          //   snapshotData: convertJsonToBase64({
+          //     ...currentSavedParameters, 
+          //     // currentSavedResources,
+          //     // currentSavedProjectTasks,
+          //   }),
+          //   seerDescription: submitFormData?.description,
+          //   arrayGeneratorHandler,
+          // }))
+        } else {
+          setOpenSaveSnapshotPopup(true);
+        }
+        
     } else {
       alert(missingSnapshot);
     }
@@ -224,13 +392,40 @@ const App = ({
   const onSubmit = () => {
     console.log("Submitted", submitFormData, snapshotSettingParameters);
     if (submitFormData?.name && submitFormData?.description) {
-      dispatch(saveInitialSnapshotRecordAsync({
-        seerName: submitFormData?.name,
-        baseData: convertJsonToBase64(baseJson), 
-        snapshotData: convertJsonToBase64(snapshotSettingParameters),
-        seerDescription: submitFormData?.description
-      }))
+      // dispatch(saveInitialSnapshotRecordAsync({
+      //   seerName: submitFormData?.name,
+      //   baseData: convertJsonToBase64(baseJson), 
+      //   snapshotData: convertJsonToBase64({...snapshotSettingParameters, snapshotResourceModelDataParameters}),
+      //   seerDescription: submitFormData?.description
+      // }));
+
+      // NEW STATES
+      if (snapshotsList) {
+        if (checkDuplicates(snapshotsList, submitFormData?.name, 'seer_name')) {
+          alert('Duplicates names are not allowed!')
+        } else {
+          submitRecord();
+        }
+      } else {
+        submitRecord();
+      }
+      
+      
     }
+  }
+
+  const submitRecord = () => {
+    dispatch(saveInitialSnapshotRecordAsync({
+      seerName: submitFormData?.name,
+      baseData: convertJsonToBase64(snapshotBase), 
+      snapshotData: convertJsonToBase64({
+        ...currentSavedParameters, 
+        // currentSavedResources,
+        // currentSavedProjectTasks,
+      }),
+      seerDescription: submitFormData?.description,
+      arrayGeneratorHandler,
+    }))
   }
 
   React.useEffect(() => {
@@ -256,7 +451,14 @@ const App = ({
         {selectedButton == 'button2' && (
           <div >
             <span className="blue-text">Snapshot Name: </span>
-            <span className="gray-text">Unsaved</span>
+            {/* {selectedSnapshotFromDB ? (
+              <span className="gray-text">{selectedSnapshotFromDB?.seer_name}{loadedSnapshotDetails?.seer_name}</span>
+            )  */}
+            {loadedSnapshotDetails ? (
+              <span className="gray-text">{loadedSnapshotDetails?.seer_name}</span>
+            ) : (
+              <span className="gray-text">Unsaved</span>
+            )}
           </div>
         )}
         </div>
@@ -268,7 +470,7 @@ const App = ({
                 {/* <InputLabel className="label mr-10">Mode</InputLabel> */}
               </Grid>
               {/* buttonTitles */}
-              <ButtonGroups setSelectedButton={setSelectedButton} selectedButton={selectedButton} arrayGeneratorHandler={arrayGeneratorHandler} />
+              <ButtonGroups setSelectedButton={modeHanlder} selectedButton={selectedButton} arrayGeneratorHandler={arrayGeneratorHandler}  />
             </Stack>
             {/* <DropDownButtons selectedButton={selectedButton} /> */}
           </Box>
@@ -277,10 +479,13 @@ const App = ({
           // className='text-right'
           // style={{margin: '2px', height: '10px !important', fontSize: '11px !important'}}
           >
-            <Button title="Refresh" className='btn-primary btn-small mr-10' onClick={(e) => initialTriggerHandler(e)}><AutorenewOutlinedIcon className="btn-icon" /></Button>
+            {selectedButton == 'button1' && (
+              <Button title="Refresh" className='btn-primary btn-small mr-10' onClick={(e) => initialTriggerHandler(e)}><AutorenewOutlinedIcon className="btn-icon" /></Button>
+            )}
+            
             {selectedButton == 'button2' && (
               <div className='text-right flex-wrap-end'>
-                <DropDownButtons selectedButton={selectedButton} handleSaveSnapshot={handleSaveSnapshot} />
+                <DropDownButtons selectedButton={selectedButton} handleSaveSnapshot={handleSaveSnapshot} arrayGeneratorHandler={arrayGeneratorHandler} />
                 <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
                 formattedSettingHandler(e, initialFetchData);
               
@@ -302,7 +507,7 @@ const App = ({
       </Grid> 
       <div>
         {openSettingPopup && (
-          <DialogComponent setOpenSettingPopup={setOpenSettingPopup} openSettingPopup={openSettingPopup}/>
+          <DialogComponent setOpenSettingPopup={setOpenSettingPopup} openSettingPopup={openSettingPopup} arrayGeneratorHandler={arrayGeneratorHandler}/>
         )}
       </div>
       <Tabs size="small" defaultActiveKey="1" items={items} onChange={onChange} />
@@ -315,6 +520,30 @@ const App = ({
          handleClose={() => setOpenSaveSnapshotPopup(false)}
        /> : <> </>
       }
+      {openCustomDialog && (
+        <CustomDialog 
+          title={snapshotSaveConfirmMessage}
+          open={openCustomDialog}
+          handleClose={() => setOpenCustomDialog(false)}
+          buttons={
+            [
+              {
+                text: updateExisting,
+                action: onClickYes
+              },
+              {
+                text: createNew,
+                action: onClickNo
+              },
+              {
+                text: cancel,
+                action: () => setOpenCustomDialog(false)
+              }
+            ]
+          }
+        />
+      )}
+      
     </>
   )
 }

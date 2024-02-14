@@ -9,7 +9,7 @@ import { initialFetchFailure, initialFetchSuccess, setEstimateAveRateAnalysisDes
 import Loader from "./components/Loader/Loader";
 import { dataMapper } from "./Utils/RequirmentData/requirement.data.utils";
 import { saveSnapshotAsync } from "./redux/snapshotReport/snapshoAsync";
-import { setBaseJson } from "./redux/snapshotReport/snapshotReportSlice";
+import { setBaseJson, setLiveBase, setSnapshotBase } from "./redux/snapshotReport/snapshotReportSlice";
 
 
 function Index({tableContent, context, imageUrl}: {tableContent: any, context: any, imageUrl?: any}) {
@@ -31,6 +31,17 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   const showLoadedParameters = useSelector((state: any) => state?.snapshot?.showLoadedParameters)
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
   const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
+  const selectedSnapshotFromDB = useSelector((state: any) => state?.snapshot?.selectedSnapshotFromDB);
+  const selectedBaseJson = useSelector((state: any) => state?.snapshot?.baseJson);
+
+  // NEW STATE
+  const liveParameters = useSelector((state: any) => state?.snapshot?.liveParameters);
+  const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters);
+  // const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters);
+  const snapshotParameters = useSelector((state: any) => state?.snapshot?.snapshotParameters);
+  const isLiveValue: boolean = useSelector((state: any) => state?.snapshot?.isLive);
+  const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
+  const liveBase = useSelector((state: any) => state?.snapshot?.liveBase)
 
   React.useEffect(() => {
     initialTriggerHandler();
@@ -47,19 +58,30 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     if (!inititalData.error) {
       dispatch(initialFetchSuccess(inititalData?.result));
       dispatch(setBaseJson(inititalData?.result))
+
+      // NEW STATE
+      dispatch(setLiveBase(inititalData?.result));
+      dispatch(setSnapshotBase(inititalData?.result));
     } else {
       setIsloading(false)
       dispatch(initialFetchFailure(inititalData?.result));
     }
   }
 
-  const arrayGeneratorHandler = async(isLive?: boolean) => {
+  const arrayGeneratorHandler = async(isLive?: boolean, requestObj?: any, mode?: string) => {
     setIsloading(true)
+
+    console.log('lo=', currentSavedParameters);
+    console.log('lo=2', requestObj);
     
-    const requirment: any = dataMapper(data?.OutputData);
-    const customisation: any = dataMapper(data?.CustomisationModels, 'customisation');
-    const documentLayouts: any = dataMapper(data?.DocumentlayoutModel, 'documentLayouts');
-    const dataMigrations: any = dataMapper(data?.DataMigrationModel, 'dataMigrations')
+    
+
+    const modeStatus = (mode && mode == 'snapshot') ? true : isLive ? !isLive : !isLiveValue;
+    
+    const requirment: any = dataMapper(modeStatus ? snapshotBase?.OutputData : data?.OutputData);
+    const customisation: any = dataMapper(modeStatus ? snapshotBase?.CustomisationModels : data?.CustomisationModels, 'customisation');
+    const documentLayouts: any = dataMapper(modeStatus ? snapshotBase?.DocumentlayoutModel : data?.DocumentlayoutModel, 'documentLayouts');
+    const dataMigrations: any = dataMapper(modeStatus ? snapshotBase?.DataMigrationModel : data?.DataMigrationModel, 'dataMigrations')
 
     if (requirment?.length) {
       setRequirementData(requirment?.filter((req: {seer_FitGap: string}) => req?.seer_FitGap !== 'Gap'));
@@ -70,16 +92,26 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     if (documentLayouts?.length) {
       setDocumentLayouts(documentLayouts);
     }
-
     if (customisation?.length) {
       setCustomisationData(customisation)
     }
-    console.log('+++', isSnapshotModeEnable && settingParameters);
-    const modeStatus = isLive ? !isLive : (isSnapshotModeEnable || showSaveParameters || showLoadedParameters);
-    const parameterSet = showSaveParameters ? snapshotSettingParameters : settingParameters;
-    console.log('parameterSet => ', parameterSet, modeStatus);
+
+    console.log('+++', currentSavedParameters);
     
-    arrayGenerator(data, dispatch, parameterSet, modeStatus)
+    console.log('j modeStatus ==> ', modeStatus, isLiveValue);
+
+    
+    
+    const parameterSet = modeStatus ? ((requestObj?.formattedData ? {formattedData: requestObj?.formattedData} : null) || currentSavedParameters) : liveParameters;
+    // showSaveParameters ? snapshotSettingParameters : settingParameters;
+    // console.log('parameterSet => ', parameterSet, modeStatus);
+    const dataBundle = modeStatus ? (requestObj?.base || snapshotBase) : (liveBase || data);
+    // console.log('(selectedSnapshotFromDB && modeStatus) ==> ', (selectedSnapshotFromDB && modeStatus));
+    // console.log('selectedBaseJson opo ==> ', selectedBaseJson);
+    console.log("parameterSet -------> ", parameterSet);
+    console.log("parameterSet -------> ", parameterSet);
+    
+    arrayGenerator(dataBundle, dispatch, parameterSet, modeStatus)
       .then(async(result: any) => {
         // Handle the result here
         console.log('llll', result?.reducerValues);

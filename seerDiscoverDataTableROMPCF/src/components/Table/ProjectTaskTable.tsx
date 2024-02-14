@@ -7,11 +7,8 @@ import {
   parameterBaseSettingColumns
 } from '../../Constants/parametersSetting';
 import {
-  setCurrentChangingParameters,
-  setCurrentSavedParameters,
-  setDoCalculation,
-  setSettingParameterAttributes,
-  setSettingParameters,
+  setProjectTasktModelParameters,
+  setProjectTasktModelParameterAttributes,
   setShowSaveParameters,
   setStateSnapshot
 } from '../../redux/snapshotReport/snapshotReportSlice';
@@ -23,7 +20,7 @@ import {
 } from '../../redux/snapshotReport/snapshoAsync';
 import { convertBase64ToJson, convertJsonToBase64 } from '../../Utils/commonFunc.utils';
 
-const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { handleClose: any, tableNumber?: number, arrayGeneratorHandler?: any }) => {
+const ProjectTaskTable = ({ handleClose, tableNumber }: { handleClose: any, tableNumber?: number }) => {
   const dispatch = useDispatch();
   const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
   const [isBaesline, setIsBaseline] = useState(false);
@@ -32,11 +29,6 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
   const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
   const [showSnapshotForm, setShowSnapshotForm] = useState(false);
   const [submitFormData, setSubmitFormData] = useState<any>();
-
-  // NEW STATE
-  const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters)
-  const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
-  const initialFetchData = useSelector((state: any) => state.report.initialFetchData);
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
@@ -48,10 +40,7 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
 
   const onChangeHanlder = useCallback(
     (info) => {
-      // dispatch(setSettingParameterAttributes(info));
-      // NEW STATE
-
-      dispatch(setCurrentChangingParameters(info));
+      dispatch(setProjectTasktModelParameterAttributes(info));
       // if (info?.isDropDown) {
       //   dispatch(setStateSnapshot(true));
       // }
@@ -64,7 +53,7 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
   // call this when retrive success
   const handleSetSettingParameters = useCallback(
     (info) => {
-      dispatch(setSettingParameters(info));
+      dispatch(setProjectTasktModelParameters(info));
     },
     [dispatch]
   );
@@ -79,14 +68,9 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
     console.log('2222222222111 ===> ');
     
     setShowSnapshotForm(true);
-    console.log('22222222221112222 ===> ', currentChangingParameters);
+    console.log('22222222221112222 ===> ');
     dispatch(setShowSaveParameters(true))
     dispatch(setStateSnapshot(true))
-    dispatch(setCurrentSavedParameters(currentChangingParameters))
-    arrayGeneratorHandler(false, {...currentChangingParameters, base: snapshotBase ? snapshotBase : initialFetchData}, 'snapshot')
-    // setTimeout(() => {
-      // dispatch(setDoCalculation(true))
-    // }, 2);
     console.log('22222222221113333 ===> ');
   };
 
@@ -98,16 +82,16 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
     }
   }, [isBaesline]);
 
-  // const onSubmit = () => {
-  //   if (submitFormData?.name && submitFormData?.description) {
-  //     dispatch(saveInitialSnapshotRecordAsync({
-  //       seerName: submitFormData?.name,
-  //       baseData: convertJsonToBase64(baseJson), 
-  //       snapshotData: convertJsonToBase64(snapshotSettingParameters),
-  //       seerDescription: submitFormData?.description
-  //     }))
-  //   }
-  // }
+  const onSubmit = () => {
+    if (submitFormData?.name && submitFormData?.description) {
+        dispatch(saveInitialSnapshotRecordAsync({
+          seerName: submitFormData?.name,
+          baseData: convertJsonToBase64(baseJson), 
+          snapshotData: convertJsonToBase64(snapshotSettingParameters),
+          seerDescription: submitFormData?.description,
+        }))
+      }
+}
 
 const onClose = () => {
   setShowSnapshotForm(false);
@@ -129,9 +113,7 @@ const onClose = () => {
           </tr>
         </thead>
         <tbody>
-          {
-          // snapshotSettingParameters
-          currentChangingParameters?.formattedData?.map((settingItem: Parameter, id: number) => {
+          {snapshotSettingParameters?.formattedData?.map((settingItem: Parameter, id: number) => {
             console.log('seeeee ===> ', settingItem?.name == 'Data Migration' && settingItem);
             
             let name = settingItem?.name;
@@ -252,4 +234,4 @@ const onClose = () => {
   );
 };
 
-export default DyanamicTable;
+export default ProjectTaskTable;

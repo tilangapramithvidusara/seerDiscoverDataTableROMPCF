@@ -6,12 +6,12 @@ import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import DownloadingOutlinedIcon from '@mui/icons-material/DownloadingOutlined';
 import UpdateOutlined from '@mui/icons-material/UpdateOutlined';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectSnapshot } from '../../../redux/snapshotReport/snapshotReportSlice';
+import { setDoCalculation, setSelectSnapshot } from '../../../redux/snapshotReport/snapshotReportSlice';
 import SnapShotPopup from '../../SnapshotPopup/SnapshotPopup';
-import { loadSelectedSnapshotAsync } from '../../../redux/snapshotReport/snapshoAsync';
+import { loadSelectedSnapshotAsync, loadSelectedSnapshotAsyncTEST } from '../../../redux/snapshotReport/snapshoAsync';
 
-const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, handleSaveSnapshot}: 
-  {selectedButton: any, hasSnapshots?: boolean, selectItem?: any, selectedItemParent?: string, handleSaveSnapshot?: any}) => {
+const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, handleSaveSnapshot, arrayGeneratorHandler}: 
+  {selectedButton: any, hasSnapshots?: boolean, selectItem?: any, selectedItemParent?: string, handleSaveSnapshot?: any, arrayGeneratorHandler?: any}) => {
   const dispatch = useDispatch()
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -41,7 +41,10 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
   }, [dispatch])
 
   const loadSelectedSnapshotHandler = React.useCallback((info) => {
-    dispatch(loadSelectedSnapshotAsync({snapshotId: info}))
+    dispatch(setDoCalculation(false))
+    dispatch(loadSelectedSnapshotAsync({snapshotId: info, arrayGeneratorHandler}))
+    // dispatch(setDoCalculation(false))
+    // dispatch(loadSelectedSnapshotAsyncTEST({arrayGeneratorHandler}));
   }, [dispatch])
 
   const handleMenuItemClick = (itemValue: any) => {
@@ -83,7 +86,10 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
               className='btn-blue-outline btn-small mr-10'  
               aria-haspopup="true" 
               // onClick={handleClick}
-              onClick={() => setOpenLoadSnapshotModal(!openLoadSnapshotModal)}
+              onClick={() => {
+                // loadSelectedSnapshotHandler({})
+                setOpenLoadSnapshotModal(!openLoadSnapshotModal)
+              }}
             >
               <DownloadingOutlinedIcon className='btn-icon'/> 
             </Button>

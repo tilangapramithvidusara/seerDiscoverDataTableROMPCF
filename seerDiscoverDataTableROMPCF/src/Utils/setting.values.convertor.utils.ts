@@ -24,6 +24,17 @@ export interface Parameter {
   currentValueDropdownValues?: string[]
 }
 
+export interface ProjectTask {
+  name: string,
+  projectTaskCustomer_Name: string | null,
+  projectTaskCustomer_Resource: {
+    id: string,
+    name: string,
+  } | null,
+  projectTaskCustomer_ResourceSecondary: any,
+  projectTaskCustomer_ResourceSecondaryName: string | null
+}
+
 
 export const parameterModelConvertToTableJson = (parameterModel: any) => {
   let parameterObject = parameterModel[0];

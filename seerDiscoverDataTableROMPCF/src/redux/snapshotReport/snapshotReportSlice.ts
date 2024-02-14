@@ -103,6 +103,52 @@ const initialState: any = {
   showSaveParameters: false,
   showLoadedParameters: false,
   isLiveModeEnable: true,
+  snapshotResourceModelDataParameters: null,
+  resourceModelDataParameters: null,
+  snapshotProjectTasktModelParameters: null,
+  projectTasktModelParameters: null,
+
+  // NEW STATES
+
+  // new booleans
+  isSnapshotLoading: false,
+  isLive: true,
+  isSnapshotEnable: false,
+  doCalculation: true,
+  showLiveBase: true,
+  showLoadedSnapshotBase: false,
+  showLivePametersNRates: true,
+  showCurrentSavedPametersNRates: false,
+  showLoadedSnapshotPametersNRates: false,
+
+  // base data
+  liveBase: null,
+  snapshotBase: null,
+
+  // parameters
+  liveParameters: null,
+  currentSavedParameters: null,
+  currentChangingParameters: null,
+  snapshotParameters: null,
+  baseSnapshotParameters: null,
+
+  // resources
+  liveResources: null,
+  currentSavedResources: null,
+  currentChangingResources: null,
+  snapshotResources: null,
+  baseSnapshotResources: null,
+
+  // projectTasks
+  liveProjectTasks: null,
+  currentSavedProjectTasks: null,
+  currentChangingProjectTasks: null,
+  snapshotProjectTasks: null,
+  baseSnapshotProjectTasks: null,
+
+  // snapshot
+  loadedSnapshotId: null,
+  loadedSnapshotDetails: null,
 }
 
 const snapshotSlice: any = createSlice({
@@ -136,21 +182,6 @@ const snapshotSlice: any = createSlice({
     },
     setSettingParameters: (state, action) => {
       console.log('lloo ===--0 => ', action);
-      // const userIndex = state.settingParameters.findIndex((item: any) => item.name === action?.payload?.name);
-      // if (userIndex !== -1) {
-      //   // Use spread operator to create a new object with updated properties
-      //   // const updatedUser = { ...state.settingParameters[userIndex], name: newName, role: newRole };
-    
-      //   // // Update the array with the new object
-      //   // state.settingParameters = [
-      //   //   ...state.settingParameters.slice(0, userIndex),
-      //   //   updatedUser,
-      //   //   ...state.settingParameters.slice(userIndex + 1),
-      //   // ];
-    
-      //   // console.log('User edited successfully:', updatedUser);
-      // }
-    
       state.settingParameters = action.payload
       if (!state.showSaveParameters) {
         state.snapshotSettingParameters = action.payload;
@@ -201,6 +232,254 @@ const snapshotSlice: any = createSlice({
     },
     setShowLoadedParameters: (state, action) => {
       state.showLoadedParameters = action.payload
+    },
+    setResourceModelDataParameters: (state, action) => {
+      console.log('rates ===--0 => ', action);
+      state.resourceModelDataParameters = action.payload
+      if (!state.showSaveParameters) {
+        state.snapshotResourceModelDataParameters = action.payload;
+      }
+      
+    },
+    setResourceModelDataParameterAttributes: (state, action) => {
+      console.log('qaqa rates ===--02 => ', action);
+      const {payload: {key, value}} = action;
+      const stateValue = current(state)
+      const parameterValues = stateValue?.snapshotResourceModelDataParameters
+      console.log('ee',stateValue?.snapshotResourceModelDataParameters);
+      const paramerterIndex = parameterValues?.findIndex((item: any) => item.name === action?.payload?.name);
+      console.log('paramerterIndex snapshotResourceModelDataParameters', paramerterIndex);
+      if (paramerterIndex !== -1) {
+        // Use spread operator to create a new object with updated properties
+        const updatedPrameter = { 
+          ...parameterValues[paramerterIndex], 
+          [`${key}`]: value, 
+        };
+        console.log('snapshotResourceModelDataParameters => ', updatedPrameter);
+        state.snapshotResourceModelDataParameters = [
+          ...parameterValues.slice(0, paramerterIndex),
+          updatedPrameter,
+          ...parameterValues.slice(paramerterIndex + 1),
+        ];
+        console.log('User snapshotResourceModelDataParameters edited successfully:', state.snapshotResourceModelDataParameters);
+      }
+    },
+    setProjectTasktModelParameters: (state, action) => {
+      console.log('rates ===--0 => ', action);
+      state.projectTasktModelParameters = action.payload
+      if (!state.showSaveParameters) {
+        state.snapshotProjectTasktModelParameters = action.payload;
+      }
+    },
+    setProjectTasktModelParameterAttributes: (state, action) => {
+      console.log('qaqa rates ===--02 => ', action);
+      const {payload: {key, value}} = action;
+      const stateValue = current(state)
+      const parameterValues = stateValue?.snapshotProjectTasktModelParameters
+      console.log('ee',stateValue?.snapshotProjectTasktModelParameters);
+      const paramerterIndex = parameterValues?.findIndex((item: any) => item.name === action?.payload?.name);
+      console.log('paramerterIndex snapshotProjectTasktModelParameters', paramerterIndex);
+      if (paramerterIndex !== -1) {
+        // Use spread operator to create a new object with updated properties
+        const updatedPrameter = { 
+          ...parameterValues[paramerterIndex], 
+          [`${key}`]: value, 
+        };
+        console.log('snapshotProjectTasktModelParameters => ', updatedPrameter);
+        state.snapshotProjectTasktModelParameters = [
+          ...parameterValues.slice(0, paramerterIndex),
+          updatedPrameter,
+          ...parameterValues.slice(paramerterIndex + 1),
+        ];
+        console.log('User snapshotProjectTasktModelParameters edited successfully:', state.snapshotResourceModelDataParameters);
+      }
+    },
+    setSelectedSnapshotFromDB: (state, action) => {
+      if (action.payload) {
+        const snapshot = state?.snapshotsList?.find((snapshotItem: {
+          seer_rominportalsnapshotid: string,
+          seer_name: string,
+        }) => snapshotItem?.seer_rominportalsnapshotid == action.payload);
+        state.selectedSnapshotFromDB = snapshot;
+      } else {
+        state.selectedSnapshotFromDB = null;
+      }
+      
+    },
+
+
+    // NEW REDUCERS
+
+    // new booleans
+    setIsSnapshotLoading: (state, action) => {
+      state.isSnapshotLoading = action.payload
+    },
+    setIsLive: (state, action) => {
+      state.isLive = action.payload
+    },
+    setIsSnapshotEnable: (state, action) => {
+      state.isSnapshotEnable = action.payload
+    },
+    setDoCalculation: (state, action) => {
+      console.log('setDoCalculation ===> ', action.payload);
+      
+      state.doCalculation = action.payload
+    },
+    setShowLiveBase: (state, action) => {
+      state.showLiveBase = action.payload
+    },
+    setShowLoadedSnapshotBase: (state, action) => {
+      state.showLoadedSnapshotBase = action.payload;
+    },
+    setShowLivePametersNRates: (state, action) => {
+      state.showLivePametersNRates = action.payload
+    },
+    setShowCurrentSavedPametersNRates: (state, action) => {
+      state.showCurrentSavedPametersNRates = action.payload
+    },
+    setShowLoadedSnapshotPametersNRates: (state, action) => {
+      state.showLoadedSnapshotPametersNRates = action.payload
+    },
+
+    // base data
+    setLiveBase: (state, action) => {
+      state.liveBase = action.payload
+    },
+    // when retrive snapshot then can assign
+    setSnapshotBase: (state, action) => {
+      state.snapshotBase = action.payload
+    },
+
+    // parameters
+    setLiveParameters: (state, action) => {
+      state.liveParameters = action.payload;
+    },
+    setCurrentSavedParameters: (state, action) => {
+      console.log('0-=l;==> ', action.payload);
+      
+      state.currentSavedParameters = action.payload;
+    },
+    setInitiallyCurrentChangingParameters: (state, action) => {
+      state.currentChangingParameters = action.payload;
+    },
+    setCurrentChangingParameters: (state, action) => {
+      const {payload: {key, value}} = action;
+      const stateValue = current(state)
+      const parameterValues = stateValue?.currentChangingParameters?.formattedData;
+      
+      const paramerterIndex = parameterValues?.findIndex((item: any) => item.name === action?.payload?.name);
+      
+      if (paramerterIndex !== -1) {
+        // Use spread operator to create a new object with updated properties
+        const updatedPrameter = { 
+          ...parameterValues[paramerterIndex], 
+          [`${key}`]: value, 
+        };        
+    
+        // // Update the array with the new object
+        state.currentChangingParameters.formattedData = [
+          ...parameterValues.slice(0, paramerterIndex),
+          updatedPrameter,
+          ...parameterValues.slice(paramerterIndex + 1),
+        ];
+        console.log('User edited successfully:', state.currentChangingParameters);
+      }
+    },
+    setSnapshotParameters: (state, action) => {
+      state.snapshotParameters = action.payload;
+    },
+
+    //resources
+    setLiveResources: (state, action) => {
+      state.liveResources = action.payload;
+    },
+    setCurrentSavedResources: (state, action) => {
+      state.currentSavedResources = action.payload;
+    },
+    setInitiallyCurrentChangingResources: (state, action) => {
+      state.currentChangingResources = action.payload;
+    },
+    setCurrentChangingResources: (state, action) => {
+      const {payload: {key, value}} = action;
+      const stateValue = current(state)
+      const parameterValues = stateValue?.currentChangingResources;
+      
+      const paramerterIndex = parameterValues?.findIndex((item: any) => item.name === action?.payload?.name);
+      
+      if (paramerterIndex !== -1) {
+        // Use spread operator to create a new object with updated properties
+        const updatedPrameter = { 
+          ...parameterValues[paramerterIndex], 
+          [`${key}`]: value, 
+        };        
+    
+        // // Update the array with the new object
+        state.currentChangingResources = [
+          ...parameterValues.slice(0, paramerterIndex),
+          updatedPrameter,
+          ...parameterValues.slice(paramerterIndex + 1),
+        ];
+        console.log('User edited successfully:', state.currentChangingResources);
+      }
+    },
+    setSnapshotResources: (state, action) => {
+      state.snapshotResources = action.payload;
+    },
+
+    // projectTask
+    setLiveProjectTasks: (state, action) => {
+      state.liveProjectTasks = action.payload;
+    },
+    setCurrentSavedProjectTasks: (state, action) => {
+      state.currentSavedProjectTasks = action.payload;
+    },
+    setInitiallyCurrentChangingProjectTasks: (state, action) => {
+      state.currentChangingProjectTasks = action.payload;
+    },
+    setCurrentChangingProjectTasks: (state, action) => {
+      const {payload: {key, value}} = action;
+      const stateValue = current(state)
+      const parameterValues = stateValue?.currentChangingProjectTasks;
+      
+      const paramerterIndex = parameterValues?.findIndex((item: any) => item.name === action?.payload?.name);
+      
+      if (paramerterIndex !== -1) {
+        // Use spread operator to create a new object with updated properties
+        const updatedPrameter = { 
+          ...parameterValues[paramerterIndex], 
+          [`${key}`]: value, 
+        };        
+    
+        // // Update the array with the new object
+        state.currentChangingProjectTasks = [
+          ...parameterValues.slice(0, paramerterIndex),
+          updatedPrameter,
+          ...parameterValues.slice(paramerterIndex + 1),
+        ];
+        console.log('User edited successfully:', state.currentChangingResources);
+      }
+    },
+    setSnapshotProjectTasks: (state, action) => {
+      state.snapshotProjectTasks = action.payload;
+    },
+
+    // snapshot
+    setLoadedSnapshotId: (state, action) => {
+      state.loadedSnapshotId = action.payload
+    },
+    setLoadedSnapshotDetailsWhenSave: (state, action) => {
+      state.loadedSnapshotDetails = action.payload
+    },
+    setLoadedSnapshotDetails: (state, action) => {
+      if (action.payload) {
+        const snapshot = state?.snapshotsList?.find((snapshotItem: {
+          seer_rominportalsnapshotid: string,
+          seer_name: string,
+        }) => snapshotItem?.seer_rominportalsnapshotid == action.payload);
+        state.loadedSnapshotDetails = snapshot;
+      } else {
+        state.loadedSnapshotDetails = null;
+      }
     }
   }
   
@@ -220,6 +499,41 @@ export const {
   setShowSaveParameters,
   setShowLoadedParameters,
   setIsLiveModeEnable,
+  setResourceModelDataParameters,
+  setResourceModelDataParameterAttributes,
+  setProjectTasktModelParameters,
+  setProjectTasktModelParameterAttributes,
+  setSelectedSnapshotFromDB,
+  // new states
+  setIsSnapshotLoading,
+  setIsLive,
+  setIsSnapshotEnable,
+  setDoCalculation,
+  setShowLiveBase,
+  setShowLoadedSnapshotBase,
+  setShowLivePametersNRates,
+  setShowCurrentSavedPametersNRates,
+  setShowLoadedSnapshotPametersNRates,
+  setLiveBase,
+  setSnapshotBase,
+  setLiveParameters,
+  setCurrentSavedParameters,
+  setInitiallyCurrentChangingParameters,
+  setCurrentChangingParameters,
+  setSnapshotParameters,
+  setLiveResources,
+  setCurrentSavedResources,
+  setInitiallyCurrentChangingResources,
+  setCurrentChangingResources,
+  setSnapshotResources,
+  setLiveProjectTasks,
+  setCurrentSavedProjectTasks,
+  setInitiallyCurrentChangingProjectTasks,
+  setCurrentChangingProjectTasks,
+  setSnapshotProjectTasks,
+  setLoadedSnapshotId,
+  setLoadedSnapshotDetails,
+  setLoadedSnapshotDetailsWhenSave,
 } = snapshotSlice.actions;
 
 

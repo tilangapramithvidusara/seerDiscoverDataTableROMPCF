@@ -64,6 +64,12 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
 
   const [selectedTab, setSelectedTab] = React.useState<string>('RQ')
 
+
+  // NEW STATES
+  const isLive = useSelector((state: any) => state?.snapshot?.isLive)
+  const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters)
+  const isSnapshotLoading = useSelector((state: any) => state?.snapshot?.isSnapshotLoading)
+
   console.log(reportReducerValues);
   
   // const averageM = useMemo(
@@ -131,12 +137,13 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
     columnCreator();
   }, [resourceType, type, tableMode]) // resourceType
   
+  // (!isLiveModeEnable && showSaveParameters) 
   const columns = useMemo<MRT_ColumnDef<any>[]>(
-    () => columnFixed(columnsSet, tabData, (!isLiveModeEnable && showSaveParameters) ? snapshotSettingParameters?.formattedData[
+    () => columnFixed(columnsSet, tabData, (!isLive) ? currentSavedParameters?.formattedData[
       parameterKeyIndex.currency
     ]?.currentValue || 'GBP' : currency),
-    [columnsSet, currency, showSaveParameters, isLiveModeEnable],
-  );//columnsSet
+    [columnsSet, currency, isLive, currentSavedParameters, tabData],
+  );//columnsSet showSaveParameters, isLiveModeEnable
   console.log('llop', columns);
   
   const handleSubTab = (type: string) => {
@@ -167,6 +174,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
           </div>
         </>
       )} */}
+      {isSnapshotLoading ? (<>Loading...</>) : (<>
         {type != 'RequirementData' && type != 'CustomisationData' && (
           <div>
             <div className='flex-wrap ptb-10 custom-toggle-button'>
@@ -365,6 +373,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
           )}
           
         </div>
+        </>)}
     </>
   );
 };
