@@ -29,8 +29,8 @@ function CustomDialog(props: CustomDialogProps) {
       {/* <Button variant="contained" color="primary" onClick={handleClickOpen}>
         Open Dialog
       </Button> */}
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{title}</DialogTitle>
+      <Dialog open={open} onClose={handleClose} className='alert-modal'>
+        <DialogTitle className='heading'>{title}</DialogTitle>
         {description && (
           <DialogContent>
             <DialogContentText>
@@ -38,17 +38,18 @@ function CustomDialog(props: CustomDialogProps) {
             </DialogContentText>
           </DialogContent>
         )}
+        <div className='flex'>
         {buttons?.length && buttons.map((item: AlertButtonProps, index: number) => {
           const {text, action} = item;
           return (
             <DialogActions>
-              <Button onClick={(e) => action(e)} color="primary">
+              <Button onClick={(e) => action(e)} color="primary" className='btn-primary'>
                 {text}
               </Button>
             </DialogActions>
           )
         })}
-        
+        </div>
       </Dialog>
     </div>
   );
