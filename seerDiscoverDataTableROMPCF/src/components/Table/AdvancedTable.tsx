@@ -68,6 +68,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
   // NEW STATES
   const isLive = useSelector((state: any) => state?.snapshot?.isLive)
   const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters)
+  const isSnapshotLoading = useSelector((state: any) => state?.snapshot?.isSnapshotLoading)
 
   console.log(reportReducerValues);
   
@@ -173,6 +174,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
           </div>
         </>
       )} */}
+      {isSnapshotLoading ? (<>Loading...</>) : (<>
         {type != 'RequirementData' && type != 'CustomisationData' && (
           <div>
             <div className='flex-wrap ptb-10 custom-toggle-button'>
@@ -371,6 +373,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
           )}
           
         </div>
+        </>)}
     </>
   );
 };

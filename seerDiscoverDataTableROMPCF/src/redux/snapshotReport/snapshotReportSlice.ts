@@ -321,6 +321,8 @@ const snapshotSlice: any = createSlice({
       state.isSnapshotEnable = action.payload
     },
     setDoCalculation: (state, action) => {
+      console.log('setDoCalculation ===> ', action.payload);
+      
       state.doCalculation = action.payload
     },
     setShowLiveBase: (state, action) => {
@@ -380,7 +382,7 @@ const snapshotSlice: any = createSlice({
           updatedPrameter,
           ...parameterValues.slice(paramerterIndex + 1),
         ];
-        console.log('User edited successfully:', state.snapshotSettingParameters);
+        console.log('User edited successfully:', state.currentChangingParameters);
       }
     },
     setSnapshotParameters: (state, action) => {

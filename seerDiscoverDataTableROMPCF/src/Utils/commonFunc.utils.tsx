@@ -11,7 +11,7 @@ export const removeDuplicates : any = (array: any, removeKey: any) => {
 
 export const executeAfterGivenDilay = (task: () => void, timeout = 0) => setTimeout(task, timeout);
 
-export const convertJsonToBase64: any = async(jsonData: any) => {
+export const convertJsonToBase64: any = (jsonData: any) => {
   console.log('JSON Data', jsonData);
   let objJsonStr = JSON.stringify(jsonData);
   let objJsonB64 = Buffer.from(objJsonStr).toString("base64");

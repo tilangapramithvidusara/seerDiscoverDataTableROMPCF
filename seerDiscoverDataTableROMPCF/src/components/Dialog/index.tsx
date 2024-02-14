@@ -13,10 +13,11 @@ export interface SimpleDialogProps {
   openSettingPopup: boolean, 
   setOpenSettingPopup: (value: boolean) => void;
   onClose?: (value: string) => void;
+  arrayGeneratorHandler?: any
 }
 
 export default function SimpleDialog(props: SimpleDialogProps) {
-  const { setOpenSettingPopup, openSettingPopup } = props;
+  const { setOpenSettingPopup, openSettingPopup, arrayGeneratorHandler } = props;
 
   const handleClose = () => {
     setOpenSettingPopup(false)
@@ -32,7 +33,7 @@ export default function SimpleDialog(props: SimpleDialogProps) {
     {
       key: '1',
       label: 'Parameters',
-      children: <DyanamicTable handleClose={handleClose} />,
+      children: <DyanamicTable handleClose={handleClose} arrayGeneratorHandler={arrayGeneratorHandler} />,
     },
     {
       key: '2',

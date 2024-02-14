@@ -1,8 +1,10 @@
-import { setRecordId, setBaseJson, setSnapshotLoading, setSettingParameters, setLoadedSnapshot, setSnapshotList, setShowSaveParameters, setResourceModelDataParameters, setSelectedSnapshotFromDB, setStateSnapshot, setIsSnapshotLoading, setLoadedSnapshotId, setCurrentSavedParameters, setInitiallyCurrentChangingParameters, setCurrentSavedResources, setInitiallyCurrentChangingResources, setCurrentSavedProjectTasks, setInitiallyCurrentChangingProjectTasks, setSnapshotBase, setLoadedSnapshotDetails, setLoadedSnapshotDetailsWhenSave, setDoCalculation, setShowLoadedSnapshotBase, setShowLoadedSnapshotPametersNRates, setSnapshotParameters } from './snapshotReportSlice';
+import { setRecordId, setBaseJson, setSnapshotLoading, setSettingParameters, setLoadedSnapshot, setSnapshotList, setShowSaveParameters, setResourceModelDataParameters, setSelectedSnapshotFromDB, setStateSnapshot, setIsSnapshotLoading, setLoadedSnapshotId, setCurrentSavedParameters, setInitiallyCurrentChangingParameters, setCurrentSavedResources, setInitiallyCurrentChangingResources, setCurrentSavedProjectTasks, setInitiallyCurrentChangingProjectTasks, setSnapshotBase, setLoadedSnapshotDetails, setLoadedSnapshotDetailsWhenSave, setDoCalculation, setShowLoadedSnapshotBase, setShowLoadedSnapshotPametersNRates, setSnapshotParameters, setLiveBase } from './snapshotReportSlice';
 import { convertBase64ToJson, executeAfterGivenDilay } from '../../Utils/commonFunc.utils';
 import { seerBasejson, seerUpdatedsnapshotdata } from '../../Constants/endPoints';
 import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
 import { showAlertError, showAlertSuccess } from '../../Utils/Alerts';
+import { initialFetchFailure, initialFetchSuccess } from '../report/reportSlice';
+import { fetchInitialDataAsync } from '../report/reportAsycn';
 
 declare global {
   interface Window {
@@ -115,20 +117,27 @@ export const saveSnapshotAsync: any = (info: any) => {
 
                 // NEW STATES
                 dispatch(setLoadedSnapshotId(recodeId))
+                // // dispatch(setLoadedSnapshotDetails(recodeId))
+                // dispatch(setCurrentSavedParameters(snapshotData));
+                // dispatch(setInitiallyCurrentChangingParameters(snapshotData));
+                // dispatch(setSnapshotParameters(snapshotData))
                 dispatch(setSnapshotBase(baseData));
                 dispatch(setLoadedSnapshotDetailsWhenSave({
                   seer_rominportalsnapshotid: recodeId,
                   seer_name: info?.seerName,
                 }));
+                // dispatch(setShowLoadedSnapshotBase(true));
+                // dispatch(setShowLoadedSnapshotPametersNRates(true));
                 
-                showAlertSuccess("Snapshot saved succesfully!")
+                // showAlertSuccess("Snapshot saved succesfully!")
 
                 // NEW STATES
                 dispatch(loadSnapshotsAsync());
-                
+                dispatch(loadSelectedSnapshotAsync({snapshotId: recodeId, arrayGeneratorHandler: info?.arrayGeneratorHandler}))
+                showAlertSuccess("Snapshot saved succesfully!")
                 // TO NOT SHOWING CHANGE DATA AFTER SUCCESSFULLY SAVED
-                dispatch(setShowSaveParameters(false))
-                dispatch(setIsSnapshotLoading(false));
+                // dispatch(setShowSaveParameters(false))
+                // dispatch(setIsSnapshotLoading(false));
               }
           },
           error: function (xhr: any, textStatus: any, errorThrown: any) {
@@ -189,6 +198,8 @@ export const loadSnapshotsAsync: any = () => {
 export const loadSelectedSnapshotAsync: any = (info: any) => {
   return async (dispatch: (arg0: any) => void) => {
     try {
+      console.log('INfo ==> ', info, info?.snapshotId);
+      
       dispatch(setSnapshotLoading(true))
       await window.parent.webapi.safeAjax({
         type: "GET",
@@ -202,7 +213,7 @@ export const loadSelectedSnapshotAsync: any = (info: any) => {
             console.log("loadSelectedSnapshotAsync success", result);
             // Columns
             var seer_rominportalsnapshotid = result["seer_rominportalsnapshotid"];
-            dispatch(getSnapshotBaseJSONFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid}))
+            dispatch(getSnapshotBaseJSONFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid, ...info}))
             // dispatch(getUpdatedSnapshotFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid}))
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
@@ -240,7 +251,7 @@ export const getSnapshotBaseJSONFile = (info: any) => {
             // dispatch(setBaseJson({...info, fileContent:fileContent, recordId: recodeId}));
             const convertedJSONData = await convertBase64ToJson(fileContent);
             dispatch(setBaseJson(convertedJSONData));
-            dispatch(getUpdatedSnapshotFile({requestNumber: 1, recodeId, convertedJSONData}))
+            dispatch(getUpdatedSnapshotFile({requestNumber: 1, recodeId, base: convertedJSONData, ...info}))
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
             console.log(xhr);
@@ -257,7 +268,7 @@ export const getSnapshotBaseJSONFile = (info: any) => {
 }
 
 export const getUpdatedSnapshotFile = (info: any) => {
-  const {requestNumber, recodeId, convertedJSONData} = info;
+  const {requestNumber, recodeId, base} = info;
 
   return async (dispatch: (arg0: any) => void) => {
     try {
@@ -291,17 +302,68 @@ export const getUpdatedSnapshotFile = (info: any) => {
             // dispatch(setInitiallyCurrentChangingResources())
             // dispatch(setCurrentSavedProjectTasks())
             // dispatch(setInitiallyCurrentChangingProjectTasks())
-            dispatch(setSnapshotBase(convertedJSONData));
-            dispatch(setDoCalculation(true));
+            dispatch(setSnapshotBase(base));
             dispatch(setShowLoadedSnapshotBase(true));
             dispatch(setShowLoadedSnapshotPametersNRates(true));
+            // dispatch(setDoCalculation(true));
+            dispatch(info?.arrayGeneratorHandler(false, {...convertedJSONData, base}, 'snapshot'))
+            // setComIsloading(true)
+            // const inititalData = await fetchInitialDataAsync();
+            // if (!inititalData.error) {
+            //   dispatch(initialFetchSuccess(inititalData?.result));
+
+            //   // NEW STATE
+            //   dispatch(setLiveBase(inititalData?.result));
+            //   dispatch(setSnapshotBase(inititalData?.result));
+            // } else {
+            //   // setComIsloading(false)
+            //   dispatch(initialFetchFailure(inititalData?.result));
+            // }
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
           console.log(xhr);
+          console.log('retrive snapshot error2: ');
         }
     });
     } catch (error) {
-      console.log('save snapshot error: ');
+      console.log('retrive snapshot error: ');
+    } finally {
+      executeAfterGivenDilay(() => {
+        dispatch(setSnapshotLoading(false))
+      });
+    }
+  }
+}
+
+
+export const loadSelectedSnapshotAsyncTEST: any = (info: any) => {
+
+  return async (dispatch: any) => {
+    try {
+      dispatch(setSnapshotLoading(true));
+      dispatch(setSettingParameters({a: 'll'}));
+      dispatch(setResourceModelDataParameters({a: 'll'}));
+      dispatch(setSelectedSnapshotFromDB('111'));
+      dispatch(setShowSaveParameters(true));
+      dispatch(setStateSnapshot(true))
+
+      // NEW STATE
+      dispatch(setLoadedSnapshotId('111'));
+      dispatch(setLoadedSnapshotDetails('111'))
+      dispatch(setCurrentSavedParameters({a: 'll'}));
+      dispatch(setInitiallyCurrentChangingParameters({a: 'll'}))
+      dispatch(setSnapshotParameters({a: 'll'}))
+      // dispatch(setCurrentSavedResources())
+      // dispatch(setInitiallyCurrentChangingResources())
+      // dispatch(setCurrentSavedProjectTasks())
+      // dispatch(setInitiallyCurrentChangingProjectTasks())
+      dispatch(setSnapshotBase({a: 'll'}));
+      dispatch(setShowLoadedSnapshotBase(true));
+      dispatch(setShowLoadedSnapshotPametersNRates(true));
+      // dispatch(setDoCalculation(true));
+      dispatch(info?.arrayGeneratorHandler(false, {a: 'll'}))
+    } catch (error) {
+      console.log('retrive snapshot error: ');
     } finally {
       executeAfterGivenDilay(() => {
         dispatch(setSnapshotLoading(false))

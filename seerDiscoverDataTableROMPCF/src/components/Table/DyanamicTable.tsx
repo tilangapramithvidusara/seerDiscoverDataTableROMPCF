@@ -23,7 +23,7 @@ import {
 } from '../../redux/snapshotReport/snapshoAsync';
 import { convertBase64ToJson, convertJsonToBase64 } from '../../Utils/commonFunc.utils';
 
-const DyanamicTable = ({ handleClose, tableNumber }: { handleClose: any, tableNumber?: number }) => {
+const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { handleClose: any, tableNumber?: number, arrayGeneratorHandler?: any }) => {
   const dispatch = useDispatch();
   const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
   const [isBaesline, setIsBaseline] = useState(false);
@@ -35,6 +35,8 @@ const DyanamicTable = ({ handleClose, tableNumber }: { handleClose: any, tableNu
 
   // NEW STATE
   const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters)
+  const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
+  const initialFetchData = useSelector((state: any) => state.report.initialFetchData);
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
@@ -77,13 +79,14 @@ const DyanamicTable = ({ handleClose, tableNumber }: { handleClose: any, tableNu
     console.log('2222222222111 ===> ');
     
     setShowSnapshotForm(true);
-    console.log('22222222221112222 ===> ');
+    console.log('22222222221112222 ===> ', currentChangingParameters);
     dispatch(setShowSaveParameters(true))
     dispatch(setStateSnapshot(true))
     dispatch(setCurrentSavedParameters(currentChangingParameters))
-    setTimeout(() => {
-      dispatch(setDoCalculation(true))
-    }, 2);
+    arrayGeneratorHandler(false, {...currentChangingParameters, base: snapshotBase ? snapshotBase : initialFetchData}, 'snapshot')
+    // setTimeout(() => {
+      // dispatch(setDoCalculation(true))
+    // }, 2);
     console.log('22222222221113333 ===> ');
   };
 

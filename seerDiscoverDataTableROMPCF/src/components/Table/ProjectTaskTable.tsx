@@ -88,7 +88,7 @@ const ProjectTaskTable = ({ handleClose, tableNumber }: { handleClose: any, tabl
           seerName: submitFormData?.name,
           baseData: convertJsonToBase64(baseJson), 
           snapshotData: convertJsonToBase64(snapshotSettingParameters),
-          seerDescription: submitFormData?.description
+          seerDescription: submitFormData?.description,
         }))
       }
 }

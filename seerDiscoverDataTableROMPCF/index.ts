@@ -44,6 +44,7 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
     public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement): void
     {
         // this.notifyOutputChanged = notifyOutputChanged;
+        console.log('12345678');
         
         this.imgElement = document.createElement("img");
 		context.resources.getResource("refresh.png", this.setImage.bind(this, false, "png"), this.showError.bind(this));

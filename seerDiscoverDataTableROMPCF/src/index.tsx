@@ -68,13 +68,20 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     }
   }
 
-  const arrayGeneratorHandler = async(isLive?: boolean) => {
+  const arrayGeneratorHandler = async(isLive?: boolean, requestObj?: any, mode?: string) => {
     setIsloading(true)
+
+    console.log('lo=', currentSavedParameters);
+    console.log('lo=2', requestObj);
     
-    const requirment: any = dataMapper(data?.OutputData);
-    const customisation: any = dataMapper(data?.CustomisationModels, 'customisation');
-    const documentLayouts: any = dataMapper(data?.DocumentlayoutModel, 'documentLayouts');
-    const dataMigrations: any = dataMapper(data?.DataMigrationModel, 'dataMigrations')
+    
+
+    const modeStatus = (mode && mode == 'snapshot') ? true : isLive ? !isLive : !isLiveValue;
+    
+    const requirment: any = dataMapper(modeStatus ? snapshotBase?.OutputData : data?.OutputData);
+    const customisation: any = dataMapper(modeStatus ? snapshotBase?.CustomisationModels : data?.CustomisationModels, 'customisation');
+    const documentLayouts: any = dataMapper(modeStatus ? snapshotBase?.DocumentlayoutModel : data?.DocumentlayoutModel, 'documentLayouts');
+    const dataMigrations: any = dataMapper(modeStatus ? snapshotBase?.DataMigrationModel : data?.DataMigrationModel, 'dataMigrations')
 
     if (requirment?.length) {
       setRequirementData(requirment?.filter((req: {seer_FitGap: string}) => req?.seer_FitGap !== 'Gap'));
@@ -85,20 +92,24 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     if (documentLayouts?.length) {
       setDocumentLayouts(documentLayouts);
     }
-
     if (customisation?.length) {
       setCustomisationData(customisation)
     }
-    console.log('+++', isSnapshotModeEnable && settingParameters);
-    const modeStatus = !isLiveValue
-    console.log('j modeStatus ==> ', modeStatus, isLiveValue);
+
+    console.log('+++', currentSavedParameters);
     
-    const parameterSet = modeStatus ? currentSavedParameters : liveParameters;
+    console.log('j modeStatus ==> ', modeStatus, isLiveValue);
+
+    
+    
+    const parameterSet = modeStatus ? ((requestObj?.formattedData ? {formattedData: requestObj?.formattedData} : null) || currentSavedParameters) : liveParameters;
     // showSaveParameters ? snapshotSettingParameters : settingParameters;
     // console.log('parameterSet => ', parameterSet, modeStatus);
-    const dataBundle = modeStatus ? snapshotBase : (liveBase || data);
+    const dataBundle = modeStatus ? (requestObj?.base || snapshotBase) : (liveBase || data);
     // console.log('(selectedSnapshotFromDB && modeStatus) ==> ', (selectedSnapshotFromDB && modeStatus));
     // console.log('selectedBaseJson opo ==> ', selectedBaseJson);
+    console.log("parameterSet -------> ", parameterSet);
+    console.log("parameterSet -------> ", parameterSet);
     
     arrayGenerator(dataBundle, dispatch, parameterSet, modeStatus)
       .then(async(result: any) => {
