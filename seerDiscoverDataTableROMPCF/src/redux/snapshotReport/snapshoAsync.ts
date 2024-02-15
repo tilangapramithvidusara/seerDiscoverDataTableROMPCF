@@ -255,14 +255,16 @@ export const getSnapshotBaseJSONFile = (info: any) => {
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
             console.log(xhr);
+            dispatch(setSnapshotLoading(false))
         }
     });
     } catch (error) {
       console.log('save snapshot error: ');
+      dispatch(setSnapshotLoading(false))
     } finally {
-      executeAfterGivenDilay(() => {
-        dispatch(setSnapshotLoading(false))
-      });
+      // executeAfterGivenDilay(() => {
+      //   dispatch(setSnapshotLoading(false))
+      // });
     }
   }
 }
@@ -319,14 +321,17 @@ export const getUpdatedSnapshotFile = (info: any) => {
             //   // setComIsloading(false)
             //   dispatch(initialFetchFailure(inititalData?.result));
             // }
+            dispatch(setSnapshotLoading(false))
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
           console.log(xhr);
           console.log('retrive snapshot error2: ');
+          dispatch(setSnapshotLoading(false))
         }
     });
     } catch (error) {
       console.log('retrive snapshot error: ');
+      dispatch(setSnapshotLoading(false))
     } finally {
       executeAfterGivenDilay(() => {
         dispatch(setSnapshotLoading(false))
