@@ -60,7 +60,7 @@ export default function SimpleDialog(props: SimpleDialogProps) {
       <Tabs defaultActiveKey="1" 
       items={tabItems} 
       onChange={onChange} 
-      style={{ padding: '12px' }}
+      style={{ padding: '0 25px 0 25px' }}
       />
     </Dialog>
   );
