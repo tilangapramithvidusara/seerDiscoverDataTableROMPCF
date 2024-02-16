@@ -228,7 +228,7 @@ const onClose = () => {
       </table>
       <div className="modal-footer">
         {/* btn-gray-outline */}
-        <Button className="btn-primary mr-10" onClick={() => handleClose()}>
+        <Button className="btn-blue-outline mr-10" onClick={() => handleClose()}>
           Cancel
         </Button>
         <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
