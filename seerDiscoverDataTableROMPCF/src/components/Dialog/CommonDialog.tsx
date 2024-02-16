@@ -38,7 +38,7 @@ function CustomDialog(props: CustomDialogProps) {
             </DialogContentText>
           </DialogContent>
         )}
-        <div className='flex'>
+        <div className='flex py-15'>
         {buttons?.length && buttons.map((item: AlertButtonProps, index: number) => {
           const {text, action} = item;
           return (

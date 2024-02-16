@@ -10,8 +10,10 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
       <Space wrap style={{width: '100%'}}>
         <div style={{ 
           display: 'flex-column', 
-          fontSize: '14px',
-          marginBottom: '5px'
+          fontSize: '13px',
+          marginBottom: '10px',
+          fontWeight: 700,
+          marginTop: '5px'
           }}>
           <div>Select Snapshot</div>
           <Select
