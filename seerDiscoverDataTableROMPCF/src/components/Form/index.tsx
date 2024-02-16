@@ -35,6 +35,9 @@ export default function FormDialog({handleClickOpen, handleClose, handleSubmit, 
             fullWidth
             variant="standard"
             onChange={(e) => setSubmitFormData((prev: any) => ({...prev, name: e?.target?.value}))}
+            style={{
+              marginTop: '0px'
+            }}
           />
 
           <DialogContentText className='mt-10 d-inline'><label>Description</label></DialogContentText>
@@ -46,7 +49,6 @@ export default function FormDialog({handleClickOpen, handleClose, handleSubmit, 
             style={{ 
               resize: 'none',
               width: '96.6%',
-              marginTop: '5px'
            }}
             onChange={(e) => setSubmitFormData((prev: any) => ({ ...prev, description: e?.target?.value }))}
           />
