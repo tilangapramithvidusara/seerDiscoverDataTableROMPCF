@@ -10,6 +10,7 @@ import Loader from "./components/Loader/Loader";
 import { dataMapper } from "./Utils/RequirmentData/requirement.data.utils";
 import { saveSnapshotAsync } from "./redux/snapshotReport/snapshoAsync";
 import { setBaseJson, setLiveBase, setSnapshotBase } from "./redux/snapshotReport/snapshotReportSlice";
+import OverlayComponent from "./components/Overley";
 
 
 function Index({tableContent, context, imageUrl}: {tableContent: any, context: any, imageUrl?: any}) {
@@ -42,6 +43,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   const isLiveValue: boolean = useSelector((state: any) => state?.snapshot?.isLive);
   const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
   const liveBase = useSelector((state: any) => state?.snapshot?.liveBase)
+  const isLoadingSnapshot = useSelector((state: any) => state?.snapshot?.isLoadingSnapshot);
 
   React.useEffect(() => {
     initialTriggerHandler();
@@ -162,11 +164,18 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   return (
     <div>
       {loading || isLoading ? (<>
-          <div className="blur-background"></div>
+        {<OverlayComponent showOverlay={true}/>}
+          {/* <div className="blur-background"></div>
           <div className="loader-container">
             <Loader />
-          </div>
+          </div> */}
         </>)
+      // : isLoadingSnapshot ? (
+      //   <div className="loading">
+      //     <h2>Loading...</h2>
+      //     {/* You can add a spinner or other loading animation here */}
+      //   </div>
+      // ) 
       : <TabComponent
           dataSet={dataSet}
           isRefreshing={loading || isLoading}

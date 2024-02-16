@@ -47,7 +47,7 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
         dataMigrationTypeValue = parseFloat(settingParameters?.formattedData[
           parameterKeyIndex.dataMigration
         ]?.typeValueCurrent)
-      }
+      }      
       // Must Custom Requirement
       const mustCal = 
         (analisisDesignPre?.responseCustomRequirementDesign?.customRequirementBuild?.resultValue || 0) + 
@@ -132,9 +132,9 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
           returnObject.dataMigration.resultValue = mustCal * (dataMigrationValue/100);
           returnObject.dataMigration.resultValueMS = mustShouldCal * (dataMigrationValue/100);
           returnObject.dataMigration.resultValueMSC = mustShouldCouldCal * (dataMigrationValue/100);
-        } else if (percentData?.[parameterModel[0]?.dataMigrationType] == percentData?.[100000003]) {
+        } else if (percentData?.[dataMigrationTypeValue] == percentData?.[100000003]) {
           // moscow
-          const moscowCal = getMigratedMoscow(DataMigrationModel, romParameter, hoursPerday);
+          const moscowCal = getMigratedMoscow(DataMigrationModel, romParameter, hoursPerday);          
           returnObject.dataMigration.resultValue = moscowCal?.mustValue;
           returnObject.dataMigration.resultValueMS = moscowCal?.mustShouldValue;
           returnObject.dataMigration.resultValueMSC = moscowCal?.mustShouldCouldValue;

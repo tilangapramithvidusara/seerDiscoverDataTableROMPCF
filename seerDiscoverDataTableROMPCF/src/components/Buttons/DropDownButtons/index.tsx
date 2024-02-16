@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setDoCalculation, setSelectSnapshot } from '../../../redux/snapshotReport/snapshotReportSlice';
 import SnapShotPopup from '../../SnapshotPopup/SnapshotPopup';
 import { loadSelectedSnapshotAsync, loadSelectedSnapshotAsyncTEST } from '../../../redux/snapshotReport/snapshoAsync';
+import OverlayComponent from '../../Overley';
 
 const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, handleSaveSnapshot, arrayGeneratorHandler}: 
   {selectedButton: any, hasSnapshots?: boolean, selectItem?: any, selectedItemParent?: string, handleSaveSnapshot?: any, arrayGeneratorHandler?: any}) => {
@@ -21,6 +22,16 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
   const snapshotsList = useSelector((state: any) => state.snapshot.snapshotsList)
   // const snapshotsList = [{seer_name: "test", seer_description: "Des", seer_rominportalsnapshotid: "idd", createdOn: "2024-01-10T09:37:11Z"}, {seer_name: "teeest", seer_description: "Deseee", seer_rominportalsnapshotid: "iddss", createdOn: "2024-01-10T09:37:11Z"}];
 
+  const [showOverlayLoad, setShowOverlayLoad] = useState(false);
+
+  React.useEffect(() => {
+    // setShowOverlayLoad(true)
+    if (showOverlayLoad) {
+      loadSelectedSnapshotHandler(selectedItem);
+      setShowOverlayLoad(false)
+    }
+  }, [showOverlayLoad, selectedItem])
+
   // seer_name
   // : 
   // "Test Snapshot 1"
@@ -28,6 +39,7 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
   // : 
   // "1996f51d-ebc3-ee11-9079-002248015232"
   console.log("snapshotsListState", snapshotsList)
+
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
@@ -53,7 +65,8 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
     console.log('itemValue 22 => ', itemValue);
     // selectItem(itemValue);
     console.log('itemValue 33 => ', itemValue);
-    loadSelectedSnapshotHandler(itemValue);
+    // loadSelectedSnapshotHandler(itemValue);
+    setShowOverlayLoad(true);
     console.log('itemValue 44 => ', itemValue);
     // dispatch(loadSelectedSnapshotAsync({snapshotId: itemValue?.value}))
     setSelectSnapshotHandler(itemValue);
@@ -142,6 +155,7 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
           </Button>
         )}
       </div>
+      {showOverlayLoad && <OverlayComponent showOverlay={showOverlayLoad}/>}
       <div className='text-right'>
         {selectedItem && selectedButton === "button2" && (
           <InputLabel className='label  ptb-10'>{optionList?.[selectedItem]}</InputLabel>

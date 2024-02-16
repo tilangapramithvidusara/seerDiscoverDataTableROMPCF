@@ -13,7 +13,11 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
           fontSize: '14px',
           marginBottom: '5px'
           }}>
-          <div>Select Snapshot</div>
+          <div className="mandatory-text-container">
+            <div className="mandatory-text-container-row">
+              <span>Select Snapshot</span><span><div className="mandatory-text-container-row-red">*</div></span>
+            </div>
+          </div>
           <Select
             style={{ width: '100%' }}
             onSelect={(e) => {

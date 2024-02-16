@@ -174,7 +174,8 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
           </div>
         </>
       )} */}
-      {isSnapshotLoading ? (<>Loading...</>) : (<>
+      {/* {isSnapshotLoading ? (<>Loading...</>) : ( */}
+      <>
         {type != 'RequirementData' && type != 'CustomisationData' && (
           <div>
             <div className='flex-wrap ptb-10 custom-toggle-button'>
@@ -373,7 +374,9 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
           )}
           
         </div>
-        </>)}
+        </>
+        {/* ) */}
+        {/* } */}
     </>
   );
 };
