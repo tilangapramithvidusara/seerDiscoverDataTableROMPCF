@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { MaterialReactTable, type MRT_ColumnDef } from 'material-react-table';
-// import { columnDetails, data, type Person } from '../../Constants/makeData';
 import { columnDetails, columnDetailsHOURS, type Person } from '../../Constants/estimateAverageRate';
 
 import { columnFixed } from '../../Utils/CustomColumnGenerator';
@@ -70,48 +69,6 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
   const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters)
   const isSnapshotLoading = useSelector((state: any) => state?.snapshot?.isSnapshotLoading)
 
-  console.log(reportReducerValues);
-  
-  // const averageM = useMemo(
-  //   () => data.reduce((acc: any, curr: any) => acc + curr?.M, 0) / data.length,
-  //   [],
-  // );
-  // const averageMS = useMemo(
-  //   () => data.reduce((acc: any, curr: any) => acc + curr?.['M/S'], 0) / data.length,
-  //   [],
-  // );
-
-  // const averageMSC = useMemo(
-  //   () => data.reduce((acc: any, curr: any) => acc + curr['M/S/C'], 0) / data.length,
-  //   [],
-  // );
-
-  // const maxAge = useMemo(
-  //   () => data.reduce((acc, curr) => Math.max(acc, curr.age), 0),
-  //   [],
-  // );
-
-  // const totalSalary = useMemo(
-  //   () => data.reduce((acc, curr) => acc + curr.salary, 0),
-  //   [],
-  // );
-
-  // const initialTriggerHandler = async(e: any) => {
-  //   // e.preventDefault()
-  //   setComIsloading(true)
-  //   const inititalData = await fetchInitialDataAsync();
-  //   if (!inititalData.error) {
-  //     dispatch(initialFetchSuccess(inititalData?.result));
-  //   } else {
-  //     setComIsloading(false)
-  //     dispatch(initialFetchFailure(inititalData?.result));
-  //   }
-  // }
-
-  // React.useEffect(() => {    
-  //   setComIsloading(isLoading)
-  // }, [isLoading])
-
   const columnCreator = () => {
     
     const columnCreator = (type == 'CustomisationData') ? columnCustomisationData : 
@@ -139,12 +96,11 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
   
   // (!isLiveModeEnable && showSaveParameters) 
   const columns = useMemo<MRT_ColumnDef<any>[]>(
-    () => columnFixed(columnsSet, tabData, (!isLive) ? currentSavedParameters?.formattedData[
+    () => columnFixed(columnsSet, tabData, (!isLive) ? (currentSavedParameters?.formattedData[
       parameterKeyIndex.currency
-    ]?.currentValue || 'GBP' : currency),
+    ]?.currentValue || currency) : currency),
     [columnsSet, currency, isLive, currentSavedParameters, tabData],
   );//columnsSet showSaveParameters, isLiveModeEnable
-  console.log('llop', columns);
   
   const handleSubTab = (type: string) => {
     if(type === 'RQ') {
@@ -345,13 +301,11 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
                     'transparent' : 'black',
                 },
               onClick: () => {
-                console.log("CCCCCCCC", cell, cell?.row?.original?.nameCategory, cell?.row?.original?.nameCategory);
                 if ((cell?.row?.original?.nameCategory == 'ANALYSIS & DESIGN' || cell?.row?.original?.nameCategory == 'BUILD') && tableMode === defaultText && type === 'Estimate Average Rate') {
                   setSidePaneEnable(true)
                 } else {
                   setSidePaneEnable(false)
                 }
-                console.log(cell.getValue(), cell.id);
                 setCellDataForSidePane({
                   cellValue: cell.getValue(),
                   cellId: cell.id,

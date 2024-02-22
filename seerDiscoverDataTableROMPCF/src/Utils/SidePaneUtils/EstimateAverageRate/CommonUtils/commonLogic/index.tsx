@@ -5,9 +5,7 @@ import { sidePaneIDs } from "../../../../../Constants/sidePaneConstants";
 const { common } = sidePaneIDs
 const { MODULE_OVERRIDES, MODULE_ESTIMATE_VALUE, NUMBER_OF_MODULES, REQUIRNMENTS_ESTIMATE_VALUE, NUMBER_OF_REQUIRNMENT_OVERRIDES, NUMBER_OF_REQUIENMENTS } = common
 export const commonSidePaneLogic = (selectorForSidePane: any, columnValue: any) => {
-    const datatoShow = selectorForSidePane;
-    console.log("datatoShowdatatoShow, columnValue", datatoShow, columnValue);
-    
+    const datatoShow = selectorForSidePane;    
     // let totalResultModuleFor_M_MS_MSC: any = [];
     // let totalResultOverideModuleFor_M_MS_MSC: any = [];
 

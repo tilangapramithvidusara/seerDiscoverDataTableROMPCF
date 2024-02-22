@@ -6,7 +6,6 @@ let para_d4 = 10/100;
 export const generateDataMigrationMValue = async(inititlaData: any, analisisDesignPre: {responseCustomRequirementDesign: any, responseAnalisisDesign: any, responseCustomisationDesign: any, responseIntegration: any}, condition: boolean, isFte?: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
   let hasParameters = settingParameters && isSnapshotModeEnable;
-  console.log("settingParameters", settingParameters)
   let fte = isFte ? true : false;
 
   let resultValue = 0;
@@ -94,41 +93,9 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
           returnObject.dataMigrationAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
           returnObject.dataMigrationAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
         }
-        // console.log("With FTE", mustCal)
-
-        // if (hasParameters) {
-        //   const dataMigrationValue = parseFloat(settingParameters?.formattedData[
-        //     parameterKeyIndex.dataMigration
-        //   ]?.currentValue || '0')
-        //   const dataMigrationTypeValue = parseFloat(settingParameters?.formattedData[
-        //     parameterKeyIndex.dataMigration
-        //   ]?.typeValueCurrent)
-
-        //   if (percentData?.[dataMigrationTypeValue] == percentData?.[100000001]) {
-        //     returnObject.dataMigrationAveRateMilestone.resultValue = mustCal * (dataMigrationValue/100);
-        //     returnObject.dataMigrationAveRateMilestone.resultValueMS = mustShouldCal * (dataMigrationValue/100);
-        //     returnObject.dataMigrationAveRateMilestone.resultValueMSC = mustShouldCouldCal * (dataMigrationValue/100);
-        //   } else {
-        //     returnObject.dataMigrationAveRateMilestone.resultValue = mustCal * (para_d4); // not dataMigration it need to get from backend
-        //     returnObject.dataMigrationAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
-        //     returnObject.dataMigrationAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
-        //   }
-        // } else {
-        //   if (percentData?.[parameterModel[0]?.dataMigrationType] === percentData?.[100000001]) {
-        //     returnObject.dataMigrationAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.dataMigration/100);
-        //     returnObject.dataMigrationAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.dataMigration/100);
-        //     returnObject.dataMigrationAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.dataMigration/100);
-        //   } else {
-        //     returnObject.dataMigrationAveRateMilestone.resultValue = mustCal * (para_d4); // not dataMigration it need to get from backend
-        //     returnObject.dataMigrationAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
-        //     returnObject.dataMigrationAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
-        //   }
-        // }
         
       } else {
-        console.log("Without FTE", hasParameters)
         if (percentData?.[dataMigrationTypeValue] == percentData?.[100000001]) {
-          console.log("MUSTCALL", mustCal)
           returnObject.dataMigration.resultValue = mustCal * (dataMigrationValue/100);
           returnObject.dataMigration.resultValueMS = mustShouldCal * (dataMigrationValue/100);
           returnObject.dataMigration.resultValueMSC = mustShouldCouldCal * (dataMigrationValue/100);
@@ -149,64 +116,6 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
           returnObject.dataMigration.resultValueMS = romParameter == "Hours" ? (dataMigrationValue * g8) : (dataMigrationValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * g8  // need to find G8
           returnObject.dataMigration.resultValueMSC = romParameter == "Hours" ? (dataMigrationValue * f8) : (dataMigrationValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * f8  // need to find F8
         }
-        // if (hasParameters) {
-        //   const dataMigrationValue = parseFloat(settingParameters?.formattedData[
-        //     parameterKeyIndex.dataMigration
-        //   ]?.currentValue || '0')
-        //   const dataMigrationTypeValue = parseFloat(settingParameters?.formattedData[
-        //     parameterKeyIndex.dataMigration
-        //   ]?.typeValueCurrent)
-
-        //   if (percentData?.[dataMigrationTypeValue] === percentData?.[100000001]) {
-        //     console.log("MUSTCALL", mustCal)
-        //     returnObject.dataMigration.resultValue = mustCal * (dataMigrationValue/100);
-        //     returnObject.dataMigration.resultValueMS = mustShouldCal * (dataMigrationValue/100);
-        //     returnObject.dataMigration.resultValueMSC = mustShouldCouldCal * (dataMigrationValue/100);
-        //   } else if (percentData?.[parameterModel[0]?.dataMigrationType] === percentData?.[100000003]) {
-        //     // moscow
-        //     const moscowCal = getMigratedMoscow(DataMigrationModel, romParameter, hoursPerday);
-        //     returnObject.dataMigration.resultValue = moscowCal?.mustValue;
-        //     returnObject.dataMigration.resultValueMS = moscowCal?.mustShouldValue;
-        //     returnObject.dataMigration.resultValueMSC = moscowCal?.mustShouldCouldValue;
-        //   } else if (percentData?.[dataMigrationTypeValue] === percentData?.[100000002]) { // hours
-            
-        //     returnObject.dataMigration.resultValue = romParameter == "Hours" ? dataMigrationValue : dataMigrationValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration
-        //     returnObject.dataMigration.resultValueMS = romParameter == "Hours" ? dataMigrationValue : dataMigrationValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration
-        //     returnObject.dataMigration.resultValueMSC = romParameter == "Hours" ? dataMigrationValue : (dataMigrationValue/hoursPerday);
-        //   } else if (percentData?.[dataMigrationTypeValue] === percentData?.[100000000]) { // FTE
-        //     // dont need yet
-        //     returnObject.dataMigration.resultValue = romParameter == "Hours" ? (dataMigrationValue * h8) : (dataMigrationValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.dataMigration * h8)  // need to find H8
-        //     returnObject.dataMigration.resultValueMS = romParameter == "Hours" ? (dataMigrationValue * g8) : (dataMigrationValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * g8  // need to find G8
-        //     returnObject.dataMigration.resultValueMSC = romParameter == "Hours" ? (dataMigrationValue * f8) : (dataMigrationValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * f8  // need to find F8
-        //   }
-        // } else {
-        //   console.log("MUSTCALL mustCal", mustCal);
-        //   console.log("MUSTCALL parameterModel", parameterModel)
-        //   console.log("MUSTCALL percentData", percentData)
-
-        //   if (percentData?.[parameterModel[0]?.dataMigrationType] === percentData?.[100000001]) {
-           
-        //     returnObject.dataMigration.resultValue = mustCal * (parameterModel[0]?.dataMigration/100);
-        //     returnObject.dataMigration.resultValueMS = mustShouldCal * (parameterModel[0]?.dataMigration/100);
-        //     returnObject.dataMigration.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.dataMigration/100);
-        //   } else if (percentData?.[parameterModel[0]?.dataMigrationType] === percentData?.[100000003]) {
-        //     // moscow
-        //     const moscowCal = getMigratedMoscow(DataMigrationModel, romParameter, parameterModel[0]?.hoursPerday);
-        //     returnObject.dataMigration.resultValue = moscowCal?.mustValue;
-        //     returnObject.dataMigration.resultValueMS = moscowCal?.mustShouldValue;
-        //     returnObject.dataMigration.resultValueMSC = moscowCal?.mustShouldCouldValue;
-        //   } else if (percentData?.[parameterModel[0]?.dataMigrationType] === percentData?.[100000002]) { // hours
-            
-        //     returnObject.dataMigration.resultValue = romParameter == "Hours" ? parameterModel[0]?.dataMigration : parameterModel[0]?.dataMigration/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration
-        //     returnObject.dataMigration.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.dataMigration : parameterModel[0]?.dataMigration/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration
-        //     returnObject.dataMigration.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.dataMigration : (parameterModel[0]?.dataMigration/parameterModel[0]?.hoursPerday);
-        //   } else if (percentData?.[parameterModel[0]?.dataMigrationType] === percentData?.[100000000]) { // FTE
-        //     // dont need yet
-        //     returnObject.dataMigration.resultValue = romParameter == "Hours" ? (parameterModel[0]?.dataMigration * h8) : (parameterModel[0]?.dataMigration * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.dataMigration * h8)  // need to find H8
-        //     returnObject.dataMigration.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.dataMigration * g8) : (parameterModel[0]?.dataMigration * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * g8  // need to find G8
-        //     returnObject.dataMigration.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.dataMigration * f8) : (parameterModel[0]?.dataMigration * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.dataMigration * f8  // need to find F8
-        //   }
-        // }
       }
       
       await Promise.all([returnObject])
@@ -215,7 +124,6 @@ export const generateDataMigrationMValue = async(inititlaData: any, analisisDesi
       return returnObject;
     }
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return returnObject;
   }
 }

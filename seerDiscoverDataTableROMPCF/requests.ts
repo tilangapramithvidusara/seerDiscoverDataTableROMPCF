@@ -8,7 +8,7 @@ export const fetchRecords = async (fetchXml: string, entityName: string, context
         return [option.Value.toString(), option.Color];
       }));
     } catch (e) {
-      console.log(e);
+    //   console.log(e);
     }  
     try{    
         const res = await context.webAPI.retrieveMultipleRecords(entityName, "?fetchXml=" + fetchXml)

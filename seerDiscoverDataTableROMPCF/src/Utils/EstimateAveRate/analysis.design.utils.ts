@@ -23,7 +23,6 @@ import { parameterKeyIndex } from "../../Constants/parametersSetting";
 import { checkTypeparseFloat } from "../setting.values.convertor.utils";
 
 export const generateIColoumnValue = async(inititlaData: any, title: string, dispatch: any, hasFteValue?: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
-  console.log('pppp ==> ', settingParameters, isSnapshotModeEnable);
   const hasParameters = settingParameters && isSnapshotModeEnable;
   const condition = romParameter === "Days";
   // ################################ESTIMATE AVERAGE RATE################################
@@ -218,12 +217,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
   let estimageAveRateCustomerCustomisationBuildSidePane: any;
   let estimageAveRateCustomerCustomRequirementBuildSidePane: any;
   let estimageAveRateDocumentLayoutSidePane: any;
-  console.log('===hasFteValue===>', hasFteValue);
   
   try {
-    const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
-    console.log('o===', responseAnalisisDesign);
-    
+    const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);    
     const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable)
     const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
 
@@ -290,9 +286,6 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
       
       
       if (hasParameters) {
-        console.log('q1q1q1q1q ==> ', settingParameters?.formattedData[
-          parameterKeyIndex?.hourlyRate
-        ]?.currentValue, parameterKeyIndex?.hourlyRate);
         hoursPerday = checkTypeparseFloat(settingParameters?.formattedData[
           parameterKeyIndex.hoursPerDay
         ]?.currentValue || '0')
@@ -301,14 +294,9 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
           value: parseFloat(settingParameters?.formattedData[
             parameterKeyIndex.hourlyRate
           ]?.currentValue || '0')
-        }
-
-        console.log('hourlyRate',hourlyRate);
-        
+        }        
       }
-      resultValueAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValue, hourlyRate?.value, hoursPerday, condition)
-      console.log('peeek ', hourlyRate?.value, hoursPerday,responseAnalisisDesign?.resultValue);
-      
+      resultValueAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValue, hourlyRate?.value, hoursPerday, condition)      
       resultValueMSAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValueMS, hourlyRate?.value, hoursPerday, condition)
       resultValueMSCAnalisisDesign = checkConditionAndGenerateValue(responseAnalisisDesign?.resultValueMSC, hourlyRate?.value, hoursPerday, condition)
       resultValueAnalisisDesignBase = checkConditionAndGenerateValue(responseAnalisisDesign?.resultBaseValue, hourlyRate?.value, hoursPerday, condition)
@@ -334,14 +322,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         resultValueMSModule: resultValueMSAnalisisDesignModule,
         resultValueMSCModule: resultValueMSCAnalisisDesignModule,
       });
-      // resultModule: modulesConfiguration,
-      // resultModuleMS: modulesConfigurationMS,
-      // resultModuleMSC: modulesConfigurationMSC,
-      // resultOverideModule: overidesModulesConfiguration,
-      // resultOverideModuleMS: overidesModulesConfigurationMS,
-      // resultOverideModuleMSC: overidesModulesConfigurationMSC,
 
-      console.log('qa', estimageAveRateAnalysisDesignSidePane);
       resultValueCustomisationDesign = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultValue, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCustomisationDesign = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
       resultValueMSCCustomisationDesign = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultValueMSC, hourlyRate?.value, hoursPerday, condition);
@@ -483,8 +464,6 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         resultValueMS: responseCustomRequirementDesign?.customRequirementBuild?.resultValueMS,
         resultValueMSC: responseCustomRequirementDesign?.customRequirementBuild?.resultValueMSC,
       }, hourlyRate?.value, hoursPerday, condition)
-
-      console.log(responseDocumentLayout?.documentLayout?.resultValue);
       
       resultValueDocumentLayout = checkConditionAndGenerateValue(responseDocumentLayout?.documentLayout?.resultValue, hourlyRate?.value, hoursPerday, condition);
       resultValueMSDocumentLayout = checkConditionAndGenerateValue(responseDocumentLayout?.documentLayout?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
@@ -564,9 +543,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         condition,
         settingParameters, 
         isSnapshotModeEnable
-      );   
-      console.log('resultValueAnalisisDesignEstimateResource ==>', resultValueAnalisisDesignEstimateResource);
-         
+      );            
 
       resultValueCustomisationDesignEstimateResource = generateEstimateResourceValue(
         inititlaData, {
@@ -892,9 +869,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
 
     }
 
-    ////////////////ESTIMATE RESOURCE MILESTONE START///////////////
-    console.log('resultValueAnalisisDesign ==> ', resultValueAnalisisDesign);
-    
+    ////////////////ESTIMATE RESOURCE MILESTONE START///////////////    
     return {
       analysisDesing: {
         resultValue: resultValueAnalisisDesign,
@@ -1060,7 +1035,6 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
       }
     };
   } catch (error) {
-    console.log("generateIColoumnValue error ==> ", error);
     return {
       analysisDesing: {
         resultValue,
@@ -1104,10 +1078,6 @@ export const costReportMainObject = (values: any, subValues: any, hourlyRate: nu
     }
   };
   if (type) {
-    console.log('typeData', typeData);
-    console.log('baseValue', baseValue);
-    
-    
     object.M.resultModule = moduleReturn(returnModule, typeData.resultModule);
     object.MS.resultModule = moduleReturn(returnModule, typeData.resultModuleMS);
     object.MSC.resultModule = moduleReturn(returnModule, typeData.resultModuleMSC);
@@ -1256,16 +1226,12 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
       ]?.currentValue || '0')
     }
 
-    console.log('hoursPerday design ==> ', hoursPerday, hasParameters);
-    
     if (inititlaData) {
 
       // BASE DATA LOOP
       const baseLoop = await BaseData && BaseData.length && BaseData.map(async(baseItem: any, baseIndex: number) => {
         const {allResources} = baseItem;
-        console.log('baseItem ==> ', baseItem);
         // && baseItem?.module?.name != "Assembly - BC"
-        console.log('00-=', baseItem?.module?.name != "Cost Accounting - BC", baseItem?.module?.name == "Cost Accounting - BC");
         // Assembly - BC
         // ANALYSIS AND DESING
         // Must
@@ -1369,7 +1335,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
       });
 
       const moduleLoop = await ModuleData && ModuleData?.length && ModuleData.map((moduleDataItem: any, moduleDataIndex: any) => {
-        console.log('3w2w2', moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC', moduleDataItem?.moduleSeerModuleName == 'Cost Accounting - BC');
         
         // Must
         if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
@@ -1505,7 +1470,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           hoursPerday,
           condition
         );
-        console.log('resultValue ==> ', resultValue);
         
         // (
         //     primaryResourceDesignValueFromBaseData 
@@ -1741,7 +1705,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
       };
     }
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return {resultValue, resultValueMS, resultValueMSC, 
       resultModule: modulesAnalysisDesign,
       resultModuleMS: modulesAnalysisDesignMS,
@@ -1802,7 +1765,6 @@ export const generateAnalysisDesignMValue2 = async (inititlaData: any) => {
     const resultValue = calculateResultValue(BaseData, ModuleData, parameterModel);
     return resultValue;
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return 0;
   }
 }

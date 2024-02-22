@@ -6,12 +6,14 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
   const [selectSnapshot, setSelectSnapshot] = useState(null);
 
   return (
-    <Modal className='snapshot-modal' open={open} title="Load Snapshot" onOk={() => selectSnapshot ? onSelect(selectSnapshot) : alert('Please select the snapshot')} onCancel={handleClose}>
+    <Modal className='snapshot-modal' open={open} title="Load Snapshot" onOk={() => selectSnapshot ? onSelect(selectSnapshot) : alert('Please select the snapshot to load')} onCancel={handleClose}>
       <Space wrap style={{width: '100%'}}>
         <div style={{ 
           display: 'flex-column', 
-          fontSize: '14px',
-          marginBottom: '5px'
+          fontSize: '13px',
+          marginBottom: '10px',
+          fontWeight: 700,
+          marginTop: '5px'
           }}>
           <div className="mandatory-text-container">
             <div className="mandatory-text-container-row">
@@ -21,7 +23,6 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
           <Select
             style={{ width: '100%' }}
             onSelect={(e) => {
-              console.log('selelelelelelele ==> ', e)
               setSelectSnapshot(e)
               // onSelect(e)
             }}
@@ -55,7 +56,49 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
                 selectSnapshot
                   ? snapshots?.find(
                       (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
-                    )?.createdon
+                    )?.['createdon@OData.Community.Display.V1.FormattedValue']
+                  : ''
+              }
+            />
+          </div>
+          <div style={{ marginTop: '10px' }}>
+            Created By:{' '}
+            <Input
+              placeholder="Created By"
+              disabled
+              value={
+                selectSnapshot
+                  ? snapshots?.find(
+                      (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
+                    )?.['_createdby_value@OData.Community.Display.V1.FormattedValue']
+                  : ''
+              }
+            />
+          </div>
+          <div style={{ marginTop: '10px' }}>
+            Last Modified At:{' '}
+            <Input
+              placeholder="Last Modified At"
+              disabled
+              value={
+                selectSnapshot
+                  ? snapshots?.find(
+                      (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
+                    )?.['modifiedon@OData.Community.Display.V1.FormattedValue']
+                  : ''
+              }
+            />
+          </div>
+          <div style={{ marginTop: '10px' }}>
+            Last Modified By:{' '}
+            <Input
+              placeholder="Last Modified By"
+              disabled
+              value={
+                selectSnapshot
+                  ? snapshots?.find(
+                      (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
+                    )?.['_modifiedby_value@OData.Community.Display.V1.FormattedValue']
                   : ''
               }
             />

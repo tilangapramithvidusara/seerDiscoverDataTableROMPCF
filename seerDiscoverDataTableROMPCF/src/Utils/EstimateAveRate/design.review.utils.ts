@@ -65,12 +65,8 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
       const g8 = g7 * F4Parameter
       // hoursPerWeek
       const f8 = f7 * F4Parameter
-      // hoursPerWeek
-      console.log('====> ', parameterModel[0]?.designReview);
-      
+      // hoursPerWeek      
       if (fte) {
-        console.log('1');
-
         if (percentData?.[designTypeValue] === percentData?.[100000001]) {
           returnObject.designReviewAveRateMilestone.resultValue = mustCal * (designValue/100);
           returnObject.designReviewAveRateMilestone.resultValueMS = mustShouldCal * (designValue/100);
@@ -81,41 +77,7 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
           returnObject.designReviewAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
         }
         
-        // if (hasParameters) {
-        //   console.log('2');
-          
-        //   // const designValue = parseFloat(settingParameters?.formattedData[
-        //   //   parameterKeyIndex.designReview
-        //   // ]?.currentValue || '0')
-        //   // const designTypeValue = parseFloat(settingParameters?.formattedData[
-        //   //   parameterKeyIndex.designReview
-        //   // ]?.typeValueCurrent)
-        //   if (percentData?.[designTypeValue] === percentData?.[100000001]) {
-        //     returnObject.designReviewAveRateMilestone.resultValue = mustCal * (designValue/100);
-        //     returnObject.designReviewAveRateMilestone.resultValueMS = mustShouldCal * (designValue/100);
-        //     returnObject.designReviewAveRateMilestone.resultValueMSC = mustShouldCouldCal * (designValue/100);
-        //   } else {
-        //     returnObject.designReviewAveRateMilestone.resultValue = mustCal * (para_d4); // not designReview it need to get from backend
-        //     returnObject.designReviewAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
-        //     returnObject.designReviewAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
-        //   }
-        // } else {
-        //   console.log('3', parameterModel[0]?.designReviewType, mustCal, mustShouldCal, mustShouldCouldCal);
-          
-        //   if (percentData?.[parameterModel[0]?.designReviewType] === percentData?.[100000001]) {
-        //     returnObject.designReviewAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.designReview/100);
-        //     returnObject.designReviewAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.designReview/100);
-        //     returnObject.designReviewAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.designReview/100);
-        //   } else {
-        //     returnObject.designReviewAveRateMilestone.resultValue = mustCal * (para_d4); // not designReview it need to get from backend
-        //     returnObject.designReviewAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
-        //     returnObject.designReviewAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
-        //   }
-        // }
-        
       } else {
-        console.log('4');
-
         if (percentData?.[designTypeValue] == percentData?.[100000001]) {
 
           returnObject.designReview.resultValue = mustCal * (designValue/100);
@@ -132,62 +94,14 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
           returnObject.designReview.resultValueMSC = romParameter == "Hours" ? (designValue * f8) : (designValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview * f8  // need to find F8
         }
         
-        // if (hasParameters) {
-        //   console.log('5');
-          
-        //   // const designValue = parseFloat(settingParameters?.formattedData[
-        //   //   parameterKeyIndex.designReview
-        //   // ]?.currentValue || '0')
-        //   // const designTypeValue = parseFloat(settingParameters?.formattedData[
-        //   //   parameterKeyIndex.designReview
-        //   // ]?.typeValueCurrent)
-        //   if (percentData?.[designTypeValue] == percentData?.[100000001]) {
-
-        //     returnObject.designReview.resultValue = mustCal * (designValue/100);
-        //     returnObject.designReview.resultValueMS = mustShouldCal * (designValue/100);
-        //     returnObject.designReview.resultValueMSC = mustShouldCouldCal * (designValue/100);
-        //   } else if (percentData?.[designTypeValue] == percentData?.[100000002]) { // hours
-            
-        //     returnObject.designReview.resultValue = romParameter == "Hours" ? designValue :  designValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview
-        //     returnObject.designReview.resultValueMS = romParameter == "Hours" ? designValue :  designValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview
-        //     returnObject.designReview.resultValueMSC = romParameter == "Hours" ? designValue :  designValue/hoursPerday
-        //   } else if (percentData?.[designTypeValue] == percentData?.[100000000]) { // FTE
-        //     returnObject.designReview.resultValue = romParameter == "Hours" ? (designValue * h8) : (designValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.designReview * h8)  // need to find H8
-        //     returnObject.designReview.resultValueMS = romParameter == "Hours" ? (designValue * g8) : (designValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview * g8  // need to find G8
-        //     returnObject.designReview.resultValueMSC = romParameter == "Hours" ? (designValue * f8) : (designValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview * f8  // need to find F8
-        //   }
-        // } else {
-        //   console.log('6');
-          
-        //   if (percentData?.[parameterModel[0]?.designReviewType] === percentData?.[100000001]) {
-        //     console.log('desi rev => ', mustCal, parameterModel[0]?.designReview, mustCal * (parameterModel[0]?.designReview/100));
-            
-        //     returnObject.designReview.resultValue = mustCal * (parameterModel[0]?.designReview/100);
-        //     returnObject.designReview.resultValueMS = mustShouldCal * (parameterModel[0]?.designReview/100);
-        //     returnObject.designReview.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.designReview/100);
-        //   } else if (percentData?.[parameterModel[0]?.designReviewType] === percentData?.[100000002]) { // hours
-            
-        //     returnObject.designReview.resultValue = romParameter == "Hours" ? parameterModel[0]?.designReview :  parameterModel[0]?.designReview/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview
-        //     returnObject.designReview.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.designReview :  parameterModel[0]?.designReview/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview
-        //     returnObject.designReview.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.designReview :  parameterModel[0]?.designReview/parameterModel[0]?.hoursPerday
-        //   } else if (percentData?.[parameterModel[0]?.designReviewType] === percentData?.[100000000]) { // FTE
-        //     returnObject.designReview.resultValue = romParameter == "Hours" ? (parameterModel[0]?.designReview * h8) : (parameterModel[0]?.designReview * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.designReview * h8)  // need to find H8
-        //     returnObject.designReview.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.designReview * g8) : (parameterModel[0]?.designReview * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview * g8  // need to find G8
-        //     returnObject.designReview.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.designReview * f8) : (parameterModel[0]?.designReview * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview * f8  // need to find F8
-        //   }
-        // }
-        
       }
       
-      await Promise.all([returnObject])
-      console.log('de=> ',returnObject);
-      
+      await Promise.all([returnObject])      
       return returnObject;
     } else {
       return returnObject;
     }
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return returnObject;
   }
 }

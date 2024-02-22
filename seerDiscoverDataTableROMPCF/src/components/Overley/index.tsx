@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 const OverlayComponent = ({ showOverlay }: {showOverlay: boolean}) => {
-  console.log('dooodododododod ==> ', showOverlay);
   
   if (!showOverlay) {
     return null; // If showOverlay is false, don't render anything

@@ -14,7 +14,7 @@ export const generateEstimateResourceValue = (
   ) => {
   try {
     let hasParameters = settingParameters && isSnapshotModeEnable;
-    const {ProjectTasktModel, resourceModelData, parameterModel} = inititlaData;
+    let {ProjectTasktModel, resourceModelData, parameterModel} = inititlaData;
     let {hoursPerday, hourlyRate} = parameterModel[0]
     if (hasParameters) {
       hoursPerday = parseFloat(settingParameters?.formattedData[
@@ -26,26 +26,17 @@ export const generateEstimateResourceValue = (
           parameterKeyIndex.hourlyRate
         ]?.currentValue || '0')
       }
+      resourceModelData = settingParameters?.currentSavedResources
+      ProjectTasktModel = settingParameters?.currentSavedProjectTasks
     }
     
     const filteredValue: any = ProjectTasktModel?.length && ProjectTasktModel.find((item: any, index: number) => {
-      if (name === 'Project Manager') {
-        console.log('Project Manager 3', item?.projectTaskPartner_Name);
-        console.log('Project Manager 4', item?.name);
-      }  
-      console.log('Project projectTaskPartner_Name ==>', item?.projectTaskPartner_Name);
-      console.log('projectTaskPartner_Name name', item?.name);
-      console.log('Name name', name);
-      if (item?.projectTaskPartner_Name == name || item?.projectTaskCustomer_Name == name || item?.name == name) {
-        console.log('item value ==> ', item);
-        
+      if (item?.projectTaskPartner_Name == name || item?.projectTaskCustomer_Name == name || item?.name == name) {        
         return item
       }
       
     });
-    
-    console.log('filteredValue ==> ', filteredValue);
-    
+        
     if (filteredValue) {
       //
       const {
@@ -66,12 +57,10 @@ export const generateEstimateResourceValue = (
       // projectTaskPartner_Name
       const checkIsCustomer = projectTaskCustomer_Name ? true : false;
       const checkIsPatner = projectTaskPartner_Name ? true : false;
-      console.log('checkIsCustome ==> ', checkIsCustomer,  checkIsPatner);
       
       const split = seerResourceSplit;
       const secondarySplit = (100 - seerResourceSplit);
       // checkIsCustomer ? (projectTaskCustomer_ResourceSplit || 0) : (projectTaskPartner_ResourceSplit || 0)
-      console.log('split ==> ', split);
       
       // projectTaskPartner_ResourceSplit
       const findProjectTaskPartner_Resource = resourceModelData?.find((item: any, index: number) => item?.resourceId == seerResource?.id);
@@ -79,10 +68,7 @@ export const generateEstimateResourceValue = (
       const findProjectTaskPartner_ResourceSecondary = seerResourceSecondary ? resourceModelData?.find((item: any, index: number) => item?.resourceId == seerResourceSecondary?.id) : null;
       // projectTaskPartner_ResourceSecondary?.id && resourceModelData?.find((item: any, index: number) => checkIsCustomer ? item?.resourceId == projectTaskCustomer_ResourceSecondary?.id : item?.resourceId == projectTaskPartner_ResourceSecondary?.id)
       // hourlyRate
-      console.log('findProjectTaskPartner_Resource => ', findProjectTaskPartner_Resource, findProjectTaskPartner_ResourceSecondary);
       
-      
-
       const r1Mvalue = priority === 'Estimate Resource Milestone' ? subCal.M *  (split || 0)/100 : generateValue(split || 0, subCal.M || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, hoursPerday || 0, condition);
       const r1MvalueSub = allSubsections?.resultValue *  (split || 0)/100;
       // condition ? 
@@ -108,16 +94,9 @@ export const generateEstimateResourceValue = (
       //   subCal['M/S'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate
 
       const r1MSCvalue = priority === 'Estimate Resource Milestone' ? (subCal['M/S/C'] || 0) *  (split || 0)/100 : generateValue((split) || 0, subCal['M/S/C'] || 0, findProjectTaskPartner_Resource?.hourlyRate || 0, hoursPerday || 0, condition)
-     if(priority === 'Estimate Resource Milestone' ) {
-      console.log("r1MSCvalue", r1MSCvalue)
-     }
     
       const r1MSCvalueSub = allSubsections?.resultValueMSC *  ((split) || 0)/100;
-      if(priority === 'Estimate Resource Milestone' ) {
-        console.log("r1MSCvalueSub", r1MSCvalueSub)
-       }
      
-
       // condition ? 
       //   subCal['M/S/C'] * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S/C'] * ((split || 0) / 100) * findProjectTaskPartner_Resource?.hourlyRate
@@ -130,7 +109,6 @@ export const generateEstimateResourceValue = (
       //   subCal['M/S/C'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate * parameterModel?.hoursPerday :
       //   subCal['M/S/C'] * ((100 - (split || 0)) / 100) * findProjectTaskPartner_ResourceSecondary?.hourlyRate
       const numberOfResources = 2;
-      console.log('xxxx ==> ', subCal.M, hourlyRate, hoursPerday);
       
       return {
         resultValue1:  r1Mvalue,
@@ -166,19 +144,12 @@ export const generateEstimateResourceValue = (
         numberOfResources,
       }
     } else {
-      ProjectTasktModel?.length && ProjectTasktModel.find((item: any, index: number) => { 
-        if (name === 'Project Manager') {
-          console.log('Project Manager 2', item?.projectTaskPartner_Name);
-          
-        }       
+      ProjectTasktModel?.length && ProjectTasktModel.find((item: any, index: number) => {       
         return item?.projectTaskPartner_Name == name
-      });
-      console.log('eeeeeee', name);
-      
+      });      
       throw new Error();
     }
   } catch (error) {
-    console.log(error);
     
     return {
       resultValue1: 0,

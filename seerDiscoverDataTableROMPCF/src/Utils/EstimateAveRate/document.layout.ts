@@ -44,10 +44,7 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
     const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels, FactorsModel, DocumentlayoutModel, fteValue} = inititlaData
     let {hoursPerday, documentlayoutstype, dataMigration, documentlayouts } = parameterModel[0]
       if (hasParameters) {
-        console.log('dododod ==> ', settingParameters?.formattedData[
-          parameterKeyIndex.documnentLayout
-        ]);
-        
+
         hoursPerday = parseFloat(settingParameters?.formattedData[
           parameterKeyIndex.hoursPerDay
         ]?.currentValue || '0');
@@ -66,7 +63,6 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
       const h7 = fteValue?.totalFte || 0 // need to gets it from api
       const g7 = fteValue?.totalFteMS || 0
       const f7 = fteValue?.totalFteMSC || 0
-      console.log('f4 ==> ', F4Parameter, h7);
       const h8 = h7 * F4Parameter
       // hoursPerWeek
       const g8 = g7 * F4Parameter
@@ -90,8 +86,6 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
       (analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValueMSC || 0) + 
       (analisisDesignPre?.responseCustomisationDesign?.customisationBuild?.resultValueMSC || 0) + 
       (analisisDesignPre?.responseIntegration?.integration?.resultValueMSC || 0)
-      console.log("Configured 1", FactorsModel)
-      console.log(isFte);
       
     if (isFte) {
       const customizationLoop = await FactorsModel && FactorsModel.length && FactorsModel.map(async(factorItem: any, factorIndex: number) => {
@@ -239,7 +233,6 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
         returnObject.endUserTraining.resultValue = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMS = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMSC = endUserTrainingValue;
-        console.log(getFcolValue);
         
         returnObject.projectRisk.estimateAveRate = getFcolValue;
         
@@ -248,9 +241,6 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
       return returnObject;
     } else {
       if (parameterModel?.length) {
-        console.log("parameterModel", parameterModel);
-        console.log("percentData", percentData);
-        console.log('documentlayoutstype ==> ', documentlayoutstype);
         
         if (percentData?.[documentlayoutstype] == percentData?.[100000003]) {
           // moscow
@@ -268,7 +258,6 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
             returnObject.documentLayout.resultValueMS = romParameter == "Hours" ? documentlayouts : documentlayouts/hoursPerday;
             returnObject.documentLayout.resultValueMSC = romParameter == "Hours" ? documentlayouts : (documentlayouts/hoursPerday);
           } else if (percentData?.[documentlayoutstype] == percentData?.[100000000]) { // FTE
-            console.log('==== fte =====> ', documentlayouts, h8, hoursPerday);
             
             returnObject.documentLayout.resultValue = romParameter == "Hours" ? (documentlayouts * h8) : (documentlayouts * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.collateRequirment * h8)  // need to find H8
             returnObject.documentLayout.resultValueMS = romParameter == "Hours" ? (documentlayouts * g8) : (documentlayouts * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.collateRequirment * g8  // need to find G8
@@ -303,7 +292,6 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
               layoutValue += factorItem?.wholeNumber
             }
     
-            console.log("GHGH 1")
             if (factorItem?.ad_QuestionNumber == '201900') {
               if (factorItem?.answerChoice == 'End user training') {
                 if (hasParameters) {
@@ -412,9 +400,7 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
             
           
           });
-    
-          console.log("GETGG VALL", getGColValue)
-    
+        
           await Promise.all(customizationLoop);
         }
           // if (getGColValue == 43) {
@@ -431,10 +417,7 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
           } else if (getGColValue < 30) {
             getFcolValue = 20/100;
           }
-    
-    
-          console.log("GETFF VALL", getFcolValue)
-          console.log("parameterModel VALL", getFcolValue)
+
         returnObject.endUserTraining.resultValue = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMS = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMSC = endUserTrainingValue;
@@ -443,210 +426,11 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
         
       }
     }
-    // if(FactorsModel?.length) {
-    //   const customizationLoop = await FactorsModel && FactorsModel?.length && FactorsModel?.map(async(factorItem: any, factorIndex: number) => {
-    //     if (factorItem?.ad_QuestionNumber == '500000' || factorItem?.ad_QuestionNumber == '500100') {
-    //       layoutValue += factorItem?.wholeNumber
-    //     }
-
-    //     console.log("GHGH 1")
-    //     if (factorItem?.ad_QuestionNumber == '201900') {
-    //       if (factorItem?.answerChoice == 'End user training') {
-    //         if (hasParameters) {
-    //           const totalLicenceCountSettingValue = parseFloat(settingParameters?.formattedData[
-    //             parameterKeyIndex.users
-    //           ]?.currentValue || '0')
-    //           const endUserTrainingUsersSettingValue = parseFloat(settingParameters?.formattedData[
-    //             parameterKeyIndex.endUserTrainingUsers
-    //           ]?.currentValue || '0')
-    //           const endUserTrainingSettingValue = parseFloat(settingParameters?.formattedData[
-    //             parameterKeyIndex.endUserTraining
-    //           ]?.currentValue || '0')
-    //           if (condition) {
-    //             // d5 = parameterModel[0].hoursPerday
-    //             // d8 = parameterModel[0]?.totalLicenceCount
-    //             // d21 = endUserTrainingUsers
-    //             // d20 = endUserTraining
-    //             // (para d8/ parad21) * (para d20/ para d5)
-  
-    //             endUserTrainingValue += 
-    //               ((totalLicenceCountSettingValue || 0)/ (endUserTrainingUsersSettingValue || 0)) *
-    //                ((endUserTrainingSettingValue || 0)/(hoursPerday || 0))
-    //           } else {
-    //             // (para d8/ parad21) * (para d20)
-    //             endUserTrainingValue += ((totalLicenceCountSettingValue || 0)/ (endUserTrainingUsersSettingValue || 0)) *
-    //             ((endUserTrainingSettingValue || 0))
-    //           }
-    //         } else {
-    //           if (condition) {
-    //             // d5 = parameterModel[0].hoursPerday
-    //             // d8 = parameterModel[0]?.totalLicenceCount
-    //             // d21 = endUserTrainingUsers
-    //             // d20 = endUserTraining
-    //             // (para d8/ parad21) * (para d20/ para d5)
-  
-    //             endUserTrainingValue += 
-    //               ((parameterModel[0]?.totalLicenceCount || 0)/ (parameterModel[0]?.endUserTrainingUsers || 0)) *
-    //                ((parameterModel[0]?.endUserTraining || 0)/(hoursPerday || 0))
-    //           } else {
-    //             // (para d8/ parad21) * (para d20)
-    //             endUserTrainingValue += ((parameterModel[0]?.totalLicenceCount || 0)/ (parameterModel[0]?.endUserTrainingUsers || 0)) *
-    //             ((parameterModel[0]?.endUserTraining || 0))
-    //           }
-    //         }
-    //       }
-    //     }
-
-    //     // risk releated
-    //     if (factorItem?.ad_CalculationType?.value == 100000000) {
-    //       if (factorItem?.ad_QuestionNumber == '100900') {
-    //         let value = factorItem?.wholeNumber <= 50 ? 10 : (factorItem?.wholeNumber > 50 && factorItem?.wholeNumber <= 100) ? 5 : factorItem?.wholeNumber > 100 ? 0 : 0;
-    //         getGColValue += value;
-    //       }
-    //       if (
-    //         factorItem?.ad_QuestionNumber == '101000' || 
-    //         factorItem?.ad_QuestionNumber == '101300' ||
-    //         factorItem?.ad_QuestionNumber == '200700'
-    //         ) {
-    //         let value = factorItem?.boolean ? -5 : 5;
-    //         getGColValue += value;
-    //       }
-    //       if (
-    //         factorItem?.ad_QuestionNumber == '200400' || 
-    //         factorItem?.ad_QuestionNumber == '200900'
-    //         ) {
-    //         let value = factorItem?.boolean ? 10 : -5;
-    //         getGColValue += value;
-    //       }
-    //       if (
-    //         factorItem?.ad_QuestionNumber == '201000' || 
-    //         factorItem?.ad_QuestionNumber == '202100'
-    //         ) {
-    //         let value = factorItem?.boolean ? 10 : 0;
-    //         getGColValue += value;
-    //       }
-    //       if (
-    //         factorItem?.ad_QuestionNumber == '201800' || 
-    //         factorItem?.ad_QuestionNumber == '202700' || 
-    //         factorItem?.ad_QuestionNumber == '500100'
-    //         ) {
-    //         let value = factorItem?.boolean ? 5 : 0;
-    //         getGColValue += value;
-    //       } // Train-the-trainer
-    //       if (
-    //         factorItem?.ad_QuestionNumber == '201900' 
-    //         ) {
-    //         let value = factorItem?.answerChoice == 'Train-the-trainer' ? 10 : -10;
-    //         getGColValue += value;
-    //       }
-    //       if (
-    //         factorItem?.ad_QuestionNumber == '202400' 
-    //         ) {
-    //         let value = factorItem?.answerChoice == 'No internal resource' ? -10 :
-    //         factorItem?.answerChoice == 'Staff less than 50% on project' ? 0 :
-    //         factorItem?.answerChoice == 'Staff more than 50% on project' ? 5 :
-    //         factorItem?.answerChoice == 'Staff fully allocated to project' ? 10 : 0;
-    //         getGColValue += value;
-    //       }
-    //       if (
-    //         factorItem?.ad_QuestionNumber == '500000' 
-    //         ) {
-    //         let value = factorItem?.wholeNumber;
-    //         getGColValue += value;
-    //       }
-    //     }
-        
-      
-    //   });
-
-    //   console.log("GETGG VALL", getGColValue)
-
-    //   await Promise.all(customizationLoop);
-    // }
-    //   // if (getGColValue == 43) {
-    //   //   getFcolValue = 0;
-    //   // }
-
-
-    //   if (getGColValue >= 70) {
-    //     getFcolValue = 5/100;
-    //   } else if (getGColValue >= 50 && getGColValue < 70) {
-    //     getFcolValue = 10/100;
-    //   } else if (getGColValue >= 30 && getGColValue < 50) {
-    //     getFcolValue = 15/100;
-    //   } else if (getGColValue < 30) {
-    //     getFcolValue = 20/100;
-    //   }
-
-
-    //   console.log("GETFF VALL", getFcolValue)
-    //   console.log("parameterModel VALL", getFcolValue)
-
-      // if (parameterModel?.length) {
-      //   console.log("parameterModel", parameterModel);
-      //   console.log("percentData", percentData);
-      //   console.log("documentlayoutstype", documentlayoutstype);
-
-      //   if (percentData?.[documentlayoutstype] === percentData?.[100000003]) {
-      //     // moscow
-      //     const moscowCal = getMigratedMoscow(DocumentlayoutModel, romParameter, hoursPerday);
-      //     returnObject.documentLayout.resultValue = moscowCal?.mustValue;
-      //     returnObject.documentLayout.resultValueMS = moscowCal?.mustShouldValue;
-      //     returnObject.documentLayout.resultValueMSC = moscowCal?.mustShouldCouldValue;
-      //   } else {
-      //     console.log("layoutValue", layoutValue);
-      //     console.log("parameterModel[0]", parameterModel[0]);
-      //     console.log("hoursPerday[0]", hoursPerday)
-      //     console.log("condition[0]", condition)
-      //     console.log("mustCal[0]", mustCal)
-
-      //     if (percentData?.[parameterModel[0]?.documentlayoutstype] === percentData?.[100000001]) {
-      //       returnObject.documentLayout.resultValue = mustCal * (documentlayouts/100);
-      //       returnObject.documentLayout.resultValueMS = mustShouldCal * (documentlayouts/100);
-      //       returnObject.documentLayout.resultValueMSC = mustShouldCouldCal * (documentlayouts/100);
-      //     } else if (percentData?.[parameterModel[0]?.documentlayoutstype] === percentData?.[100000002]) {
-      //       returnObject.documentLayout.resultValue = romParameter == "Hours" ? documentlayouts : documentlayouts/hoursPerday;
-      //       returnObject.documentLayout.resultValueMS = romParameter == "Hours" ? documentlayouts : documentlayouts/hoursPerday;
-      //       returnObject.documentLayout.resultValueMSC = romParameter == "Hours" ? documentlayouts : (documentlayouts/hoursPerday);
-      //     } 
-      //     // else {
-      //       // returnObject.documentLayout.resultValue = mustCal * (para_d4); // not dataMigration it need to get from backend
-      //       // returnObject.documentLayout.resultValueMS = mustShouldCal * (para_d4);
-      //       // returnObject.documentLayout.resultValueMSC = mustShouldCouldCal * (para_d4);
-      //     // }
-      //     // returnObject.documentLayout.resultValue = generateReturnValue(
-      //     //   documentlayouts,
-      //     //   hoursPerday,
-      //     //   condition
-      //     // )
-          
-      //     // returnObject.documentLayout.resultValueMS = generateReturnValue(
-      //     //   documentlayouts,
-      //     //   hoursPerday,
-      //     //   condition
-      //     // )
-  
-      //     // returnObject.documentLayout.resultValueMSC =  generateReturnValue(
-      //     //   documentlayouts,
-      //     //   hoursPerday,
-      //     //   condition
-      //     // )
-      //   }
-        
-      //   returnObject.endUserTraining.resultValue = endUserTrainingValue;
-      //   returnObject.endUserTraining.resultValueMS = endUserTrainingValue;
-      //   returnObject.endUserTraining.resultValueMSC = endUserTrainingValue;
-
-      //   returnObject.projectRisk.estimateAveRate = getFcolValue;
-        
-      // }
-      // await Promise.all([customizationLoop])
       return returnObject;
     } else {
       return returnObject;
     }
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return returnObject;
   }
 }
@@ -657,8 +441,3 @@ const generateReturnValue = (val1: number, hoursPerDay: number, condtion: boolea
   }
   return (val1)
 }
-
-const generateFColValue = () => {
-  
-}
-

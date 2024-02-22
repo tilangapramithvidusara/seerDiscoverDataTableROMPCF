@@ -8,13 +8,6 @@ import DropDownButtons from "./Buttons/DropDownButtons";
 import ButtonGroups from "./Buttons/ButtonGroups";
 import { Box, Button, Grid, Stack} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import RatesAndResources from "./RatesAndResources";
-import RiskFactors from "./RiskFactors";
-import ProjectROM from "./ProjectROM";
-import ProjectMargin from "./ProjectMargin";
-import Governance from "./Governance";
-import ROMByPhase from "./ROMByPhase";
-import FitOrGap from "./FitOrGap";
 import { fetchInitialDataAsync } from "../redux/report/reportAsycn";
 import { initialFetchFailure, initialFetchSuccess } from "../redux/report/reportSlice";
 import Loader from "./Loader/Loader";
@@ -22,12 +15,12 @@ import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import Settings from "@mui/icons-material/Settings";
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
-import { setCurrentSavedParameters, setDoCalculation, setInitiallyCurrentChangingParameters, setIsLive, setIsSnapshotEnable, setIsSnapshotLoading, setLiveBase, setLiveParameters, setLoadedSnapshotDetailsWhenSave, setLoadedSnapshotId, setRecordId, setResourceModelDataParameters, setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setSnapshotBase, setSnapshotLoading, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
+import { setCurrentSavedParameters, setCurrentSavedProjectTasks, setCurrentSavedResources, setDoCalculation, setInitiallyCurrentChangingParameters, setInitiallyCurrentChangingProjectTasks, setInitiallyCurrentChangingResources, setIsLive, setIsSnapshotEnable, setIsSnapshotLoading, setLiveBase, setLiveParameters, setLiveProjectTasks, setLiveResources, setLoadedSnapshotDetailsWhenSave, setLoadedSnapshotId, setRecordId, setResourceModelDataParameters, setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setSnapshotBase, setSnapshotLoading, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
 import { loadSelectedSnapshotAsync, loadSnapshotsAsync, saveInitialSnapshotRecordAsync, saveSnapshotAsync } from "../redux/snapshotReport/snapshoAsync";
 import FormDialog from "./Form";
 import { convertJsonToBase64 } from "../Utils/commonFunc.utils";
 import SnapShotPopup from "./SnapshotPopup/SnapshotPopup";
-import { cancel, createNew, failedToSave, missingSnapshot, snapshotSaveConfirmMessage, updateExisting } from "../Constants/messages";
+import { cancel, createNew, failedToSave, missingSnapshot, snapshotSaveConfirmMessage, successfullySaved, updateExisting } from "../Constants/messages";
 import CustomDialog from "./Dialog/CommonDialog";
 import { checkDuplicates } from "../Utils/Validations/check.duplication.utils";
 import OverlayComponent from "./Overley";
@@ -154,6 +147,7 @@ const App = ({
   const [showOverlaySubmit, setShowOverlaySubmit] = React.useState(false);
   const [showOverlaySave, setShowOverlaySave] = React.useState(false);
   const [showOverlayLoad, setShowOverlayLoad] = React.useState(false);
+  const [showOverlayInitLoad, setShowOverlayInitLoad] = React.useState(false);
   const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters);
   const currentSavedResources = useSelector((state: any) => state?.snapshot?.currentSavedResources);
   const currentSavedProjectTasks = useSelector((state: any) => state?.snapshot?.currentSavedProjectTasks);
@@ -168,8 +162,13 @@ const App = ({
     console.log(key);
   };
 
-  const initialTriggerHandler = async(e: any) => {
+  const initialTriggerHandler = async(e: any, countNumber: number, isLive: boolean) => {
     // e.preventDefault()
+    // if (countNumber > 1) {
+    //   setShowOverlayInitLoad(false);
+    //   return;
+    // };
+    // setShowOverlayInitLoad(true)
     dispatch(setShowSaveParameters(false))
     dispatch(setShowLoadedParameters(false));
     setComIsloading(true)
@@ -180,10 +179,31 @@ const App = ({
       // NEW STATE
       dispatch(setLiveBase(inititalData?.result));
       dispatch(setSnapshotBase(inititalData?.result));
+      if (isLive) {
+
+        const formatedData = parameterModelConvertToTableJson(inititalData?.result?.parameterModel);
+        arrayGeneratorHandler(true, {...formatedData, base: inititalData?.result, currentSavedResources: inititalData?.result?.resourceModelData}, 'liveRefresh');
+      } else {
+        const formatedData = parameterModelConvertToTableJson(inititalData?.result?.parameterModel);
+        dispatch(setLiveParameters(formatedData));
+        dispatch(setCurrentSavedParameters(formatedData));
+        dispatch(setInitiallyCurrentChangingParameters(formatedData))
+        dispatch(setLiveResources(inititalData?.result?.resourceModelData))
+        dispatch(setCurrentSavedResources(inititalData?.result?.resourceModelData));
+        dispatch(setInitiallyCurrentChangingResources(inititalData?.result?.resourceModelData));
+        dispatch(setLiveProjectTasks(inititalData?.result?.ProjectTasktModel)); 
+        dispatch(setCurrentSavedProjectTasks(inititalData?.result?.ProjectTasktModel))
+        dispatch(setInitiallyCurrentChangingProjectTasks(inititalData?.result?.ProjectTasktModel))
+        dispatch(setLoadedSnapshotDetailsWhenSave(null));
+        dispatch(setLoadedSnapshotId(null));
+        arrayGeneratorHandler(false, {...formatedData, base: inititalData?.result, currentSavedResources: inititalData?.result?.resourceModelData}, 'snapshot')
+      }
+      
     } else {
       setComIsloading(false)
       dispatch(initialFetchFailure(inititalData?.result));
     }
+    // initialTriggerHandler({}, (countNumber + 1), isLive)
   }
 
   const [selectedButton, setSelectedButton] = React.useState(
@@ -236,66 +256,98 @@ const App = ({
     }
   }, [showOverlayLoad])
 
+  const afterFinishRequestStateHandler = (state: boolean, message: string) => {
+    dispatch(setIsSnapshotLoading(false))
+    dispatch(setSnapshotLoading(false))
+    setShowOverlaySubmit(false)
+    setShowOverlaySave(false)
+    setTimeout(() => {
+      if (state)
+        showAlertSuccess(message);
+      else
+        showAlertError(message);
+    }, 10)
+  }
+
   const saveInitialSnapshotRecordAsyncAPI : any = (info: any) => {
     const url = new URL(window.location.href);
     const queryParameters = url.searchParams;
     // console.log('accountId -=> ', queryParameters.get("accountId"));
-    const accountId = queryParameters.get(snapshotAPIConstants.ACCOUNT_ID);
-    const contactId = queryParameters.get(snapshotAPIConstants.USER_ID);
+    const accountId = localStorage.getItem("accountId") || queryParameters.get(snapshotAPIConstants.ACCOUNT_ID);
+    const contactId = localStorage.getItem("userId") || queryParameters.get(snapshotAPIConstants.USER_ID);
   
-    console.log("ACC ID", accountId);
-    console.log("COntact ID", contactId);
-    console.log("saveInitialSnapshotRecordAsync Info", info);
     return async (dispatch: any) => {
-      try {
-        console.log("saving....");
+      try {        
         dispatch(setSnapshotLoading(true));
 
         // NEW STATE
         dispatch(setIsSnapshotLoading(true));
         const record: any = {};
+        // record[snapshotAPIConstants?.SEER_CREATED_BY_ID] = `/systemusers(${contactId})`;
+        // record[snapshotAPIConstants?.SEER_MODIFIED_BY_ID] = `/systemusers(${contactId})`;
         record[snapshotAPIConstants.SEER_ACCOUNT_RECORD_ID] = `/accounts(${accountId})`; // Lookup
         record[snapshotAPIConstants.SEER_CONTACT_RECORD_ID] = `/contacts(${contactId})`; // Lookup
         record.seer_name = info?.seerName; // Text
         record.seer_description = info?.seerDescription; // Text
-        console.log("saving 1 ....");
 
         window.parent.webapi.safeAjax({
           type: "POST",
           contentType: "application/json",
           url: snapshotAPIConstants.INITIAL_SNAPSHOT_URL,
           data: JSON.stringify(record),
-          success: function (data: any, textStatus: any, xhr: any) {
-            console.log('snapshot success ===> ', data, textStatus);
-            
+          success: function (data: any, textStatus: any, xhr: any) {            
               var newId = xhr.getResponseHeader("entityid");
-              console.log("newId", newId);
               dispatch(setRecordId(newId))
               dispatch(saveSnapshotAsyncAPI({requestNumber: 1, recodeId: newId, ...info}))
           },
           error: function (xhr: any, textStatus: any, errorThrown: any) {
-            console.log("snapshot failed xhr", xhr);
-            console.log("snapshot failed", textStatus, errorThrown);
-            showAlertError(failedToSave);
-            dispatch(setIsSnapshotLoading(false))
-            dispatch(setSnapshotLoading(false))
-            setShowOverlaySubmit(false)
-            setShowOverlaySave(false)
+            afterFinishRequestStateHandler(false, failedToSave)
+            
           }
         });
       } catch (error) {
-        console.log('save snapshot initial error: ', error);
-        showAlertError(failedToSave);
-        dispatch(setIsSnapshotLoading(false))
-        dispatch(setSnapshotLoading(false))
-        setShowOverlaySubmit(false)
-        setShowOverlaySave(false)
+        afterFinishRequestStateHandler(false, failedToSave)
+      } 
+    }
+  }
+
+  const saveInitialUpdateSnapshotRecordAsyncAPI : any = (info: any) => {
+    const url = new URL(window.location.href);
+    const queryParameters = url.searchParams;
+    const accountId = localStorage.getItem("accountId") || queryParameters.get(snapshotAPIConstants.ACCOUNT_ID);
+    const contactId = localStorage.getItem("userId") || queryParameters.get(snapshotAPIConstants.USER_ID);
+
+    return async (dispatch: any) => {
+      try {        
+        dispatch(setSnapshotLoading(true));
+
+        // NEW STATE
+        dispatch(setIsSnapshotLoading(true));
+        const record: any = {};
+        record["seer_modifiedbyportal@odata.bind"] = `/systemusers(${contactId})`;
+
+        window.parent.webapi.safeAjax({
+          type: "PATCH",
+          contentType: "application/json",
+          url: `${snapshotAPIConstants.INITIAL_SNAPSHOT_URL}(${info?.recodeId})`,
+          data: JSON.stringify(record),
+          success: function (data: any, textStatus: any, xhr: any) {
+            dispatch(saveSnapshotAsyncAPI({...info}))
+          },
+          error: function (xhr: any, textStatus: any, errorThrown: any) {
+            afterFinishRequestStateHandler(false, failedToSave)
+            // showAlertError(failedToSave);
+            
+          }
+        });
+      } catch (error) {
+        afterFinishRequestStateHandler(false, failedToSave)
+        // showAlertError(failedToSave);        
       } 
     }
   }
   
   const saveSnapshotAsyncAPI: any = (info: any) => {
-    console.log("Save snapshot Async", info)
     return async (dispatch: any) => {
       try {
         const {requestNumber, recodeId, baseData, snapshotData} = info;
@@ -321,18 +373,11 @@ const App = ({
           data: fileContent,
           processData: false,
           success: function (data: any, textStatus: any, xhr: any) {
-              console.log("File uploaded");
               if(requestNumber === 1){ 
-                console.log("Success 1", requestNumber, data, xhr)
-                console.log('Success one textStatus', textStatus);
-                
                 dispatch(saveSnapshotAsyncAPI({...info, requestNumber: 2}))
-                dispatch(setSnapshotLoading(false));
+                // dispatch(setSnapshotLoading(false));
               }
               else {
-                console.log("Success 2", requestNumber, data, xhr)
-                console.log('Success two textStatus', textStatus);
-                // alert("Snapshot saved succesfully!")
                 dispatch(setSettingParameters(snapshotData))
 
                 // NEW STATES
@@ -346,66 +391,46 @@ const App = ({
                 // NEW STATES
                 dispatch(loadSnapshotsAsync());
                 dispatch(loadSelectedSnapshotAsync({snapshotId: recodeId, arrayGeneratorHandler: info?.arrayGeneratorHandler}))
-                showAlertSuccess("Snapshot saved succesfully!")
-                setShowOverlaySubmit(false)
-                setShowOverlaySave(false)
+                afterFinishRequestStateHandler(true, successfullySaved)
               }
           },
           error: function (xhr: any, textStatus: any, errorThrown: any) {
-            console.log("Error Request", requestNumber);
-            console.log(xhr);
-            showAlertError(failedToSave)
-            dispatch(setIsSnapshotLoading(false));
-            setShowOverlaySubmit(false)
-            setShowOverlaySave(false)
+            afterFinishRequestStateHandler(false, failedToSave)
+            // showAlertError(failedToSave);
           }
         });
       } catch (error) {
-        console.log('save snapshot error: ', error);
-        showAlertError(failedToSave)
-        dispatch(setIsSnapshotLoading(false))
-        setShowOverlaySubmit(false)
-        setShowOverlaySave(false)
+        afterFinishRequestStateHandler(false, failedToSave)
+        // showAlertError(failedToSave);      
       } 
     }
   }
 
-  const formattedSettingHandler = (event: any, initFetchedData: any) => {
-    console.log('call formattedSettingHandler');
-    
+  const formattedSettingHandler = (event: any, initFetchedData: any) => {    
     if (hasLoadedData) {
       // set retrived data as setSettingParameter
     } else {
       const formatedData = parameterModelConvertToTableJson(initFetchedData?.parameterModel);
-      console.log('pppp222 ==> ', formatedData);
-      
-      // dispatch(setSettingParameters(formatedData))
-      // dispatch(setResourceModelDataParameters(initFetchedData?.resourceModelData))
-      // console.log('formatedData => ', formatedData);
-
       // NEW STATE
       if (!loadedSnapshotId) {
-        console.log('dooom');
         const formatedData = parameterModelConvertToTableJson(initFetchedData?.parameterModel);
         dispatch(setLiveParameters(formatedData));
         if (!currentSavedParameters) {
           dispatch(setCurrentSavedParameters(formatedData));
           dispatch(setInitiallyCurrentChangingParameters(formatedData))
         }
-        
-        console.log('dooom2');
+        if (!currentSavedResources) {
+          dispatch(setCurrentSavedResources(initFetchedData?.resourceModelData));
+          dispatch(setInitiallyCurrentChangingResources(initFetchedData?.resourceModelData))
+        }
+        if (!currentSavedProjectTasks) {
+          dispatch(setCurrentSavedProjectTasks(initFetchedData?.ProjectTasktModel))
+          dispatch(setInitiallyCurrentChangingProjectTasks(initFetchedData?.ProjectTasktModel))
+        }
       }
-    }
-    console.log('p0012122');
-     
+    }     
     setOpenSettingPopup(true)
-    console.log('p00121221q1q1q');
   }
-
-  const getSnapshotsListHandler = React.useCallback((info) => {
-    // dispatch(loadSnapshotsAsync())
-  }, [dispatch])
-
 
   const modeHanlder = (buttonValue: string) => {
     setSelectedButton(buttonValue);
@@ -419,12 +444,6 @@ const App = ({
     } else if (buttonValue == 'button1') {
       dispatch(setIsLive(true))
       dispatch(setIsSnapshotEnable(false))
-      if (renderCount > 0) {
-        console.log('lo=5');
-        // arrayGeneratorHandler(true);
-        // dispatch(setDoCalculation(true))
-      }
-        
     }
     setRenderCount(renderCount + 1);
   }
@@ -434,16 +453,19 @@ const App = ({
   }, [dispatch])
 
   const saveHandler = React.useCallback((info: {name: string, description: string}) => {
-    console.log('save ==> ', info);
+    setShowOverlaySave(true)
     
-    dispatch(saveSnapshotAsyncAPI({
-      requestNumber: 1,
+    dispatch(
+      saveSnapshotAsyncAPI({
+      // saveInitialUpdateSnapshotRecordAsyncAPI({
+      requestNumber: 2,
+      // 1,
       recodeId: loadedSnapshotId,
       seerName: info?.name,
       baseData: convertJsonToBase64(snapshotBase), 
       snapshotData: convertJsonToBase64({
         ...currentSavedParameters, 
-        // currentSavedResources,
+        currentSavedResources,
         // currentSavedProjectTasks,
       }),
       seerDescription: info?.description,
@@ -454,6 +476,7 @@ const App = ({
   const onClickYes = () => {
     dispatch(setIsSnapshotLoading(true))
     setOpenCustomDialog(false)
+    // saveHandler(submitFormData)
     setShowOverlaySave(true)
   }
 
@@ -463,7 +486,6 @@ const App = ({
   }
 
   const handleSaveSnapshot = () => {
-    console.log("handleSaveSnapshot");
     // NEW STATES
     if (currentSavedParameters 
       // && currentSavedResources && currentSavedProjectTasks
@@ -480,7 +502,6 @@ const App = ({
   }
 
   const onSubmit = () => {
-    console.log("Submitted", submitFormData, snapshotSettingParameters);
     if (submitFormData?.name) {
       // NEW STATES
       if (snapshotsList) {
@@ -490,15 +511,17 @@ const App = ({
           loadingHandler();
           setSubmitFormData(submitFormData);
           setShowOverlaySubmit(true);
-          // submitRecord();
+          // submitRecord(submitFormData);
         }
       } else {
         loadingHandler();
         setSubmitFormData(submitFormData);
         setShowOverlaySubmit(true);
-        // submitRecord();
+        // submitRecord(submitFormData);
       }
       setOpenSaveSnapshotPopup(false)
+    } else {
+      alert("Fill all mandatory fields!")
     }
   }
 
@@ -507,13 +530,13 @@ const App = ({
   }, [dispatch])
 
   const submitRecord: any = React.useCallback((info: {name: string, description: string}) => {
-    console.log('save ((())) ==> ', info, currentSavedParameters);
+    // setShowOverlaySubmit(true)
     dispatch(saveInitialSnapshotRecordAsyncAPI({
       seerName: info?.name,
       baseData: convertJsonToBase64(snapshotBase), 
       snapshotData: convertJsonToBase64({
         ...currentSavedParameters, 
-        // currentSavedResources,
+        currentSavedResources,
         // currentSavedProjectTasks,
       }),
       seerDescription: info?.description,
@@ -522,7 +545,6 @@ const App = ({
   }, [dispatch])
 
   React.useEffect(() => {
-    console.log("isLoadingSnapshot BTN", isLoadingSnapshot);
     if(!isLoadingSnapshot) setOpenSaveSnapshotPopup(false);
   }, [isLoadingSnapshot])
 
@@ -573,9 +595,9 @@ const App = ({
           // className='text-right'
           // style={{margin: '2px', height: '10px !important', fontSize: '11px !important'}}
           >
-            {selectedButton == 'button1' && (
-              <Button title="Refresh" className='btn-primary btn-small mr-10' onClick={(e) => initialTriggerHandler(e)}><AutorenewOutlinedIcon className="btn-icon" /></Button>
-            )}
+            {/* {selectedButton == 'button1' && ( */}
+              <Button title={selectedButton == 'button1' ? "Get Latest" : "Sync With Live Data"} className='btn-primary btn-small mr-10' onClick={(e) => initialTriggerHandler(e, 0, selectedButton == 'button1' ? true : false)}><AutorenewOutlinedIcon className="btn-icon" /></Button>
+            {/* )} */}
             
             {selectedButton == 'button2' && (
               <div className='text-right flex-wrap-end'>
@@ -605,9 +627,9 @@ const App = ({
         )}
       </div>
       <Tabs size="small" defaultActiveKey="1" items={items} onChange={onChange} />
-      {showOverlaySubmit && <OverlayComponent showOverlay={showOverlaySubmit}/>}
-      {showOverlaySave && <OverlayComponent showOverlay={showOverlaySave}/>}
-      {showOverlayLoad && <OverlayComponent showOverlay={showOverlayLoad}/>}
+      {(showOverlaySubmit || showOverlayInitLoad || showOverlaySave) && <OverlayComponent showOverlay={showOverlaySubmit || showOverlayInitLoad || showOverlaySave}/>}
+      {/* {showOverlaySave && <OverlayComponent showOverlay={showOverlaySave}/>} */}
+      {/* {showOverlayLoad && <OverlayComponent showOverlay={showOverlayLoad}/>} */}
       
       {
          openSaveSnapshotPopup ? 

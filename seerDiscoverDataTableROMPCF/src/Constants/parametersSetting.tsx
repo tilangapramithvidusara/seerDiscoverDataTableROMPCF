@@ -46,20 +46,21 @@ export const parameterKeyIndex = {
   'none': 8,
   'documentation': 9,
   'designReview': 10,
-  'reporting': 11,
-  'dataMigration': 12,
-  'crp': 13,
-  'testing': 14,
-  'trainTheTrainer': 15,
-  'uatEnvPrep': 16,
-  'prodEnvPrep': 17,
-  'uatSupport': 18,
-  'supportHandover': 19,
-  'postGoLiveSupport': 20,
-  'projectManagement': 21,
-  'endUserTraining': 22,
-  'endUserTrainingUsers': 23,
-  'documnentLayout': 24,
+  'documnentLayout': 11,
+  'reporting': 12,
+  'dataMigration': 13,
+  'crp': 14,
+  'testing': 15,
+  'trainTheTrainer': 16,
+  'uatEnvPrep': 17,
+  'prodEnvPrep': 18,
+  'uatSupport': 19,
+  'supportHandover': 20,
+  'postGoLiveSupport': 21,
+  'projectManagement': 22,
+  'endUserTraining': 23,
+  'endUserTrainingUsers': 24,
+  // 'documnentLayout': 25,
   // '21': '',
   // '22': '',
   // '23': '',
@@ -84,5 +85,22 @@ export const resourceParameterColumn = [
   },
   {
     header: 'Cost'
+  }
+]
+
+
+// PROJECT ASK HEADINGS
+export const projectTaskColumn = [
+  {
+    header: 'Name',
+  },
+  {
+    header: 'Resource 1'
+  },
+  {
+    header: 'Resource 2'
+  },
+  {
+    header: 'Split'
   }
 ]

@@ -73,10 +73,8 @@ const TableWithTotal: React.FC = () =>{
         },
       ];
     const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
-        console.log('params', pagination, filters, sorter, extra);
-      };
+    };
       
-
     const getTotalRow = (): any => {
         let chinese = 0;
         let math = 0;

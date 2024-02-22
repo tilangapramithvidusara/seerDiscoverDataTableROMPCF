@@ -28,9 +28,7 @@ export const columnDetails = [
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
     showBottomTotal: true,
-    render: (rowData: any) => {
-      console.log(rowData);
-      
+    render: (rowData: any) => {      
       if (rowData.aggregated) {
         // Apply background color for aggregated cells
         return <div style={{ backgroundColor: 'lightblue' }}>{rowData.value}</div>;
@@ -88,9 +86,7 @@ export const columnDetailsHOURS = [
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
     showBottomTotal: true,
-    render: (rowData: any) => {
-      console.log(rowData);
-      
+    render: (rowData: any) => {      
       if (rowData.aggregated) {
         // Apply background color for aggregated cells
         return <div style={{ backgroundColor: 'lightblue' }}>{rowData.value}</div>;

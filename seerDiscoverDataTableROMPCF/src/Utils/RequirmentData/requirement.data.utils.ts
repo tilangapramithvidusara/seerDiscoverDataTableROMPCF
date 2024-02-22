@@ -40,7 +40,6 @@ export const dataMapper = (data: any[], type = 'requirement') => {
     });    
     return finalData;
   } catch (error) {
-    console.log('erroraaa', error);
     
     return data;
   }

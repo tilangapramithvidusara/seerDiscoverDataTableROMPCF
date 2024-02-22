@@ -254,7 +254,6 @@ export const generateProjectManagerMValue = async(inititlaData: any, analisisDes
 
     
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return returnObject;
   }
 }

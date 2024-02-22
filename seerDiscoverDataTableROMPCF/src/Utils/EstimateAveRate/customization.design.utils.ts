@@ -171,7 +171,6 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
       return returnObject;
     }
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return returnObject;
   }
 }

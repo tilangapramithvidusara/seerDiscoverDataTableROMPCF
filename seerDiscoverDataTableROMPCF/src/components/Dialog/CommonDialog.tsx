@@ -22,7 +22,6 @@ interface CustomDialogProps {
 
 function CustomDialog(props: CustomDialogProps) {
   const {title, setOpen, open, buttons, description, handleClose} = props
-  // const [open, setOpen] = useState(false);
 
   return (
     <div>
@@ -38,7 +37,7 @@ function CustomDialog(props: CustomDialogProps) {
             </DialogContentText>
           </DialogContent>
         )}
-        <div className='flex'>
+        <div className='flex py-15'>
         {buttons?.length && buttons.map((item: AlertButtonProps, index: number) => {
           const {text, action} = item;
           return (

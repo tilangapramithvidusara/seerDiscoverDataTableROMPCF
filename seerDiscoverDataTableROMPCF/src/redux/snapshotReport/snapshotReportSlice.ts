@@ -162,7 +162,6 @@ const snapshotSlice: any = createSlice({
       state.isLiveModeEnable = action.payload
     },
     setSnapshotList: (state, action) => {
-      console.log("ACTION setSnapshotList", action)
       state.snapshotsList = action.payload
     },
     setSnapshotLoading: (state, action) => {
@@ -181,7 +180,6 @@ const snapshotSlice: any = createSlice({
       state.hasLoadedData = action.payload
     },
     setSettingParameters: (state, action) => {
-      console.log('lloo ===--0 => ', action);
       state.settingParameters = action.payload
       if (!state.showSaveParameters) {
         state.snapshotSettingParameters = action.payload;
@@ -189,15 +187,11 @@ const snapshotSlice: any = createSlice({
       
     },
     setSettingParameterAttributes: (state, action) => {
-      console.log('qaqa lloo ===--02 => ', action);
       const {payload: {key, value}} = action;
       const stateValue = current(state)
       // const parameterValues = stateValue?.settingParameters?.formattedData;
-      const parameterValues = stateValue?.snapshotSettingParameters?.formattedData;
-      console.log('ee',stateValue?.settingParameters);
-      
+      const parameterValues = stateValue?.snapshotSettingParameters?.formattedData;      
       const paramerterIndex = parameterValues?.findIndex((item: any) => item.name === action?.payload?.name);
-      console.log('paramerterIndex', paramerterIndex);
       
       if (paramerterIndex !== -1) {
         // Use spread operator to create a new object with updated properties
@@ -205,18 +199,12 @@ const snapshotSlice: any = createSlice({
           ...parameterValues[paramerterIndex], 
           [`${key}`]: value, 
         };
-
-        console.log('updatedPrameter => ', updatedPrameter);
-        
-    
         // // Update the array with the new object
         state.snapshotSettingParameters.formattedData = [
           ...parameterValues.slice(0, paramerterIndex),
           updatedPrameter,
           ...parameterValues.slice(paramerterIndex + 1),
         ];
-    
-        console.log('User edited successfully:', state.snapshotSettingParameters);
       }
     },
     setRecordId: (state, action) => {
@@ -225,16 +213,13 @@ const snapshotSlice: any = createSlice({
     setBaseJson: (state, action) => {
       state.baseJson = action.payload
     },
-    setShowSaveParameters: (state, action) => {
-      console.log('www setShowSaveParameters == >', action.payload);
-      
+    setShowSaveParameters: (state, action) => {      
       state.showSaveParameters = action.payload
     },
     setShowLoadedParameters: (state, action) => {
       state.showLoadedParameters = action.payload
     },
     setResourceModelDataParameters: (state, action) => {
-      console.log('rates ===--0 => ', action);
       state.resourceModelDataParameters = action.payload
       if (!state.showSaveParameters) {
         state.snapshotResourceModelDataParameters = action.payload;
@@ -242,56 +227,45 @@ const snapshotSlice: any = createSlice({
       
     },
     setResourceModelDataParameterAttributes: (state, action) => {
-      console.log('qaqa rates ===--02 => ', action);
       const {payload: {key, value}} = action;
       const stateValue = current(state)
       const parameterValues = stateValue?.snapshotResourceModelDataParameters
-      console.log('ee',stateValue?.snapshotResourceModelDataParameters);
       const paramerterIndex = parameterValues?.findIndex((item: any) => item.name === action?.payload?.name);
-      console.log('paramerterIndex snapshotResourceModelDataParameters', paramerterIndex);
       if (paramerterIndex !== -1) {
         // Use spread operator to create a new object with updated properties
         const updatedPrameter = { 
           ...parameterValues[paramerterIndex], 
           [`${key}`]: value, 
         };
-        console.log('snapshotResourceModelDataParameters => ', updatedPrameter);
         state.snapshotResourceModelDataParameters = [
           ...parameterValues.slice(0, paramerterIndex),
           updatedPrameter,
           ...parameterValues.slice(paramerterIndex + 1),
         ];
-        console.log('User snapshotResourceModelDataParameters edited successfully:', state.snapshotResourceModelDataParameters);
       }
     },
     setProjectTasktModelParameters: (state, action) => {
-      console.log('rates ===--0 => ', action);
       state.projectTasktModelParameters = action.payload
       if (!state.showSaveParameters) {
         state.snapshotProjectTasktModelParameters = action.payload;
       }
     },
     setProjectTasktModelParameterAttributes: (state, action) => {
-      console.log('qaqa rates ===--02 => ', action);
       const {payload: {key, value}} = action;
       const stateValue = current(state)
       const parameterValues = stateValue?.snapshotProjectTasktModelParameters
-      console.log('ee',stateValue?.snapshotProjectTasktModelParameters);
       const paramerterIndex = parameterValues?.findIndex((item: any) => item.name === action?.payload?.name);
-      console.log('paramerterIndex snapshotProjectTasktModelParameters', paramerterIndex);
       if (paramerterIndex !== -1) {
         // Use spread operator to create a new object with updated properties
         const updatedPrameter = { 
           ...parameterValues[paramerterIndex], 
           [`${key}`]: value, 
         };
-        console.log('snapshotProjectTasktModelParameters => ', updatedPrameter);
         state.snapshotProjectTasktModelParameters = [
           ...parameterValues.slice(0, paramerterIndex),
           updatedPrameter,
           ...parameterValues.slice(paramerterIndex + 1),
         ];
-        console.log('User snapshotProjectTasktModelParameters edited successfully:', state.snapshotResourceModelDataParameters);
       }
     },
     setSelectedSnapshotFromDB: (state, action) => {
@@ -320,9 +294,7 @@ const snapshotSlice: any = createSlice({
     setIsSnapshotEnable: (state, action) => {
       state.isSnapshotEnable = action.payload
     },
-    setDoCalculation: (state, action) => {
-      console.log('setDoCalculation ===> ', action.payload);
-      
+    setDoCalculation: (state, action) => {      
       state.doCalculation = action.payload
     },
     setShowLiveBase: (state, action) => {
@@ -354,9 +326,7 @@ const snapshotSlice: any = createSlice({
     setLiveParameters: (state, action) => {
       state.liveParameters = action.payload;
     },
-    setCurrentSavedParameters: (state, action) => {
-      console.log('0-=l;==> ', action.payload);
-      
+    setCurrentSavedParameters: (state, action) => {      
       state.currentSavedParameters = action.payload;
     },
     setInitiallyCurrentChangingParameters: (state, action) => {
@@ -382,7 +352,6 @@ const snapshotSlice: any = createSlice({
           updatedPrameter,
           ...parameterValues.slice(paramerterIndex + 1),
         ];
-        console.log('User edited successfully:', state.currentChangingParameters);
       }
     },
     setSnapshotParameters: (state, action) => {
@@ -393,10 +362,10 @@ const snapshotSlice: any = createSlice({
     setLiveResources: (state, action) => {
       state.liveResources = action.payload;
     },
-    setCurrentSavedResources: (state, action) => {
+    setCurrentSavedResources: (state, action) => {      
       state.currentSavedResources = action.payload;
     },
-    setInitiallyCurrentChangingResources: (state, action) => {
+    setInitiallyCurrentChangingResources: (state, action) => {      
       state.currentChangingResources = action.payload;
     },
     setCurrentChangingResources: (state, action) => {
@@ -419,7 +388,6 @@ const snapshotSlice: any = createSlice({
           updatedPrameter,
           ...parameterValues.slice(paramerterIndex + 1),
         ];
-        console.log('User edited successfully:', state.currentChangingResources);
       }
     },
     setSnapshotResources: (state, action) => {
@@ -437,26 +405,30 @@ const snapshotSlice: any = createSlice({
       state.currentChangingProjectTasks = action.payload;
     },
     setCurrentChangingProjectTasks: (state, action) => {
-      const {payload: {key, value}} = action;
+      const {payload: {key, value, selectedValue, isDropDown}} = action;
+      
       const stateValue = current(state)
       const parameterValues = stateValue?.currentChangingProjectTasks;
       
-      const paramerterIndex = parameterValues?.findIndex((item: any) => item.name === action?.payload?.name);
-      
+      const paramerterIndex = parameterValues?.findIndex((item: any) => item.name === action?.payload?.name);      
       if (paramerterIndex !== -1) {
+        let resourceItem
+        if (isDropDown)
+          resourceItem = state?.currentSavedResources?.find((item: any) => item?.resourceId == selectedValue);
         // Use spread operator to create a new object with updated properties
         const updatedPrameter = { 
           ...parameterValues[paramerterIndex], 
-          [`${key}`]: value, 
-        };        
-    
+          [`${key}`]: isDropDown ? {
+            id: resourceItem?.resourceId,
+            name: resourceItem?.name
+          } : value, 
+        };
         // // Update the array with the new object
         state.currentChangingProjectTasks = [
           ...parameterValues.slice(0, paramerterIndex),
           updatedPrameter,
           ...parameterValues.slice(paramerterIndex + 1),
         ];
-        console.log('User edited successfully:', state.currentChangingResources);
       }
     },
     setSnapshotProjectTasks: (state, action) => {

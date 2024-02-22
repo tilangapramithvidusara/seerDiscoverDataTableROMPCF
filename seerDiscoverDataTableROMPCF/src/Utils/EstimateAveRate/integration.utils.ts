@@ -39,9 +39,7 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
       const IntegrationDataSet = JSON.parse(interfaces_Crf96_json?.value)
       if(IntegrationDataSet?.length) {
       const integrationLoop = IntegrationDataSet && IntegrationDataSet.length && IntegrationDataSet.map((integrationItem: any, itegrationIndex: number) => {
-        let k2 = integrationItem?.['305110'];
-        console.log(k2);
-        
+        let k2 = integrationItem?.['305110'];        
         
         let m2 = 0
         let n2 = 0
@@ -51,42 +49,35 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
         let r2 = 0;
         let s2 = 0
         let t2 = 0;
-        console.log("integrationItem?.['304600']", integrationItem?.['304600']);
-        console.log("integrationItem?.['304700']", integrationItem?.['304700']);
-        console.log("integrationItem?.['305100']", integrationItem?.['305100']);
-        console.log("integrationItem?.['305110']", integrationItem?.['305110']);
-        console.log("integrationItem?.['305120']", integrationItem?.['305120']);
+        // console.log("integrationItem?.['304600']", integrationItem?.['304600']);
+        // console.log("integrationItem?.['304700']", integrationItem?.['304700']);
+        // console.log("integrationItem?.['305100']", integrationItem?.['305100']);
+        // console.log("integrationItem?.['305110']", integrationItem?.['305110']);
+        // console.log("integrationItem?.['305120']", integrationItem?.['305120']);
         
         if (integrationItem?.['305110'] !== '') {          
           if (integrationItem?.['304600'] !== '') {
-            const value: any = integrationParameters.find((item, index) => item.lookup == integrationItem?.['304600']);
-            console.log('value m2 ==> ', value);
-            
+            const value: any = integrationParameters.find((item, index) => item.lookup == integrationItem?.['304600']);            
             m2 = value?.score || 0
           }
           if (integrationItem?.['304700'] !== '') {
             const value: any = integrationParameters.find((item, index) => item.lookup == integrationItem?.['304700']);
-            console.log('value n2 ==> ', value);
             n2 = value?.score || 0
           }
           // 305100
           if (integrationItem?.['305100'] !== '') {
             const value: any = integrationParameters.find((item, index) => item.lookup == integrationItem?.['305100']);
-            console.log('value o2 ==> ', value);
             o2 = value?.score || 0
           }
           if (integrationItem?.['305110'] !== '') {
             const value: any =  integrationParameters.find((item, index) => item.type == 'Messages');
-            console.log('value op ==> ', value, integrationItem?.['305110'], (value?.score || 0) * integrationItem?.['305110']);
             p2 = (value?.score || 0) * integrationItem?.['305110']
           }
           if (integrationItem?.['305120'] !== '') {
             const value: any = integrationParameters.find((item, index) => item.lookup == integrationItem?.['305120']);
-            console.log('value q2 ==> ', value);
             q2 = value?.score || 0
           }
           r2 = m2 + n2 + o2 + p2 + q2;
-          console.log('r2 => ', r2);
 
           // find s2
           let maxObject: any = null;
@@ -94,9 +85,7 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
           // Iterate over the array
           integrationParameters.forEach((param) => {
             // Check if the type is "Size" and the lookup is less than or equal to 9
-            console.log('1q1q1q1==> ', param.type === 'Size' && param.lookup <= r2.toString(), param.type, param.lookup);
             if (param.type === 'Size') {
-              console.log('1q1q1q==> ', parseFloat(param?.lookup) <= r2, param.type, param.lookup, parseFloat(param?.lookup), r2);
               if (parseFloat(param?.lookup) <= r2) {
                 // Update maxObject if the current lookup is greater
                 if (!maxObject || parseFloat(param.lookup) > parseFloat(maxObject.lookup)) {
@@ -107,16 +96,7 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
           });
           
           const valueS2: any = maxObject
-          // integrationParameters.find((item, index) => {
-          //   console.log('item.lookup ', item.lookup, r2);
-          //   console.log('item.type ', item.lookup, 'Size');
-            
-          //   return(item.lookup == r2.toString() && item.type == 'Size')
-          // });
-          console.log('s2 => ', valueS2?.score || 0, valueS2);
-          
           s2 = valueS2?.score || 0
-          console.log('s2=> ', valueS2);
           
           // Days per msg
           const valuePT21: any = integrationParameters.find((item, index) => item.type == 'Days per msg');
@@ -126,7 +106,6 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
         }
         integrationValue += t2;
       })
-      console.log(integrationValue);
       
       await Promise.all(integrationLoop);
     }
@@ -151,16 +130,12 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
         )
         
       }
-      // await Promise.all([integrationLoop])
-      console.log('hjhjhj ==.', returnObject);
-      
+      // await Promise.all([integrationLoop])      
       return returnObject;
     } else {
-      console.log("generateAnalysisDesignMValue false ==> ");
       return returnObject;
     }
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return returnObject;
   }
 }

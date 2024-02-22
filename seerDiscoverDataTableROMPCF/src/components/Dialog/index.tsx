@@ -6,6 +6,7 @@ import DyanamicTable from '../Table/DyanamicTable';
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import ResourceTable from '../Table/ResourceTable';
+import ProjectTaskTable from '../Table/ProjectTaskTable';
 
 export interface SimpleDialogProps {
   open?: boolean;
@@ -38,12 +39,12 @@ export default function SimpleDialog(props: SimpleDialogProps) {
     {
       key: '2',
       label: 'Resources',
-      children: <ResourceTable handleClose={handleClose}/>,
+      children: <ResourceTable handleClose={handleClose} arrayGeneratorHandler={arrayGeneratorHandler}/>,
     },
     {
       key: '3',
       label: 'Project Task',
-      children: <div style={{ height: '200px' }}></div>,
+      children: <ProjectTaskTable handleClose={handleClose} arrayGeneratorHandler={arrayGeneratorHandler}/>,
     },
   ];
 
