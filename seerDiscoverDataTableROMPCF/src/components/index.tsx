@@ -283,8 +283,8 @@ const App = ({
         // NEW STATE
         dispatch(setIsSnapshotLoading(true));
         const record: any = {};
-        // record[snapshotAPIConstants?.SEER_CREATED_BY_ID] = `/systemusers(${contactId})`;
-        // record[snapshotAPIConstants?.SEER_MODIFIED_BY_ID] = `/systemusers(${contactId})`;
+        record[snapshotAPIConstants?.SEER_CREATED_BY_ID] = `/contacts(${contactId})`;
+        record[snapshotAPIConstants?.SEER_MODIFIED_BY_ID] = `/contacts(${contactId})`;
         record[snapshotAPIConstants.SEER_ACCOUNT_RECORD_ID] = `/accounts(${accountId})`; // Lookup
         record[snapshotAPIConstants.SEER_CONTACT_RECORD_ID] = `/contacts(${contactId})`; // Lookup
         record.seer_name = info?.seerName; // Text
@@ -324,7 +324,7 @@ const App = ({
         // NEW STATE
         dispatch(setIsSnapshotLoading(true));
         const record: any = {};
-        record["seer_modifiedbyportal@odata.bind"] = `/systemusers(${contactId})`;
+        record[snapshotAPIConstants?.SEER_MODIFIED_BY_ID] = `/contacts(${contactId})`;
 
         window.parent.webapi.safeAjax({
           type: "PATCH",
@@ -456,8 +456,8 @@ const App = ({
     setShowOverlaySave(true)
     
     dispatch(
-      saveSnapshotAsyncAPI({
-      // saveInitialUpdateSnapshotRecordAsyncAPI({
+      // saveSnapshotAsyncAPI({
+      saveInitialUpdateSnapshotRecordAsyncAPI({
       requestNumber: 2,
       // 1,
       recodeId: loadedSnapshotId,
@@ -466,7 +466,7 @@ const App = ({
       snapshotData: convertJsonToBase64({
         ...currentSavedParameters, 
         currentSavedResources,
-        // currentSavedProjectTasks,
+        currentSavedProjectTasks,
       }),
       seerDescription: info?.description,
       arrayGeneratorHandler,
@@ -537,7 +537,7 @@ const App = ({
       snapshotData: convertJsonToBase64({
         ...currentSavedParameters, 
         currentSavedResources,
-        // currentSavedProjectTasks,
+        currentSavedProjectTasks,
       }),
       seerDescription: info?.description,
       arrayGeneratorHandler,

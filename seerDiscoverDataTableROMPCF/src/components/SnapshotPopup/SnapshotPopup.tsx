@@ -70,7 +70,8 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
                 selectSnapshot
                   ? snapshots?.find(
                       (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
-                    )?.['_createdby_value@OData.Community.Display.V1.FormattedValue']
+                    )?.['_seer_createdbyportal_value@OData.Community.Display.V1.FormattedValue']
+                    // ['_createdby_value@OData.Community.Display.V1.FormattedValue']
                   : ''
               }
             />
@@ -98,7 +99,8 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
                 selectSnapshot
                   ? snapshots?.find(
                       (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
-                    )?.['_modifiedby_value@OData.Community.Display.V1.FormattedValue']
+                    )?.['_seer_modifiedbyportal_value@OData.Community.Display.V1.FormattedValue']
+                    // ['_modifiedby_value@OData.Community.Display.V1.FormattedValue']
                   : ''
               }
             />

@@ -31,12 +31,14 @@ export default function SwipeableTemporaryDrawer({
   data,
   setIsOpenSideDrawer,
   cellDataForSidePane,
+  currency,
 }: {
   anchor: Anchor;
   isOpenSideDrawer: boolean;
   setIsOpenSideDrawer: any;
   data: any;
   cellDataForSidePane: any;
+  currency: string;
 }) {
   const selectorForSidePane = useSelector((state: any) => state?.report);
   const [showCellData, setShowCellData] = React.useState<any>();
@@ -53,7 +55,7 @@ export default function SwipeableTemporaryDrawer({
 
     const data: any = CommonUtils[cellDataForSidePane?.table]?.[
       cellDataForSidePane?.nameCategory
-    ]?.[cellDataForSidePane?.name]?.(selectorForSidePane, columnValue);
+    ]?.[cellDataForSidePane?.name]?.(selectorForSidePane, columnValue, currency);
     if (data) setTableData(data);
   }, [cellDataForSidePane]);
 

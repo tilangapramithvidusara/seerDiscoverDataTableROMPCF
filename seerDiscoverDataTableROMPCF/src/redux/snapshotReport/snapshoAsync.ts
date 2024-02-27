@@ -123,7 +123,7 @@ export const loadSnapshotsAsync: any = () => {
       dispatch(setSnapshotLoading(true));
       window.parent.webapi.safeAjax({
         type: "GET",
-        url: "/_api/seer_rominportalsnapshots?$select=seer_rominportalsnapshotid,_seer_account_value,_seer_contact_value,_createdby_value,createdon,seer_description,_modifiedby_value,modifiedon,seer_name&$orderby=createdon desc,modifiedon desc",
+        url: "/_api/seer_rominportalsnapshots?$select=seer_rominportalsnapshotid,_seer_account_value,_seer_contact_value,_createdby_value,createdon,seer_description,_modifiedby_value,modifiedon,_seer_createdbyportal_value,_seer_modifiedbyportal_value,seer_name&$orderby=createdon desc,modifiedon desc",
         // "/_api/seer_rominportalsnapshots?$select=seer_rominportalsnapshotid,_seer_contact_value,_createdby_value,createdon,seer_description,_modifiedby_value,modifiedon"
         contentType: "application/json",
         headers: {
@@ -272,43 +272,6 @@ export const getUpdatedSnapshotFile = (info: any) => {
     });
     } catch (error) {
       dispatch(setSnapshotLoading(false))
-    } finally {
-      executeAfterGivenDilay(() => {
-        dispatch(setSnapshotLoading(false))
-      });
-    }
-  }
-}
-
-
-export const loadSelectedSnapshotAsyncTEST: any = (info: any) => {
-
-  return (dispatch: any) => {
-    try {
-      dispatch(setSnapshotLoading(true));
-      dispatch(setSettingParameters({a: 'll'}));
-      dispatch(setResourceModelDataParameters({a: 'll'}));
-      dispatch(setSelectedSnapshotFromDB('111'));
-      dispatch(setShowSaveParameters(true));
-      dispatch(setStateSnapshot(true))
-
-      // NEW STATE
-      dispatch(setLoadedSnapshotId('111'));
-      dispatch(setLoadedSnapshotDetails('111'))
-      dispatch(setCurrentSavedParameters({a: 'll'}));
-      dispatch(setInitiallyCurrentChangingParameters({a: 'll'}))
-      dispatch(setSnapshotParameters({a: 'll'}))
-      // dispatch(setCurrentSavedResources())
-      // dispatch(setInitiallyCurrentChangingResources())
-      // dispatch(setCurrentSavedProjectTasks())
-      // dispatch(setInitiallyCurrentChangingProjectTasks())
-      dispatch(setSnapshotBase({a: 'll'}));
-      dispatch(setShowLoadedSnapshotBase(true));
-      dispatch(setShowLoadedSnapshotPametersNRates(true));
-      // dispatch(setDoCalculation(true));
-      dispatch(info?.arrayGeneratorHandler(false, {a: 'll'}))
-    } catch (error) {
-      console.log('retrive snapshot error: ');
     } finally {
       executeAfterGivenDilay(() => {
         dispatch(setSnapshotLoading(false))

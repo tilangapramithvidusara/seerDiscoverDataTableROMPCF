@@ -305,7 +305,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
       resultValueAnalisisDesignModule = checkConditionAndGenerateValue(responseAnalisisDesign?.resultModuleValue, hourlyRate?.value, hoursPerday, condition)
       resultValueMSAnalisisDesignModule = checkConditionAndGenerateValue(responseAnalisisDesign?.resultModuleValueMS, hourlyRate?.value, hoursPerday, condition)
       resultValueMSCAnalisisDesignModule = checkConditionAndGenerateValue(responseAnalisisDesign?.resultModuleValueMSC, hourlyRate?.value, hoursPerday, condition)
-      estimageAveRateAnalysisDesignSidePane = costReportMainObject({
+      estimageAveRateAnalysisDesignSidePane = costReportMainObject({// resultModuleNumber
         resultValue: resultValueAnalisisDesign,
         resultValueMS: resultValueMSAnalisisDesign,
         resultValueMSC: resultValueMSCAnalisisDesign,
@@ -321,6 +321,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         resultValueModule: resultValueAnalisisDesignModule,
         resultValueMSModule: resultValueMSAnalisisDesignModule,
         resultValueMSCModule: resultValueMSCAnalisisDesignModule,
+        totalModules: responseAnalisisDesign?.resultModuleNumber
       });
 
       resultValueCustomisationDesign = checkConditionAndGenerateValue(responseCustomisationDesign?.customisation?.resultValue, hourlyRate?.value, hoursPerday, condition);
@@ -411,6 +412,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
           resultValueModule: resultValueConfigurationModule,
           resultValueMSModule: resultValueMSConfigurationModule,
           resultValueMSCModule: resultValueMSCConfigurationModule,
+          totalModules: responseAnalisisDesign?.configuration?.resultModuleNumber
         })
 
       resultValueIntegration = checkConditionAndGenerateValue(responseIntegration?.integration?.resultValue, hourlyRate?.value, hoursPerday, condition)
@@ -1096,6 +1098,9 @@ export const costReportMainObject = (values: any, subValues: any, hourlyRate: nu
     object.MS.moduleValue = moduleReturn(returnModule, moduleValues?.resultValueMSModule);
     object.MSC.baseValue = baseValue?.resultValueMSCBase;
     object.MSC.moduleValue = moduleReturn(returnModule, moduleValues?.resultValueMSCModule);
+    object.M.totalNumberOfModules = typeData?.resultModuleNumber;
+    object.MS.totalNumberOfModules = typeData?.resultModuleNumber;
+    object.MSC.totalNumberOfModules = typeData?.resultModuleNumber;
   }
   return object;
 }
@@ -1333,11 +1338,15 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         }
 
       });
-
+      const totalModules: any[] = [];
       const moduleLoop = await ModuleData && ModuleData?.length && ModuleData.map((moduleDataItem: any, moduleDataIndex: any) => {
         
+        if (!totalModules.find((moduleElement) => moduleElement.moduleSeerModuleName == moduleDataItem?.moduleSeerModuleName)) {
+          totalModules.push(moduleDataItem)
+        }
         // Must
-        if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
+        // if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
+        if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000]) {
           if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
             overidesModulesAnalysisDesign.push(moduleDataItem);
           } else {
@@ -1354,7 +1363,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
 
         // Must Should
         // if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001]) && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
-          if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001])) {
+        if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001])) {
         //
           if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
             overidesModulesAnalysisDesignMS.push(moduleDataItem);
@@ -1371,7 +1380,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
 
         // Must Should Could
         // if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002]) && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
-          if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002])) {
+        if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002])) {
 
         //
           if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
@@ -1415,7 +1424,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         // Must Should
         // if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001]) && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
         if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001])) {
-        if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
+          if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
             overidesModulesConfigurationMS.push(moduleDataItem);
           } else {
             modulesConfigurationMS.push(moduleDataItem);
@@ -1436,7 +1445,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         // Must Should Could
         // if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002]) && moduleDataItem?.moduleSeerModuleName != "Cost Accounting - BC") {
         if ((moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002])) {
-        if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
+          if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
             overidesModulesConfigurationMSC.push(moduleDataItem);
           } else {
             modulesConfigurationMSC.push(moduleDataItem);
@@ -1455,6 +1464,17 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           }
         }
       });
+
+      // console.log('p ==>', 
+      // totalModules.length, 
+      // overidesModulesConfiguration.length, 
+      // overidesModulesConfigurationMS.length,
+      // overidesModulesConfigurationMSC.length,
+      // modulesConfiguration.length,
+      // modulesConfigurationMS.length,
+      // modulesConfigurationMSC.length,
+      // );
+      
       buildEstimateConfigurationValueFromBaseData = primaryResourceConfigurationValueFromBaseData + secondaryResourceConfigurationValueFromBaseData
       buildEstimateConfigurationValueFromBaseDataMS = primaryResourceConfigurationValueFromBaseDataMS + secondaryResourceConfigurationValueFromBaseDataMS
       buildEstimateConfigurationValueFromBaseDataMSC = primaryResourceConfigurationValueFromBaseDataMSC + secondaryResourceConfigurationValueFromBaseDataMSC 
@@ -1545,6 +1565,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         resultOverideBase: overidesBaseAnalysisDesign,
         resultOverideBaseMS: overidesBaseAnalysisDesignMS,
         resultOverideBaseMSC: overidesBaseAnalysisDesignMSC,
+        resultModuleNumber: totalModules?.length,
         resultModuleValue: generateReturnValue(
           0,
           0,
@@ -1609,6 +1630,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           resultOverideBase: overidesBaseConfiguration,
           resultOverideBaseMS: overidesBaseConfigurationMS,
           resultOverideBaseMSC: overidesBaseConfigurationMSC,
+          resultModuleNumber: totalModules?.length,
           resultModuleValue: generateReturnValue(
             0,
             0,

@@ -234,22 +234,27 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       resultValueAnalisisDesign = responseAnalisisDesign?.resultValue
       resultValueMSAnalisisDesign = responseAnalisisDesign?.resultValueMS
       resultValueMSCAnalisisDesign = responseAnalisisDesign?.resultValueMSC
-
+      // console.log(responseAnalisisDesign?.resultValue);
+      
       resultValueCustomisationDesign = responseCustomisationDesign?.customisation?.resultValue
       resultValueMSCustomisationDesign = responseCustomisationDesign?.customisation?.resultValueMS
       resultValueMSCCustomisationDesign = responseCustomisationDesign?.customisation?.resultValueMSC
+      // console.log(responseCustomisationDesign?.customisation?.resultValue);
 
       resultValueCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValue
       resultValueMSCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValueMS
       resultValueMSCCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValueMSC
+      // console.log(responseCustomRequirementDesign?.customRequirement?.resultValue)
 
       resultValueDocumentation = responseDocumentation?.documentationAveRateMilestone?.resultValue
       resultValueMSDocumentation = responseDocumentation?.documentationAveRateMilestone?.resultValueMS
       resultValueMSCDocumentation = responseDocumentation?.documentationAveRateMilestone?.resultValueMSC
+      // console.log(responseDocumentation?.documentationAveRateMilestone?.resultValue)
       
       resultValueDesignReview = responseDesignReview?.designReviewAveRateMilestone?.resultValue;
       resultValueMSDesignReview = responseDesignReview?.designReviewAveRateMilestone?.resultValueMS;
       resultValueMSCDesignReview = responseDesignReview?.designReviewAveRateMilestone?.resultValueMSC;
+      // console.log(responseDesignReview?.designReviewAveRateMilestone?.resultValue)
       
       totalOfSubAnalysisDesign = resultValueAnalisisDesign 
         + resultValueCustomisationDesign 
@@ -270,6 +275,7 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       projectManagerAnalysisDesign = totalOfSubAnalysisDesign * para_d4_copy;
       projectManagerAnalysisDesignMS = totalOfSubAnalysisDesignMS * para_d4_copy;
       projectManagerAnalysisDesignMSC = totalOfSubAnalysisDesignMSC * para_d4_copy;
+      // console.log(totalOfSubAnalysisDesign * para_d4_copy)
       
       totalOfAnalysisDesign = totalOfSubAnalysisDesign + projectManagerAnalysisDesign;
       totalOfAnalysisDesignMS = totalOfSubAnalysisDesignMS + projectManagerAnalysisDesignMS;
@@ -278,41 +284,52 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       totalFteMS += totalOfAnalysisDesignMS
       totalFteMSC += totalOfAnalysisDesignMSC
 
+      // console.log(totalOfAnalysisDesign)
+
       resultValueConfiguration = responseAnalisisDesign?.configuration?.resultValue
       resultValueMSConfiguration = responseAnalisisDesign?.configuration?.resultValueMS
-      resultValueMSCConfiguration = responseAnalisisDesign?.configuration?.resultValueMSC      
+      resultValueMSCConfiguration = responseAnalisisDesign?.configuration?.resultValueMSC  
+      // console.log(responseAnalisisDesign?.configuration?.resultValue)    
 
       resultValueIntegration = responseIntegration?.integration?.resultValue
       resultValueMSIntegration = responseIntegration?.integration?.resultValueMS
-      resultValueMSCIntegration = responseIntegration?.integration?.resultValueMSC      
+      resultValueMSCIntegration = responseIntegration?.integration?.resultValueMSC   
+      // console.log(responseIntegration?.integration?.resultValue)   
 
       resultValueCustomisationBuild = responseCustomisationDesign?.customisationBuild?.resultValue;
       resultValueMSCustomisationBuild = responseCustomisationDesign?.customisationBuild?.resultValueMS;
-      resultValueMSCCustomisationBuild = responseCustomisationDesign?.customisationBuild?.resultValueMSC;      
+      resultValueMSCCustomisationBuild = responseCustomisationDesign?.customisationBuild?.resultValueMSC;  
+      // console.log(responseCustomisationDesign?.customisationBuild?.resultValue)    
 
       resultValueCustomRequirementBuild = responseCustomRequirementDesign?.customRequirementBuild?.resultValue;
       resultValueMSCustomRequirementBuild = responseCustomRequirementDesign?.customRequirementBuild?.resultValueMS;
-      resultValueMSCCustomRequirementBuild = responseCustomRequirementDesign?.customRequirementBuild?.resultValueMSC;      
+      resultValueMSCCustomRequirementBuild = responseCustomRequirementDesign?.customRequirementBuild?.resultValueMSC;  
+      // console.log(responseCustomRequirementDesign?.customRequirementBuild?.resultValue)    
 
       resultValueDocumentLayout = responseDocumentLayout?.documentLayout?.resultValue;
       resultValueMSDocumentLayout = responseDocumentLayout?.documentLayout?.resultValueMS;
-      resultValueMSCDocumentLayout = responseDocumentLayout?.documentLayout?.resultValueMSC;      
+      resultValueMSCDocumentLayout = responseDocumentLayout?.documentLayout?.resultValueMSC; 
+      // console.log(responseDocumentLayout?.documentLayout?.resultValue)     
 
       resultValueReporting = responseReporting?.reportingAveRateMilestone?.resultValue;
       resultValueMSReporting = responseReporting?.reportingAveRateMilestone?.resultValueMS;
-      resultValueMSCReporting = responseReporting?.reportingAveRateMilestone?.resultValueMSC;      
+      resultValueMSCReporting = responseReporting?.reportingAveRateMilestone?.resultValueMSC; 
+      // console.log(responseReporting?.reportingAveRateMilestone?.resultValue)     
 
       resultValueDataMigration = responseDataMigration?.dataMigrationAveRateMilestone?.resultValue;
       resultValueMSDataMigration = responseDataMigration?.dataMigrationAveRateMilestone?.resultValueMS;
-      resultValueMSCDataMigration = responseDataMigration?.dataMigrationAveRateMilestone?.resultValueMSC;      
+      resultValueMSCDataMigration = responseDataMigration?.dataMigrationAveRateMilestone?.resultValueMSC; 
+      // console.log(responseDataMigration?.dataMigrationAveRateMilestone?.resultValue)     
 
       resultValueCRP = responseCRP?.crpAveRateMilestone?.resultValue;
       resultValueMSCRP = responseCRP?.crpAveRateMilestone?.resultValueMS;
-      resultValueMSCCRP = responseCRP?.crpAveRateMilestone?.resultValueMSC;      
+      resultValueMSCCRP = responseCRP?.crpAveRateMilestone?.resultValueMSC; 
+      // console.log(responseCRP?.crpAveRateMilestone?.resultValue)     
 
       resultValueTesting = responseTesting?.testingAveRateMilestone?.resultValue;
       resultValueMSTesting = responseTesting?.testingAveRateMilestone?.resultValueMS;
-      resultValueMSCTesting = responseTesting?.testingAveRateMilestone?.resultValueMSC;      
+      resultValueMSCTesting = responseTesting?.testingAveRateMilestone?.resultValueMSC; 
+      // console.log(responseTesting?.testingAveRateMilestone?.resultValue)     
 
       totalOfSubBuild = resultValueConfiguration
         + resultValueIntegration
@@ -344,39 +361,47 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       
       projectManagerBuild = totalOfSubBuild * para_d4;
       projectManagerBuildMS = totalOfSubBuildMS * para_d4;
-      projectManagerBuildMSC = totalOfSubBuildMSC * para_d4;      
+      projectManagerBuildMSC = totalOfSubBuildMSC * para_d4;   
+      // console.log(totalOfSubBuild * para_d4)   
 
       totalOfBuild = totalOfSubBuild + projectManagerBuild;
       totalOfBuildMS = totalOfSubBuildMS + projectManagerBuildMS;
       totalOfBuildMSC = totalOfSubBuildMSC + projectManagerBuildMSC;
+      // console.log(totalOfSubBuild + projectManagerBuild)
 
       totalFte += totalOfBuild
       totalFteMS += totalOfBuildMS
       totalFteMSC += totalOfBuildMSC
 
+      // console.log(totalOfBuild)
       // SKIP 4 ROWS
       
       resultValueTrainTheTrainer = responseTrainTheTrainer?.trainTheTrainerAveRateMilestone?.resultValue;
       resultValueMSTrainTheTrainer = responseTrainTheTrainer?.trainTheTrainerAveRateMilestone?.resultValueMS;
-      resultValueMSCTrainTheTrainer = responseTrainTheTrainer?.trainTheTrainerAveRateMilestone?.resultValueMSC;      
+      resultValueMSCTrainTheTrainer = responseTrainTheTrainer?.trainTheTrainerAveRateMilestone?.resultValueMSC;   
+      // console.log(responseTrainTheTrainer?.trainTheTrainerAveRateMilestone?.resultValue)   
 
       // UAT ENVIROMENT PREPARATION MISSING // responseUATEnvironmentPreparation
 
       resultValueUATEnvironmentPreparation = responseUATEnvironmentPreparation?.uatEnvironmentPreparationAveRateMilestone?.resultValue;
       resultValueMSUATEnvironmentPreparation = responseUATEnvironmentPreparation?.uatEnvironmentPreparationAveRateMilestone?.resultValueMS;
-      resultValueMSCUATEnvironmentPreparation = responseUATEnvironmentPreparation?.uatEnvironmentPreparationAveRateMilestone?.resultValueMSC;      
+      resultValueMSCUATEnvironmentPreparation = responseUATEnvironmentPreparation?.uatEnvironmentPreparationAveRateMilestone?.resultValueMSC;   
+      // console.log(responseUATEnvironmentPreparation?.uatEnvironmentPreparationAveRateMilestone?.resultValue)   
 
       resultValueUATSupport = responseUATSupport?.uatSupportAveRateMilestone?.resultValue;
       resultValueMSUATSupport = responseUATSupport?.uatSupportAveRateMilestone?.resultValueMS;
-      resultValueMSCUATSupport = responseUATSupport?.uatSupportAveRateMilestone?.resultValueMSC;      
+      resultValueMSCUATSupport = responseUATSupport?.uatSupportAveRateMilestone?.resultValueMSC;   
+      // console.log(responseUATSupport?.uatSupportAveRateMilestone?.resultValue)   
 
       resultValueProdEnvironmentPreparation = responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValue;
       resultValueMSProdEnvironmentPreparation = responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValueMS;
-      resultValueMSCProdEnvironmentPreparation = responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValueMSC;      
+      resultValueMSCProdEnvironmentPreparation = responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValueMSC;  
+      // console.log(responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValue)    
 
       resultValueSupportHandover = responseSupportHandover?.supportHandoverAveRateMilestone?.resultValue;
       resultValueMSSupportHandover = responseSupportHandover?.supportHandoverAveRateMilestone?.resultValueMS;
-      resultValueMSCSupportHandover = responseSupportHandover?.supportHandoverAveRateMilestone?.resultValueMSC;      
+      resultValueMSCSupportHandover = responseSupportHandover?.supportHandoverAveRateMilestone?.resultValueMSC;    
+      // console.log(responseSupportHandover?.supportHandoverAveRateMilestone?.resultValue)  
 
       totalOfSubDeploy = resultValueTrainTheTrainer
         + resultValueUATEnvironmentPreparation
@@ -397,23 +422,29 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       projectManagerDeploy = totalOfSubDeploy * para_d4;
       projectManagerDeployMS = totalOfSubDeployMS * para_d4;
       projectManagerDeployMSC = totalOfSubDeployMSC * para_d4;
+      // console.log(totalOfSubDeploy * para_d4)
 
       totalOfDeploy = totalOfSubDeploy + projectManagerDeploy;
       totalOfDeployMS = totalOfSubDeployMS + projectManagerDeployMS;
       totalOfDeployMSC = totalOfSubDeployMSC + projectManagerDeployMSC;
 
+      // console.log(totalOfSubDeploy + projectManagerDeploy)
+
       totalFte += totalOfDeploy
       totalFteMS += totalOfDeployMS
       totalFteMSC += totalOfDeployMSC
+      // console.log(totalOfDeploy)
 
       // responseDocumentLayout
       resultValueEndUserTraining = responseDocumentLayout?.endUserTraining?.resultValue;
       resultValueMSEndUserTraining = responseDocumentLayout?.endUserTraining?.resultValueMS;
-      resultValueMSCEndUserTraining = responseDocumentLayout?.endUserTraining?.resultValueMSC;      
+      resultValueMSCEndUserTraining = responseDocumentLayout?.endUserTraining?.resultValueMSC;   
+      // console.log(responseDocumentLayout?.endUserTraining?.resultValue)   
 
       resultValuePostGoLive = responsePostGoLive?.postGoLiveAveRateMilestone?.resultValue;
       resultValueMSPostGoLive = responsePostGoLive?.postGoLiveAveRateMilestone?.resultValueMS;
-      resultValueMSCPostGoLive = responsePostGoLive?.postGoLiveAveRateMilestone?.resultValueMSC;      
+      resultValueMSCPostGoLive = responsePostGoLive?.postGoLiveAveRateMilestone?.resultValueMSC;   
+      // console.log(responsePostGoLive?.postGoLiveAveRateMilestone?.resultValue)   
 
       totalOfSubOperation = resultValueEndUserTraining
         + resultValuePostGoLive;
@@ -425,21 +456,27 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       projectManagerOperation = totalOfSubOperation * para_d4;
       projectManagerOperationMS = totalOfSubOperationMS * para_d4;
       projectManagerOperationMSC = totalOfSubOperationMSC * para_d4;
+      // console.log(totalOfSubOperation * para_d4)
 
       totalOfOperation = totalOfSubOperation + projectManagerOperation;
       totalOfOperationMS = totalOfSubOperationMS + projectManagerOperationMS;
       totalOfOperationMSC = totalOfSubOperationMSC + projectManagerOperationMSC;
+      // console.log(totalOfSubOperation + projectManagerOperation)
 
       totalFte += totalOfOperation
       totalFteMS += totalOfOperationMS
       totalFteMSC += totalOfOperationMSC
 
+      // console.log(totalOfOperation)
+
       fColmnValueEstimateAveRate = responseDocumentLayout?.projectRisk?.estimateAveRate
+
+      // console.log(fColmnValueEstimateAveRate)
 
       // ################################ESTIMATE RESOURCE################################
 
     }
-
+    // console.log('===> ', totalFte, generateTotalFte(condition, totalFte, hoursPerday, 5))
     ////////////////ESTIMATE RESOURCE MILESTONE START///////////////
     return {
       totalFte: generateTotalFte(condition, totalFte, hoursPerday, 5),

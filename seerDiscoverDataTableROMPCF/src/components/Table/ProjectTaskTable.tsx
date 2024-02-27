@@ -84,7 +84,12 @@ const ProjectTaskTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: {
     dispatch(setCurrentSavedParameters(currentChangingParameters))
     dispatch(setCurrentSavedResources(currentChangingResources))
     dispatch(setCurrentSavedProjectTasks(currentChangingProjectTasks))
-    arrayGeneratorHandler(false, {...currentChangingParameters, base: snapshotBase ? snapshotBase : initialFetchData, currentSavedResources: currentChangingResources, currentSavedProjectTasks: currentChangingProjectTasks}, 'snapshot')
+    arrayGeneratorHandler(false, {
+      ...currentChangingParameters,
+      base: snapshotBase ? snapshotBase : initialFetchData,
+      currentSavedResources: currentChangingResources,
+      currentSavedProjectTasks: currentChangingProjectTasks
+    }, 'snapshot')
   };
 
   // useEffect(() => {

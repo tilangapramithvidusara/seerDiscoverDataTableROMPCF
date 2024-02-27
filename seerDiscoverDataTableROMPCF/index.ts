@@ -72,6 +72,8 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
     public updateView(context?: ComponentFramework.Context<IInputs>): any
     {   
         // flowurl, accountId, userId, name, azureurl
+        // console.log('context?.parameters ==> ', context?.parameters);
+        
         const flowurl = context?.parameters?.deleteFlow?.raw;
         const accountId = context?.parameters?.accountId?.raw;
         const userId = context?.parameters?.userId?.raw;

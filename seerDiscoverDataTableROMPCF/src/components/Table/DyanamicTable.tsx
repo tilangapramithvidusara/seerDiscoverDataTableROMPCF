@@ -49,7 +49,12 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
     // dispatch(setCurrentChangingResources(currentChangingResources))
     dispatch(setCurrentSavedResources(currentChangingResources))
     dispatch(setCurrentSavedProjectTasks(currentChangingProjectTasks))
-    arrayGeneratorHandler(false, {...currentChangingParameters, base: snapshotBase ? snapshotBase : initialFetchData, currentSavedResources: currentChangingResources}, 'snapshot')
+    arrayGeneratorHandler(false, {
+      ...currentChangingParameters, 
+      base: snapshotBase ? snapshotBase : initialFetchData,
+      currentSavedResources: currentChangingResources,
+      currentSavedProjectTasks: currentChangingProjectTasks
+    }, 'snapshot')
   };
 
   useEffect(() => {

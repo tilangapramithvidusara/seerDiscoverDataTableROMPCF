@@ -29,12 +29,12 @@ export const complexityData: any = {
 }
 
 export const currencyData: any = {
-  'AUD': 'AUD$',
+  'AUD': 'A$', // AUD
   'GBP': '£',
-  'CAD': 'CAD$',
+  'CAD': 'CA$', // CAD
   'EUR': '€',
-  'NZD': 'NZD$',
+  'NZD': 'NZ$', // NZD
   'BRL': 'R$',
-  'ZAR': 'R',
+  'ZAR': 'ZAR', // R
   'USD': '$'
 }

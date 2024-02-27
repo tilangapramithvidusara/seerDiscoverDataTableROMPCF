@@ -43,7 +43,7 @@ export default function SimpleDialog(props: SimpleDialogProps) {
     },
     {
       key: '3',
-      label: 'Project Task',
+      label: 'Project Tasks',
       children: <ProjectTaskTable handleClose={handleClose} arrayGeneratorHandler={arrayGeneratorHandler}/>,
     },
   ];

@@ -166,6 +166,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
                   setIsOpenSideDrawer={setIsOpenSideDrawer} 
                   data={selectedRow}
                   cellDataForSidePane={cellDataForSidePane}
+                  currency={(!isLive) ? (currentSavedParameters?.formattedData[parameterKeyIndex.currency]?.currentValue || currency) : currency}
                 />
               )}
               
@@ -193,7 +194,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
                   fontSize: '10px',
                   textTransform: 'none',
                   backgroundColor: selectedTab === 'DL' ? '#015BA1' : '#676767', // Change 'red' to the color you want
-                  }} onClick={() => handleSubTab("DL")} variant="contained">Data Layouts</Button>
+                  }} onClick={() => handleSubTab("DL")} variant="contained">Document Layouts</Button>
               </div>
             } 
             </div>
