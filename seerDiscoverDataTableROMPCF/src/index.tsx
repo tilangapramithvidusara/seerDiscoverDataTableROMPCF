@@ -1,15 +1,13 @@
 import * as React from "react";
 import TabComponent from "./components/index";
-// const TabComponent = React.lazy(() => import('./components/index'));
 
 import { arrayGenerator } from "./Utils/SetupDataArray/analysis.design.array.utils";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteOutputSetAsync, fetchInitialDataAsync } from "./redux/report/reportAsycn";
 import { initialFetchFailure, initialFetchSuccess, setEstimateAveRateAnalysisDesign, setEstimateAveRateConfiguration, setEstimateAveRateCusomisationDesign, setEstimateAveRateCustomRequirementBuild, setEstimateAveRateCustomerRequirementDesign, setEstimateAveRateCustomisationBuild, setEstimateAveRateDesignReview, setEstimateAveRateDocumentLayout, setEstimateAveRateIntegration, setImageUrl } from "./redux/report/reportSlice";
-import Loader from "./components/Loader/Loader";
 import { dataMapper } from "./Utils/RequirmentData/requirement.data.utils";
-import { saveSnapshotAsync } from "./redux/snapshotReport/snapshoAsync";
-import { setBaseJson, setLiveBase, setSnapshotBase } from "./redux/snapshotReport/snapshotReportSlice";
+import { setBaseJson, setLiveBase, setLiveResources, setSnapshotBase } from "./redux/snapshotReport/snapshotReportSlice";
+import OverlayComponent from "./components/Overley";
 
 
 function Index({tableContent, context, imageUrl}: {tableContent: any, context: any, imageUrl?: any}) {
@@ -37,11 +35,16 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   // NEW STATE
   const liveParameters = useSelector((state: any) => state?.snapshot?.liveParameters);
   const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters);
+  const liveResources = useSelector((state: any) => state?.snapshot?.liveResources);
+  const currentSavedResources = useSelector((state: any) => state?.snapshot?.currentSavedResources);
+  const liveProjectTasks = useSelector((state: any) => state?.snapshot?.liveProjectTasks);
+  const currentSavedProjectTasks = useSelector((state: any) => state?.snapshot?.currentSavedProjectTasks);
   // const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters);
   const snapshotParameters = useSelector((state: any) => state?.snapshot?.snapshotParameters);
   const isLiveValue: boolean = useSelector((state: any) => state?.snapshot?.isLive);
   const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
   const liveBase = useSelector((state: any) => state?.snapshot?.liveBase)
+  const isLoadingSnapshot = useSelector((state: any) => state?.snapshot?.isLoadingSnapshot);
 
   React.useEffect(() => {
     initialTriggerHandler();
@@ -71,12 +74,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   const arrayGeneratorHandler = async(isLive?: boolean, requestObj?: any, mode?: string) => {
     setIsloading(true)
 
-    console.log('lo=', currentSavedParameters);
-    console.log('lo=2', requestObj);
-    
-    
-
-    const modeStatus = (mode && mode == 'snapshot') ? true : isLive ? !isLive : !isLiveValue;
+    const modeStatus =  (mode && (mode == 'snapshot' || mode == 'liveRefresh')) ? true : isLive ? !isLive : !isLiveValue;
     
     const requirment: any = dataMapper(modeStatus ? snapshotBase?.OutputData : data?.OutputData);
     const customisation: any = dataMapper(modeStatus ? snapshotBase?.CustomisationModels : data?.CustomisationModels, 'customisation');
@@ -95,28 +93,23 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     if (customisation?.length) {
       setCustomisationData(customisation)
     }
-
-    console.log('+++', currentSavedParameters);
-    
-    console.log('j modeStatus ==> ', modeStatus, isLiveValue);
-
-    
-    
-    const parameterSet = modeStatus ? ((requestObj?.formattedData ? {formattedData: requestObj?.formattedData} : null) || currentSavedParameters) : liveParameters;
+    const parameterSet = modeStatus ? (
+      (
+        requestObj?.formattedData ? {
+          formattedData: requestObj?.formattedData,
+          currentSavedResources: requestObj?.currentSavedResources,
+          currentSavedProjectTasks: requestObj?.currentSavedProjectTasks,
+        } : null
+      ) || {...currentSavedParameters, currentSavedResources, currentSavedProjectTasks}) : {...liveParameters, currentSavedResources: liveResources, currentSavedProjectTasks: liveProjectTasks};
     // showSaveParameters ? snapshotSettingParameters : settingParameters;
     // console.log('parameterSet => ', parameterSet, modeStatus);
     const dataBundle = modeStatus ? (requestObj?.base || snapshotBase) : (liveBase || data);
     // console.log('(selectedSnapshotFromDB && modeStatus) ==> ', (selectedSnapshotFromDB && modeStatus));
     // console.log('selectedBaseJson opo ==> ', selectedBaseJson);
-    console.log("parameterSet -------> ", parameterSet);
-    console.log("parameterSet -------> ", parameterSet);
-    
+
     arrayGenerator(dataBundle, dispatch, parameterSet, modeStatus)
       .then(async(result: any) => {
         // Handle the result here
-        console.log('llll', result?.reducerValues);
-        console.log('ResultDTA', result);
-
         setDataSet(result?.dataEstimateAverageRate ? result?.dataEstimateAverageRate : []);
         setDataSetEstimateResource(result?.dataEstimateResource ? result?.dataEstimateResource : [])
         setDataEstimateAverageRateMilestone(result?.dataEstimateAverageRateMilestone ? result?.dataEstimateAverageRateMilestone : [])
@@ -143,18 +136,11 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
       });
     deleteOutputSetAsync({ OutputSetId: data?.OutputSetId })
 
-    // const dataValue: any = arrayGenerator(data);
-    // setDataSet(dataValue);
-    // console.log('dataValue ==> ', dataValue);
   }
 // useMemo
   React.useMemo(() => {
     if (data) {
       arrayGeneratorHandler();
-      // const dataValue = arrayGenerator(data);
-      // setDataSet(dataValue);
-      // console.log('dataValue ==> ', dataValue);
-      
     }
   }, 
   [data]);
@@ -162,11 +148,9 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   return (
     <div>
       {loading || isLoading ? (<>
-          <div className="blur-background"></div>
-          <div className="loader-container">
-            <Loader />
-          </div>
-        </>)
+        {<OverlayComponent showOverlay={true}/>}
+        </>
+        )
       : <TabComponent
           dataSet={dataSet}
           isRefreshing={loading || isLoading}
@@ -179,7 +163,6 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
           documentLayoutsData={documentLayouts}
           dataMigrationData={dataMigrations}
         />}
-      {/* <TabComponent dataSet={dataSet} isRefreshing={loading || isLoading}/> */}
     </div>
   )
 }

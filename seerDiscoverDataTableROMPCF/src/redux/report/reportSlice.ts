@@ -102,8 +102,8 @@ const reportSlice: any = createSlice({
     initialFetchSuccess: (state, action) => {
       state.initialFetchData = action.payload,
       state.loading = false,
-      state.error = null,
-      state.currency = action?.payload?.parameterModel[0]?.isocurrencycode?.isocurrencycode || 'GBP'
+      state.error = null,      
+      state.currency = action?.payload?.parameterModel[0]?.isocurrencycode?.value || 'GBP'
     },
     initialFetchFailure: (state, action) => {
       state.error = action.payload,

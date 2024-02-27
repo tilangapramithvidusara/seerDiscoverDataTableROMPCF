@@ -4,13 +4,18 @@ import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   parameterSettingColumns,
-  parameterBaseSettingColumns
+  parameterBaseSettingColumns,
+  projectTaskColumn
 } from '../../Constants/parametersSetting';
 import {
   setProjectTasktModelParameters,
   setProjectTasktModelParameterAttributes,
   setShowSaveParameters,
-  setStateSnapshot
+  setStateSnapshot,
+  setCurrentChangingProjectTasks,
+  setCurrentSavedParameters,
+  setCurrentSavedResources,
+  setCurrentSavedProjectTasks
 } from '../../redux/snapshotReport/snapshotReportSlice';
 import { Parameter } from '../../Utils/setting.values.convertor.utils';
 import { fteDropdown } from '../../Constants/dropdownConstants';
@@ -20,19 +25,27 @@ import {
 } from '../../redux/snapshotReport/snapshoAsync';
 import { convertBase64ToJson, convertJsonToBase64 } from '../../Utils/commonFunc.utils';
 
-const ProjectTaskTable = ({ handleClose, tableNumber }: { handleClose: any, tableNumber?: number }) => {
+const ProjectTaskTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { handleClose: any, tableNumber?: number, arrayGeneratorHandler: any }) => {
   const dispatch = useDispatch();
   const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
   const [isBaesline, setIsBaseline] = useState(false);
-  const [columns, setColumns] = useState(parameterSettingColumns);
+  const [columns, setColumns] = useState(projectTaskColumn);
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
   const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
   const [showSnapshotForm, setShowSnapshotForm] = useState(false);
   const [submitFormData, setSubmitFormData] = useState<any>();
+  const initialFetchData = useSelector((state: any) => state.report.initialFetchData);
+  const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
+  let currentSavedResources = useSelector((state: any) => state?.snapshot?.currentSavedResources);
+  const currentChangingResources = useSelector((state: any) => state?.snapshot?.currentChangingResources);
+  const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters);
+  const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters);
+  const currentSavedProjectTasks = useSelector((state: any) => state?.snapshot?.currentSavedProjectTasks)
+  const currentChangingProjectTasks = useSelector((state: any) => state?.snapshot?.currentChangingProjectTasks)
+
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
-      console.log('Sentence changed:');
       dispatch(setStateSnapshot(true));
     }
   };
@@ -40,7 +53,7 @@ const ProjectTaskTable = ({ handleClose, tableNumber }: { handleClose: any, tabl
 
   const onChangeHanlder = useCallback(
     (info) => {
-      dispatch(setProjectTasktModelParameterAttributes(info));
+      dispatch(setCurrentChangingProjectTasks(info));
       // if (info?.isDropDown) {
       //   dispatch(setStateSnapshot(true));
       // }
@@ -63,24 +76,29 @@ const ProjectTaskTable = ({ handleClose, tableNumber }: { handleClose: any, tabl
   //   setShowSnapshotForm(true);
   // }, [dispatch])
 
-  const saveHandler = (info: any) => {
+  const saveHandler = () => {
     // saveSnapshotAsync(info);
-    console.log('2222222222111 ===> ');
-    
     setShowSnapshotForm(true);
-    console.log('22222222221112222 ===> ');
     dispatch(setShowSaveParameters(true))
     dispatch(setStateSnapshot(true))
-    console.log('22222222221113333 ===> ');
+    dispatch(setCurrentSavedParameters(currentChangingParameters))
+    dispatch(setCurrentSavedResources(currentChangingResources))
+    dispatch(setCurrentSavedProjectTasks(currentChangingProjectTasks))
+    arrayGeneratorHandler(false, {
+      ...currentChangingParameters,
+      base: snapshotBase ? snapshotBase : initialFetchData,
+      currentSavedResources: currentChangingResources,
+      currentSavedProjectTasks: currentChangingProjectTasks
+    }, 'snapshot')
   };
 
-  useEffect(() => {
-    if (isBaesline) {
-      setColumns(parameterBaseSettingColumns);
-    } else {
-      setColumns(parameterSettingColumns);
-    }
-  }, [isBaesline]);
+  // useEffect(() => {
+  //   if (isBaesline) {
+  //     setColumns(parameterBaseSettingColumns);
+  //   } else {
+  //     setColumns(parameterSettingColumns);
+  //   }
+  // }, [isBaesline]);
 
   const onSubmit = () => {
     if (submitFormData?.name && submitFormData?.description) {
@@ -103,7 +121,7 @@ const onClose = () => {
       <table>
         <thead>
           <tr>
-            {columns?.map(({ header, accessorKey }, index: number) => {
+            {columns?.map(({ header }, index: number) => {
               return (
                 // <div>
                 <th key={`${isBaesline ? 'baseline' : 'setting'}${index}`}>{header}</th>
@@ -113,94 +131,101 @@ const onClose = () => {
           </tr>
         </thead>
         <tbody>
-          {snapshotSettingParameters?.formattedData?.map((settingItem: Parameter, id: number) => {
-            console.log('seeeee ===> ', settingItem?.name == 'Data Migration' && settingItem);
+          {currentChangingProjectTasks?.map((settingItem: any, id: number) => {
+            const {
+              name,
+              seerResource, // id, name
+              seerResourceSecondary,
+              seerResourceSplit,
+            } = settingItem;
             
-            let name = settingItem?.name;
-            let switchValue = settingItem?.switch;
-            let currentValue = settingItem?.currentValue;
-            let baslineValue = settingItem?.baslineValue;
-            let type = settingItem?.type;
-            let dropdownValues = settingItem?.dropdownValues;
-            let currentValueType = settingItem?.currentValueType;
-            let typeValueCurrent = settingItem?.typeValueCurrent;
-            let typeValueBasline = settingItem?.typeValueBasline;
-            let currentValueDropdownValues = settingItem?.currentValueDropdownValues;
+            const secondaryDropDown = [{
+              resourceId: '',
+              name: ''
+            }, ...currentSavedResources];
+            
             return (
               <tr key={id}>
                 <td>{name}</td>
                 <td>
                   <div>
-                    {type == 'dropdown' ? (
-                      <div>
-                        <select
-                          value={typeValueCurrent || ''}
-                          onChange={(e) => {
-                            // handleRoleChange(row.id, e.target.value)
-                            onChangeHanlder({
-                              ...settingItem,
-                              key: 'typeValueCurrent',
-                              value: e.target.value,
-                              isDropDown: true
-                            });
-                          }}
-                        >
-                          {dropdownValues?.map((fteItem: any) => (
-                            <option value={fteItem?.value}>{fteItem?.label}</option>
-                          ))}
-                          {/* <option value="Admin">Admin</option>
-                          <option value="User">User</option>
-                          <option value="Guest">Guest</option> */}
-                        </select>
-                      </div>
-                    ) : (
-                      <div>{switchValue}</div>
-                    )}
+                    <div>
+                      {/* {seerResource?.id + "" + seerResource?.name} */}
+                      <select
+                        value={seerResource?.id || ''}
+                        onChange={(e) => {                          
+                          // handleRoleChange(row.id, e.target.value)
+                          onChangeHanlder({
+                            ...settingItem,
+                            key: 'seerResource',
+                            selectedValue: e.target.value,
+                            isDropDown: true
+                          });
+                        }}
+                      >
+                        {currentSavedResources?.map((resourceItem: {
+                          resourceId: string,
+                          name: string
+                        }) => (
+                          <option value={resourceItem?.resourceId}>{resourceItem?.name}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </td>
                 <td>
                   <div>
-                    {currentValueType == 'dropdown' ? (
-                      <div>
-                        <select
-                          value={currentValue}
-                          onChange={(e) => {
-                            // handleRoleChange(row.id, e.target.value)
-                            onChangeHanlder({
-                              ...settingItem,
-                              key: 'currentValue',
-                              value: e.target.value,
-                              isDropDown: true
-                            });
-                          }}
-                        >
-                          {currentValueDropdownValues?.map((currentItem: any) => (
-                            <option value={currentItem?.value}>{currentItem?.label}</option>
-                          ))}
-                          {/* <option value="Admin">Admin</option>
-                          <option value="User">User</option>
-                          <option value="Guest">Guest</option> */}
-                        </select>
-                      </div>
-                    ) : (
-                      <div>
-                        {/* {currentValue} */}
-                        <input
-                          name="currentValue"
-                          value={currentValue}
-                          type="text"
-                          // onKeyDown={handleKeyDown}
-                          onChange={(e) => {
-                            onChangeHanlder({
-                              ...settingItem,
-                              key: 'currentValue',
-                              value: e.target.value
-                            });
-                          }}
-                          placeholder="Current Value"
-                        />
-                      </div>
-                    )}
+                    <div>
+                      <select
+                        value={seerResourceSecondary?.id || ''}
+                        onChange={(e) => {                          
+                          // handleRoleChange(row.id, e.target.value)
+                          onChangeHanlder({
+                            ...settingItem,
+                            key: 'seerResourceSecondary',
+                            selectedValue: e.target.value,
+                            isDropDown: true
+                          });
+                        }}
+                      >
+                        {secondaryDropDown?.map((resourceItem: {
+                          resourceId: string,
+                          name: string
+                        }) => (
+                          <option value={resourceItem?.resourceId}>{resourceItem?.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                  <div>
+                    <input
+                      name="Split"
+                      value={seerResourceSplit}
+                      type="number"
+                      // onKeyDown={handleKeyDown}
+                      onChange={(e) => {
+                        let value = parseFloat(e.target.value);
+                        // Ensure the value is between 0 and 100
+                        if (value < 0) {
+                          value = 0;
+                        } else if (value > 100) {
+                          value = 100;
+                        }
+
+                        // Update the state with the sanitized value
+                        onChangeHanlder({
+                          ...settingItem,
+                          key: 'seerResourceSplit',
+                          value: value,
+                          isDropdown: false,
+                        });
+                      }}
+                      placeholder="Split"
+                    />
+                  </div>
                   </div>
                 </td>
               </tr>
@@ -213,23 +238,10 @@ const onClose = () => {
         <Button className="btn-blue-outline mr-10" onClick={() => handleClose()}>
           Cancel
         </Button>
-        <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
+        <Button className="btn-primary" onClick={() => saveHandler()}>
           Save
         </Button>
-        {/* <Button className="btn-primary">
-          Save
-        </Button> */}
       </div>
-      {/* {showSnapshotForm ? (
-        <FormDialog
-          handleClickOpen={true}
-          handleSubmit={onSubmit}
-          setSubmitFormData={setSubmitFormData}
-          handleClose={onClose}
-        />
-      ) : (
-        <></>
-      )} */}
     </div>
   );
 };

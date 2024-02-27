@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="seerDiscoverROM" constructor="seerDiscoverDataTableROMPCF" version="1.1.66" display-name-key="seerDiscoverDataTableROMPCF" description-key="seerDiscoverDataTableROMPCF description" control-type="standard" >
+  <control namespace="seerDiscoverROM" constructor="seerDiscoverDataTableROMPCF" version="1.1.97" display-name-key="seerDiscoverDataTableROMPCF" description-key="seerDiscoverDataTableROMPCF description" control-type="standard" >
     <!--external-service-usage node declares whether this 3rd party PCF control is using external service or not, if yes, this control will be considered as premium and please also add the external domain it is using.
     If it is not using any external service, please set the enabled="false" and DO NOT add any domain below. The "enabled" will be false by default.
     Example1:
@@ -24,7 +24,12 @@
     <property name="output" display-name-key="Output" description-key="Output" of-type="SingleLine.Text" usage="output" required="false" />
     <property name="accountId" display-name-key="Account Id" description-key="Account Id" of-type="SingleLine.Text" usage="bound" required="true" />
     <property name="reportId" display-name-key="Report Id" description-key="Report Id" of-type="SingleLine.Text" usage="bound" required="true" />
+    <property name="deleteFlow" display-name-key="Flow URL" description-key="Report Id" of-type="SingleLine.Text" usage="bound" required="true" />
+    <property name="userId" display-name-key="User Id" description-key="User Id" of-type="SingleLine.Text" usage="bound" required="true" />
+    <property name="name" display-name-key="Name" description-key="Name" of-type="SingleLine.Text" usage="bound" required="true" />
+    <property name="azureFunction" display-name-key="Azure URL" description-key="Azure URL" of-type="SingleLine.Text" usage="bound" required="true" />
     <!--
+      flowurl, accountId, userId, name, azureurl
       Property node's of-type attribute can be of-type-group attribute.
       Example:
       <type-group name="numbers">

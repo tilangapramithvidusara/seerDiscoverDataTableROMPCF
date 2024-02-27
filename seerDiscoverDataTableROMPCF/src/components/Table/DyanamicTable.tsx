@@ -8,20 +8,14 @@ import {
 } from '../../Constants/parametersSetting';
 import {
   setCurrentChangingParameters,
+  setCurrentChangingResources,
   setCurrentSavedParameters,
-  setDoCalculation,
-  setSettingParameterAttributes,
-  setSettingParameters,
+  setCurrentSavedProjectTasks,
+  setCurrentSavedResources,
   setShowSaveParameters,
   setStateSnapshot
 } from '../../redux/snapshotReport/snapshotReportSlice';
 import { Parameter } from '../../Utils/setting.values.convertor.utils';
-import { fteDropdown } from '../../Constants/dropdownConstants';
-import {
-  saveInitialSnapshotRecordAsync,
-  saveSnapshotAsync
-} from '../../redux/snapshotReport/snapshoAsync';
-import { convertBase64ToJson, convertJsonToBase64 } from '../../Utils/commonFunc.utils';
 
 const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { handleClose: any, tableNumber?: number, arrayGeneratorHandler?: any }) => {
   const dispatch = useDispatch();
@@ -29,65 +23,38 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
   const [isBaesline, setIsBaseline] = useState(false);
   const [columns, setColumns] = useState(parameterSettingColumns);
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
-  const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
   const [showSnapshotForm, setShowSnapshotForm] = useState(false);
-  const [submitFormData, setSubmitFormData] = useState<any>();
 
   // NEW STATE
-  const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters)
+  const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters);
+  const currentChangingResources = useSelector((state: any) => state?.snapshot?.currentChangingResources);
+  const currentChangingProjectTasks = useSelector((state: any) => state?.snapshot?.currentChangingProjectTasks);
   const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
   const initialFetchData = useSelector((state: any) => state.report.initialFetchData);
-
-  const handleKeyDown = (event: any) => {
-    if (event.key === 'Enter') {
-      console.log('Sentence changed:');
-      dispatch(setStateSnapshot(true));
-    }
-  };
 
 
   const onChangeHanlder = useCallback(
     (info) => {
-      // dispatch(setSettingParameterAttributes(info));
-      // NEW STATE
-
       dispatch(setCurrentChangingParameters(info));
-      // if (info?.isDropDown) {
-      //   dispatch(setStateSnapshot(true));
-      // }
-      // example for checking
-      // dispatch(setStateSnapshot(true))
     },
     [dispatch]
   );
-
-  // call this when retrive success
-  const handleSetSettingParameters = useCallback(
-    (info) => {
-      dispatch(setSettingParameters(info));
-    },
-    [dispatch]
-  );
-
-  // const saveHandler = useCallback((info: any) => {
-  //   saveSnapshotAsync(info);
-  //   setShowSnapshotForm(true);
-  // }, [dispatch])
 
   const saveHandler = (info: any) => {
     // saveSnapshotAsync(info);
-    console.log('2222222222111 ===> ');
-    
     setShowSnapshotForm(true);
-    console.log('22222222221112222 ===> ', currentChangingParameters);
     dispatch(setShowSaveParameters(true))
     dispatch(setStateSnapshot(true))
     dispatch(setCurrentSavedParameters(currentChangingParameters))
-    arrayGeneratorHandler(false, {...currentChangingParameters, base: snapshotBase ? snapshotBase : initialFetchData}, 'snapshot')
-    // setTimeout(() => {
-      // dispatch(setDoCalculation(true))
-    // }, 2);
-    console.log('22222222221113333 ===> ');
+    // dispatch(setCurrentChangingResources(currentChangingResources))
+    dispatch(setCurrentSavedResources(currentChangingResources))
+    dispatch(setCurrentSavedProjectTasks(currentChangingProjectTasks))
+    arrayGeneratorHandler(false, {
+      ...currentChangingParameters, 
+      base: snapshotBase ? snapshotBase : initialFetchData,
+      currentSavedResources: currentChangingResources,
+      currentSavedProjectTasks: currentChangingProjectTasks
+    }, 'snapshot')
   };
 
   useEffect(() => {
@@ -97,22 +64,6 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
       setColumns(parameterSettingColumns);
     }
   }, [isBaesline]);
-
-  // const onSubmit = () => {
-  //   if (submitFormData?.name && submitFormData?.description) {
-  //     dispatch(saveInitialSnapshotRecordAsync({
-  //       seerName: submitFormData?.name,
-  //       baseData: convertJsonToBase64(baseJson), 
-  //       snapshotData: convertJsonToBase64(snapshotSettingParameters),
-  //       seerDescription: submitFormData?.description
-  //     }))
-  //   }
-  // }
-
-const onClose = () => {
-  setShowSnapshotForm(false);
-  setSubmitFormData({});
-};
 
   return (
     <div className="containerManualTable">
@@ -131,9 +82,7 @@ const onClose = () => {
         <tbody>
           {
           // snapshotSettingParameters
-          currentChangingParameters?.formattedData?.map((settingItem: Parameter, id: number) => {
-            console.log('seeeee ===> ', settingItem?.name == 'Data Migration' && settingItem);
-            
+          currentChangingParameters?.formattedData?.map((settingItem: Parameter, id: number) => {            
             let name = settingItem?.name;
             let switchValue = settingItem?.switch;
             let currentValue = settingItem?.currentValue;

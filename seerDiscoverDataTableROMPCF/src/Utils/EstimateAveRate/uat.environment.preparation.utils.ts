@@ -90,34 +90,6 @@ export const generateUATEnvironmentPreparationMValue = async(inititlaData: any, 
           returnObject.uatEnvironmentPreparationAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
           returnObject.uatEnvironmentPreparationAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
         }
-        // if (hasParameters) {
-        //   const deploayUatValue = parseFloat(settingParameters?.formattedData[
-        //     parameterKeyIndex.uatEnvPrep
-        //   ]?.currentValue || '0')
-        //   const deploayUatTypeValue = parseFloat(settingParameters?.formattedData[
-        //     parameterKeyIndex.uatEnvPrep
-        //   ]?.typeValueCurrent)
-
-        //   if (percentData?.[deploayUatTypeValue] === percentData?.[100000001]) {
-        //     returnObject.uatEnvironmentPreparationAveRateMilestone.resultValue = mustCal * (deploayUatValue/100);
-        //     returnObject.uatEnvironmentPreparationAveRateMilestone.resultValueMS = mustShouldCal * (deploayUatValue/100);
-        //     returnObject.uatEnvironmentPreparationAveRateMilestone.resultValueMSC = mustShouldCouldCal * (deploayUatValue/100);
-        //   } else {
-        //     returnObject.uatEnvironmentPreparationAveRateMilestone.resultValue = mustCal * (para_d4); // not deployUat it need to get from backend
-        //     returnObject.uatEnvironmentPreparationAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
-        //     returnObject.uatEnvironmentPreparationAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
-        //   }
-        // } else {
-        //   if (percentData?.[parameterModel[0]?.deployUatType] === percentData?.[100000001]) {
-        //     returnObject.uatEnvironmentPreparationAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.deployUat/100);
-        //     returnObject.uatEnvironmentPreparationAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.deployUat/100);
-        //     returnObject.uatEnvironmentPreparationAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.deployUat/100);
-        //   } else {
-        //     returnObject.uatEnvironmentPreparationAveRateMilestone.resultValue = mustCal * (para_d4); // not deployUat it need to get from backend
-        //     returnObject.uatEnvironmentPreparationAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
-        //     returnObject.uatEnvironmentPreparationAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
-        //   }
-        // }
         
       } else {
         if (percentData?.[deploayUatTypeValue] == percentData?.[100000001]) {
@@ -136,48 +108,6 @@ export const generateUATEnvironmentPreparationMValue = async(inititlaData: any, 
           returnObject.uatEnvironmentPreparation.resultValueMS = romParameter == "Hours" ? (deploayUatValue * g8) : (deploayUatValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.deployUat * g8  // need to find G8
           returnObject.uatEnvironmentPreparation.resultValueMSC = romParameter == "Hours" ? (deploayUatValue * f8) : (deploayUatValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.deployUat * f8  // need to find F8
         }
-        // if (hasParameters) {
-        //   const deploayUatValue = parseFloat(settingParameters?.formattedData[
-        //     parameterKeyIndex.uatEnvPrep
-        //   ]?.currentValue || '0')
-        //   const deploayUatTypeValue = parseFloat(settingParameters?.formattedData[
-        //     parameterKeyIndex.uatEnvPrep
-        //   ]?.typeValueCurrent)
-
-        //   if (percentData?.[deploayUatTypeValue] == percentData?.[100000001]) {
-
-        //     returnObject.uatEnvironmentPreparation.resultValue = mustCal * (deploayUatValue/100);
-        //     returnObject.uatEnvironmentPreparation.resultValueMS = mustShouldCal * (deploayUatValue/100);
-        //     returnObject.uatEnvironmentPreparation.resultValueMSC = mustShouldCouldCal * (deploayUatValue/100);
-        //   } else if (percentData?.[deploayUatTypeValue] == percentData?.[100000002]) { // hours
-            
-        //     returnObject.uatEnvironmentPreparation.resultValue = romParameter == "Hours" ? deploayUatValue : deploayUatValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.deployUat
-        //     returnObject.uatEnvironmentPreparation.resultValueMS = romParameter == "Hours" ? deploayUatValue : deploayUatValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.deployUat
-        //     returnObject.uatEnvironmentPreparation.resultValueMSC = romParameter == "Hours" ? deploayUatValue : deploayUatValue/hoursPerday
-        //   } else if (percentData?.[deploayUatTypeValue] == percentData?.[100000000]) { // FTE
-        //     // dont need yet
-        //     returnObject.uatEnvironmentPreparation.resultValue = romParameter == "Hours" ? (deploayUatValue * h8) : (deploayUatValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.deployUat * h8)  // need to find H8
-        //     returnObject.uatEnvironmentPreparation.resultValueMS = romParameter == "Hours" ? (deploayUatValue * g8) : (deploayUatValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.deployUat * g8  // need to find G8
-        //     returnObject.uatEnvironmentPreparation.resultValueMSC = romParameter == "Hours" ? (deploayUatValue * f8) : (deploayUatValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.deployUat * f8  // need to find F8
-        //   }
-        // } else {
-        //   if (percentData?.[parameterModel[0]?.deployUatType] === percentData?.[100000001]) {
-
-        //     returnObject.uatEnvironmentPreparation.resultValue = mustCal * (parameterModel[0]?.deployUat/100);
-        //     returnObject.uatEnvironmentPreparation.resultValueMS = mustShouldCal * (parameterModel[0]?.deployUat/100);
-        //     returnObject.uatEnvironmentPreparation.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.deployUat/100);
-        //   } else if (percentData?.[parameterModel[0]?.deployUatType] === percentData?.[100000002]) { // hours
-            
-        //     returnObject.uatEnvironmentPreparation.resultValue = romParameter == "Hours" ? parameterModel[0]?.deployUat : parameterModel[0]?.deployUat/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.deployUat
-        //     returnObject.uatEnvironmentPreparation.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.deployUat : parameterModel[0]?.deployUat/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.deployUat
-        //     returnObject.uatEnvironmentPreparation.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.deployUat : parameterModel[0]?.deployUat/parameterModel[0]?.hoursPerday
-        //   } else if (percentData?.[parameterModel[0]?.deployUatType] === percentData?.[100000000]) { // FTE
-        //     // dont need yet
-        //     returnObject.uatEnvironmentPreparation.resultValue = romParameter == "Hours" ? (parameterModel[0]?.deployUat * h8) : (parameterModel[0]?.deployUat * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.deployUat * h8)  // need to find H8
-        //     returnObject.uatEnvironmentPreparation.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.deployUat * g8) : (parameterModel[0]?.deployUat * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.deployUat * g8  // need to find G8
-        //     returnObject.uatEnvironmentPreparation.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.deployUat * f8) : (parameterModel[0]?.deployUat * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.deployUat * f8  // need to find F8
-        //   }
-        // }
         
       }
        
@@ -187,7 +117,6 @@ export const generateUATEnvironmentPreparationMValue = async(inititlaData: any, 
       return returnObject;
     }
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return returnObject;
   }
 }

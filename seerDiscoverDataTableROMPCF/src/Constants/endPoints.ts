@@ -1,2 +1,3 @@
-export const seerBasejson = 'seer_basejson';
-export const seerUpdatedsnapshotdata = 'seer_updatedsnapshotdata'
+export const seerBasejson = "seer_baselinedata"
+export const seerUpdatedsnapshotdata = 'seer_updatedsettings'
+export const seerUpdatedsnapshotdate = 'seer_settingsupdateddate'

@@ -1,8 +1,7 @@
 import * as React from 'react'
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
-import { setDoCalculation, setIsLiveModeEnable, setStateSnapshot } from '../../../redux/snapshotReport/snapshotReportSlice';
+import { setIsLiveModeEnable } from '../../../redux/snapshotReport/snapshotReportSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const index = (
@@ -22,46 +21,24 @@ const index = (
   const dispatch = useDispatch();
 
   const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters);
+  const currentSavedResources = useSelector((state: any) => state?.snapshot?.currentSavedResources);
   const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
   const loadedSnapshotId = useSelector((state: any) => state?.snapshot?.loadedSnapshotId);
 
   const handleButtonChange = (event: any, newValue: any) => {
-    console.log('newValue ==> ',newValue);
+    if (!newValue) return;
     setSelectedButton(newValue);
     if (newValue == 'button2') {
       dispatch(setIsLiveModeEnable(false))
       if (currentSavedParameters || loadedSnapshotId) {
-        // dispatch(setDoCalculation(true))
-        console.log('lo=4');
-        
-        arrayGeneratorHandler(false, {...currentSavedParameters, base: snapshotBase}, 'snapshot')
+        arrayGeneratorHandler(false, {...currentSavedParameters, base: snapshotBase, currentSavedResources}, 'snapshot')
       }
     } else if (newValue == 'button1') {
-      // if (!buttonTitles || !buttonTitles.length) {
-      //   dispatch(setDoCalculation(true))
-      // }
       dispatch(setIsLiveModeEnable(true));
       setTimeout(() => {
         arrayGeneratorHandler(true)
       }, 2)
-      // arrayGeneratorHandler(true)
     }
-    // setSelectedButton(newValue);
-      // if (newValue == 'button1') {
-      //   arrayGeneratorHandler(true);
-      // }
-    // setTimeout(() => {
-    //   setSelectedButton(newValue);
-    //   // if (newValue == 'button1') {
-    //   //   arrayGeneratorHandler(true);
-    //   // }
-    // }, 10);
-    // setTimeout(() => {
-    //   if (newValue == 'button1') {
-    //     arrayGeneratorHandler(true);
-    //   }
-    // }, 20)
-    // setSelectedButton(newValue);
   };
 
   

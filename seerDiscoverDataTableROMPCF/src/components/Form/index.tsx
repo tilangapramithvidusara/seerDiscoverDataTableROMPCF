@@ -23,7 +23,13 @@ export default function FormDialog({handleClickOpen, handleClose, handleSubmit, 
         },
       }}>
         <DialogTitle className='heading custom-heading'>Create New</DialogTitle>
-        <DialogContentText className='mt-10 d-inline'><label>Name</label></DialogContentText>
+        <DialogContentText className='mt-10 d-inline'>
+          <label>
+            <span>
+                Name
+              <span style={{ color: 'red', alignSelf: 'flex-start' }}>*</span>
+            </span>
+          </label></DialogContentText>
         <DialogContent>
           <TextField
             autoFocus
@@ -34,6 +40,7 @@ export default function FormDialog({handleClickOpen, handleClose, handleSubmit, 
             InputLabelProps={{shrink: true}}
             fullWidth
             variant="standard"
+            // required={true}
             onChange={(e) => setSubmitFormData((prev: any) => ({...prev, name: e?.target?.value}))}
             style={{
               marginTop: '0px'

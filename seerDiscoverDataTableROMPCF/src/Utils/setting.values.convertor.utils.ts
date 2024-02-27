@@ -163,6 +163,16 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       dropdownValues: fteDropdown,
     },
     {
+      name: 'Document Layout',
+      switch: null,
+      currentValue: parameterObject?.documentlayouts,
+      baslineValue: parameterObject?.documentlayouts,
+      type: 'dropdown', // dropdown | string | null
+      typeValueCurrent: parameterObject?.documentlayoutstype,
+      typeValueBasline: parameterObject?.documentlayoutstype,
+      dropdownValues: fteDropdownWithMoscow,
+    },
+    {
       name: 'Reporting',
       switch: null,
       currentValue: parameterObject?.reporting,
@@ -275,7 +285,7 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       dropdownValues: fteDropdown,
     },
     {
-      name: 'Trainin Hours',
+      name: 'Training Hours',
       switch: null,
       currentValue: parameterObject?.endUserTraining,
       baslineValue: parameterObject?.endUserTraining,
@@ -283,23 +293,23 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       dropdownValues: [],
     },
     {
-      name: 'Trainin Users',
+      name: 'Training Users',
       switch: null,
       currentValue: parameterObject?.endUserTrainingUsers,
       baslineValue: parameterObject?.endUserTrainingUsers,
       type: null, // dropdown | string | null
       dropdownValues: [],
     },
-    {
-      name: 'Document Layout',
-      switch: null,
-      currentValue: parameterObject?.documentlayouts,
-      baslineValue: parameterObject?.documentlayouts,
-      type: 'dropdown', // dropdown | string | null
-      typeValueCurrent: parameterObject?.documentlayoutstype,
-      typeValueBasline: parameterObject?.documentlayoutstype,
-      dropdownValues: fteDropdownWithMoscow,
-    },
+    // {
+    //   name: 'Document Layout',
+    //   switch: null,
+    //   currentValue: parameterObject?.documentlayouts,
+    //   baslineValue: parameterObject?.documentlayouts,
+    //   type: 'dropdown', // dropdown | string | null
+    //   typeValueCurrent: parameterObject?.documentlayoutstype,
+    //   typeValueBasline: parameterObject?.documentlayoutstype,
+    //   dropdownValues: fteDropdownWithMoscow,
+    // },
     // 
   ];
   return {formattedData, parameterObject}

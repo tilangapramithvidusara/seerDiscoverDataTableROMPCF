@@ -9,29 +9,32 @@ import {
   setResourceModelDataParameters,
   setResourceModelDataParameterAttributes,
   setShowSaveParameters,
-  setStateSnapshot
+  setStateSnapshot,
+  setCurrentSavedParameters,
+  setCurrentChangingResources,
+  setCurrentSavedResources,
+  setCurrentSavedProjectTasks
 } from '../../redux/snapshotReport/snapshotReportSlice';
-import { Parameter } from '../../Utils/setting.values.convertor.utils';
-import { fteDropdown } from '../../Constants/dropdownConstants';
-import {
-  saveInitialSnapshotRecordAsync,
-  saveSnapshotAsync
-} from '../../redux/snapshotReport/snapshoAsync';
-import { convertBase64ToJson, convertJsonToBase64 } from '../../Utils/commonFunc.utils';
 
-const ResourceTable = ({ handleClose, tableNumber }: { handleClose: any, tableNumber?: number }) => {
+const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { handleClose: any, tableNumber?: number, arrayGeneratorHandler?: any }) => {
   const dispatch = useDispatch();
   const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
   const [isBaesline, setIsBaseline] = useState(false);
   const [columns, setColumns] = useState(resourceParameterColumn);
-  const resourceModelDataParameters = useSelector((state: any) => state?.snapshot?.resourceModelDataParameters || []);
-  const snapshotResourceModelDataParameters = useSelector((state: any) => state?.snapshot?.snapshotResourceModelDataParameters || []);
   const [showSnapshotForm, setShowSnapshotForm] = useState(false);
-  const [submitFormData, setSubmitFormData] = useState<any>();
+  
+  // NEW STATE
+  const initialFetchData = useSelector((state: any) => state.report.initialFetchData);
+  const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
+  const currentSavedResources = useSelector((state: any) => state?.snapshot?.currentSavedResources);
+  const currentChangingResources = useSelector((state: any) => state?.snapshot?.currentChangingResources);
+  const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters);
+  const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters);
+  const currentSavedProjectTasks = useSelector((state: any) => state?.snapshot?.currentSavedProjectTasks)
+  const currentChangingProjectTasks = useSelector((state: any) => state?.snapshot?.currentChangingProjectTasks)
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
-      console.log('Sentence changed:');
       dispatch(setStateSnapshot(true));
     }
   };
@@ -39,38 +42,25 @@ const ResourceTable = ({ handleClose, tableNumber }: { handleClose: any, tableNu
 
   const onChangeHanlder = useCallback(
     (info) => {
-      dispatch(setResourceModelDataParameterAttributes(info));
-      // if (info?.isDropDown) {
-      //   dispatch(setStateSnapshot(true));
-      // }
-      // example for checking
-      // dispatch(setStateSnapshot(true))
+      dispatch(setCurrentChangingResources(info));
     },
     [dispatch]
   );
-
-  // call this when retrive success
-  const handleSetSettingParameters = useCallback(
-    (info) => {
-      dispatch(setResourceModelDataParameters(info));
-    },
-    [dispatch]
-  );
-
-  // const saveHandler = useCallback((info: any) => {
-  //   saveSnapshotAsync(info);
-  //   setShowSnapshotForm(true);
-  // }, [dispatch])
 
   const saveHandler = () => {
     // saveSnapshotAsync(info);
-    console.log('2222222222111 ===> ');
-    
     setShowSnapshotForm(true);
-    console.log('22222222221112222 ===> ');
     dispatch(setShowSaveParameters(true))
     dispatch(setStateSnapshot(true))
-    console.log('22222222221113333 ===> ');
+    dispatch(setCurrentSavedParameters(currentChangingParameters))
+    dispatch(setCurrentSavedResources(currentChangingResources))
+    dispatch(setCurrentSavedProjectTasks(currentChangingProjectTasks))
+    arrayGeneratorHandler(false, {
+      ...currentChangingParameters, 
+      base: snapshotBase ? snapshotBase : initialFetchData,
+      currentSavedResources: currentChangingResources,
+      currentSavedProjectTasks: currentChangingProjectTasks
+    }, 'snapshot')
   };
 
   // useEffect(() => {
@@ -81,28 +71,12 @@ const ResourceTable = ({ handleClose, tableNumber }: { handleClose: any, tableNu
   //   }
   // }, [isBaesline]);
 
-  const onSubmit = () => {
-    if (submitFormData?.name && submitFormData?.description) {
-        dispatch(saveInitialSnapshotRecordAsync({
-          seerName: submitFormData?.name,
-          baseData: convertJsonToBase64(baseJson), 
-          snapshotData: convertJsonToBase64(snapshotResourceModelDataParameters),
-          seerDescription: submitFormData?.description
-        }))
-      }
-}
-
-const onClose = () => {
-  setShowSnapshotForm(false);
-  setSubmitFormData({});
-};
-
-const objct = {
-  "resourceId": "83b5886a-a5dd-ec11-bb3c-000d3a7f3b87",
-  "name": "Cloud Deployment Manager",
-  "hourlyRate": 125.0000000000,
-  "hourlyCost": 50.0000000000
-}
+// const objct = {
+//   "resourceId": "83b5886a-a5dd-ec11-bb3c-000d3a7f3b87",
+//   "name": "Cloud Deployment Manager",
+//   "hourlyRate": 125.0000000000,
+//   "hourlyCost": 50.0000000000
+// }
 
 
   return (
@@ -121,7 +95,7 @@ const objct = {
         </thead>
         <tbody>
           {/* need to add types */}
-          {snapshotResourceModelDataParameters?.map((settingItem: any, id: number) => {            
+          {currentChangingResources?.map((settingItem: any, id: number) => {            
             const {
               resourceId,
               name,
@@ -180,20 +154,7 @@ const objct = {
         <Button className="btn-primary" onClick={() => saveHandler()}>
           Save
         </Button>
-        {/* <Button className="btn-primary">
-          Save
-        </Button> */}
       </div>
-      {/* {showSnapshotForm ? (
-        <FormDialog
-          handleClickOpen={true}
-          handleSubmit={onSubmit}
-          setSubmitFormData={setSubmitFormData}
-          handleClose={onClose}
-        />
-      ) : (
-        <></>
-      )} */}
     </div>
   );
 };

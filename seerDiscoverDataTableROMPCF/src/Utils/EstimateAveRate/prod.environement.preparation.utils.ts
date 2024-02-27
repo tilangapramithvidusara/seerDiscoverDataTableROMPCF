@@ -188,7 +188,6 @@ export const generateProdEnvironmentPreparationMValue = async(inititlaData: any,
       return returnObject;
     }
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return returnObject;
   }
 }

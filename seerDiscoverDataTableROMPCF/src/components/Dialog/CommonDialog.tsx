@@ -22,7 +22,6 @@ interface CustomDialogProps {
 
 function CustomDialog(props: CustomDialogProps) {
   const {title, setOpen, open, buttons, description, handleClose} = props
-  // const [open, setOpen] = useState(false);
 
   return (
     <div>

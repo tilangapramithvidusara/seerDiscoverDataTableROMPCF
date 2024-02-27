@@ -9,26 +9,9 @@ import { useSelector } from 'react-redux';
 
 
 
-export const columnFixed = (columnArray: any, data: any, currency: string) => {
-  console.log('columnFixed currency ==> ', currency);
-  
-    
-  // const AggregatedGroupRow = ({ row }) => {
-  //   const customRowStyle = {
-  //     backgroundColor: 'your-group-background-color', // Change to your desired background color for grouped rows
-  //   };
-  
-  //   return (
-  //     <MRT_HeaderGroup {...row} sx={customRowStyle} />
-  //   );
-  // };
+export const columnFixed = (columnArray: any, data: any, currency: string) => {  
   const totalColumn =
     (key?: string | number | undefined | any) => {      
-      // return data.reduce((acc: any, curr: any) => {
-      //   console.log('acc + curr', acc, curr[key], key);
-        
-      //   return acc + curr[key]
-      // }, 0)
       let sumEstimateResource = 0;
       let indicesToSum = []
       // type: 'Estimate Resource'

@@ -33,7 +33,6 @@ export const generateReportingMValue = async(inititlaData: any, analisisDesignPr
       let {hoursPerday, reportingType, reporting} = parameterModel[0]
       let reportingValue = reporting;
       let reportingTypeValue = reportingType;
-      console.log('1234 ==> ', reportingValue, reportingTypeValue);
       
       if (hasParameters) {
         para_d4 = parseFloat(settingParameters?.formattedData[
@@ -81,7 +80,6 @@ export const generateReportingMValue = async(inititlaData: any, analisisDesignPr
 
       if (fte) {
         if (percentData?.[reportingTypeValue] == percentData?.[100000001]) {
-          console.log(mustCal, reportingValue);
           
           returnObject.reportingAveRateMilestone.resultValue = mustCal * (reportingValue/100);
           returnObject.reportingAveRateMilestone.resultValueMS = mustShouldCal * (reportingValue/100);
@@ -91,41 +89,9 @@ export const generateReportingMValue = async(inititlaData: any, analisisDesignPr
           returnObject.reportingAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
           returnObject.reportingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
         }
-        // if (hasParameters) {
-        //   const reportingValue = parseFloat(settingParameters?.formattedData[
-        //     parameterKeyIndex.reporting
-        //   ]?.currentValue || '0')
-        //   const reportingTypeValue = parseFloat(settingParameters?.formattedData[
-        //     parameterKeyIndex.reporting
-        //   ]?.typeValueCurrent)
-        //   if (percentData?.[reportingTypeValue] == percentData?.[100000001]) {
-        //     console.log(mustCal, reportingValue);
-            
-        //     returnObject.reportingAveRateMilestone.resultValue = mustCal * (reportingValue/100);
-        //     returnObject.reportingAveRateMilestone.resultValueMS = mustShouldCal * (reportingValue/100);
-        //     returnObject.reportingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (reportingValue/100);
-        //   } else {
-        //     returnObject.reportingAveRateMilestone.resultValue = mustCal * (para_d4); // not reporting it need to get from backend
-        //     returnObject.reportingAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
-        //     returnObject.reportingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
-        //   }
-        // } else {
-        //   if (percentData?.[parameterModel[0]?.reportingType] == percentData?.[100000001]) {
-        //     console.log(mustCal, parameterModel[0]?.reporting);
-        //     returnObject.reportingAveRateMilestone.resultValue = mustCal * (parameterModel[0]?.reporting/100);
-        //     returnObject.reportingAveRateMilestone.resultValueMS = mustShouldCal * (parameterModel[0]?.reporting/100);
-        //     returnObject.reportingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.reporting/100);
-        //   } else {
-        //     console.log(mustCal, parameterModel[0]?.reporting, parameterModel[0]?.reportingType);
-        //     returnObject.reportingAveRateMilestone.resultValue = mustCal * (para_d4); // not reporting it need to get from backend
-        //     returnObject.reportingAveRateMilestone.resultValueMS = mustShouldCal * (para_d4);
-        //     returnObject.reportingAveRateMilestone.resultValueMSC = mustShouldCouldCal * (para_d4);
-        //   }
-        // }
         
       } else {
         if (percentData?.[reportingTypeValue] == percentData?.[100000001]) {
-          console.log(mustCal, reportingValue);
           returnObject.reporting.resultValue = mustCal * (reportingValue/100);
           returnObject.reporting.resultValueMS = mustShouldCal * (reportingValue/100);
           returnObject.reporting.resultValueMSC = mustShouldCouldCal * (reportingValue/100);
@@ -140,51 +106,9 @@ export const generateReportingMValue = async(inititlaData: any, analisisDesignPr
           returnObject.reporting.resultValueMS = romParameter == "Hours" ? (reportingValue * g8) : (reportingValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
           returnObject.reporting.resultValueMSC = romParameter == "Hours" ? (reportingValue * f8) : (reportingValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
         }
-        // if (hasParameters) {
-        //   const reportingValue = parseFloat(settingParameters?.formattedData[
-        //     parameterKeyIndex.reporting
-        //   ]?.currentValue || '0')
-        //   const reportingTypeValue = parseFloat(settingParameters?.formattedData[
-        //     parameterKeyIndex.reporting
-        //   ]?.typeValueCurrent)
-        //   if (percentData?.[reportingTypeValue] == percentData?.[100000001]) {
-        //     console.log(mustCal, reportingValue);
-        //     returnObject.reporting.resultValue = mustCal * (reportingValue/100);
-        //     returnObject.reporting.resultValueMS = mustShouldCal * (reportingValue/100);
-        //     returnObject.reporting.resultValueMSC = mustShouldCouldCal * (reportingValue/100);
-        //   } else if (percentData?.[reportingTypeValue] == percentData?.[100000002]) { // hours
-            
-        //     returnObject.reporting.resultValue = romParameter == "Hours" ? reportingValue : reportingValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
-        //     returnObject.reporting.resultValueMS = romParameter == "Hours" ? reportingValue : reportingValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
-        //     returnObject.reporting.resultValueMSC = romParameter == "Hours" ? reportingValue : reportingValue/hoursPerday
-        //   } else if (percentData?.[reportingTypeValue] == percentData?.[100000000]) { // FTE
-        //     // dont need yet
-        //     returnObject.reporting.resultValue = romParameter == "Hours" ? (reportingValue * h8) : (reportingValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
-        //     returnObject.reporting.resultValueMS = romParameter == "Hours" ? (reportingValue * g8) : (reportingValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
-        //     returnObject.reporting.resultValueMSC = romParameter == "Hours" ? (reportingValue * f8) : (reportingValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
-        //   }
-        // } else {
-        //   if (percentData?.[parameterModel[0]?.reportingType] === percentData?.[100000001]) {
-
-        //     returnObject.reporting.resultValue = mustCal * (parameterModel[0]?.reporting/100);
-        //     returnObject.reporting.resultValueMS = mustShouldCal * (parameterModel[0]?.reporting/100);
-        //     returnObject.reporting.resultValueMSC = mustShouldCouldCal * (parameterModel[0]?.reporting/100);
-        //   } else if (percentData?.[parameterModel[0]?.reportingType] === percentData?.[100000002]) { // hours
-            
-        //     returnObject.reporting.resultValue = romParameter == "Hours" ? parameterModel[0]?.reporting : parameterModel[0]?.reporting/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
-        //     returnObject.reporting.resultValueMS = romParameter == "Hours" ? parameterModel[0]?.reporting : parameterModel[0]?.reporting/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting
-        //     returnObject.reporting.resultValueMSC = romParameter == "Hours" ? parameterModel[0]?.reporting : parameterModel[0]?.reporting/parameterModel[0]?.hoursPerday
-        //   } else if (percentData?.[parameterModel[0]?.reportingType] === percentData?.[100000000]) { // FTE
-        //     // dont need yet
-        //     returnObject.reporting.resultValue = romParameter == "Hours" ? (parameterModel[0]?.reporting * h8) : (parameterModel[0]?.reporting * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
-        //     returnObject.reporting.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.reporting * g8) : (parameterModel[0]?.reporting * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
-        //     returnObject.reporting.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.reporting * f8) : (parameterModel[0]?.reporting * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
-        //   }
-        // }
       }
       
       // not done yet
-      
       
       await Promise.all([returnObject])
       return returnObject;
@@ -192,7 +116,6 @@ export const generateReportingMValue = async(inititlaData: any, analisisDesignPr
       return returnObject;
     }
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return returnObject;
   }
 }

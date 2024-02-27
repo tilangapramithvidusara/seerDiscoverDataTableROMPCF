@@ -20,7 +20,6 @@ import { generateEstimateResourceMilestone } from "./estimate.resource.milestone
 import { generateEstimateResourceMilestoneSub } from "./estimate.resource.milestone.sub.utils";
 
 export const arrayGenerator = async (initialDataSet: any, dispatch: any, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
-  console.log('eeee ==> ', settingParameters && isSnapshotModeEnable, settingParameters, isSnapshotModeEnable);
   const hasParameters = settingParameters && isSnapshotModeEnable
   let resultArray: any[] = [];
   let subTotalMAnalysisDesign = 0;
@@ -35,18 +34,15 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
   const {parameterModel} = initialDataSet;
   let {hourlyRate, hoursPerday} = parameterModel[0];
   if (hasParameters) {
-    console.log('a', hourlyRate);
     hourlyRate = {
       ...hourlyRate,
       value: parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.hourlyRate
       ]?.currentValue || '0')
     }
-    console.log('b');
     hoursPerday = parseFloat(settingParameters?.formattedData[
       parameterKeyIndex.hoursPerDay
     ]?.currentValue || '0');
-    console.log('c');
   }
 
   let fteValue: any;
@@ -54,11 +50,9 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
 
   try {
     // checkHasFteParameter
-    console.log('llqq ==> ', settingParameters && isSnapshotModeEnable, hasParameters);
     
     if (hasParameters) {
       hasFteValue = await checkHasFteParameter(settingParameters);
-      console.log('cc=> ', hasFteValue);
       
       if (hasFteValue) {
         fteValue = await generateIColoumnValueFte(initialDataSet, '', settingParameters, isSnapshotModeEnable);
@@ -385,7 +379,6 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
     // );
 
     // projectManager
-    console.log('----', analisisAndDesignCalculation?.analysisDesingEstimateResource);
     
     const responseGenerateEstimateResource = await generateEstimateResource(dataEstimateResource, analisisAndDesignCalculation, {
       subTotalMAnalysisDesign,

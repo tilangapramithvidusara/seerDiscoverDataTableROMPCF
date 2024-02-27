@@ -31,9 +31,7 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
   if (hasParameters) {
     para_d4 = parseFloat(settingParameters?.formattedData[
       parameterKeyIndex.fteBase
-    ]?.currentValue || '0')
-    console.log("doc ==> ", para_d4);
-    
+    ]?.currentValue || '0')    
   }
   // formattedData
   // ################################ESTIMATE AVERAGE RATE################################
@@ -193,15 +191,11 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
   // ################################ESTIMATE RESOURCE################################
   
   try {
-    const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
-    console.log('oo', responseAnalisisDesign);
-    
+    const responseAnalisisDesign = await generateAnalysisDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);    
     const responseCustomisationDesign = await generateCustomisationDesignMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable)
     const responseCustomRequirementDesign = await generateCustomRequirementMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
 
-    const responseDocumentation = await generateDocumentationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign}, condition, true, settingParameters, isSnapshotModeEnable)
-    console.log('responseDocumentation', responseDocumentation);
-    
+    const responseDocumentation = await generateDocumentationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign}, condition, true, settingParameters, isSnapshotModeEnable)    
     const responseDesignReview = await generateDesignReviewMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseDocumentation}, condition, true, settingParameters, isSnapshotModeEnable);
 
     const responseIntegration = await generateIntegrationMValue(inititlaData, condition);
@@ -240,32 +234,28 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       resultValueAnalisisDesign = responseAnalisisDesign?.resultValue
       resultValueMSAnalisisDesign = responseAnalisisDesign?.resultValueMS
       resultValueMSCAnalisisDesign = responseAnalisisDesign?.resultValueMSC
-      console.log("resultValueAnalisisDesign", responseAnalisisDesign?.resultValue)
-
+      // console.log(responseAnalisisDesign?.resultValue);
+      
       resultValueCustomisationDesign = responseCustomisationDesign?.customisation?.resultValue
       resultValueMSCustomisationDesign = responseCustomisationDesign?.customisation?.resultValueMS
       resultValueMSCCustomisationDesign = responseCustomisationDesign?.customisation?.resultValueMSC
-      console.log("resultValueCustomisationDesign", responseCustomisationDesign?.customisation?.resultValue)
+      // console.log(responseCustomisationDesign?.customisation?.resultValue);
 
       resultValueCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValue
       resultValueMSCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValueMS
       resultValueMSCCustomRequirementDesign = responseCustomRequirementDesign?.customRequirement?.resultValueMSC
-      console.log("resultValueCustomRequirementDesign", responseCustomRequirementDesign?.customRequirement?.resultValue)
-      console.log("Total FTE For Estimate AVG rate", resultValueAnalisisDesign + resultValueCustomisationDesign + resultValueCustomRequirementDesign)
+      // console.log(responseCustomRequirementDesign?.customRequirement?.resultValue)
 
-      
       resultValueDocumentation = responseDocumentation?.documentationAveRateMilestone?.resultValue
       resultValueMSDocumentation = responseDocumentation?.documentationAveRateMilestone?.resultValueMS
       resultValueMSCDocumentation = responseDocumentation?.documentationAveRateMilestone?.resultValueMSC
-      console.log('-', responseDocumentation?.documentationAveRateMilestone?.resultValue);
+      // console.log(responseDocumentation?.documentationAveRateMilestone?.resultValue)
       
-
       resultValueDesignReview = responseDesignReview?.designReviewAveRateMilestone?.resultValue;
       resultValueMSDesignReview = responseDesignReview?.designReviewAveRateMilestone?.resultValueMS;
       resultValueMSCDesignReview = responseDesignReview?.designReviewAveRateMilestone?.resultValueMSC;
-      console.log(responseDesignReview?.designReviewAveRateMilestone?.resultValue);
+      // console.log(responseDesignReview?.designReviewAveRateMilestone?.resultValue)
       
-
       totalOfSubAnalysisDesign = resultValueAnalisisDesign 
         + resultValueCustomisationDesign 
         + resultValueCustomRequirementDesign
@@ -285,72 +275,61 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       projectManagerAnalysisDesign = totalOfSubAnalysisDesign * para_d4_copy;
       projectManagerAnalysisDesignMS = totalOfSubAnalysisDesignMS * para_d4_copy;
       projectManagerAnalysisDesignMSC = totalOfSubAnalysisDesignMSC * para_d4_copy;
-      console.log(projectManagerAnalysisDesign);
+      // console.log(totalOfSubAnalysisDesign * para_d4_copy)
       
-
       totalOfAnalysisDesign = totalOfSubAnalysisDesign + projectManagerAnalysisDesign;
       totalOfAnalysisDesignMS = totalOfSubAnalysisDesignMS + projectManagerAnalysisDesignMS;
       totalOfAnalysisDesignMSC = totalOfSubAnalysisDesignMSC + projectManagerAnalysisDesignMSC;
-      console.log("totalOfAnalysisDesign", totalOfAnalysisDesign)
       totalFte += totalOfAnalysisDesign
       totalFteMS += totalOfAnalysisDesignMS
       totalFteMSC += totalOfAnalysisDesignMSC
 
+      // console.log(totalOfAnalysisDesign)
+
       resultValueConfiguration = responseAnalisisDesign?.configuration?.resultValue
       resultValueMSConfiguration = responseAnalisisDesign?.configuration?.resultValueMS
-      resultValueMSCConfiguration = responseAnalisisDesign?.configuration?.resultValueMSC
-      console.log(responseAnalisisDesign?.configuration?.resultValue);
-      
+      resultValueMSCConfiguration = responseAnalisisDesign?.configuration?.resultValueMSC  
+      // console.log(responseAnalisisDesign?.configuration?.resultValue)    
 
       resultValueIntegration = responseIntegration?.integration?.resultValue
       resultValueMSIntegration = responseIntegration?.integration?.resultValueMS
-      resultValueMSCIntegration = responseIntegration?.integration?.resultValueMSC
-      console.log(responseIntegration?.integration?.resultValue);
-      
-
-      // integration pending
+      resultValueMSCIntegration = responseIntegration?.integration?.resultValueMSC   
+      // console.log(responseIntegration?.integration?.resultValue)   
 
       resultValueCustomisationBuild = responseCustomisationDesign?.customisationBuild?.resultValue;
       resultValueMSCustomisationBuild = responseCustomisationDesign?.customisationBuild?.resultValueMS;
-      resultValueMSCCustomisationBuild = responseCustomisationDesign?.customisationBuild?.resultValueMSC;
-      console.log(responseCustomisationDesign?.customisationBuild?.resultValue);
-      
+      resultValueMSCCustomisationBuild = responseCustomisationDesign?.customisationBuild?.resultValueMSC;  
+      // console.log(responseCustomisationDesign?.customisationBuild?.resultValue)    
 
       resultValueCustomRequirementBuild = responseCustomRequirementDesign?.customRequirementBuild?.resultValue;
       resultValueMSCustomRequirementBuild = responseCustomRequirementDesign?.customRequirementBuild?.resultValueMS;
-      resultValueMSCCustomRequirementBuild = responseCustomRequirementDesign?.customRequirementBuild?.resultValueMSC;
-      console.log(responseCustomRequirementDesign?.customRequirementBuild?.resultValue);
-      
+      resultValueMSCCustomRequirementBuild = responseCustomRequirementDesign?.customRequirementBuild?.resultValueMSC;  
+      // console.log(responseCustomRequirementDesign?.customRequirementBuild?.resultValue)    
 
       resultValueDocumentLayout = responseDocumentLayout?.documentLayout?.resultValue;
       resultValueMSDocumentLayout = responseDocumentLayout?.documentLayout?.resultValueMS;
-      resultValueMSCDocumentLayout = responseDocumentLayout?.documentLayout?.resultValueMSC;
-      console.log(responseDocumentLayout?.documentLayout?.resultValue);
-      
+      resultValueMSCDocumentLayout = responseDocumentLayout?.documentLayout?.resultValueMSC; 
+      // console.log(responseDocumentLayout?.documentLayout?.resultValue)     
 
       resultValueReporting = responseReporting?.reportingAveRateMilestone?.resultValue;
       resultValueMSReporting = responseReporting?.reportingAveRateMilestone?.resultValueMS;
-      resultValueMSCReporting = responseReporting?.reportingAveRateMilestone?.resultValueMSC;
-      console.log(responseReporting?.reportingAveRateMilestone?.resultValue);
-      
+      resultValueMSCReporting = responseReporting?.reportingAveRateMilestone?.resultValueMSC; 
+      // console.log(responseReporting?.reportingAveRateMilestone?.resultValue)     
 
       resultValueDataMigration = responseDataMigration?.dataMigrationAveRateMilestone?.resultValue;
       resultValueMSDataMigration = responseDataMigration?.dataMigrationAveRateMilestone?.resultValueMS;
-      resultValueMSCDataMigration = responseDataMigration?.dataMigrationAveRateMilestone?.resultValueMSC;
-      console.log(responseDataMigration?.dataMigrationAveRateMilestone?.resultValue);
-      
+      resultValueMSCDataMigration = responseDataMigration?.dataMigrationAveRateMilestone?.resultValueMSC; 
+      // console.log(responseDataMigration?.dataMigrationAveRateMilestone?.resultValue)     
 
       resultValueCRP = responseCRP?.crpAveRateMilestone?.resultValue;
       resultValueMSCRP = responseCRP?.crpAveRateMilestone?.resultValueMS;
-      resultValueMSCCRP = responseCRP?.crpAveRateMilestone?.resultValueMSC;
-      console.log(responseCRP?.crpAveRateMilestone?.resultValue);
-      
+      resultValueMSCCRP = responseCRP?.crpAveRateMilestone?.resultValueMSC; 
+      // console.log(responseCRP?.crpAveRateMilestone?.resultValue)     
 
       resultValueTesting = responseTesting?.testingAveRateMilestone?.resultValue;
       resultValueMSTesting = responseTesting?.testingAveRateMilestone?.resultValueMS;
-      resultValueMSCTesting = responseTesting?.testingAveRateMilestone?.resultValueMSC;
-      console.log(responseTesting?.testingAveRateMilestone?.resultValue);
-      
+      resultValueMSCTesting = responseTesting?.testingAveRateMilestone?.resultValueMSC; 
+      // console.log(responseTesting?.testingAveRateMilestone?.resultValue)     
 
       totalOfSubBuild = resultValueConfiguration
         + resultValueIntegration
@@ -382,53 +361,47 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       
       projectManagerBuild = totalOfSubBuild * para_d4;
       projectManagerBuildMS = totalOfSubBuildMS * para_d4;
-      projectManagerBuildMSC = totalOfSubBuildMSC * para_d4;
-
-      console.log("totalOfSubBuild * para_d4", totalOfSubBuild * para_d4);
-      
+      projectManagerBuildMSC = totalOfSubBuildMSC * para_d4;   
+      // console.log(totalOfSubBuild * para_d4)   
 
       totalOfBuild = totalOfSubBuild + projectManagerBuild;
       totalOfBuildMS = totalOfSubBuildMS + projectManagerBuildMS;
       totalOfBuildMSC = totalOfSubBuildMSC + projectManagerBuildMSC;
-      console.log("totalOfBuild", totalOfBuild)
+      // console.log(totalOfSubBuild + projectManagerBuild)
 
       totalFte += totalOfBuild
       totalFteMS += totalOfBuildMS
       totalFteMSC += totalOfBuildMSC
 
+      // console.log(totalOfBuild)
       // SKIP 4 ROWS
       
       resultValueTrainTheTrainer = responseTrainTheTrainer?.trainTheTrainerAveRateMilestone?.resultValue;
       resultValueMSTrainTheTrainer = responseTrainTheTrainer?.trainTheTrainerAveRateMilestone?.resultValueMS;
-      resultValueMSCTrainTheTrainer = responseTrainTheTrainer?.trainTheTrainerAveRateMilestone?.resultValueMSC;
-      console.log(responseTrainTheTrainer?.trainTheTrainerAveRateMilestone?.resultValue);
-      
+      resultValueMSCTrainTheTrainer = responseTrainTheTrainer?.trainTheTrainerAveRateMilestone?.resultValueMSC;   
+      // console.log(responseTrainTheTrainer?.trainTheTrainerAveRateMilestone?.resultValue)   
 
       // UAT ENVIROMENT PREPARATION MISSING // responseUATEnvironmentPreparation
 
       resultValueUATEnvironmentPreparation = responseUATEnvironmentPreparation?.uatEnvironmentPreparationAveRateMilestone?.resultValue;
       resultValueMSUATEnvironmentPreparation = responseUATEnvironmentPreparation?.uatEnvironmentPreparationAveRateMilestone?.resultValueMS;
-      resultValueMSCUATEnvironmentPreparation = responseUATEnvironmentPreparation?.uatEnvironmentPreparationAveRateMilestone?.resultValueMSC;
-      console.log(responseUATEnvironmentPreparation?.uatEnvironmentPreparationAveRateMilestone?.resultValue);
-      
+      resultValueMSCUATEnvironmentPreparation = responseUATEnvironmentPreparation?.uatEnvironmentPreparationAveRateMilestone?.resultValueMSC;   
+      // console.log(responseUATEnvironmentPreparation?.uatEnvironmentPreparationAveRateMilestone?.resultValue)   
 
       resultValueUATSupport = responseUATSupport?.uatSupportAveRateMilestone?.resultValue;
       resultValueMSUATSupport = responseUATSupport?.uatSupportAveRateMilestone?.resultValueMS;
-      resultValueMSCUATSupport = responseUATSupport?.uatSupportAveRateMilestone?.resultValueMSC;
-      console.log(responseUATSupport?.uatSupportAveRateMilestone?.resultValue);
-      
+      resultValueMSCUATSupport = responseUATSupport?.uatSupportAveRateMilestone?.resultValueMSC;   
+      // console.log(responseUATSupport?.uatSupportAveRateMilestone?.resultValue)   
 
       resultValueProdEnvironmentPreparation = responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValue;
       resultValueMSProdEnvironmentPreparation = responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValueMS;
-      resultValueMSCProdEnvironmentPreparation = responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValueMSC;
-      console.log(responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValue);
-      
+      resultValueMSCProdEnvironmentPreparation = responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValueMSC;  
+      // console.log(responseProdEnvironmentPreparation?.prodEnvironmentPreparationAveRateMilestone?.resultValue)    
 
       resultValueSupportHandover = responseSupportHandover?.supportHandoverAveRateMilestone?.resultValue;
       resultValueMSSupportHandover = responseSupportHandover?.supportHandoverAveRateMilestone?.resultValueMS;
-      resultValueMSCSupportHandover = responseSupportHandover?.supportHandoverAveRateMilestone?.resultValueMSC;
-      console.log(responseSupportHandover?.supportHandoverAveRateMilestone?.resultValue);
-      
+      resultValueMSCSupportHandover = responseSupportHandover?.supportHandoverAveRateMilestone?.resultValueMSC;    
+      // console.log(responseSupportHandover?.supportHandoverAveRateMilestone?.resultValue)  
 
       totalOfSubDeploy = resultValueTrainTheTrainer
         + resultValueUATEnvironmentPreparation
@@ -449,28 +422,29 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       projectManagerDeploy = totalOfSubDeploy * para_d4;
       projectManagerDeployMS = totalOfSubDeployMS * para_d4;
       projectManagerDeployMSC = totalOfSubDeployMSC * para_d4;
+      // console.log(totalOfSubDeploy * para_d4)
 
       totalOfDeploy = totalOfSubDeploy + projectManagerDeploy;
       totalOfDeployMS = totalOfSubDeployMS + projectManagerDeployMS;
       totalOfDeployMSC = totalOfSubDeployMSC + projectManagerDeployMSC;
-      console.log("totalOfDeploy", totalOfDeploy)
+
+      // console.log(totalOfSubDeploy + projectManagerDeploy)
 
       totalFte += totalOfDeploy
       totalFteMS += totalOfDeployMS
       totalFteMSC += totalOfDeployMSC
+      // console.log(totalOfDeploy)
 
       // responseDocumentLayout
       resultValueEndUserTraining = responseDocumentLayout?.endUserTraining?.resultValue;
       resultValueMSEndUserTraining = responseDocumentLayout?.endUserTraining?.resultValueMS;
-      resultValueMSCEndUserTraining = responseDocumentLayout?.endUserTraining?.resultValueMSC;
-      console.log(responseDocumentLayout?.endUserTraining?.resultValue);
-      
+      resultValueMSCEndUserTraining = responseDocumentLayout?.endUserTraining?.resultValueMSC;   
+      // console.log(responseDocumentLayout?.endUserTraining?.resultValue)   
 
       resultValuePostGoLive = responsePostGoLive?.postGoLiveAveRateMilestone?.resultValue;
       resultValueMSPostGoLive = responsePostGoLive?.postGoLiveAveRateMilestone?.resultValueMS;
-      resultValueMSCPostGoLive = responsePostGoLive?.postGoLiveAveRateMilestone?.resultValueMSC;
-      console.log(responsePostGoLive?.postGoLiveAveRateMilestone?.resultValue);
-      
+      resultValueMSCPostGoLive = responsePostGoLive?.postGoLiveAveRateMilestone?.resultValueMSC;   
+      // console.log(responsePostGoLive?.postGoLiveAveRateMilestone?.resultValue)   
 
       totalOfSubOperation = resultValueEndUserTraining
         + resultValuePostGoLive;
@@ -482,31 +456,34 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       projectManagerOperation = totalOfSubOperation * para_d4;
       projectManagerOperationMS = totalOfSubOperationMS * para_d4;
       projectManagerOperationMSC = totalOfSubOperationMSC * para_d4;
+      // console.log(totalOfSubOperation * para_d4)
 
       totalOfOperation = totalOfSubOperation + projectManagerOperation;
       totalOfOperationMS = totalOfSubOperationMS + projectManagerOperationMS;
       totalOfOperationMSC = totalOfSubOperationMSC + projectManagerOperationMSC;
-      console.log("totalOfOperation", totalOfOperation)
+      // console.log(totalOfSubOperation + projectManagerOperation)
 
       totalFte += totalOfOperation
       totalFteMS += totalOfOperationMS
       totalFteMSC += totalOfOperationMSC
 
+      // console.log(totalOfOperation)
+
       fColmnValueEstimateAveRate = responseDocumentLayout?.projectRisk?.estimateAveRate
+
+      // console.log(fColmnValueEstimateAveRate)
 
       // ################################ESTIMATE RESOURCE################################
 
     }
-
+    // console.log('===> ', totalFte, generateTotalFte(condition, totalFte, hoursPerday, 5))
     ////////////////ESTIMATE RESOURCE MILESTONE START///////////////
-    console.log("FTEEEEEE totalFte", totalFte)
     return {
       totalFte: generateTotalFte(condition, totalFte, hoursPerday, 5),
       totalFteMS: generateTotalFte(condition, totalFteMS, hoursPerday, 5),
       totalFteMSC: generateTotalFte(condition, totalFteMSC, hoursPerday, 5),
     };
   } catch (error) {
-    console.log("generateIColoumnValue error ==> ", error);
     return {
       totalFte,
       totalFteMS,
@@ -529,302 +506,7 @@ export const checkConditionAndGenerateValue = (calculatedValue: number, hourlyRa
   return calculatedValue * hourlyRate || 0;
 }
 
-// C5 value generate
-// export const generateAnalysisDesignMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
-//    // need to check with 'Estimate - Resource Milestone'!$C$1
-//   let hasParameters = settingParameters && isSnapshotModeEnable;
-//   if (hasParameters) {
-//     para_d4 = parseFloat(settingParameters?.formattedData[
-//       parameterKeyIndex.fteBase
-//     ]?.currentValue || '0')
-//     console.log("doc ==> ", para_d4);
-    
-//   }
 
-//   let resultValue = 0;
-//   let resultValueMS = 0;
-//   let resultValueMSC = 0;
-//   let x = 0
-//   let y = 0
-
-//   // ANALYSIS AND DESIGN
-//   // Must
-//   let primaryResourceDesignValueFromBaseData = 0;
-//   let secondaryResourceDesignValueFromBaseData = 0;
-//   let primaryResourceDesignValueFromModuleData = 0;
-//   let secondaryResourceDesignValueFromModuleData = 0;
-
-//   // Must Should
-//   let primaryResourceDesignValueFromBaseDataMS = 0;
-//   let secondaryResourceDesignValueFromBaseDataMS = 0;
-//   let primaryResourceDesignValueFromModuleDataMS = 0;
-//   let secondaryResourceDesignValueFromModuleDataMS = 0;
-
-//   // Must Should Could
-//   let primaryResourceDesignValueFromBaseDataMSC = 0;
-//   let secondaryResourceDesignValueFromBaseDataMSC = 0;
-//   let primaryResourceDesignValueFromModuleDataMSC = 0;
-//   let secondaryResourceDesignValueFromModuleDataMSC = 0;
-
-//   // Must
-//   const seenBaseMIds = new Set();
-//   const seenModuleMIds = new Set();
-
-//   // Must Should
-//   const seenBaseMSIdsMS = new Set();
-//   const seenModuleMSIdsMS = new Set();
-
-//   // Must Should Could
-//   const seenBaseMSCIdsMSC = new Set();
-//   const seenModuleMSCIdsMSC = new Set();
-//   // seerMoscow
-
-//   // CONFIGURATION
-
-//   let resultConfigurationValue = 0;
-//   let resultConfigurationValueMS = 0;
-//   let resultConfigurationValueMSC = 0;
-
-//   let buildEstimateConfigurationValueFromBaseData = 0;
-//   let buildEstimateConfigurationValueFromModlueData = 0;
-
-//   let buildEstimateConfigurationValueFromBaseDataMS = 0;
-//   let buildEstimateConfigurationValueFromModlueDataMS = 0;
-
-//   let buildEstimateConfigurationValueFromBaseDataMSC = 0;
-//   let buildEstimateConfigurationValueFromModlueDataMSC = 0;
-
-//   const seenModuleConfigurationMIds = new Set();
-//   const seenModuleConfigurationMSIds = new Set();
-//   const seenModuleConfigurationMSCIds = new Set();
-//   try {
-//     const {BaseData, resourceModelData, ModuleData, parameterModel} = inititlaData
-//     let {hourlyRate, hoursPerday} = parameterModel[0];
-//     if (hasParameters) {
-//       hoursPerday = checkTypeparseFloat(settingParameters?.formattedData[
-//         parameterKeyIndex.hoursPerDay
-//       ]?.currentValue || '0');
-//       hourlyRate = {
-//         ...hourlyRate,
-//         value: parseFloat(settingParameters?.formattedData[
-//           parameterKeyIndex.hourlyRate
-//         ]?.currentValue || '0')
-//       }
-//     }
-//     if (inititlaData) {
-
-//       // BASE DATA LOOP
-//       const baseLoop = await BaseData && BaseData.length && BaseData.map(async(baseItem: any, baseIndex: number) => {
-//         const {allResources} = baseItem;
-//         // ANALYSIS AND DESING
-//         // Must
-//         if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
-//           //
-//           const res = baseReader(baseItem, primaryResourceDesignValueFromBaseData, secondaryResourceDesignValueFromBaseData, x);
-//           primaryResourceDesignValueFromBaseData = res.primaryResourceDesignValueFromBaseData;
-//           secondaryResourceDesignValueFromBaseData = res.secondaryResourceDesignValueFromBaseData;
-//         }
-
-//         // Must Should
-//         if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
-//           //
-//           const res = baseReader(baseItem, primaryResourceDesignValueFromBaseDataMS, secondaryResourceDesignValueFromBaseDataMS, x);
-//           primaryResourceDesignValueFromBaseDataMS = res.primaryResourceDesignValueFromBaseData;
-//           secondaryResourceDesignValueFromBaseDataMS = res.secondaryResourceDesignValueFromBaseData;
-//         }
-
-//         // Must Should Could
-//         if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
-//           //
-//           const res = baseReader(baseItem, primaryResourceDesignValueFromBaseDataMSC, secondaryResourceDesignValueFromBaseDataMSC, x);
-//           primaryResourceDesignValueFromBaseDataMSC = res.primaryResourceDesignValueFromBaseData;
-//           secondaryResourceDesignValueFromBaseDataMSC = res.secondaryResourceDesignValueFromBaseData;
-//         }
-
-//         // CONFIGURATION
-//         // Must
-
-//         if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
-//           // (baseItem?.designEstimate * (baseItem?.resourceSplit / 100)) * baseItem?.quantity
-//           buildEstimateConfigurationValueFromBaseData += 
-//           baseItem?.quantity > 0 ? baseItem?.buildEstimate * (baseItem?.resourceSplit / 100) * baseItem?.quantity : baseItem?.buildEstimate * (baseItem?.resourceSplit / 100)
-//         }
-
-//         // Must Should
-//         if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
-//           buildEstimateConfigurationValueFromBaseDataMS += 
-//           baseItem?.quantity > 0 ? baseItem?.buildEstimate * (baseItem?.resourceSplit / 100) * baseItem?.quantity : baseItem?.buildEstimate * (baseItem?.resourceSplit / 100)
-//         }
-
-//         // Must Should Could
-//         if ((moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) {
-//           buildEstimateConfigurationValueFromBaseDataMSC += 
-//           baseItem?.quantity > 0 ? baseItem?.buildEstimate * (baseItem?.resourceSplit / 100) * baseItem?.quantity : baseItem?.buildEstimate * (baseItem?.resourceSplit / 100)
-//         }
-
-//       });
-      
-//       const moduleLoop = await ModuleData && ModuleData?.length && ModuleData.map((moduleDataItem: any, moduleDataIndex: any) => {
-
-//         // Must
-//         if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000]) {
-//           if (!seenModuleMIds.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
-//             seenModuleMIds.add(moduleDataItem?.fitGapProductSeerModule?.id)
-//             const res = moduleReader(moduleDataItem, primaryResourceDesignValueFromModuleData, secondaryResourceDesignValueFromModuleData, y);
-//             primaryResourceDesignValueFromModuleData = res.primaryResourceDesignValueFromModuleData;
-//             secondaryResourceDesignValueFromModuleData = res.secondaryResourceDesignValueFromModuleData;
-//           }
-//         }
-
-//         // Must Should
-//         if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001]) {
-//           //
-//           if (!seenModuleMSIdsMS.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
-//             seenModuleMSIdsMS.add(moduleDataItem?.fitGapProductSeerModule?.id)
-//             const res = moduleReader(moduleDataItem, primaryResourceDesignValueFromModuleDataMS, secondaryResourceDesignValueFromModuleDataMS, y);
-//             primaryResourceDesignValueFromModuleDataMS = res.primaryResourceDesignValueFromModuleData;
-//             secondaryResourceDesignValueFromModuleDataMS = res.secondaryResourceDesignValueFromModuleData;
-//           }
-//         }
-
-//         // Must Should Could
-//         if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002]) {
-//           //
-//           if (!seenModuleMSCIdsMSC.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
-//             seenModuleMSCIdsMSC.add(moduleDataItem?.fitGapProductSeerModule?.id);
-          
-//             const res = moduleReader(moduleDataItem, primaryResourceDesignValueFromModuleDataMSC, secondaryResourceDesignValueFromModuleDataMSC, y);
-//             primaryResourceDesignValueFromModuleDataMSC = res.primaryResourceDesignValueFromModuleData;
-//             secondaryResourceDesignValueFromModuleDataMSC = res.secondaryResourceDesignValueFromModuleData;
-//           }
-//         }
-
-//         // CONFIGURATION  moduleOverrideCustomerSeerEstimateBuild  moduleSeerEstimateBuild moduleOverridePartnerSeerEstimateBuild
-
-//         // Must
-//         if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000]) {
-//           if (!seenModuleConfigurationMIds.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
-//             seenModuleConfigurationMIds.add(moduleDataItem?.fitGapProductSeerModule?.id)
-//             buildEstimateConfigurationValueFromModlueData += (
-//               moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * (moduleDataItem?.moduleSeerResourceSplit / 100)
-//               ) + 
-//             (moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100))
-//           }
-//         }
-
-//         // Must Should
-//         if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001]) {
-//           if (!seenModuleConfigurationMSIds.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
-//             seenModuleConfigurationMSIds.add(moduleDataItem?.fitGapProductSeerModule?.id)
-//             buildEstimateConfigurationValueFromModlueDataMS += (
-//               moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * (moduleDataItem?.moduleSeerResourceSplit / 100)
-//               ) + 
-//             (moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100))
-//           }
-//         }
-
-//         // Must Should Could
-//         if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000002]) {
-//           if (!seenModuleConfigurationMSCIds.has(moduleDataItem?.fitGapProductSeerModule?.id)) {
-//             seenModuleConfigurationMSCIds.add(moduleDataItem?.fitGapProductSeerModule?.id)
-//             buildEstimateConfigurationValueFromModlueDataMSC += (
-//               moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * (moduleDataItem?.moduleSeerResourceSplit / 100)
-//               ) + 
-//             (moduleDataItem?.moduleOverridePartnerSeerEstimateBuild * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100))
-//           }
-//         }
-//       });
-//       if (parameterModel?.length) {        
-//         resultValue = generateReturnValue(
-//           primaryResourceDesignValueFromBaseData,
-//           secondaryResourceDesignValueFromBaseData,
-//           primaryResourceDesignValueFromModuleData,
-//           secondaryResourceDesignValueFromModuleData,
-//           hoursPerday,
-//           condition
-//         );
-//         // (
-//         //     primaryResourceDesignValueFromBaseData 
-//         //     + secondaryResourceDesignValueFromBaseData 
-//         //     + primaryResourceDesignValueFromModuleData 
-//         //     + secondaryResourceDesignValueFromModuleData
-//         //   )/parameterModel[0].hoursPerday;
-        
-//         resultValueMS = generateReturnValue(
-//           primaryResourceDesignValueFromBaseDataMS,
-//           secondaryResourceDesignValueFromBaseDataMS,
-//           primaryResourceDesignValueFromModuleDataMS,
-//           secondaryResourceDesignValueFromModuleDataMS,
-//           hoursPerday,
-//           condition
-//         );
-//         // (
-//         //   primaryResourceDesignValueFromBaseDataMS 
-//         //     + secondaryResourceDesignValueFromBaseDataMS 
-//         //     + primaryResourceDesignValueFromModuleDataMS 
-//         //     + secondaryResourceDesignValueFromModuleDataMS
-//         //   )/parameterModel[0].hoursPerday;
-
-//         resultValueMSC = generateReturnValue(
-//           primaryResourceDesignValueFromBaseDataMSC,
-//           secondaryResourceDesignValueFromBaseDataMSC,
-//           primaryResourceDesignValueFromModuleDataMSC,
-//           secondaryResourceDesignValueFromModuleDataMSC,
-//           hoursPerday,
-//           condition
-//         );
-
-//         resultConfigurationValue = generateReturnValue(
-//           buildEstimateConfigurationValueFromBaseData, 
-//           buildEstimateConfigurationValueFromModlueData, 0, 0, 
-//           hoursPerday, 
-//           condition
-//         )
-//         // (buildEstimateConfigurationValueFromBaseData + buildEstimateConfigurationValueFromModlueData)/parameterModel[0].hoursPerday
-//         resultConfigurationValueMS = generateReturnValue(
-//           buildEstimateConfigurationValueFromBaseDataMS, 
-//           buildEstimateConfigurationValueFromModlueDataMS, 0, 0, 
-//           hoursPerday, 
-//           condition
-//         )
-//         //(buildEstimateConfigurationValueFromBaseDataMS + buildEstimateConfigurationValueFromModlueDataMS)/parameterModel[0].hoursPerday
-//         resultConfigurationValueMSC = generateReturnValue(
-//           buildEstimateConfigurationValueFromBaseDataMSC, 
-//           buildEstimateConfigurationValueFromModlueDataMSC, 0, 0, 
-//           hoursPerday, 
-//           condition
-//         )
-//         //(buildEstimateConfigurationValueFromBaseDataMSC + buildEstimateConfigurationValueFromModlueDataMSC)/parameterModel[0].hoursPerday
-//         // (
-//         //   primaryResourceDesignValueFromBaseDataMSC 
-//         //     + secondaryResourceDesignValueFromBaseDataMSC
-//         //     + primaryResourceDesignValueFromModuleDataMSC 
-//         //     + secondaryResourceDesignValueFromModuleDataMSC
-//         //   )/parameterModel[0].hoursPerday;
-        
-//       }
-//       await Promise.all([baseLoop, moduleLoop])
-//       return {resultValue, resultValueMS, resultValueMSC, configuration: {
-//         resultValue: resultConfigurationValue,
-//         resultValueMS: resultConfigurationValueMS,
-//         resultValueMSC: resultConfigurationValueMSC,
-//       }};
-//     } else {
-//       return {resultValue, resultValueMS, resultValueMSC, configuration: {
-//         resultValue: resultConfigurationValue,
-//         resultValueMS: resultConfigurationValueMS,
-//         resultValueMSC: resultConfigurationValueMSC,
-//       }};
-//     }
-//   } catch (error) {
-//     console.log("generateAnalysisDesignMValue error ==> ", error);
-//     return {resultValue, resultValueMS, resultValueMSC, configuration: {
-//       resultValue: resultConfigurationValue,
-//       resultValueMS: resultConfigurationValueMS,
-//       resultValueMSC: resultConfigurationValueMSC,
-//     }};
-//   }
-// }
 export const generateAnalysisDesignMValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   // need to check with 'Estimate - Resource Milestone'!$C$1
  const hasParameters = settingParameters && isSnapshotModeEnable
@@ -938,17 +620,13 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
        parameterKeyIndex.hoursPerDay
      ]?.currentValue || '0')
    }
-
-   console.log('hoursPerday design ==> ', hoursPerday, hasParameters);
    
    if (inititlaData) {
 
      // BASE DATA LOOP
      const baseLoop = await BaseData && BaseData.length && BaseData.map(async(baseItem: any, baseIndex: number) => {
        const {allResources} = baseItem;
-       console.log('baseItem ==> ', baseItem);
        // && baseItem?.module?.name != "Assembly - BC"
-       console.log('00-=', baseItem?.module?.name != "Cost Accounting - BC", baseItem?.module?.name == "Cost Accounting - BC");
        // Assembly - BC
        // ANALYSIS AND DESING
        // Must
@@ -1051,9 +729,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
 
      });
 
-     const moduleLoop = await ModuleData && ModuleData?.length && ModuleData.map((moduleDataItem: any, moduleDataIndex: any) => {
-       console.log('3w2w2', moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC', moduleDataItem?.moduleSeerModuleName == 'Cost Accounting - BC');
-       
+     const moduleLoop = await ModuleData && ModuleData?.length && ModuleData.map((moduleDataItem: any, moduleDataIndex: any) => {       
        // Must
        if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000] && moduleDataItem?.moduleSeerModuleName != 'Cost Accounting - BC') {
          if (moduleDataItem?.moduleOverrideCustomerSeerName || moduleDataItem?.moduleOverridePartnerSeerName) {
@@ -1188,14 +864,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
          hoursPerday,
          condition
        );
-       console.log('resultValue ==> ', resultValue);
-       
-       // (
-       //     primaryResourceDesignValueFromBaseData 
-       //     + secondaryResourceDesignValueFromBaseData 
-       //     + primaryResourceDesignValueFromModuleData 
-       //     + secondaryResourceDesignValueFromModuleData
-       //   )/parameterModel[0].hoursPerday;
        
        resultValueMS = generateReturnValue(
          primaryResourceDesignValueFromBaseDataMS,
@@ -1205,12 +873,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
          hoursPerday,
          condition
        );
-       // (
-       //   primaryResourceDesignValueFromBaseDataMS 
-       //     + secondaryResourceDesignValueFromBaseDataMS 
-       //     + primaryResourceDesignValueFromModuleDataMS 
-       //     + secondaryResourceDesignValueFromModuleDataMS
-       //   )/parameterModel[0].hoursPerday;
 
        resultValueMSC = generateReturnValue(
          primaryResourceDesignValueFromBaseDataMSC,
@@ -1241,14 +903,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
          hoursPerday, 
          condition
        )
-       //(buildEstimateConfigurationValueFromBaseDataMSC + buildEstimateConfigurationValueFromModlueDataMSC)/parameterModel[0].hoursPerday
-       // (
-       //   primaryResourceDesignValueFromBaseDataMSC 
-       //     + secondaryResourceDesignValueFromBaseDataMSC
-       //     + primaryResourceDesignValueFromModuleDataMSC 
-       //     + secondaryResourceDesignValueFromModuleDataMSC
-       //   )/parameterModel[0].hoursPerday;
-       
      }
      await Promise.all([baseLoop, moduleLoop])
      return {resultValue, resultValueMS, resultValueMSC, 
@@ -1424,7 +1078,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
      };
    }
  } catch (error) {
-   console.log("generateAnalysisDesignMValue error ==> ", error);
    return {resultValue, resultValueMS, resultValueMSC, 
      resultModule: modulesAnalysisDesign,
      resultModuleMS: modulesAnalysisDesignMS,
@@ -1485,7 +1138,6 @@ export const generateAnalysisDesignMValue2 = async (inititlaData: any) => {
     const resultValue = calculateResultValue(BaseData, ModuleData, parameterModel);
     return resultValue;
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return 0;
   }
 }
@@ -1534,27 +1186,3 @@ const calculateResultValue = (
   }
   return 0;
 };
-
-
-// const baseReader = (baseItem: any, primaryResourceDesignValueFromBaseData: number, secondaryResourceDesignValueFromBaseData: number, x: number) => {
-//   x += 1;
-//   if (baseItem?.quantity && baseItem?.quantity > 0) { // Quantity greaterthan 0
-//     // (design*(split/100))*quantity    
-//     primaryResourceDesignValueFromBaseData += (baseItem?.designEstimate * (baseItem?.resourceSplit / 100)) * baseItem?.quantity
-//   } else {
-//     // design value
-//     primaryResourceDesignValueFromBaseData += (baseItem?.designEstimate * (baseItem?.resourceSplit / 100))
-//   }
-
-//   secondaryResourceDesignValueFromBaseData += (baseItem?.designEstimate * ((100 - baseItem?.resourceSplit) / 100))
-//   return {primaryResourceDesignValueFromBaseData, secondaryResourceDesignValueFromBaseData}
-// }
-
-// const moduleReader = (moduleDataItem: any, primaryResourceDesignValueFromModuleData: number, secondaryResourceDesignValueFromModuleData: number ,y: number) => {
-//   y += 1;
-//   // design*(split/100)
-//   // Design*((100-Split)/100)
-//   primaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * (moduleDataItem?.moduleSeerResourceSplit / 100)
-//   secondaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100)
-//   return {primaryResourceDesignValueFromModuleData, secondaryResourceDesignValueFromModuleData}
-// }
