@@ -81,10 +81,10 @@ export const resourceParameterColumn = [
     header: 'Name',
   },
   {
-    header: 'Rate'
+    header: 'Cost'
   },
   {
-    header: 'Cost'
+    header: 'Rate'
   }
 ]
 

@@ -15,7 +15,8 @@ import {
   setCurrentChangingProjectTasks,
   setCurrentSavedParameters,
   setCurrentSavedResources,
-  setCurrentSavedProjectTasks
+  setCurrentSavedProjectTasks,
+  setLatestChanges
 } from '../../redux/snapshotReport/snapshotReportSlice';
 import { Parameter } from '../../Utils/setting.values.convertor.utils';
 import { fteDropdown } from '../../Constants/dropdownConstants';
@@ -42,7 +43,7 @@ const ProjectTaskTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: {
   const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters);
   const currentSavedProjectTasks = useSelector((state: any) => state?.snapshot?.currentSavedProjectTasks)
   const currentChangingProjectTasks = useSelector((state: any) => state?.snapshot?.currentChangingProjectTasks)
-
+  const latestChanges = useSelector((state: any) => state?.snapshot?.latestChanges);
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
@@ -54,6 +55,10 @@ const ProjectTaskTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: {
   const onChangeHanlder = useCallback(
     (info) => {
       dispatch(setCurrentChangingProjectTasks(info));
+      dispatch(setLatestChanges({
+        ...latestChanges,
+        projectTaskChanged: true,
+      }));
       // if (info?.isDropDown) {
       //   dispatch(setStateSnapshot(true));
       // }
@@ -84,6 +89,10 @@ const ProjectTaskTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: {
     dispatch(setCurrentSavedParameters(currentChangingParameters))
     dispatch(setCurrentSavedResources(currentChangingResources))
     dispatch(setCurrentSavedProjectTasks(currentChangingProjectTasks))
+    dispatch(setLatestChanges({
+      ...latestChanges,
+      projectTaskChanged: true,
+    }));
     arrayGeneratorHandler(false, {
       ...currentChangingParameters,
       base: snapshotBase ? snapshotBase : initialFetchData,

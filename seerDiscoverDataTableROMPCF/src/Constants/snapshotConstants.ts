@@ -10,5 +10,6 @@ export const snapshotAPIConstants: any = {
     CREATED_BY: '_seer_createdbyportal_value@OData.Community.Display.V1.FormattedValue',
     MODIFIED_AT: 'modifiedon@OData.Community.Display.V1.FormattedValue',
     MODIFIED_BY: '_seer_modifiedbyportal_value@OData.Community.Display.V1.FormattedValue',
+    UPDATED_DATES: 'seer_settingsupdateddate'
 }
   

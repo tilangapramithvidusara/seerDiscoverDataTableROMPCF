@@ -13,7 +13,8 @@ import {
   setCurrentSavedParameters,
   setCurrentChangingResources,
   setCurrentSavedResources,
-  setCurrentSavedProjectTasks
+  setCurrentSavedProjectTasks,
+  setLatestChanges
 } from '../../redux/snapshotReport/snapshotReportSlice';
 
 const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { handleClose: any, tableNumber?: number, arrayGeneratorHandler?: any }) => {
@@ -32,6 +33,7 @@ const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
   const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters);
   const currentSavedProjectTasks = useSelector((state: any) => state?.snapshot?.currentSavedProjectTasks)
   const currentChangingProjectTasks = useSelector((state: any) => state?.snapshot?.currentChangingProjectTasks)
+  const latestChanges = useSelector((state: any) => state?.snapshot?.latestChanges);
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
@@ -43,6 +45,10 @@ const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
   const onChangeHanlder = useCallback(
     (info) => {
       dispatch(setCurrentChangingResources(info));
+      dispatch(setLatestChanges({
+        ...latestChanges,
+        resourceChanged: true,
+      }));
     },
     [dispatch]
   );
@@ -55,6 +61,10 @@ const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
     dispatch(setCurrentSavedParameters(currentChangingParameters))
     dispatch(setCurrentSavedResources(currentChangingResources))
     dispatch(setCurrentSavedProjectTasks(currentChangingProjectTasks))
+    dispatch(setLatestChanges({
+      ...latestChanges,
+      resourceChanged: true,
+    }));
     arrayGeneratorHandler(false, {
       ...currentChangingParameters, 
       base: snapshotBase ? snapshotBase : initialFetchData,
@@ -108,24 +118,6 @@ const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
                 <td>
                   <div>
                     <input
-                      name="hourlyRate"
-                      value={hourlyRate}
-                      type="number"
-                      // onKeyDown={handleKeyDown}
-                      onChange={(e) => {
-                        onChangeHanlder({
-                          ...settingItem,
-                          key: 'hourlyRate',
-                          value: parseFloat(e.target.value)
-                        });
-                      }}
-                      placeholder="HourlyRate"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <div>
-                    <input
                       name="hourlyCost"
                       value={hourlyCost}
                       type="number"
@@ -138,6 +130,24 @@ const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
                         });
                       }}
                       placeholder="HourlyCost"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <input
+                      name="hourlyRate"
+                      value={hourlyRate}
+                      type="number"
+                      // onKeyDown={handleKeyDown}
+                      onChange={(e) => {
+                        onChangeHanlder({
+                          ...settingItem,
+                          key: 'hourlyRate',
+                          value: parseFloat(e.target.value)
+                        });
+                      }}
+                      placeholder="HourlyRate"
                     />
                   </div>
                 </td>
