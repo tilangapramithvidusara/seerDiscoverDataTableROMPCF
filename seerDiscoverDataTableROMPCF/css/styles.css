@@ -251,6 +251,7 @@ table {
   text-transform: capitalize;
   min-width: 60px;
   border-radius: 5px !important;
+  line-height: 25px;
 }
 
 
@@ -266,6 +267,7 @@ table {
   text-transform: capitalize;
   min-width: 60px;
   border-radius: 5px !important;
+  line-height: 25px;
 }
 
 .seerDiscoverROM  .btn-blue-outline .btn-icon{
