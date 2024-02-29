@@ -241,7 +241,8 @@ table {
 
 .seerDiscoverROM .btn-blue-outline, .alert-modal .btn-blue-outline, .snapshot-modal .ant-btn-default, .containerManualTable .btn-blue-outline {
   height: 25px;
-  font-size:13px;
+  font-size:13px !important;
+  font-weight: 400 !important;
   padding: 0px 12px;
   color: #0E94FD;
   background-color: transparent !important;
@@ -250,12 +251,14 @@ table {
   text-transform: capitalize;
   min-width: 60px;
   border-radius: 5px !important;
+  line-height: 25px;
 }
 
 
 .seerDiscoverROM  .btn-primary, .containerManualTable .btn-primary, .alert-modal .btn-primary, .snapshot-modal .ant-btn-primary{
   height: 25px;
-  font-size:13px;
+  font-size:13px !important;
+  font-weight: 400 !important;
   padding: 0px 12px;
   color: #ffffff !important;
   background-color: #0E94FD !important;
@@ -264,6 +267,7 @@ table {
   text-transform: capitalize;
   min-width: 60px;
   border-radius: 5px !important;
+  line-height: 25px;
 }
 
 .seerDiscoverROM  .btn-blue-outline .btn-icon{

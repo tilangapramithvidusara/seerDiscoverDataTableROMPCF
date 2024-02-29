@@ -10,7 +10,7 @@ const OverlayComponent = ({ showOverlay }: {showOverlay: boolean}) => {
     <div className={'overlay-component'}>
       <div className={'content-overlay-component'}>
         <h2>Processing</h2>
-        <p>Wait for until finish processing...!</p>
+        <p>Please wait...!</p>
       </div>
     </div>
   );

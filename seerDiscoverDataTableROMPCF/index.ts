@@ -79,16 +79,16 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
         const userId = context?.parameters?.userId?.raw;
         const name = context?.parameters?.name?.raw;
         const azureurl = context?.parameters?.azureFunction?.raw;
-        // localStorage.setItem("flowurl", ('https://uat-18.uksouth.logic.azure.com:443/workflo…0&sig=uWULxjDR3f6LwFWo87fMqmnKL4FaxsiMOO8vIN4E1XY' || flowurl || ''));
-        // localStorage.setItem("accountId", ("5172763a-52b1-ee11-a569-000d3a0bcfb2" || accountId || ''));
-        // localStorage.setItem("userId", ("b7d3be6f-a9b3-ee11-a568-002248015232" || userId || ''));
-        // localStorage.setItem("name", (name || ''));
-        // localStorage.setItem("azureFunction", ("https://poc-rom-in-portal-uat.azurewebsites.net/api/DiscoverSMBROM?code=HwBgZK01CGG1OgSDraJwW3Nj-HdI_VaYznAPufDYEutDAzFuCIQvvg==" || azureurl || ''));
-        localStorage.setItem("flowurl", (flowurl || ''));
-        localStorage.setItem("accountId", (accountId || ''));
-        localStorage.setItem("userId", (userId || ''));
+        localStorage.setItem("flowurl", ('https://uat-18.uksouth.logic.azure.com:443/workflo…0&sig=uWULxjDR3f6LwFWo87fMqmnKL4FaxsiMOO8vIN4E1XY' || flowurl || ''));
+        localStorage.setItem("accountId", ("5172763a-52b1-ee11-a569-000d3a0bcfb2" || accountId || ''));
+        localStorage.setItem("userId", ("b7d3be6f-a9b3-ee11-a568-002248015232" || userId || ''));
         localStorage.setItem("name", (name || ''));
-        localStorage.setItem("azureFunction", (azureurl || ''));
+        localStorage.setItem("azureFunction", ("https://poc-rom-in-portal-uat.azurewebsites.net/api/DiscoverSMBROM?code=HwBgZK01CGG1OgSDraJwW3Nj-HdI_VaYznAPufDYEutDAzFuCIQvvg==" || azureurl || ''));
+        // localStorage.setItem("flowurl", (flowurl || ''));
+        // localStorage.setItem("accountId", (accountId || ''));
+        // localStorage.setItem("userId", (userId || ''));
+        // localStorage.setItem("name", (name || ''));
+        // localStorage.setItem("azureFunction", (azureurl || ''));
 
         // : React.ReactElement
         // console.log('entity name : ', context?.parameters?.entityName?.raw)

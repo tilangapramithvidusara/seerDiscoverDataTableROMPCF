@@ -28,8 +28,8 @@ export const generateEstimateResourceValue = (
       }
       resourceModelData = settingParameters?.currentSavedResources
       ProjectTasktModel = settingParameters?.currentSavedProjectTasks
-      console.log('12121 ==> ', settingParameters?.currentSavedResources);
-      console.log('121212 ==> ', settingParameters?.currentSavedProjectTasks);
+      // console.log('12121 ==> ', settingParameters?.currentSavedResources);
+      // console.log('121212 ==> ', settingParameters?.currentSavedProjectTasks);
       
     }
     

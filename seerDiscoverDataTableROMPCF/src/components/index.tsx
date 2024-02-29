@@ -296,9 +296,9 @@ const App = ({
         record.seer_name = info?.seerName; // Text
         record.seer_description = info?.seerDescription;
         record.seer_settingsupdateddate = info?.latestChangesTime; // Text
-        console.log('record ==> ', info?.seerDescription, info?.latestChangesTime, typeof info?.latestChangesTime)
+        // console.log('record ==> ', info?.seerDescription, info?.latestChangesTime, typeof info?.latestChangesTime)
 
-        console.log('JSON.stringify(record)', JSON.stringify(record));
+        // console.log('JSON.stringify(record)', JSON.stringify(record));
         
 
         window.parent.webapi.safeAjax({
@@ -477,23 +477,23 @@ const App = ({
     if (latestChanges?.parameterChanged) {
       latestChangesTimeData = {
         ...latestChangesTimeData,
-        parameterChangedTime: new Date(),
+        parameterChangedTime: new Date().toISOString(),
       }
     }
     if (latestChanges?.resourceChanged) {
       latestChangesTimeData = {
         ...latestChangesTimeData,
-        resourceChangedTime: new Date(),
+        resourceChangedTime: new Date().toISOString(),
       }
     }
     if (latestChanges?.projectTaskChanged) {
       latestChangesTimeData = {
         ...latestChangesTimeData,
-        projectTaskChangedTime: new Date(),
+        projectTaskChangedTime: new Date().toISOString(),
       }
     }
 
-    console.log('qaqa ==> ', latestChanges, latestChangesTimeData);
+    // console.log('qaqa ==> ', latestChanges, latestChangesTimeData);
     
     
     dispatch(setLatestChangesTime(latestChangesTimeData))
@@ -579,11 +579,11 @@ const App = ({
     let latestChangesTimeData = latestChangesTime;
     latestChangesTimeData = {
       ...latestChangesTimeData,
-      parameterChangedTime: new Date(),
-      resourceChangedTime: new Date(),
-      projectTaskChangedTime: new Date(),
+      parameterChangedTime: new Date().toISOString(),
+      resourceChangedTime: new Date().toISOString(),
+      projectTaskChangedTime: new Date().toISOString(),
     }
-    console.log('qaqa222 ==> ', latestChanges, latestChangesTimeData);
+    // console.log('qaqa222 ==> ', latestChanges, latestChangesTimeData);
     dispatch(setLatestChangesTime(latestChangesTimeData))
     dispatch(saveInitialSnapshotRecordAsyncAPI({
       seerName: info?.name,
@@ -606,6 +606,12 @@ const App = ({
   const handleClosePopup = () => {
     setOpenLoadSnapshotModal(false);
   }
+
+  console.log('initialFetchData?.parameterModel[0]?.seer_Enablesnapshots', initialFetchData?.parameterModel[0]?.seer_Enablesnapshots);
+  // console.log("initialFetchData?.parameterModel[0]", initialFetchData?.parameterModel[0]);
+  // console.log('initialFetchData', initialFetchData);
+  
+  
   return (
     <>
       {(isRefreshing || isComLoading || loading) && (
@@ -641,7 +647,11 @@ const App = ({
                 {/* <InputLabel className="label mr-10">Mode</InputLabel> */}
               </Grid>
               {/* buttonTitles */}
-              <ButtonGroups setSelectedButton={modeHanlder} selectedButton={selectedButton} arrayGeneratorHandler={arrayGeneratorHandler}  />
+
+              {initialFetchData?.parameterModel[0]?.seer_Enablesnapshots && (
+                <ButtonGroups setSelectedButton={modeHanlder} selectedButton={selectedButton} arrayGeneratorHandler={arrayGeneratorHandler}  />
+              )}
+              
             </Stack>
             {/* <DropDownButtons selectedButton={selectedButton} /> */}
           </Box>

@@ -59,7 +59,7 @@ export const commonSidePaneLogic = (selectorForSidePane: any, columnValue: any, 
     
     if (columnValue) {
         const getColumnObject = datatoShow[columnValue];
-        console.log('getColumnObject', getColumnObject);
+        // console.log('getColumnObject', getColumnObject);
         
         const baseValue = getColumnObject?.baseValue;
         const moduleValue = getColumnObject?.moduleValue;

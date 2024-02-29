@@ -31,7 +31,7 @@ import {
 import SnapShotPopup from '../../SnapshotPopup/SnapshotPopup';
 import OverlayComponent from '../../Overley';
 import { showAlertError } from '../../../Utils/Alerts';
-import { failedToLoadSelectedSnapshot } from '../../../Constants/messages';
+import { failedToLoadSelectedSnapshot, noExistingSnapshots } from '../../../Constants/messages';
 import { convertBase64ToJson } from '../../../Utils/commonFunc.utils';
 import { seerBasejson, seerUpdatedsnapshotdata } from '../../../Constants/endPoints';
 
@@ -225,17 +225,21 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
               className='btn-blue-outline btn-small mr-10'  
               aria-haspopup="true" 
               onClick={() => {
-                setOpenLoadSnapshotModal(!openLoadSnapshotModal)
+                if (snapshotsList && snapshotsList?.length) {
+                  setOpenLoadSnapshotModal(!openLoadSnapshotModal)
+                } else {
+                  alert(noExistingSnapshots)
+                }
               }}
             >
               <DownloadingOutlinedIcon className='btn-icon'/> 
             </Button>
-            {snapshotsList && snapshotsList?.length && (   
-            <div>
-              {
-                openLoadSnapshotModal ? <SnapShotPopup snapshots = {snapshotsList} handleClose={handleClosePopup} onSelect={handleMenuItemClick} open={openLoadSnapshotModal}/> : <></>
-              }
-            </div>
+            {(snapshotsList && snapshotsList?.length > 0) && (   
+              <div>
+                {
+                  openLoadSnapshotModal && <SnapShotPopup snapshots = {snapshotsList} handleClose={handleClosePopup} onSelect={handleMenuItemClick} open={openLoadSnapshotModal}/>
+                }
+              </div>
             )}
           </>
         )}
@@ -264,11 +268,11 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
         )}
       </div>
       {showOverlayLoad && <OverlayComponent showOverlay={showOverlayLoad}/>}
-      <div className='text-right'>
+      {/* <div className='text-right'>
         {selectedItem && selectedButton === "button2" && (
           <InputLabel className='label  ptb-10'>{optionList?.[selectedItem]}</InputLabel>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -456,15 +456,15 @@ const snapshotSlice: any = createSlice({
     setLoadedSnapshotDetails: (state, action) => {
       if (action.payload) {
         const stateValue = current(state)
-        console.log("state?.snapshotsList ==> ", stateValue.snapshotsList, action.payload)
+        // console.log("state?.snapshotsList ==> ", stateValue.snapshotsList, action.payload)
         const snapshot = stateValue.snapshotsList?.find((snapshotItem: {
           seer_rominportalsnapshotid: string,
           seer_name: string,
         }) => snapshotItem?.seer_rominportalsnapshotid == action.payload);
-        console.log('snapshot ===> ', snapshot);
+        // console.log('snapshot ===> ', snapshot);
         
         state.loadedSnapshotDetails = snapshot;
-        console.log('snapshot?.[snapshotAPIConstants?.UPDATED_DATES] ', snapshot?.[snapshotAPIConstants?.UPDATED_DATES], JSON.parse(snapshot?.[snapshotAPIConstants?.UPDATED_DATES]));
+        // console.log('snapshot?.[snapshotAPIConstants?.UPDATED_DATES] ', snapshot?.[snapshotAPIConstants?.UPDATED_DATES], JSON.parse(snapshot?.[snapshotAPIConstants?.UPDATED_DATES]));
         
         state.latestChangesTime = JSON.parse(snapshot?.[snapshotAPIConstants?.UPDATED_DATES])
       } else {
