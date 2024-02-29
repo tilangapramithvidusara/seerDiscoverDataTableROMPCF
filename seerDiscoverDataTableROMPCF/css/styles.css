@@ -236,6 +236,8 @@ table {
   border: 0.5px solid#C1BDBD !important;
   box-shadow: none !important;
   text-transform: capitalize;
+  font-family: 'Roboto', sans-serif !important;
+  vertical-align: middle;
 }
 
 
@@ -251,7 +253,8 @@ table {
   text-transform: capitalize;
   min-width: 60px;
   border-radius: 5px !important;
-  line-height: 25px;
+  font-family: 'Roboto', sans-serif !important;
+  vertical-align: middle;
 }
 
 
@@ -267,7 +270,8 @@ table {
   text-transform: capitalize;
   min-width: 60px;
   border-radius: 5px !important;
-  line-height: 25px;
+  font-family: 'Roboto', sans-serif !important;
+  vertical-align: middle;
 }
 
 .seerDiscoverROM  .btn-blue-outline .btn-icon{
