@@ -77,6 +77,8 @@ export const setDataSetAveRate = async(data: any, dataEstimateAverageRateMilesto
   (dataEstimateAverageRateMilestone[4] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValueMS;
   (dataEstimateAverageRateMilestone[4] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValueMSC;
   const estimateDesignProjectManager = await calculateProjectManagerEstimateAvgRateMilestone(initialDataSet, analisisAndDesignCalculation?.subSections, 'Analysis and Design');
+  // console.log('99', estimateDesignProjectManager);
+  
   (dataEstimateAverageRateMilestone[5] as any)['M_H'] = estimateDesignProjectManager?.resultValue;
   (dataEstimateAverageRateMilestone[5] as any)['M/S_H'] = estimateDesignProjectManager?.resultValueMS;
   (dataEstimateAverageRateMilestone[5] as any)['M/S/C_H'] = estimateDesignProjectManager?.resultValueMSC;
@@ -298,6 +300,8 @@ export const setDataSetAveRate = async(data: any, dataEstimateAverageRateMilesto
       subTotalMSCAnalysisDesign: subTotalMSCAnalysisDesignSub
     }
   }, condition, settingParameters, isSnapshotModeEnable);
+
+  // console.log(' === pp111 ==> ', responsePojectManagement);
 
   const resultValueProjectManagerEstimateResource = generateEstimateResourceValue(
     initialDataSet, {

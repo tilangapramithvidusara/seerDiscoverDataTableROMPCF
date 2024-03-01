@@ -200,7 +200,7 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
 
     const responseIntegration = await generateIntegrationMValue(inititlaData, condition);
     const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
-    console.log("x responseDocumentLayout ==> ", responseDocumentLayout);
+    // console.log("x responseDocumentLayout ==> ", responseDocumentLayout);
     
     const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable)
     const responseDataMigration = await generateDataMigrationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);

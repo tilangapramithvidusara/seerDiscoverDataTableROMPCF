@@ -351,7 +351,8 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
         subTotalMSAnalysisDesign,
         subTotalMSCAnalysisDesign
       }
-    }, condition, settingParameters, isSnapshotModeEnable);
+    }, condition, settingParameters, isSnapshotModeEnable, true);
+    // condition, settingParameters, isSnapshotModeEnable    
 
     (data[22] as any).M = responsePojectManagement?.projectManager?.resultValue;
     (data[22] as any)['M/S'] = responsePojectManagement?.projectManager?.resultValueMS;

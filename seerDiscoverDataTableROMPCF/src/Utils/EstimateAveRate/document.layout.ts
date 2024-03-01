@@ -86,10 +86,10 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
       (analisisDesignPre?.responseAnalisisDesign?.configuration?.resultValueMSC || 0) + 
       (analisisDesignPre?.responseCustomisationDesign?.customisationBuild?.resultValueMSC || 0) + 
       (analisisDesignPre?.responseIntegration?.integration?.resultValueMSC || 0)
-      
+    let valueOf202400 = 0;
     if (isFte) {
       const customizationLoop = await FactorsModel && FactorsModel.length && FactorsModel.map(async(factorItem: any, factorIndex: number) => {
-        console.log('llu ===> ', FactorsModel);
+        // console.log('llu ===> ', FactorsModel);
         
         if (factorItem?.ad_QuestionNumber == '500000' || factorItem?.ad_QuestionNumber == '500100') {
           layoutValue += factorItem?.wholeNumber
@@ -142,7 +142,7 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
         }
 
         // risk releated
-        if (factorItem?.ad_CalculationType?.value == 100000000) {
+        // if (factorItem?.ad_CalculationType?.value == 100000000) {
           if (factorItem?.ad_QuestionNumber == '100900') {
             let value = factorItem?.wholeNumber <= 50 ? 10 : (factorItem?.wholeNumber > 50 && factorItem?.wholeNumber <= 100) ? 5 : factorItem?.wholeNumber > 100 ? 0 : 0;
             getGColValue += value;
@@ -188,13 +188,15 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
             getGColValue += value;
           }
           if (
-            factorItem?.ad_QuestionNumber == '202400' 
+            factorItem?.ad_QuestionNumber == '202400' || 
+            factorItem?.ad_QuestionNumber == '202401'
             ) {
             let value = factorItem?.answerChoice == 'No internal resource' ? -10 :
             factorItem?.answerChoice == 'Staff less than 50% on project' ? 0 :
             factorItem?.answerChoice == 'Staff more than 50% on project' ? 5 :
             factorItem?.answerChoice == 'Staff fully allocated to project' ? 10 : 0;
             getGColValue += value;
+            valueOf202400 = value;
           }
           if (
             factorItem?.ad_QuestionNumber == '500000' 
@@ -206,17 +208,32 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
             factorItem?.ad_QuestionNumber == '200500'
             ) {
             let value = factorItem?.boolean ? 0 : 5;
-            console.log( value, factorItem?.ad_QuestionNumber);
+            // console.log( value, factorItem?.ad_QuestionNumber);
             getGColValue += value;
           }
           if (
-            factorItem?.ad_QuestionNumber == '202600'
+            factorItem?.ad_QuestionNumber == '202600' ||
+            factorItem?.ad_QuestionNumber == '302500' ||
+            factorItem?.ad_QuestionNumber == '303200' ||
+            factorItem?.ad_QuestionNumber == '303300' ||
+            factorItem?.ad_QuestionNumber == '302000' ||
+            factorItem?.ad_QuestionNumber == '302100'
             ) {
             let value = factorItem?.boolean ? -5 : 0;
-            console.log( value, factorItem?.ad_QuestionNumber);
+            // console.log( value, factorItem?.ad_QuestionNumber);
             getGColValue += value;
           }
-        }
+
+          if (factorItem?.ad_QuestionNumber == '303100') {
+            let value = factorItem?.wholeNumber > 10 ? -5 : 0            
+            getGColValue += value;
+          }
+
+          // 
+          // if (factorItem?.ad_QuestionNumber == '202401') {           
+          //   getGColValue += valueOf202400;
+          // }
+        // }
         
       });
       await Promise.all(customizationLoop);
@@ -254,7 +271,7 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
         returnObject.endUserTraining.resultValueMS = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMSC = endUserTrainingValue;
         
-        console.log('y getFcolValue ==> ', getFcolValue);
+        // console.log('y getFcolValue ==> ', getFcolValue);
         
         returnObject.projectRisk.estimateAveRate = getFcolValue;
         
@@ -310,7 +327,7 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
 
         if(FactorsModel?.length > 0) {
           const customizationLoop = await FactorsModel && FactorsModel?.length && FactorsModel?.map(async(factorItem: any, factorIndex: number) => {
-            console.log('xxx ==> Factor', factorItem);
+            // console.log('xxx ==> Factor', factorItem);
             
             if (factorItem?.ad_QuestionNumber == '500000' || factorItem?.ad_QuestionNumber == '500100') {
               layoutValue += factorItem?.wholeNumber
@@ -364,10 +381,10 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
             }
     
             // risk releated
-            if (factorItem?.ad_CalculationType?.value == 100000000) {
+            // if (factorItem?.ad_CalculationType?.value == 100000000) {
               if (factorItem?.ad_QuestionNumber == '100900') {
                 let value = factorItem?.wholeNumber <= 50 ? 10 : (factorItem?.wholeNumber > 50 && factorItem?.wholeNumber <= 100) ? 5 : factorItem?.wholeNumber > 100 ? 0 : 0;
-                console.log('100900 ', value);
+                // console.log('100900 ', value);
                 
                 getGColValue += value;
               }
@@ -378,7 +395,7 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
                 factorItem?.ad_QuestionNumber == '101700'
                 ) {
                 let value = factorItem?.boolean ? -5 : 5;
-                console.log(value, factorItem?.ad_QuestionNumber);
+                // console.log(value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               }
               if (
@@ -386,7 +403,7 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
                 factorItem?.ad_QuestionNumber == '200900'
                 ) {
                 let value = factorItem?.boolean ? 10 : -5;
-                console.log(value, factorItem?.ad_QuestionNumber);
+                // console.log(value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               }
               if (
@@ -396,7 +413,7 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
                 factorItem?.ad_QuestionNumber == '202300'
                 ) {
                 let value = factorItem?.boolean ? 10 : 0;
-                console.log('201000 || 202100', value, factorItem?.ad_QuestionNumber);
+                // console.log('201000 || 202100', value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               }
               if (
@@ -406,7 +423,7 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
                 factorItem?.ad_QuestionNumber == '202800' 
                 ) {
                 let value = factorItem?.boolean ? 5 : 0;
-                console.log('201800 || 202700 || 500100', value, factorItem?.ad_QuestionNumber);
+                // console.log('201800 || 202700 || 500100', value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               } // Train-the-trainer
               if (
@@ -414,31 +431,38 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
                 ) {
                   
                 let value = factorItem?.answerChoice == 'Train-the-trainer' ? 10 : -10;
-                console.log('201900', value, factorItem?.ad_QuestionNumber);
+                // console.log('201900', value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               }
               if (
-                factorItem?.ad_QuestionNumber == '202400' 
+                factorItem?.ad_QuestionNumber == '202400' ||
+                factorItem?.ad_QuestionNumber == '202401'
                 ) {
                 let value = factorItem?.answerChoice == 'No internal resource' ? -10 :
                 factorItem?.answerChoice == 'Staff less than 50% on project' ? 0 :
                 factorItem?.answerChoice == 'Staff more than 50% on project' ? 5 :
                 factorItem?.answerChoice == 'Staff fully allocated to project' ? 10 : 0;
-                console.log(value, factorItem?.ad_QuestionNumber);
+                // console.log(value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
+                valueOf202400 = value;
               }
               if (
                 factorItem?.ad_QuestionNumber == '500000' 
                 ) {
                 let value = factorItem?.wholeNumber;
-                console.log('500000', value, factorItem?.ad_QuestionNumber);
+                // console.log('500000', value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               }
               if (
-                factorItem?.ad_QuestionNumber == '202600'
+                factorItem?.ad_QuestionNumber == '202600' ||
+                factorItem?.ad_QuestionNumber == '302500' ||
+                factorItem?.ad_QuestionNumber == '303200' ||
+                factorItem?.ad_QuestionNumber == '303300' ||
+                factorItem?.ad_QuestionNumber == '302000' ||
+                factorItem?.ad_QuestionNumber == '302100'
                 ) {
                 let value = factorItem?.boolean ? -5 : 0;
-                console.log( value, factorItem?.ad_QuestionNumber);
+                // console.log( value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               }
 
@@ -446,12 +470,21 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
                 factorItem?.ad_QuestionNumber == '200500'
                 ) {
                 let value = factorItem?.boolean ? 0 : 5;
-                console.log( value, factorItem?.ad_QuestionNumber);
+                // console.log( value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               }
-            }
-            
-          
+
+              if (factorItem?.ad_QuestionNumber == '303100') {
+                let value = factorItem?.wholeNumber > 10 ? -5 : 0
+                // console.log('100900 ', value);
+                
+                getGColValue += value;
+              }
+              // valueOf202400
+              // if (factorItem?.ad_QuestionNumber == '202401') {
+              //   getGColValue += valueOf202400;
+              // }
+            // }
           });
         
           await Promise.all(customizationLoop);
@@ -460,7 +493,7 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
           //   getFcolValue = 0;
           // }
     
-        console.log('xxx ====> ', getGColValue);
+        // console.log('xxx ====> ', getGColValue);
         
         if (FactorsModel.length > 0) {
           if (getGColValue >= 70) {

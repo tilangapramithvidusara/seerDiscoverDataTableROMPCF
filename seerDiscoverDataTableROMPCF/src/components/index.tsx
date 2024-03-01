@@ -610,7 +610,7 @@ const App = ({
     setOpenLoadSnapshotModal(false);
   }
 
-  console.log('initialFetchData?.parameterModel[0]?.seer_Enablesnapshots', initialFetchData?.parameterModel[0]?.seer_Enablesnapshots);
+  // console.log('initialFetchData?.parameterModel[0]?.seer_Enablesnapshots', initialFetchData?.parameterModel[0]?.seer_Enablesnapshots);
   // console.log("initialFetchData?.parameterModel[0]", initialFetchData?.parameterModel[0]);
   // console.log('initialFetchData', initialFetchData);
   

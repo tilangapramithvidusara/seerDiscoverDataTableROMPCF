@@ -234,7 +234,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
 
     const responseIntegration = await generateIntegrationMValue(inititlaData, condition, settingParameters, isSnapshotModeEnable);
     const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, false, settingParameters, isSnapshotModeEnable);
-    console.log("y ===> responseDocumentLayout", responseDocumentLayout);
+    // console.log("y ===> responseDocumentLayout", responseDocumentLayout);
     
     const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, 
       // hasFteValue, 

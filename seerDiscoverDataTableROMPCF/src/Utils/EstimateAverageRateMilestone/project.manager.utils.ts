@@ -5,7 +5,10 @@ export const calculateProjectManagerEstimateAvgRateMilestone = async(inititlaDat
   let hasParameters = settingParameters && isSnapshotModeEnable;
 
   const {parameterModel, fteValue} = inititlaData;
+  
   let {hoursPerday} = parameterModel[0]
+  // hoursPerday
+
   if (hasParameters) {
     if (hasParameters) {
       hoursPerday = parseFloat(settingParameters?.formattedData[
@@ -48,6 +51,7 @@ export const calculateProjectManagerEstimateAvgRateMilestone = async(inititlaDat
   let mustShouldCal = 0;
   let mustShouldCouldCal = 0
   if (type == 'Analysis and Design') {
+    
     mustCal = responseAnalisisDesign?.resultValue +
       responseCustomisationDesign?.customisation?.resultValue +
       responseCustomRequirementDesign?.customRequirement?.resultValue +
@@ -64,7 +68,7 @@ export const calculateProjectManagerEstimateAvgRateMilestone = async(inititlaDat
       responseCustomisationDesign?.customisation?.resultValueMSC +
       responseCustomRequirementDesign?.customRequirement?.resultValueMSC +
       responseDocumentation?.documentation?.resultValueMSC +
-      responseDesignReview?.designReview?.resultValueMSC;
+      responseDesignReview?.designReview?.resultValueMSC;      
   } else if (type == 'BUILD') {
     mustCal = responseAnalisisDesign?.configuration?.resultValue +
       responseIntegration?.integration?.resultValue +
@@ -153,21 +157,21 @@ export const calculateProjectManagerEstimateAvgRateMilestone = async(inititlaDat
       } else {
         //
         // not done yet
-        if (percentData?.[parameterModel[0]?.projectManagementType] == percentData?.[100000001]) {
+        if (percentData?.[projectManagementTypeValue] == percentData?.[100000001]) {
           // solutionArchitecture
-          returnObject.resultValue = (mustCal * (parameterModel[0]?.projectManagementType/100))/4;
-          returnObject.resultValueMS = (mustShouldCal * (parameterModel[0]?.projectManagementType/100))/4;
-          returnObject.resultValueMSC = (mustShouldCouldCal * (parameterModel[0]?.projectManagementType/100))/4;
-        } else if (percentData?.[parameterModel[0]?.projectManagementType] == percentData?.[100000002]) { // hours
+          returnObject.resultValue = (mustCal * (projectManagementValue/100))/4;
+          returnObject.resultValueMS = (mustShouldCal * (projectManagementValue/100))/4;
+          returnObject.resultValueMSC = (mustShouldCouldCal * (projectManagementValue/100))/4;
+        } else if (percentData?.[projectManagementTypeValue] == percentData?.[100000002]) { // hours
           
-          returnObject.resultValue = romParameter == "Hours" ? (parameterModel[0]?.projectManagementType)/4 : (parameterModel[0]?.solutionArchitecture/hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
-          returnObject.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.projectManagementType)/4 : (parameterModel[0]?.solutionArchitecture/hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
-          returnObject.resultValueMSC = (mustShouldCouldCal * (parameterModel[0]?.projectManagementType/100))/4;
-        } else if (percentData?.[parameterModel[0]?.projectManagementType] == percentData?.[100000000]) { // FTE
+          returnObject.resultValue = romParameter == "Hours" ? (projectManagementValue)/4 : (projectManagementValue/hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.resultValueMS = romParameter == "Hours" ? (projectManagementValue)/4 : (projectManagementValue/hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.resultValueMSC = (mustShouldCouldCal * (projectManagementValue/100))/4;
+        } else if (percentData?.[projectManagementTypeValue] == percentData?.[100000000]) { // FTE
           // dont need yet
-          returnObject.resultValue = (parameterModel[0]?.projectManagement * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
-          returnObject.resultValueMS = (parameterModel[0]?.projectManagement * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
-          returnObject.resultValueMSC = (parameterModel[0]?.projectManagement * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
+          returnObject.resultValue = (projectManagementValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
+          returnObject.resultValueMS = (projectManagementValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
+          returnObject.resultValueMSC = (projectManagementValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
         }
       }
     } else {
@@ -185,8 +189,8 @@ export const calculateProjectManagerEstimateAvgRateMilestone = async(inititlaDat
           returnObject.resultValueMSC = (mustShouldCouldCal * (parameterModel[0]?.projectManagement/100))/4;
         } else if (percentData?.[parameterModel[0]?.projectManagementType] == percentData?.[100000002]) { // hours
           
-          returnObject.resultValue = romParameter == "Hours" ? (parameterModel[0]?.projectManagement)/4 : (parameterModel[0]?.solutionArchitecture/parameterModel[0]?.hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
-          returnObject.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.projectManagement)/4 : (parameterModel[0]?.solutionArchitecture/parameterModel[0]?.hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.resultValue = romParameter == "Hours" ? (parameterModel[0]?.projectManagement)/4 : (parameterModel[0]?.projectManagement/parameterModel[0]?.hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.projectManagement)/4 : (parameterModel[0]?.projectManagement/parameterModel[0]?.hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
           returnObject.resultValueMSC = (mustShouldCouldCal * (parameterModel[0]?.projectManagement/100))/4;
         } else if (percentData?.[parameterModel[0]?.projectManagementType] == percentData?.[100000000]) { // FTE
           // dont need yet
