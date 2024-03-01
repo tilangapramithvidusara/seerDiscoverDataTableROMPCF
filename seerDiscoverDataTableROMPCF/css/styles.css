@@ -488,6 +488,10 @@ table {
   font-size: 16px;
 }
 
+.custom-modal .MuiButton-textPrimary {
+  line-height: 25px !important;
+}
+
 .containerManualTable .modal-footer {
   display: flex;
   justify-content: flex-end;
