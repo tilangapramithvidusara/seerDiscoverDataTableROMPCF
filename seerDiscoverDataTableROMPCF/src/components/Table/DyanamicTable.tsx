@@ -14,6 +14,7 @@ import {
   setCurrentSavedResources,
   setLatestChanges,
   setShowSaveParameters,
+  setSnapshotSaveLoacalyOneTime,
   setStateSnapshot
 } from '../../redux/snapshotReport/snapshotReportSlice';
 import { Parameter } from '../../Utils/setting.values.convertor.utils';
@@ -59,6 +60,7 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
       ...latestChanges,
       parameterChanged: true,
     }));
+    dispatch(setSnapshotSaveLoacalyOneTime(true))
     arrayGeneratorHandler(false, {
       ...currentChangingParameters, 
       base: snapshotBase ? snapshotBase : initialFetchData,

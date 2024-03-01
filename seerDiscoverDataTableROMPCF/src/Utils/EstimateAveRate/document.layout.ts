@@ -89,6 +89,8 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
       
     if (isFte) {
       const customizationLoop = await FactorsModel && FactorsModel.length && FactorsModel.map(async(factorItem: any, factorIndex: number) => {
+        console.log('llu ===> ', FactorsModel);
+        
         if (factorItem?.ad_QuestionNumber == '500000' || factorItem?.ad_QuestionNumber == '500100') {
           layoutValue += factorItem?.wholeNumber
         }
@@ -148,7 +150,8 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
           if (
             factorItem?.ad_QuestionNumber == '101000' || 
             factorItem?.ad_QuestionNumber == '101300' ||
-            factorItem?.ad_QuestionNumber == '200700'
+            factorItem?.ad_QuestionNumber == '200700' ||
+            factorItem?.ad_QuestionNumber == '101700'
             ) {
             let value = factorItem?.boolean ? -5 : 5;
             getGColValue += value;
@@ -162,7 +165,9 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
           }
           if (
             factorItem?.ad_QuestionNumber == '201000' || 
-            factorItem?.ad_QuestionNumber == '202100'
+            factorItem?.ad_QuestionNumber == '202100' ||
+            factorItem?.ad_QuestionNumber == '202200' ||
+            factorItem?.ad_QuestionNumber == '202300'
             ) {
             let value = factorItem?.boolean ? 10 : 0;
             getGColValue += value;
@@ -170,7 +175,8 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
           if (
             factorItem?.ad_QuestionNumber == '201800' || 
             factorItem?.ad_QuestionNumber == '202700' || 
-            factorItem?.ad_QuestionNumber == '500100'
+            factorItem?.ad_QuestionNumber == '500100' || 
+            factorItem?.ad_QuestionNumber == '202800'
             ) {
             let value = factorItem?.boolean ? 5 : 0;
             getGColValue += value;
@@ -194,6 +200,20 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
             factorItem?.ad_QuestionNumber == '500000' 
             ) {
             let value = factorItem?.wholeNumber;
+            getGColValue += value;
+          }
+          if (
+            factorItem?.ad_QuestionNumber == '200500'
+            ) {
+            let value = factorItem?.boolean ? 0 : 5;
+            console.log( value, factorItem?.ad_QuestionNumber);
+            getGColValue += value;
+          }
+          if (
+            factorItem?.ad_QuestionNumber == '202600'
+            ) {
+            let value = factorItem?.boolean ? -5 : 0;
+            console.log( value, factorItem?.ad_QuestionNumber);
             getGColValue += value;
           }
         }
@@ -233,6 +253,8 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
         returnObject.endUserTraining.resultValue = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMS = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMSC = endUserTrainingValue;
+        
+        console.log('y getFcolValue ==> ', getFcolValue);
         
         returnObject.projectRisk.estimateAveRate = getFcolValue;
         
@@ -286,8 +308,10 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
         returnObject.endUserTraining.resultValueMS = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMSC = endUserTrainingValue;
 
-        if(FactorsModel?.length) {
+        if(FactorsModel?.length > 0) {
           const customizationLoop = await FactorsModel && FactorsModel?.length && FactorsModel?.map(async(factorItem: any, factorIndex: number) => {
+            console.log('xxx ==> Factor', factorItem);
+            
             if (factorItem?.ad_QuestionNumber == '500000' || factorItem?.ad_QuestionNumber == '500100') {
               layoutValue += factorItem?.wholeNumber
             }
@@ -343,14 +367,18 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
             if (factorItem?.ad_CalculationType?.value == 100000000) {
               if (factorItem?.ad_QuestionNumber == '100900') {
                 let value = factorItem?.wholeNumber <= 50 ? 10 : (factorItem?.wholeNumber > 50 && factorItem?.wholeNumber <= 100) ? 5 : factorItem?.wholeNumber > 100 ? 0 : 0;
+                console.log('100900 ', value);
+                
                 getGColValue += value;
               }
               if (
                 factorItem?.ad_QuestionNumber == '101000' || 
                 factorItem?.ad_QuestionNumber == '101300' ||
-                factorItem?.ad_QuestionNumber == '200700'
+                factorItem?.ad_QuestionNumber == '200700' || 
+                factorItem?.ad_QuestionNumber == '101700'
                 ) {
                 let value = factorItem?.boolean ? -5 : 5;
+                console.log(value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               }
               if (
@@ -358,27 +386,35 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
                 factorItem?.ad_QuestionNumber == '200900'
                 ) {
                 let value = factorItem?.boolean ? 10 : -5;
+                console.log(value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               }
               if (
                 factorItem?.ad_QuestionNumber == '201000' || 
-                factorItem?.ad_QuestionNumber == '202100'
+                factorItem?.ad_QuestionNumber == '202100' ||
+                factorItem?.ad_QuestionNumber == '202200' ||
+                factorItem?.ad_QuestionNumber == '202300'
                 ) {
                 let value = factorItem?.boolean ? 10 : 0;
+                console.log('201000 || 202100', value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               }
               if (
                 factorItem?.ad_QuestionNumber == '201800' || 
                 factorItem?.ad_QuestionNumber == '202700' || 
-                factorItem?.ad_QuestionNumber == '500100'
+                factorItem?.ad_QuestionNumber == '500100' ||
+                factorItem?.ad_QuestionNumber == '202800' 
                 ) {
                 let value = factorItem?.boolean ? 5 : 0;
+                console.log('201800 || 202700 || 500100', value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               } // Train-the-trainer
               if (
                 factorItem?.ad_QuestionNumber == '201900' 
                 ) {
+                  
                 let value = factorItem?.answerChoice == 'Train-the-trainer' ? 10 : -10;
+                console.log('201900', value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               }
               if (
@@ -388,12 +424,29 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
                 factorItem?.answerChoice == 'Staff less than 50% on project' ? 0 :
                 factorItem?.answerChoice == 'Staff more than 50% on project' ? 5 :
                 factorItem?.answerChoice == 'Staff fully allocated to project' ? 10 : 0;
+                console.log(value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               }
               if (
                 factorItem?.ad_QuestionNumber == '500000' 
                 ) {
                 let value = factorItem?.wholeNumber;
+                console.log('500000', value, factorItem?.ad_QuestionNumber);
+                getGColValue += value;
+              }
+              if (
+                factorItem?.ad_QuestionNumber == '202600'
+                ) {
+                let value = factorItem?.boolean ? -5 : 0;
+                console.log( value, factorItem?.ad_QuestionNumber);
+                getGColValue += value;
+              }
+
+              if (
+                factorItem?.ad_QuestionNumber == '200500'
+                ) {
+                let value = factorItem?.boolean ? 0 : 5;
+                console.log( value, factorItem?.ad_QuestionNumber);
                 getGColValue += value;
               }
             }
@@ -407,7 +460,9 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
           //   getFcolValue = 0;
           // }
     
-    
+        console.log('xxx ====> ', getGColValue);
+        
+        if (FactorsModel.length > 0) {
           if (getGColValue >= 70) {
             getFcolValue = 5/100;
           } else if (getGColValue >= 50 && getGColValue < 70) {
@@ -417,6 +472,18 @@ export const generateDocumentLayoutMValue = async(inititlaData: any, analisisDes
           } else if (getGColValue < 30) {
             getFcolValue = 20/100;
           }
+        } else {
+          getFcolValue = 0
+        }
+          // if (getGColValue >= 70) {
+          //   getFcolValue = 5/100;
+          // } else if (getGColValue >= 50 && getGColValue < 70) {
+          //   getFcolValue = 10/100;
+          // } else if (getGColValue >= 30 && getGColValue < 50) {
+          //   getFcolValue = 15/100;
+          // } else if (getGColValue < 30) {
+          //   getFcolValue = 20/100;
+          // }
 
         returnObject.endUserTraining.resultValue = endUserTrainingValue;
         returnObject.endUserTraining.resultValueMS = endUserTrainingValue;

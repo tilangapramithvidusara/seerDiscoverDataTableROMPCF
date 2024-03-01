@@ -159,7 +159,8 @@ const initialState: any = {
     parameterChangedTime: null,
     resourceChangedTime: null,
     projectTaskChangedTime: null,
-  }
+  },
+  snapshotSaveLoacalyOneTime: false,
 }
 
 const snapshotSlice: any = createSlice({
@@ -476,6 +477,9 @@ const snapshotSlice: any = createSlice({
     },
     setLatestChangesTime: (state, action) => {
       state.latestChanges = action.payload
+    },
+    setSnapshotSaveLoacalyOneTime: (state, action) => {
+      state.snapshotSaveLoacalyOneTime = action.payload
     }
   }
   
@@ -532,6 +536,7 @@ export const {
   setLoadedSnapshotDetailsWhenSave,
   setLatestChanges,
   setLatestChangesTime,
+  setSnapshotSaveLoacalyOneTime
 } = snapshotSlice.actions;
 
 

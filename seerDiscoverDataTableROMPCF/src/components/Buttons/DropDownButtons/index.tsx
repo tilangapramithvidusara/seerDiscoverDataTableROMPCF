@@ -35,8 +35,8 @@ import { failedToLoadSelectedSnapshot, noExistingSnapshots } from '../../../Cons
 import { convertBase64ToJson } from '../../../Utils/commonFunc.utils';
 import { seerBasejson, seerUpdatedsnapshotdata } from '../../../Constants/endPoints';
 
-const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, handleSaveSnapshot, arrayGeneratorHandler}: 
-  {selectedButton: any, hasSnapshots?: boolean, selectItem?: any, selectedItemParent?: string, handleSaveSnapshot?: any, arrayGeneratorHandler?: any}) => {
+const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, handleSaveSnapshot, arrayGeneratorHandler, currentSavedParameters}: 
+  {selectedButton: any, hasSnapshots?: boolean, selectItem?: any, selectedItemParent?: string, handleSaveSnapshot?: any, arrayGeneratorHandler?: any, currentSavedParameters?: any}) => {
   const dispatch = useDispatch()
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -249,9 +249,11 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
         (
           <Button  title='Save Snapshot'
             variant="contained" 
-            color="primary" 
+            color="primary"
             className='btn-blue-outline btn-small mr-10'
+            // className={!currentSavedParameters ? 'btn-gray-outline btn-small mr-10' : 'btn-blue-outline btn-small mr-10'}
             onClick={handleSaveSnapshot}
+            // disabled={!currentSavedParameters}// new change
             >
             <SaveOutlinedIcon className='btn-icon'/> 
           </Button>

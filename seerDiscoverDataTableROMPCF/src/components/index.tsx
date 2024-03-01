@@ -15,7 +15,7 @@ import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import Settings from "@mui/icons-material/Settings";
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
-import { setCurrentSavedParameters, setCurrentSavedProjectTasks, setCurrentSavedResources, setDoCalculation, setInitiallyCurrentChangingParameters, setInitiallyCurrentChangingProjectTasks, setInitiallyCurrentChangingResources, setIsLive, setIsSnapshotEnable, setIsSnapshotLoading, setLatestChanges, setLatestChangesTime, setLiveBase, setLiveParameters, setLiveProjectTasks, setLiveResources, setLoadedSnapshotDetailsWhenSave, setLoadedSnapshotId, setRecordId, setResourceModelDataParameters, setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setSnapshotBase, setSnapshotLoading, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
+import { setCurrentSavedParameters, setCurrentSavedProjectTasks, setCurrentSavedResources, setDoCalculation, setInitiallyCurrentChangingParameters, setInitiallyCurrentChangingProjectTasks, setInitiallyCurrentChangingResources, setIsLive, setIsSnapshotEnable, setIsSnapshotLoading, setLatestChanges, setLatestChangesTime, setLiveBase, setLiveParameters, setLiveProjectTasks, setLiveResources, setLoadedSnapshotDetailsWhenSave, setLoadedSnapshotId, setRecordId, setResourceModelDataParameters, setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setSnapshotBase, setSnapshotLoading, setSnapshotSaveLoacalyOneTime, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
 import { loadSelectedSnapshotAsync, loadSnapshotsAsync, saveInitialSnapshotRecordAsync, saveSnapshotAsync } from "../redux/snapshotReport/snapshoAsync";
 import FormDialog from "./Form";
 import { convertJsonToBase64 } from "../Utils/commonFunc.utils";
@@ -159,6 +159,7 @@ const App = ({
   const isLive = useSelector((state: any) => state?.snapshot?.isLive);
   const loadedSnapshotDetails = useSelector((state: any) => state?.snapshot?.loadedSnapshotDetails);
   const isSnapshotLoading = useSelector((state: any) => state?.snapshot?.isSnapshotLoading)
+  const snapshotSaveLoacalyOneTime = useSelector((state: any) => state?.snapshot?.snapshotSaveLoacalyOneTime);
 
   const onChange = (key: string) => {
     console.log(key);
@@ -202,6 +203,7 @@ const App = ({
         dispatch(setInitiallyCurrentChangingProjectTasks(inititalData?.result?.ProjectTasktModel))
         dispatch(setLoadedSnapshotDetailsWhenSave(null));
         dispatch(setLoadedSnapshotId(null));
+        dispatch(setSnapshotSaveLoacalyOneTime(false));
         arrayGeneratorHandler(false, {...formatedData, base: inititalData?.result, currentSavedResources: inititalData?.result?.resourceModelData}, 'snapshot')
       }
       
@@ -532,7 +534,8 @@ const App = ({
 
   const handleSaveSnapshot = () => {
     // NEW STATES
-    if (currentSavedParameters 
+    if (snapshotSaveLoacalyOneTime
+      // currentSavedParameters 
       // && currentSavedResources && currentSavedProjectTasks
       ) {
         if (loadedSnapshotId) {
@@ -666,7 +669,7 @@ const App = ({
             
             {selectedButton == 'button2' && (
               <div className='text-right flex-wrap-end'>
-                <DropDownButtons selectedButton={selectedButton} handleSaveSnapshot={handleSaveSnapshot} arrayGeneratorHandler={arrayGeneratorHandler} />
+                <DropDownButtons currentSavedParameters={currentSavedParameters} selectedButton={selectedButton} handleSaveSnapshot={handleSaveSnapshot} arrayGeneratorHandler={arrayGeneratorHandler} />
                 <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
                 formattedSettingHandler(e, initialFetchData);
               

@@ -14,7 +14,8 @@ import {
   setCurrentChangingResources,
   setCurrentSavedResources,
   setCurrentSavedProjectTasks,
-  setLatestChanges
+  setLatestChanges,
+  setSnapshotSaveLoacalyOneTime
 } from '../../redux/snapshotReport/snapshotReportSlice';
 
 const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { handleClose: any, tableNumber?: number, arrayGeneratorHandler?: any }) => {
@@ -65,6 +66,7 @@ const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
       ...latestChanges,
       resourceChanged: true,
     }));
+    dispatch(setSnapshotSaveLoacalyOneTime(true))
     arrayGeneratorHandler(false, {
       ...currentChangingParameters, 
       base: snapshotBase ? snapshotBase : initialFetchData,

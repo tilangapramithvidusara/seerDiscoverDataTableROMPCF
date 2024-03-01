@@ -53,7 +53,8 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
   const showLoadedParameters = useSelector((state: any) => state?.snapshot?.showLoadedParameters)
   let currency = useSelector((state: any) => state?.report?.currency)
   const [typeLoader, setTypeLoader] = React.useState(false);
-  const [columnsSet, setColumnSet] = React.useState(type == 'RequirementData' ? columnRequirementData : type !== 'Estimate Resource' ? columnDetails : 
+  const [columnsSet, setColumnSet] = React.useState(
+    type == 'RequirementData' ? columnRequirementData : type !== 'Estimate Resource' ? columnDetails : 
   estimateResourceMustColumnDetails
   // estimateResourceMustShouldColumnDetails
   )
@@ -65,12 +66,13 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
 
 
   // NEW STATES
+  const [reloadTable, setReloadTable] = React.useState(false);
   const isLive = useSelector((state: any) => state?.snapshot?.isLive)
   const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters)
   const isSnapshotLoading = useSelector((state: any) => state?.snapshot?.isSnapshotLoading)
 
   const columnCreator = () => {
-    
+    // setTabData([]);
     const columnCreator = (type == 'CustomisationData') ? columnCustomisationData : 
       (type == 'RequirementData') ? columnRequirementData : 
       (type === 'Estimate Average Rate' && tableMode == defaultText) ? columnDetails : 
@@ -87,20 +89,36 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
       (resourceType === 'Must Should Could' && tableMode == dayHoursText) ? estimateResourceMustShouldCouldColumnDetailsHours : 
       columnDetails;
     
-    setColumnSet(columnCreator);
+    setColumnSet([...columnCreator]);
+    // setTimeout(() => {
+    //   const newData = [...tabData];
+    //   setTabData(newData);
+    // }, 100)
+    // const newData = [...tabData];
+    // setTabData(newData);
   }
 
   React.useEffect(() => {      
     columnCreator();
   }, [resourceType, type, tableMode]) // resourceType
+
+  React.useEffect(() => {
+    setReloadTable(false); // Reset reloadTable state after reload
+  }, [reloadTable]);
   
   // (!isLiveModeEnable && showSaveParameters) 
   const columns = useMemo<MRT_ColumnDef<any>[]>(
-    () => columnFixed(columnsSet, tabData, (!isLive) ? (currentSavedParameters?.formattedData[
-      parameterKeyIndex.currency
-    ]?.currentValue || currency) : currency),
+    () => {
+      const newColumns = columnFixed(columnsSet, tabData, (!isLive) ? (currentSavedParameters?.formattedData[
+        parameterKeyIndex.currency
+      ]?.currentValue || currency) : currency);
+      setReloadTable(true)
+      return newColumns
+    },
     [columnsSet, currency, isLive, currentSavedParameters, tabData],
   );//columnsSet showSaveParameters, isLiveModeEnable
+
+  const memoizedColumns = useMemo(() => columns, [columns]);  
   
   const handleSubTab = (type: string) => {
     if(type === 'RQ') {
@@ -198,12 +216,16 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
               </div>
             } 
             </div>
-            <MaterialReactTable
+          <MaterialReactTable
+            // key={reloadTable ? 'reload' : 'no-reload'} // Key to force re-mounting
             // header-mrt_row_expand-size
+            key={reloadTable ? Date.now() : 'no-reload'}
             columns={
-              columns
+              // columns
+              memoizedColumns
             }
             data={tabData}
+            enableGlobalFilterRankedResults= {true}
             // defaultColumn ={{
             //   // maxSize: 400,
             //   // minSize: 10,
@@ -216,6 +238,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
             enableGrouping={(type != 'RequirementData' && type != 'CustomisationData' && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? true : false}
             enableStickyHeader
             enableStickyFooter
+            enableHiding={true}
             initialState={{
               density: 'compact',
               expanded: true, //expand all groups by default   'M', "M/S", "M/S/C", 

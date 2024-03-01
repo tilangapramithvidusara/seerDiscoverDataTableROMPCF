@@ -16,7 +16,8 @@ import {
   setCurrentSavedParameters,
   setCurrentSavedResources,
   setCurrentSavedProjectTasks,
-  setLatestChanges
+  setLatestChanges,
+  setSnapshotSaveLoacalyOneTime
 } from '../../redux/snapshotReport/snapshotReportSlice';
 import { Parameter } from '../../Utils/setting.values.convertor.utils';
 import { fteDropdown } from '../../Constants/dropdownConstants';
@@ -93,6 +94,7 @@ const ProjectTaskTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: {
       ...latestChanges,
       projectTaskChanged: true,
     }));
+    dispatch(setSnapshotSaveLoacalyOneTime(true))
     arrayGeneratorHandler(false, {
       ...currentChangingParameters,
       base: snapshotBase ? snapshotBase : initialFetchData,
