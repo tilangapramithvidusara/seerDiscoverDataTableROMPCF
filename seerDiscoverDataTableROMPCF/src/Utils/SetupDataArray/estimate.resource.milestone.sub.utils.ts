@@ -155,7 +155,9 @@ export const generateEstimateResourceMilestoneSub = async( dataEstimateResourceM
     // subTotalMSAnalysisDesign += analisisAndDesignCalculation?.designReviewEstimateResource?.["M/S_Resource_Total"] || 0;
     // subTotalMSCAnalysisDesign += analisisAndDesignCalculation?.designReviewEstimateResource?.["M/S/C_Resource_Total"] || 0;
     
-    let subValueAnalysisDesign = await calculateProjectManagerEstimateAvgRateMilestone(initialDataSet, analisisAndDesignCalculation?.subSections, 'Analysis and Design', settingParameters, isSnapshotModeEnable)
+    let subValueAnalysisDesign = await calculateProjectManagerEstimateAvgRateMilestone({...initialDataSet}, analisisAndDesignCalculation?.subSections, 'Analysis and Design', settingParameters, isSnapshotModeEnable)
+    // console.log(' ==> ', subValueAnalysisDesign);
+    
     let resultValueSubProjectManagerAnalysisDesign = generateEstimateResourceValue(
       initialDataSet, 
       {
@@ -170,6 +172,9 @@ export const generateEstimateResourceMilestoneSub = async( dataEstimateResourceM
       condition,
       settingParameters, isSnapshotModeEnable
     ); 
+
+    // console.log("resultValueSubProjectManagerAnalysisDesign ==> ", resultValueSubProjectManagerAnalysisDesign);
+    
   
     // dataEstimateResourceMilestone Project Manager Analysis Design
     dataEstimateResourceMilestone[5]['M_Resource1_H'] =  resultValueSubProjectManagerAnalysisDesign?.resultValue1;

@@ -76,7 +76,7 @@ export const setDataSetAveRate = async(data: any, dataEstimateAverageRateMilesto
   (dataEstimateAverageRateMilestone[4] as any)['M_H'] = analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValue;
   (dataEstimateAverageRateMilestone[4] as any)['M/S_H'] = analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValueMS;
   (dataEstimateAverageRateMilestone[4] as any)['M/S/C_H'] = analisisAndDesignCalculation?.subSections?.responseDesignReview?.designReview?.resultValueMSC;
-  const estimateDesignProjectManager = await calculateProjectManagerEstimateAvgRateMilestone(initialDataSet, analisisAndDesignCalculation?.subSections, 'Analysis and Design');
+  const estimateDesignProjectManager = await calculateProjectManagerEstimateAvgRateMilestone({...initialDataSet}, analisisAndDesignCalculation?.subSections, 'Analysis and Design');
   // console.log('99', estimateDesignProjectManager);
   
   (dataEstimateAverageRateMilestone[5] as any)['M_H'] = estimateDesignProjectManager?.resultValue;
@@ -293,7 +293,7 @@ export const setDataSetAveRate = async(data: any, dataEstimateAverageRateMilesto
   // (data[23] as any)['M/S_H'] = subTotalMSAnalysisDesignSub * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
   // (data[23] as any)['M/S/C_H'] = subTotalMSCAnalysisDesignSub * (analisisAndDesignCalculation?.fColmnValueEstimateAveRate?.resultValue || 0);
 
-  const responsePojectManagement = await generateProjectManagerMValue(initialDataSet, {
+  const responsePojectManagement = await generateProjectManagerMValue({...initialDataSet}, {
     responseSubtotal: {
       subTotalMAnalysisDesign: subTotalMAnalysisDesignSub,
       subTotalMSAnalysisDesign: subTotalMSAnalysisDesignSub,

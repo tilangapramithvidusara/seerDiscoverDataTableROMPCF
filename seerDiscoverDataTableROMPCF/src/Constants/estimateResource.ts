@@ -60,7 +60,7 @@ export const estimateResourceMustColumnDetails = [
     accessorKey: 'name',
   },
   {
-    header: '',
+    header: 'Resource Total',
     accessorKey: 'M_Resource_Total',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
@@ -100,7 +100,7 @@ export const estimateResourceMustColumnDetailsHours = [
   //   showBottomTotal: true,
   // },
   {
-    header: '',
+    header: 'Resource Total',
     accessorKey: 'M_Resource_Total_H',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
@@ -147,7 +147,7 @@ export const estimateResourceMustShouldColumnDetails = [
     accessorKey: 'name',
   },
   {
-    header: '',
+    header: 'Resource Total',
     accessorKey: 'M/S_Resource_Total',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
@@ -187,7 +187,7 @@ export const estimateResourceMustShouldColumnDetailsHours = [
   //   showBottomTotal: true,
   // },
   {
-    header: '',
+    header: 'Resource Total',
     accessorKey: 'M/S_Resource_Total_H',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
@@ -234,7 +234,7 @@ export const estimateResourceMustShouldCouldColumnDetails = [
     accessorKey: 'name',
   },
   {
-    header: '',
+    header: 'Resource Total',
     accessorKey: 'M/S/C_Resource_Total',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',
@@ -274,7 +274,7 @@ export const estimateResourceMustShouldCouldColumnDetailsHours = [
   //   showBottomTotal: true,
   // },
   {
-    header: '',
+    header: 'Resource Total',
     accessorKey: 'M/S/C_Resource_Total_H',
     isCalcultionEnabled: true,
     aggregationFn: 'sum',

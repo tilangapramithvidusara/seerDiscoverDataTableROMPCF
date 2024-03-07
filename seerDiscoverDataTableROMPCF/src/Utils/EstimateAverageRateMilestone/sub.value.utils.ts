@@ -478,7 +478,7 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       // ################################ESTIMATE RESOURCE################################
 
     }
-    // console.log('===> ', totalFte, generateTotalFte(condition, totalFte, hoursPerday, 5))
+    // console.log('***===> ', totalFte, generateTotalFte(condition, totalFte, hoursPerday, 5))
     ////////////////ESTIMATE RESOURCE MILESTONE START///////////////
     return {
       totalFte: generateTotalFte(condition, totalFte, hoursPerday, 5),
