@@ -6,3 +6,7 @@ export const cancel = 'Cancel';
 export const failedToSave = 'Failed to save the snapshot.';
 export const successfullySaved = 'Snapshot saved succesfully!';
 export const failedToLoadSelectedSnapshot = 'Failed to load selected snapshot.';
+export const noExistingSnapshots = 'There are no existing snapshots!'
+
+
+// seer_enablesnapshots

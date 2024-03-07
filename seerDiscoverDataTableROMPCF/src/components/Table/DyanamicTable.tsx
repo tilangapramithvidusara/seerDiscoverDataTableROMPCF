@@ -12,7 +12,9 @@ import {
   setCurrentSavedParameters,
   setCurrentSavedProjectTasks,
   setCurrentSavedResources,
+  setLatestChanges,
   setShowSaveParameters,
+  setSnapshotSaveLoacalyOneTime,
   setStateSnapshot
 } from '../../redux/snapshotReport/snapshotReportSlice';
 import { Parameter } from '../../Utils/setting.values.convertor.utils';
@@ -29,6 +31,7 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
   const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters);
   const currentChangingResources = useSelector((state: any) => state?.snapshot?.currentChangingResources);
   const currentChangingProjectTasks = useSelector((state: any) => state?.snapshot?.currentChangingProjectTasks);
+  const latestChanges = useSelector((state: any) => state?.snapshot?.latestChanges)
   const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
   const initialFetchData = useSelector((state: any) => state.report.initialFetchData);
 
@@ -36,6 +39,10 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
   const onChangeHanlder = useCallback(
     (info) => {
       dispatch(setCurrentChangingParameters(info));
+      dispatch(setLatestChanges({
+        ...latestChanges,
+        parameterChanged: true,
+      }));
     },
     [dispatch]
   );
@@ -49,6 +56,11 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
     // dispatch(setCurrentChangingResources(currentChangingResources))
     dispatch(setCurrentSavedResources(currentChangingResources))
     dispatch(setCurrentSavedProjectTasks(currentChangingProjectTasks))
+    dispatch(setLatestChanges({
+      ...latestChanges,
+      parameterChanged: true,
+    }));
+    dispatch(setSnapshotSaveLoacalyOneTime(true))
     arrayGeneratorHandler(false, {
       ...currentChangingParameters, 
       base: snapshotBase ? snapshotBase : initialFetchData,

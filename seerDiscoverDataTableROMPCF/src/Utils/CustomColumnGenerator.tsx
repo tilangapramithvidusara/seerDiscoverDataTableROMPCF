@@ -42,6 +42,9 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
       accessorKey: columnItem?.accessorKey,
       enableGrouping: columnItem?.enableGrouping ? true : false,
       size: columnItem?.size || undefined,
+      _filterFn: "fuzzy",
+      visibleInShowHideMenu: true,
+      enableHiding: true,
       
       Cell: columnItem?.isCalcultionEnabled ? ({ cell }: { cell: any }) => {
         const clickable = (cell?.row?.original?.isClickable && cell?.row?.original?.type == 'Estimate Avg Rate') ? true : false;
@@ -216,7 +219,7 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
         // null,
 
     }
-    return itemObjec;
+    return {...itemObjec};
   });
-  return arrayValue;
+  return [...arrayValue];
 }

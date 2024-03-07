@@ -123,7 +123,7 @@ export const loadSnapshotsAsync: any = () => {
       dispatch(setSnapshotLoading(true));
       window.parent.webapi.safeAjax({
         type: "GET",
-        url: "/_api/seer_rominportalsnapshots?$select=seer_rominportalsnapshotid,_seer_account_value,_seer_contact_value,_createdby_value,createdon,seer_description,_modifiedby_value,modifiedon,_seer_createdbyportal_value,_seer_modifiedbyportal_value,seer_name&$orderby=createdon desc,modifiedon desc",
+        url: "/_api/seer_rominportalsnapshots?$select=seer_rominportalsnapshotid,_seer_account_value,_seer_contact_value,_createdby_value,createdon,seer_description,_modifiedby_value,modifiedon,_seer_createdbyportal_value,_seer_modifiedbyportal_value,seer_settingsupdateddate,seer_name&$orderby=createdon desc,modifiedon desc",
         // "/_api/seer_rominportalsnapshots?$select=seer_rominportalsnapshotid,_seer_contact_value,_createdby_value,createdon,seer_description,_modifiedby_value,modifiedon"
         contentType: "application/json",
         headers: {

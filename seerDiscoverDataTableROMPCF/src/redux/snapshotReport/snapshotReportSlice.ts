@@ -1,6 +1,7 @@
 import { createSlice, current } from '@reduxjs/toolkit'
 // import type { PayloadAction } from '@reduxjs/toolkit'
 import { ReportState } from '../../types/reducer.types';
+import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
 
 const parameterModel = [
   {
@@ -149,6 +150,17 @@ const initialState: any = {
   // snapshot
   loadedSnapshotId: null,
   loadedSnapshotDetails: null,
+  latestChanges: {
+    parameterChanged: false,
+    resourceChanged: false,
+    projectTaskChanged: false,
+  },
+  latestChangesTime: {
+    parameterChangedTime: null,
+    resourceChangedTime: null,
+    projectTaskChangedTime: null,
+  },
+  snapshotSaveLoacalyOneTime: false,
 }
 
 const snapshotSlice: any = createSlice({
@@ -444,14 +456,30 @@ const snapshotSlice: any = createSlice({
     },
     setLoadedSnapshotDetails: (state, action) => {
       if (action.payload) {
-        const snapshot = state?.snapshotsList?.find((snapshotItem: {
+        const stateValue = current(state)
+        // console.log("state?.snapshotsList ==> ", stateValue.snapshotsList, action.payload)
+        const snapshot = stateValue.snapshotsList?.find((snapshotItem: {
           seer_rominportalsnapshotid: string,
           seer_name: string,
         }) => snapshotItem?.seer_rominportalsnapshotid == action.payload);
+        // console.log('snapshot ===> ', snapshot);
+        
         state.loadedSnapshotDetails = snapshot;
+        // console.log('snapshot?.[snapshotAPIConstants?.UPDATED_DATES] ', snapshot?.[snapshotAPIConstants?.UPDATED_DATES], JSON.parse(snapshot?.[snapshotAPIConstants?.UPDATED_DATES]));
+        
+        state.latestChangesTime = JSON.parse(snapshot?.[snapshotAPIConstants?.UPDATED_DATES])
       } else {
         state.loadedSnapshotDetails = null;
       }
+    },
+    setLatestChanges: (state, action) => {
+      state.latestChanges = action.payload
+    },
+    setLatestChangesTime: (state, action) => {
+      state.latestChanges = action.payload
+    },
+    setSnapshotSaveLoacalyOneTime: (state, action) => {
+      state.snapshotSaveLoacalyOneTime = action.payload
     }
   }
   
@@ -506,6 +534,9 @@ export const {
   setLoadedSnapshotId,
   setLoadedSnapshotDetails,
   setLoadedSnapshotDetailsWhenSave,
+  setLatestChanges,
+  setLatestChangesTime,
+  setSnapshotSaveLoacalyOneTime
 } = snapshotSlice.actions;
 
 

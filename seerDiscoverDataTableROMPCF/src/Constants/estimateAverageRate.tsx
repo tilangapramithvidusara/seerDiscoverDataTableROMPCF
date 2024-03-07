@@ -7,6 +7,9 @@ export type Person = {
   M: number;
   "M/S": number;
   "M/S/C": number;
+  M_H: number;
+  "M/S_H": number;
+  "M/S/C_H": number;
 };
 
 export const columnDetails = [
@@ -59,10 +62,12 @@ export const columnDetailsHOURS = [
     header: 'Category',
     accessorKey: 'nameCategory',
     enableGrouping: true,
+    size: 150,
   },
   {
     header: 'Name',
     accessorKey: 'name',
+    size: 220,
   },
   // {
   //   header: 'M',
@@ -81,6 +86,8 @@ export const columnDetailsHOURS = [
   //   },
   // },
   {
+    size: 100,
+    enableHiding: true,
     header: 'M',
     accessorKey: 'M_H',
     isCalcultionEnabled: true,

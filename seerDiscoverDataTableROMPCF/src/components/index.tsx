@@ -15,7 +15,7 @@ import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import Settings from "@mui/icons-material/Settings";
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
-import { setCurrentSavedParameters, setCurrentSavedProjectTasks, setCurrentSavedResources, setDoCalculation, setInitiallyCurrentChangingParameters, setInitiallyCurrentChangingProjectTasks, setInitiallyCurrentChangingResources, setIsLive, setIsSnapshotEnable, setIsSnapshotLoading, setLiveBase, setLiveParameters, setLiveProjectTasks, setLiveResources, setLoadedSnapshotDetailsWhenSave, setLoadedSnapshotId, setRecordId, setResourceModelDataParameters, setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setSnapshotBase, setSnapshotLoading, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
+import { setCurrentSavedParameters, setCurrentSavedProjectTasks, setCurrentSavedResources, setDoCalculation, setInitiallyCurrentChangingParameters, setInitiallyCurrentChangingProjectTasks, setInitiallyCurrentChangingResources, setIsLive, setIsSnapshotEnable, setIsSnapshotLoading, setLatestChanges, setLatestChangesTime, setLiveBase, setLiveParameters, setLiveProjectTasks, setLiveResources, setLoadedSnapshotDetailsWhenSave, setLoadedSnapshotId, setRecordId, setResourceModelDataParameters, setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setSnapshotBase, setSnapshotLoading, setSnapshotSaveLoacalyOneTime, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
 import { loadSelectedSnapshotAsync, loadSnapshotsAsync, saveInitialSnapshotRecordAsync, saveSnapshotAsync } from "../redux/snapshotReport/snapshoAsync";
 import FormDialog from "./Form";
 import { convertJsonToBase64 } from "../Utils/commonFunc.utils";
@@ -151,12 +151,15 @@ const App = ({
   const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters);
   const currentSavedResources = useSelector((state: any) => state?.snapshot?.currentSavedResources);
   const currentSavedProjectTasks = useSelector((state: any) => state?.snapshot?.currentSavedProjectTasks);
+  const latestChanges = useSelector((state: any) => state?.snapshot?.latestChanges);
+  const latestChangesTime = useSelector((state: any) => state?.snapshot?.latestChangesTime);
   const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
   const loadedSnapshotId = useSelector((state: any) => state?.snapshot?.loadedSnapshotId);
   const doCalculation = useSelector((state: any) => state?.snapshot?.doCalculation);
   const isLive = useSelector((state: any) => state?.snapshot?.isLive);
   const loadedSnapshotDetails = useSelector((state: any) => state?.snapshot?.loadedSnapshotDetails);
   const isSnapshotLoading = useSelector((state: any) => state?.snapshot?.isSnapshotLoading)
+  const snapshotSaveLoacalyOneTime = useSelector((state: any) => state?.snapshot?.snapshotSaveLoacalyOneTime);
 
   const onChange = (key: string) => {
     console.log(key);
@@ -180,11 +183,15 @@ const App = ({
       dispatch(setLiveBase(inititalData?.result));
       dispatch(setSnapshotBase(inititalData?.result));
       if (isLive) {
-
         const formatedData = parameterModelConvertToTableJson(inititalData?.result?.parameterModel);
         arrayGeneratorHandler(true, {...formatedData, base: inititalData?.result, currentSavedResources: inititalData?.result?.resourceModelData}, 'liveRefresh');
       } else {
         const formatedData = parameterModelConvertToTableJson(inititalData?.result?.parameterModel);
+        dispatch(setLatestChanges({
+          resourceChanged: false,
+          parameterChanged: false,
+          projectTaskChanged: false,
+        }));
         dispatch(setLiveParameters(formatedData));
         dispatch(setCurrentSavedParameters(formatedData));
         dispatch(setInitiallyCurrentChangingParameters(formatedData))
@@ -196,6 +203,7 @@ const App = ({
         dispatch(setInitiallyCurrentChangingProjectTasks(inititalData?.result?.ProjectTasktModel))
         dispatch(setLoadedSnapshotDetailsWhenSave(null));
         dispatch(setLoadedSnapshotId(null));
+        dispatch(setSnapshotSaveLoacalyOneTime(false));
         arrayGeneratorHandler(false, {...formatedData, base: inititalData?.result, currentSavedResources: inititalData?.result?.resourceModelData}, 'snapshot')
       }
       
@@ -288,7 +296,12 @@ const App = ({
         record[snapshotAPIConstants.SEER_ACCOUNT_RECORD_ID] = `/accounts(${accountId})`; // Lookup
         record[snapshotAPIConstants.SEER_CONTACT_RECORD_ID] = `/contacts(${contactId})`; // Lookup
         record.seer_name = info?.seerName; // Text
-        record.seer_description = info?.seerDescription; // Text
+        record.seer_description = info?.seerDescription;
+        record.seer_settingsupdateddate = info?.latestChangesTime; // Text
+        // console.log('record ==> ', info?.seerDescription, info?.latestChangesTime, typeof info?.latestChangesTime)
+
+        // console.log('JSON.stringify(record)', JSON.stringify(record));
+        
 
         window.parent.webapi.safeAjax({
           type: "POST",
@@ -325,6 +338,7 @@ const App = ({
         dispatch(setIsSnapshotLoading(true));
         const record: any = {};
         record[snapshotAPIConstants?.SEER_MODIFIED_BY_ID] = `/contacts(${contactId})`;
+        record.seer_settingsupdateddate = info?.latestChangesTime;
 
         window.parent.webapi.safeAjax({
           type: "PATCH",
@@ -387,6 +401,13 @@ const App = ({
                   seer_rominportalsnapshotid: recodeId,
                   seer_name: info?.seerName,
                 }));
+                dispatch(setLatestChanges({
+                  latestChanges: {
+                    parameterChanged: false,
+                    resourceChanged: false,
+                    projectTaskChanged: false,
+                  }
+                }))
 
                 // NEW STATES
                 dispatch(loadSnapshotsAsync());
@@ -454,23 +475,49 @@ const App = ({
 
   const saveHandler = React.useCallback((info: {name: string, description: string}) => {
     setShowOverlaySave(true)
+    let latestChangesTimeData = latestChangesTime;
+    if (latestChanges?.parameterChanged) {
+      latestChangesTimeData = {
+        ...latestChangesTimeData,
+        parameterChangedTime: new Date().toISOString(),
+      }
+    }
+    if (latestChanges?.resourceChanged) {
+      latestChangesTimeData = {
+        ...latestChangesTimeData,
+        resourceChangedTime: new Date().toISOString(),
+      }
+    }
+    if (latestChanges?.projectTaskChanged) {
+      latestChangesTimeData = {
+        ...latestChangesTimeData,
+        projectTaskChangedTime: new Date().toISOString(),
+      }
+    }
+
+    // console.log('qaqa ==> ', latestChanges, latestChangesTimeData);
+    
+    
+    dispatch(setLatestChangesTime(latestChangesTimeData))
     
     dispatch(
       // saveSnapshotAsyncAPI({
       saveInitialUpdateSnapshotRecordAsyncAPI({
-      requestNumber: 2,
-      // 1,
-      recodeId: loadedSnapshotId,
-      seerName: info?.name,
-      baseData: convertJsonToBase64(snapshotBase), 
-      snapshotData: convertJsonToBase64({
-        ...currentSavedParameters, 
-        currentSavedResources,
-        currentSavedProjectTasks,
-      }),
-      seerDescription: info?.description,
-      arrayGeneratorHandler,
-    }));
+        requestNumber: 2,
+        // 1,
+        recodeId: loadedSnapshotId,
+        seerName: info?.name,
+        baseData: convertJsonToBase64(snapshotBase), 
+        snapshotData: convertJsonToBase64({
+          ...currentSavedParameters, 
+          currentSavedResources,
+          currentSavedProjectTasks,
+        }),
+        seerDescription: info?.description,
+        arrayGeneratorHandler,
+        latestChangesTime: JSON.stringify(latestChangesTimeData),
+      })
+    );
   }, [dispatch])
 
   const onClickYes = () => {
@@ -487,7 +534,8 @@ const App = ({
 
   const handleSaveSnapshot = () => {
     // NEW STATES
-    if (currentSavedParameters 
+    if (snapshotSaveLoacalyOneTime
+      // currentSavedParameters 
       // && currentSavedResources && currentSavedProjectTasks
       ) {
         if (loadedSnapshotId) {
@@ -531,6 +579,15 @@ const App = ({
 
   const submitRecord: any = React.useCallback((info: {name: string, description: string}) => {
     // setShowOverlaySubmit(true)
+    let latestChangesTimeData = latestChangesTime;
+    latestChangesTimeData = {
+      ...latestChangesTimeData,
+      parameterChangedTime: new Date().toISOString(),
+      resourceChangedTime: new Date().toISOString(),
+      projectTaskChangedTime: new Date().toISOString(),
+    }
+    // console.log('qaqa222 ==> ', latestChanges, latestChangesTimeData);
+    dispatch(setLatestChangesTime(latestChangesTimeData))
     dispatch(saveInitialSnapshotRecordAsyncAPI({
       seerName: info?.name,
       baseData: convertJsonToBase64(snapshotBase), 
@@ -541,6 +598,7 @@ const App = ({
       }),
       seerDescription: info?.description,
       arrayGeneratorHandler,
+      latestChangesTime: JSON.stringify(latestChangesTimeData),
     }))
   }, [dispatch])
 
@@ -551,6 +609,12 @@ const App = ({
   const handleClosePopup = () => {
     setOpenLoadSnapshotModal(false);
   }
+
+  // console.log('initialFetchData?.parameterModel[0]?.seer_Enablesnapshots', initialFetchData?.parameterModel[0]?.seer_Enablesnapshots);
+  // console.log("initialFetchData?.parameterModel[0]", initialFetchData?.parameterModel[0]);
+  // console.log('initialFetchData', initialFetchData);
+  
+  
   return (
     <>
       {(isRefreshing || isComLoading || loading) && (
@@ -586,7 +650,11 @@ const App = ({
                 {/* <InputLabel className="label mr-10">Mode</InputLabel> */}
               </Grid>
               {/* buttonTitles */}
-              <ButtonGroups setSelectedButton={modeHanlder} selectedButton={selectedButton} arrayGeneratorHandler={arrayGeneratorHandler}  />
+
+              {initialFetchData?.parameterModel[0]?.seer_Enablesnapshots && (
+                <ButtonGroups setSelectedButton={modeHanlder} selectedButton={selectedButton} arrayGeneratorHandler={arrayGeneratorHandler}  />
+              )}
+              
             </Stack>
             {/* <DropDownButtons selectedButton={selectedButton} /> */}
           </Box>
@@ -601,7 +669,7 @@ const App = ({
             
             {selectedButton == 'button2' && (
               <div className='text-right flex-wrap-end'>
-                <DropDownButtons selectedButton={selectedButton} handleSaveSnapshot={handleSaveSnapshot} arrayGeneratorHandler={arrayGeneratorHandler} />
+                <DropDownButtons currentSavedParameters={currentSavedParameters} selectedButton={selectedButton} handleSaveSnapshot={handleSaveSnapshot} arrayGeneratorHandler={arrayGeneratorHandler} />
                 <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
                 formattedSettingHandler(e, initialFetchData);
               

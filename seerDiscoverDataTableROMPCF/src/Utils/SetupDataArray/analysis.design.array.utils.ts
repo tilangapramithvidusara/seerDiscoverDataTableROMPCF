@@ -119,7 +119,8 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
     // need to be done project manager calculation
     // subSections
 
-    const estimateDesignProjectManager = await calculateProjectManagerEstimateAvgRateMilestone(initialDataSet, analisisAndDesignCalculation?.subSections, 'Analysis and Design', settingParameters, isSnapshotModeEnable);
+    const estimateDesignProjectManager = await calculateProjectManagerEstimateAvgRateMilestone({...initialDataSet, fteValue}, analisisAndDesignCalculation?.subSections, 'Analysis and Design', settingParameters, isSnapshotModeEnable);
+    // console.log('estimateDesignProjectManager ==> ', estimateDesignProjectManager);
     
     (dataEstimateAverageRateMilestone[5] as any).M = checkConditionAndGenerateValue(estimateDesignProjectManager?.resultValue, hourlyRate?.value, hoursPerday, condition);
     (dataEstimateAverageRateMilestone[5] as any)['M/S'] = checkConditionAndGenerateValue(estimateDesignProjectManager?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
@@ -224,7 +225,7 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
     (dataEstimateAverageRateMilestone[15] as any)['M/S/C'] = analisisAndDesignCalculation?.testing?.resultValueMSC;
 
     // need to be done build project manager
-    const buildProjectManager = await calculateProjectManagerEstimateAvgRateMilestone(initialDataSet, analisisAndDesignCalculation?.subSections, 'BUILD', settingParameters, isSnapshotModeEnable);
+    const buildProjectManager = await calculateProjectManagerEstimateAvgRateMilestone({...initialDataSet, fteValue}, analisisAndDesignCalculation?.subSections, 'BUILD', settingParameters, isSnapshotModeEnable);
 
     (dataEstimateAverageRateMilestone[16] as any).M = checkConditionAndGenerateValue(buildProjectManager?.resultValue, hourlyRate?.value, hoursPerday, condition);
     (dataEstimateAverageRateMilestone[16] as any)['M/S'] = checkConditionAndGenerateValue(buildProjectManager?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
@@ -290,7 +291,7 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
     (dataEstimateAverageRateMilestone[22] as any)['M/S/C'] = analisisAndDesignCalculation?.supportHandover?.resultValueMSC;
 
     // need to be done deploy project manager
-    const deployProjectManager = await calculateProjectManagerEstimateAvgRateMilestone(initialDataSet, analisisAndDesignCalculation?.subSections, 'DEPLOY', settingParameters, isSnapshotModeEnable);
+    const deployProjectManager = await calculateProjectManagerEstimateAvgRateMilestone({...initialDataSet, fteValue}, analisisAndDesignCalculation?.subSections, 'DEPLOY', settingParameters, isSnapshotModeEnable);
 
     (dataEstimateAverageRateMilestone[23] as any).M = checkConditionAndGenerateValue(deployProjectManager?.resultValue, hourlyRate?.value, hoursPerday, condition);
     (dataEstimateAverageRateMilestone[23] as any)['M/S'] = checkConditionAndGenerateValue(deployProjectManager?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
@@ -325,7 +326,7 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
     (dataEstimateAverageRateMilestone[26] as any)['M/S/C'] = analisisAndDesignCalculation?.postGoLive?.resultValueMSC;
 
     // need to be done operation project manager
-    const operationProjectManager = await calculateProjectManagerEstimateAvgRateMilestone(initialDataSet, analisisAndDesignCalculation?.subSections, 'OPERATION', settingParameters, isSnapshotModeEnable);
+    const operationProjectManager = await calculateProjectManagerEstimateAvgRateMilestone({...initialDataSet, fteValue}, analisisAndDesignCalculation?.subSections, 'OPERATION', settingParameters, isSnapshotModeEnable);
 
     (dataEstimateAverageRateMilestone[27] as any).M = checkConditionAndGenerateValue(operationProjectManager?.resultValue, hourlyRate?.value, hoursPerday, condition);
     (dataEstimateAverageRateMilestone[27] as any)['M/S'] = checkConditionAndGenerateValue(operationProjectManager?.resultValueMS, hourlyRate?.value, hoursPerday, condition);
@@ -345,13 +346,14 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
     (dataEstimateAverageRateMilestone[29] as any)['M/S'] = subTotalMSEstimateDesignAvgRateMilestone;
     (dataEstimateAverageRateMilestone[29] as any)['M/S/C'] = subTotalMSCEstimateDesignAvgRateMilestone;
 
-    const responsePojectManagement = await generateProjectManagerMValue(initialDataSet, {
+    const responsePojectManagement = await generateProjectManagerMValue({...initialDataSet, fteValue}, {
       responseSubtotal: {
         subTotalMAnalysisDesign,
         subTotalMSAnalysisDesign,
         subTotalMSCAnalysisDesign
       }
-    }, condition, settingParameters, isSnapshotModeEnable);
+    }, condition, settingParameters, isSnapshotModeEnable, true);
+    // condition, settingParameters, isSnapshotModeEnable    
 
     (data[22] as any).M = responsePojectManagement?.projectManager?.resultValue;
     (data[22] as any)['M/S'] = responsePojectManagement?.projectManager?.resultValueMS;
@@ -384,10 +386,10 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
       subTotalMAnalysisDesign,
       subTotalMSAnalysisDesign,
       subTotalMSCAnalysisDesign
-    }, condition, initialDataSet, settingParameters, isSnapshotModeEnable);
-    const responseGenerateEstimateResourceMilestone = await generateEstimateResourceMilestone(dataEstimateResourceMilestone, analisisAndDesignCalculation, condition, initialDataSet, settingParameters, isSnapshotModeEnable);
+    }, condition, {...initialDataSet, fteValue}, settingParameters, isSnapshotModeEnable);
+    const responseGenerateEstimateResourceMilestone = await generateEstimateResourceMilestone(dataEstimateResourceMilestone, analisisAndDesignCalculation, condition, {...initialDataSet, fteValue}, settingParameters, isSnapshotModeEnable);
 // generateEstimateResourceMilestoneSub
-    const responseGenerateEstimateResourceMilestoneSub = await generateEstimateResourceMilestoneSub(responseGenerateEstimateResourceMilestone, analisisAndDesignCalculation, condition, initialDataSet, settingParameters, isSnapshotModeEnable);
+    const responseGenerateEstimateResourceMilestoneSub = await generateEstimateResourceMilestoneSub(responseGenerateEstimateResourceMilestone, analisisAndDesignCalculation, condition, {...initialDataSet, fteValue}, settingParameters, isSnapshotModeEnable);
 
   
 
@@ -411,7 +413,7 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
     // Wait for all asynchronous operations to complete
     // await Promise.all(promises);
 
-    const dataEstimateAverageRate: any = await setDataSetAveRate(data, dataEstimateAverageRateMilestone, analisisAndDesignCalculation, initialDataSet, condition, settingParameters, isSnapshotModeEnable);
+    const dataEstimateAverageRate: any = await setDataSetAveRate(data, dataEstimateAverageRateMilestone, analisisAndDesignCalculation, {...initialDataSet, fteValue}, condition, settingParameters, isSnapshotModeEnable);
     // await Promise.all(dataEstimateAverageRate)
     const responseGenerateEstimateResourceWithSub = await generateEstimateResourceSub(
       responseGenerateEstimateResource, 
@@ -420,7 +422,7 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
       subTotalMSAnalysisDesign,
       subTotalMSCAnalysisDesign,
       projectMangerSubValues: dataEstimateAverageRate?.resultValueProjectManagerEstimateResource
-    }, condition, initialDataSet, settingParameters, isSnapshotModeEnable);
+    }, condition, {...initialDataSet, fteValue}, settingParameters, isSnapshotModeEnable);
 
     await Promise.all([responseGenerateEstimateResourceWithSub])
     // resultValueProjectManagerEstimateResource

@@ -200,6 +200,8 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
 
     const responseIntegration = await generateIntegrationMValue(inititlaData, condition);
     const responseDocumentLayout = await generateDocumentLayoutMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
+    // console.log("x responseDocumentLayout ==> ", responseDocumentLayout);
+    
     const responseReporting = await generateReportingMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable)
     const responseDataMigration = await generateDataMigrationMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
     const responseCRP = await generateCRPMValue(inititlaData, {responseAnalisisDesign, responseCustomisationDesign, responseCustomRequirementDesign, responseIntegration}, condition, true, settingParameters, isSnapshotModeEnable);
@@ -476,7 +478,7 @@ export const generateIColoumnValueFte = async(inititlaData: any, title?: string,
       // ################################ESTIMATE RESOURCE################################
 
     }
-    // console.log('===> ', totalFte, generateTotalFte(condition, totalFte, hoursPerday, 5))
+    // console.log('***===> ', totalFte, generateTotalFte(condition, totalFte, hoursPerday, 5))
     ////////////////ESTIMATE RESOURCE MILESTONE START///////////////
     return {
       totalFte: generateTotalFte(condition, totalFte, hoursPerday, 5),

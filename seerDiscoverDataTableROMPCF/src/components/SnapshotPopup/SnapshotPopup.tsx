@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Space, Select, Modal, Input } from 'antd';
 import { useState } from 'react';
+import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
 
 export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }: any) {
   const [selectSnapshot, setSelectSnapshot] = useState(null);
@@ -56,7 +57,7 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
                 selectSnapshot
                   ? snapshots?.find(
                       (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
-                    )?.['createdon@OData.Community.Display.V1.FormattedValue']
+                    )?.[snapshotAPIConstants?.CREATED_AT] // 'createdon@OData.Community.Display.V1.FormattedValue'
                   : ''
               }
             />
@@ -70,7 +71,7 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
                 selectSnapshot
                   ? snapshots?.find(
                       (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
-                    )?.['_seer_createdbyportal_value@OData.Community.Display.V1.FormattedValue']
+                    )?.[snapshotAPIConstants?.CREATED_BY] // '_seer_createdbyportal_value@OData.Community.Display.V1.FormattedValue'
                     // ['_createdby_value@OData.Community.Display.V1.FormattedValue']
                   : ''
               }
@@ -85,7 +86,7 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
                 selectSnapshot
                   ? snapshots?.find(
                       (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
-                    )?.['modifiedon@OData.Community.Display.V1.FormattedValue']
+                    )?.[snapshotAPIConstants?.MODIFIED_AT] // 'modifiedon@OData.Community.Display.V1.FormattedValue'
                   : ''
               }
             />
@@ -99,7 +100,7 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
                 selectSnapshot
                   ? snapshots?.find(
                       (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
-                    )?.['_seer_modifiedbyportal_value@OData.Community.Display.V1.FormattedValue']
+                    )?.[snapshotAPIConstants?.MODIFIED_BY] // '_seer_modifiedbyportal_value@OData.Community.Display.V1.FormattedValue'
                     // ['_modifiedby_value@OData.Community.Display.V1.FormattedValue']
                   : ''
               }

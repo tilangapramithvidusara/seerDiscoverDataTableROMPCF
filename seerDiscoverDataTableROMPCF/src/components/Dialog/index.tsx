@@ -36,16 +36,16 @@ export default function SimpleDialog(props: SimpleDialogProps) {
       label: 'Parameters',
       children: <DyanamicTable handleClose={handleClose} arrayGeneratorHandler={arrayGeneratorHandler} />,
     },
-    {
-      key: '2',
-      label: 'Resources',
-      children: <ResourceTable handleClose={handleClose} arrayGeneratorHandler={arrayGeneratorHandler}/>,
-    },
-    {
-      key: '3',
-      label: 'Project Tasks',
-      children: <ProjectTaskTable handleClose={handleClose} arrayGeneratorHandler={arrayGeneratorHandler}/>,
-    },
+    // {
+    //   key: '2',
+    //   label: 'Resources',
+    //   children: <ResourceTable handleClose={handleClose} arrayGeneratorHandler={arrayGeneratorHandler}/>,
+    // },
+    // {
+    //   key: '3',
+    //   label: 'Project Tasks',
+    //   children: <ProjectTaskTable handleClose={handleClose} arrayGeneratorHandler={arrayGeneratorHandler}/>,
+    // },
   ];
 
   return (

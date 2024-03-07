@@ -6,6 +6,10 @@ export const snapshotAPIConstants: any = {
     INITIAL_SNAPSHOT_URL: "/_api/seer_rominportalsnapshots",
     SEER_CREATED_BY_ID : "seer_createdbyportal@odata.bind",
     SEER_MODIFIED_BY_ID: "seer_modifiedbyportal@odata.bind",
-
+    CREATED_AT: "createdon@OData.Community.Display.V1.FormattedValue",
+    CREATED_BY: '_seer_createdbyportal_value@OData.Community.Display.V1.FormattedValue',
+    MODIFIED_AT: 'modifiedon@OData.Community.Display.V1.FormattedValue',
+    MODIFIED_BY: '_seer_modifiedbyportal_value@OData.Community.Display.V1.FormattedValue',
+    UPDATED_DATES: 'seer_settingsupdateddate'
 }
   
