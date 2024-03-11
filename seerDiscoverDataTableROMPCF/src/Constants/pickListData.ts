@@ -38,3 +38,8 @@ export const currencyData: any = {
   'ZAR': 'ZAR', // R
   'USD': '$'
 }
+
+export const romReportType = {
+  "SMB Rom": '381070000',
+  "ENT Rom": "381070001",
+}
