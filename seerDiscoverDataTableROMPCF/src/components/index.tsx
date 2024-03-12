@@ -765,13 +765,14 @@ const App = ({
             {selectedButton == 'button2' && (
               <div className='text-right flex-wrap-end'>
                 <DropDownButtons currentSavedParameters={currentSavedParameters} selectedButton={selectedButton} handleSaveSnapshot={handleSaveSnapshot} arrayGeneratorHandler={arrayGeneratorHandler} />
-                <Button title="Setting" className='btn-blue-outline btn-small' onClick={(e) => {
+                <Button title="Setting" className='btn-blue-outline btn-small mr-10' onClick={(e) => {
                   formattedSettingHandler(e, initialFetchData);
                 
                   // getSnapshotsListHandler(initialFetchData);
                 }}><Settings className="btn-icon" /></Button>
                 {loadedSnapshotDetails && (
                   <ToggleButton
+                    className="btn-small btn-blue-outline"
                     size="small"
                     value="check"
                     selected={(!disabled && selected)}
