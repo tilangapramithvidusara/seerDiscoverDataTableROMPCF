@@ -44,7 +44,7 @@ function CustomDialog(props: CustomDialogProps) {
           const {text, action} = item;
           return (
             <DialogActions className='actions'>
-              <Button onClick={(e) => action(e)} color="primary" className={text == cancel ? 'btn-primary ml-10' : 'btn-blue-outline ml-10'}>
+              <Button onClick={(e) => action(e)} color="primary" className={text != cancel ? 'btn-primary ml-10' : 'btn-blue-outline ml-10'}>
                 {text}
               </Button>
             </DialogActions>
