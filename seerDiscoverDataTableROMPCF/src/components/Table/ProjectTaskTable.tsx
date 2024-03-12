@@ -45,6 +45,10 @@ const ProjectTaskTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: {
   const currentSavedProjectTasks = useSelector((state: any) => state?.snapshot?.currentSavedProjectTasks)
   const currentChangingProjectTasks = useSelector((state: any) => state?.snapshot?.currentChangingProjectTasks)
   const latestChanges = useSelector((state: any) => state?.snapshot?.latestChanges);
+  const finalizeSnapshot = useSelector((state: any) => state?.snapshot?.finalizeSnapshot);
+  const loadedSnapshotId = useSelector((state: any) => state?.snapshot?.loadedSnapshotId);
+  const [disabled, setIsDisabled] = useState(finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)
+
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
@@ -120,12 +124,17 @@ const ProjectTaskTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: {
           seerDescription: submitFormData?.description,
         }))
       }
-}
+  }
 
-const onClose = () => {
-  setShowSnapshotForm(false);
-  setSubmitFormData({});
-};
+  const onClose = () => {
+    setShowSnapshotForm(false);
+    setSubmitFormData({});
+  };
+
+  useEffect(() => {
+    setIsDisabled(finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)
+  }, [loadedSnapshotId, finalizeSnapshot?.seer_rominportalsnapshotid])
+
 
   return (
     <div className="containerManualTable">
@@ -173,6 +182,7 @@ const onClose = () => {
                             isDropDown: true
                           });
                         }}
+                        disabled={disabled}
                       >
                         {currentSavedResources?.map((resourceItem: {
                           resourceId: string,
@@ -198,6 +208,7 @@ const onClose = () => {
                             isDropDown: true
                           });
                         }}
+                        disabled={disabled}
                       >
                         {secondaryDropDown?.map((resourceItem: {
                           resourceId: string,
@@ -234,6 +245,7 @@ const onClose = () => {
                           isDropdown: false,
                         });
                       }}
+                      disabled={disabled}
                       placeholder="Split"
                     />
                   </div>
@@ -249,9 +261,14 @@ const onClose = () => {
         <Button className="btn-blue-outline mr-10" onClick={() => handleClose()}>
           Cancel
         </Button>
-        <Button className="btn-primary" onClick={() => saveHandler()}>
+        {/* <Button className="btn-primary" onClick={() => saveHandler()}>
           Save
-        </Button>
+        </Button> */}
+        {(!disabled) && (
+          <Button className="btn-primary" onClick={() => saveHandler()}>
+            Save
+          </Button>
+        )}
       </div>
     </div>
   );

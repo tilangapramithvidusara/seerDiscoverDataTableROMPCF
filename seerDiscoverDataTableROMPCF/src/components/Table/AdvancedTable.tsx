@@ -28,10 +28,11 @@ import { columnRequirementData } from '../../Constants/requirementsData';
 import { columnCustomisationData } from '../../Constants/cutomisationData';
 import { columnDataLayoutData } from '../../Constants/dataLayouts';
 import { parameterKeyIndex } from '../../Constants/parametersSetting';
+import { fitGapColumnsM, fitGapColumnsMS, fitGapColumnsMSC } from '../../Constants/fitGap';
 
 const buttonTitles= [
-    {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
-  ]
+  {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
+]
 
 const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {data?: any, isLoading?: boolean, type: string, dataMigrationData?: any, documentLayoutsData?: any}) => {  
   const dispatch = useDispatch();
@@ -54,7 +55,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
   let currency = useSelector((state: any) => state?.report?.currency)
   const [typeLoader, setTypeLoader] = React.useState(false);
   const [columnsSet, setColumnSet] = React.useState(
-    type == 'RequirementData' ? columnRequirementData : type !== 'Estimate Resource' ? columnDetails : 
+    type == 'RequirementData' ? columnRequirementData : type == 'FitGap' ? fitGapColumnsM : type !== 'Estimate Resource' ? columnDetails : 
   estimateResourceMustColumnDetails
   // estimateResourceMustShouldColumnDetails
   )
@@ -83,10 +84,13 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
       (type === 'Estimate Average Rate Milestone' && tableMode == dayHoursText) ? columnDetailsHOURS :
       (resourceType === 'Must' && tableMode == defaultText) ? estimateResourceMustColumnDetails :
       (resourceType === 'Must' && tableMode == dayHoursText) ? estimateResourceMustColumnDetailsHours :
+      (resourceType === 'Must' && type === 'FitGap') ? fitGapColumnsM :
       (resourceType === 'Must Should' && tableMode == defaultText) ? estimateResourceMustShouldColumnDetails :
       (resourceType === 'Must Should' && tableMode == dayHoursText) ? estimateResourceMustShouldColumnDetailsHours :
+      (resourceType === 'Must Should' && type === 'FitGap') ? fitGapColumnsMS :
       (resourceType === 'Must Should Could' && tableMode == defaultText) ? estimateResourceMustShouldCouldColumnDetails :
       (resourceType === 'Must Should Could' && tableMode == dayHoursText) ? estimateResourceMustShouldCouldColumnDetailsHours : 
+      (resourceType === 'Must Should Could' && type === 'FitGap') ? fitGapColumnsMSC :
       columnDetails;
     
     setColumnSet([...columnCreator]);
@@ -154,7 +158,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
           <div>
             <div className='flex-wrap ptb-10 custom-toggle-button'>
               <div className='text-left'>
-                {(type === 'Estimate Resource' || type === 'Estimate Resource Milestone') && (
+                {(type === 'Estimate Resource' || type === 'Estimate Resource Milestone' || type === 'FitGap') && (
                   <ButtonGroups selectedButton={resourceType} setSelectedButton={
                     setResourceType
                   } numberOfButtons={3} buttonTitles={[
