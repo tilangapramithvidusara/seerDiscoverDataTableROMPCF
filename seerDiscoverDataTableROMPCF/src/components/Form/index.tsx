@@ -7,10 +7,12 @@ import DialogContent from '@mui/material/DialogContent';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
+import CheckIcon from '@mui/icons-material/Check';
+import { ToggleButton } from '@mui/material';
 
 
-export default function FormDialog({handleClickOpen, handleClose, handleSubmit, setSubmitFormData} : any) {
-
+export default function FormDialog({handleClickOpen, handleClose, handleSubmit, setSubmitFormData, finalizeSnapshot} : any) {
+  const [selected, setSelected] = React.useState(false);
   return (
     <React.Fragment>
       <Dialog 
@@ -60,6 +62,43 @@ export default function FormDialog({handleClickOpen, handleClose, handleSubmit, 
             onChange={(e) => setSubmitFormData((prev: any) => ({ ...prev, description: e?.target?.value }))}
           />
         </DialogContent>
+        {(!finalizeSnapshot || finalizeSnapshot === undefined) && (
+          <>
+            <DialogContentText className='mt-10 d-inline'>
+              <label>
+                Is final version
+              </label>
+            </DialogContentText>
+            <DialogContent>
+              <ToggleButton
+                value="check"
+                selected={selected}
+                onChange={(e) => {
+                  setSelected(!selected)
+                  setSubmitFormData((prev: any) => ({ ...prev, seer_isfinalversion: !selected }))
+                }}
+              >
+                <CheckIcon />
+              </ToggleButton>
+            </DialogContent>
+          </>
+        )}
+        {/* <DialogContentText className='mt-10 d-inline'>
+          <label>
+            Is final version
+          </label></DialogContentText>
+        <DialogContent>
+          <ToggleButton
+            value="check"
+            selected={selected}
+            onChange={(e) => {
+              setSelected(!selected)
+              setSubmitFormData((prev: any) => ({ ...prev, seer_isfinalversion: !selected }))
+            }}
+          >
+            <CheckIcon />
+          </ToggleButton>
+        </DialogContent> */}
         <DialogActions className='btn-wrap'>
           <Button onClick={handleClose} className='btn-blue-outline'>Cancel</Button>
           <Button onClick={handleSubmit} className='btn-primary'>Save</Button>

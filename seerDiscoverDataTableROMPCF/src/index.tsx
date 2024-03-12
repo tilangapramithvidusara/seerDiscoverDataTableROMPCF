@@ -144,6 +144,17 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     }
   }, 
   [data]);
+
+  console.log('dataSet => ', dataSet);
+  console.log('dataSetEstimateResource ==> ', dataSetEstimateResource);
+  console.log('dataEstimateAverageRateMilestone => ', dataEstimateAverageRateMilestone);
+  console.log("dataEstimateResourceMilestone ==> ", dataEstimateResourceMilestone);
+  console.log("requirementData ==> ", requirementData);
+  console.log('customisationData ==> ', customisationData);
+  console.log('documentLayoutsData ==> ', documentLayouts);
+  console.log('dataMigrationData ==> ', dataMigrations);
+  
+  
   
   return (
     <div>

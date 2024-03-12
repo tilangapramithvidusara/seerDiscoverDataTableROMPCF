@@ -2,12 +2,17 @@ import * as React from 'react';
 import { Space, Select, Modal, Input } from 'antd';
 import { useState } from 'react';
 import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
+import StarsIcon from '@mui/icons-material/Stars';
+import { green, red } from '@mui/material/colors';
+import { useSelector } from 'react-redux';
 
-export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }: any) {
+export default function SnapShotPopup({ snapshots, handleClose, open, onSelect, finalizeSnapshot }: any) {
   const [selectSnapshot, setSelectSnapshot] = useState(null);
+  const finalizeSnapshotData = useSelector((state: any) => state?.snapshot?.finalizeSnapshot);
+  console.log('finalizeSnapshot ===> ', finalizeSnapshot, finalizeSnapshotData)
 
   return (
-    <Modal className='snapshot-modal' open={open} title="Load Snapshot" onOk={() => selectSnapshot ? onSelect(selectSnapshot) : alert('Please select the snapshot to load')} onCancel={handleClose}>
+    <Modal className='snapshot-modal' open={open} title={`Load Snapshot ${(finalizeSnapshot || finalizeSnapshotData) ? "Contain - Finalized Snapshot" : ''}`} onOk={() => selectSnapshot ? onSelect(selectSnapshot) : alert('Please select the snapshot to load')} onCancel={handleClose}>
       <Space wrap style={{width: '100%'}}>
         <div style={{ 
           display: 'flex-column', 
@@ -28,12 +33,27 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect }
               // onSelect(e)
             }}
             options={snapshots?.map((snapshot: any) => {
+              console.log('8888 ===> ', finalizeSnapshot?.seer_rominportalsnapshotid == snapshot?.seer_rominportalsnapshotid );
+              
+              const isFinalized = (finalizeSnapshot && (finalizeSnapshot?.seer_rominportalsnapshotid == snapshot?.seer_rominportalsnapshotid)) || (finalizeSnapshotData && (finalizeSnapshotData?.seer_rominportalsnapshotid == snapshot?.seer_rominportalsnapshotid));
+              console.log("isFinalized ==> ", isFinalized, finalizeSnapshot?.seer_rominportalsnapshotid, snapshot?.seer_rominportalsnapshotid, finalizeSnapshotData?.seer_rominportalsnapshotid);
+              
               return {
                 value: snapshot?.seer_rominportalsnapshotid,
-                label: snapshot?.seer_name
+                label: (
+                  <span>
+                    <span style={{ marginRight: '5px', color: (isFinalized) ? 'red' : 'black' }}>{snapshot?.seer_name}</span>
+                    {isFinalized && <StarsIcon style={{ width: '12px', height: '12px', marginLeft: '5px', color: 'green' }} />}
+                  </span>
+                ),
+                // snapshot?.seer_name
               };
             })}
           />
+          {/* <InfoIcon 
+                      sx={{ fontSize: 12, color: green[500] }}
+                      // fontSize="small" 
+                      /> */}
           <div style={{ marginTop: '10px' }}>
             Description:{' '}
             <Input

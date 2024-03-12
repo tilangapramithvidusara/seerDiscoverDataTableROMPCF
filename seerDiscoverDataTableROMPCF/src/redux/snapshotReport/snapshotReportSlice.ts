@@ -2,6 +2,7 @@ import { createSlice, current } from '@reduxjs/toolkit'
 // import type { PayloadAction } from '@reduxjs/toolkit'
 import { ReportState } from '../../types/reducer.types';
 import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
+import { arraySearch } from '../../Utils/commonFunc.utils';
 
 const parameterModel = [
   {
@@ -161,6 +162,8 @@ const initialState: any = {
     projectTaskChangedTime: null,
   },
   snapshotSaveLoacalyOneTime: false,
+
+  finalizeSnapshot: null,
 }
 
 const snapshotSlice: any = createSlice({
@@ -174,7 +177,14 @@ const snapshotSlice: any = createSlice({
       state.isLiveModeEnable = action.payload
     },
     setSnapshotList: (state, action) => {
-      state.snapshotsList = action.payload
+      if (action?.payload?.length > 0) {
+        const item = arraySearch(action?.payload, 'seer_isfinalversion', true);
+        if (item)
+          state.finalizeSnapshot = item;
+        else
+          state.finalizeSnapshot = null
+      }
+      state.snapshotsList = action.payload;
     },
     setSnapshotLoading: (state, action) => {
       state.isLoadingSnapshot = action.payload
@@ -480,6 +490,9 @@ const snapshotSlice: any = createSlice({
     },
     setSnapshotSaveLoacalyOneTime: (state, action) => {
       state.snapshotSaveLoacalyOneTime = action.payload
+    },
+    setFinalizeSnapshot: (state, action) => {
+      state.finalizeSnapshot = action?.payload
     }
   }
   
@@ -536,7 +549,8 @@ export const {
   setLoadedSnapshotDetailsWhenSave,
   setLatestChanges,
   setLatestChangesTime,
-  setSnapshotSaveLoacalyOneTime
+  setSnapshotSaveLoacalyOneTime,
+  setFinalizeSnapshot,
 } = snapshotSlice.actions;
 
 

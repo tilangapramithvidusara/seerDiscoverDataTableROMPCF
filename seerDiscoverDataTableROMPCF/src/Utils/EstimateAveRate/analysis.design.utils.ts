@@ -21,6 +21,7 @@ import { generateUATSupportMValue } from "./uat.support.utils";
 import { setEstimateAveRateAnalysisDesign } from "../../redux/report/reportSlice";
 import { parameterKeyIndex } from "../../Constants/parametersSetting";
 import { checkTypeparseFloat } from "../setting.values.convertor.utils";
+import { fitGapObject } from "../../Constants/fitGap";
 
 export const generateIColoumnValue = async(inititlaData: any, title: string, dispatch: any, hasFteValue?: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   const hasParameters = settingParameters && isSnapshotModeEnable;
@@ -1224,6 +1225,11 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
   const seenModuleConfigurationMIds = new Set();
   const seenModuleConfigurationMSIds = new Set();
   const seenModuleConfigurationMSCIds = new Set();
+
+  const fitGapModules = new Set();
+  const fitGapRecords = [];
+
+  let fitGapValue = fitGapObject;
   try {
     const {BaseData, resourceModelData, ModuleData, parameterModel} = inititlaData
     let {hoursPerday} = parameterModel[0];
@@ -1238,6 +1244,30 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
       // BASE DATA LOOP
       const baseLoop = await BaseData && BaseData.length && BaseData.map(async(baseItem: any, baseIndex: number) => {
         const {allResources} = baseItem;
+
+        // if (fitGapModules.has(baseItem?.module?.id)) {
+
+        // } else {
+        //   fitGapModules.add(baseItem?.module?.id)
+        //   if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000]) {
+        //     // fitGap
+        //     if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000000]) { // Fit
+
+        //     } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000001]) { // Gap
+
+        //     } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000002]) { // Partial
+
+        //     } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000003]) { // ISV Fit
+
+        //     }
+
+        //   } else if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) {
+            
+        //   } else if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) {
+
+        //   }
+        // }
+
         // && baseItem?.module?.name != "Assembly - BC"
         // Assembly - BC
         // ANALYSIS AND DESING
@@ -1928,3 +1958,36 @@ export const moduleReaderConfiguration = (moduleDataItem: any, primaryResourceCo
   // secondaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100)
   return {primaryResourceConfigurationValueFromModuleData, secondaryResourceConfigurationValueFromModuleData}
 }
+
+// export const fitGapHanlder = (fitGapModules: Set<string>, baseItem: {module: {id: string}, seerMoscow: string, fitGap: string}, fitGapRecords,) => {
+//   fitGapModules.add(baseItem?.module?.id)
+//   if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000]) {
+//     // fitGap
+//     if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000000]) { // Fit
+
+//     } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000001]) { // Gap
+
+//     } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000002]) { // Partial
+
+//     } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000003]) { // ISV Fit
+
+//     }
+
+//   } else if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) {
+    
+//   } else if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) {
+    
+//   }
+// }
+
+// export const checkFitGapTypeHandler = (fitGapModules: Set<string>, baseItem: {module: {id: string}, seerMoscow: string, fitGap: string}) => {
+//   if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000000]) { // Fit
+
+//   } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000001]) { // Gap
+
+//   } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000002]) { // Partial
+
+//   } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000003]) { // ISV Fit
+
+//   }
+// }

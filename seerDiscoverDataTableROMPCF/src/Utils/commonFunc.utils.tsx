@@ -21,3 +21,7 @@ export const convertBase64ToJson : any = async(base64Data: any) => {
   const convertValue = atob(base64Data)
   return JSON.parse(atob(base64Data))
 }
+
+export const arraySearch = (array: any[], key: string, value: any) => {
+  return array?.find((item: any) => item[key] == value)
+}

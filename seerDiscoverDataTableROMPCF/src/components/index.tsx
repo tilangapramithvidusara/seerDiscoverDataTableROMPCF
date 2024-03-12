@@ -6,27 +6,29 @@ import AdvancedTable from "./Table/AdvancedTable";
 // const AdvancedTable = React.lazy(() => import('./Table/AdvancedTable'));
 import DropDownButtons from "./Buttons/DropDownButtons";
 import ButtonGroups from "./Buttons/ButtonGroups";
-import { Box, Button, Grid, Stack} from "@mui/material";
+import { Box, Button, DialogContent, DialogContentText, Grid, Stack, ToggleButton} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchInitialDataAsync } from "../redux/report/reportAsycn";
 import { initialFetchFailure, initialFetchSuccess } from "../redux/report/reportSlice";
 import Loader from "./Loader/Loader";
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import Settings from "@mui/icons-material/Settings";
+import CheckIcon from '@mui/icons-material/Check';
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
-import { setCurrentSavedParameters, setCurrentSavedProjectTasks, setCurrentSavedResources, setDoCalculation, setInitiallyCurrentChangingParameters, setInitiallyCurrentChangingProjectTasks, setInitiallyCurrentChangingResources, setIsLive, setIsSnapshotEnable, setIsSnapshotLoading, setLatestChanges, setLatestChangesTime, setLiveBase, setLiveParameters, setLiveProjectTasks, setLiveResources, setLoadedSnapshotDetailsWhenSave, setLoadedSnapshotId, setRecordId, setResourceModelDataParameters, setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setSnapshotBase, setSnapshotLoading, setSnapshotSaveLoacalyOneTime, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
+import { setCurrentSavedParameters, setCurrentSavedProjectTasks, setCurrentSavedResources, setDoCalculation, setFinalizeSnapshot, setInitiallyCurrentChangingParameters, setInitiallyCurrentChangingProjectTasks, setInitiallyCurrentChangingResources, setIsLive, setIsSnapshotEnable, setIsSnapshotLoading, setLatestChanges, setLatestChangesTime, setLiveBase, setLiveParameters, setLiveProjectTasks, setLiveResources, setLoadedSnapshotDetailsWhenSave, setLoadedSnapshotId, setRecordId, setResourceModelDataParameters, setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setSnapshotBase, setSnapshotLoading, setSnapshotSaveLoacalyOneTime, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
 import { loadSelectedSnapshotAsync, loadSnapshotsAsync, saveInitialSnapshotRecordAsync, saveSnapshotAsync } from "../redux/snapshotReport/snapshoAsync";
 import FormDialog from "./Form";
 import { convertJsonToBase64 } from "../Utils/commonFunc.utils";
 import SnapShotPopup from "./SnapshotPopup/SnapshotPopup";
-import { cancel, createNew, failedToSave, missingSnapshot, snapshotSaveConfirmMessage, successfullySaved, updateExisting } from "../Constants/messages";
+import { areYouSure, cancel, confirm, createNew, failedToSave, missingSnapshot, snapshotSaveConfirmMessage, successfullySaved, updateAddConfirmationDes, updateConfirmationDes, updateExisting, updatedSnapshotSuccessfully } from "../Constants/messages";
 import CustomDialog from "./Dialog/CommonDialog";
 import { checkDuplicates } from "../Utils/Validations/check.duplication.utils";
 import OverlayComponent from "./Overley";
 import { showAlertError, showAlertSuccess } from "../Utils/Alerts";
 import { snapshotAPIConstants } from "../Constants/snapshotConstants";
 import { seerBasejson, seerUpdatedsnapshotdata } from "../Constants/endPoints";
+import { romReportType } from "../Constants/pickListData";
 
 const App = ({
   dataSet, onRefreshHandler, isRefreshing, 
@@ -135,7 +137,8 @@ const App = ({
   const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
   const resourceModelDataParameters = useSelector((state: any) => state?.snapshot?.resourceModelDataParameters || []);
   const snapshotResourceModelDataParameters = useSelector((state: any) => state?.snapshot?.snapshotResourceModelDataParameters || []);  
-  const [submitFormData, setSubmitFormData] = React.useState({name: "", description: ""});
+  const [submitFormData, setSubmitFormData] = React.useState({name: "", description: "", seer_isfinalversion: false});
+
   const snapshotsList = useSelector((state: any) => state.snapshot.snapshotsList);
   const [openLoadSnapshotModal, setOpenLoadSnapshotModal] = React.useState(false); // Initialize the state for selected item
   const isLoadingSnapshot = useSelector((state: any) => state?.snapshot?.isLoadingSnapshot || []);
@@ -148,6 +151,7 @@ const App = ({
   const [showOverlaySave, setShowOverlaySave] = React.useState(false);
   const [showOverlayLoad, setShowOverlayLoad] = React.useState(false);
   const [showOverlayInitLoad, setShowOverlayInitLoad] = React.useState(false);
+  const [showOverlayUpdateFlag, setShowOverlayUpdateFlag] = React.useState(false);
   const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters);
   const currentSavedResources = useSelector((state: any) => state?.snapshot?.currentSavedResources);
   const currentSavedProjectTasks = useSelector((state: any) => state?.snapshot?.currentSavedProjectTasks);
@@ -160,6 +164,12 @@ const App = ({
   const loadedSnapshotDetails = useSelector((state: any) => state?.snapshot?.loadedSnapshotDetails);
   const isSnapshotLoading = useSelector((state: any) => state?.snapshot?.isSnapshotLoading)
   const snapshotSaveLoacalyOneTime = useSelector((state: any) => state?.snapshot?.snapshotSaveLoacalyOneTime);
+  const finalizeSnapshot = useSelector((state: any) => state?.snapshot?.finalizeSnapshot);
+  const [selected, setSelected] = React.useState<boolean>(finalizeSnapshot ? true : false);
+  const [disabled, setDisabled] = React.useState<boolean>((finalizeSnapshot && finalizeSnapshot?.seer_rominportalsnapshotid != loadedSnapshotDetails?.seer_rominportalsnapshotid) ? true : false)
+  const [openCustomDialogConfirmUpdate, setOpenCustomDialogConfirmUpdate] = React.useState<boolean>(false)
+
+  console.log('finalizeSnapshot ==> ', finalizeSnapshot)
 
   const onChange = (key: string) => {
     console.log(key);
@@ -223,6 +233,11 @@ const App = ({
     setComIsloading(isRefreshing)
   }, [isRefreshing]);
 
+  React.useEffect(() => {
+    finalizeSnapshot ? setSelected(true) : setSelected(false);
+    setDisabled((finalizeSnapshot && finalizeSnapshot?.seer_rominportalsnapshotid != loadedSnapshotDetails?.seer_rominportalsnapshotid) ? true : false);
+  }, [finalizeSnapshot, loadedSnapshotDetails])
+
   // React.useEffect(() => {
   //   if (!isSnapshotLoading) {
   //     setShowOverlaySubmit(false);
@@ -278,6 +293,8 @@ const App = ({
   }
 
   const saveInitialSnapshotRecordAsyncAPI : any = (info: any) => {
+    console.log("init save info ==> ", info);
+    
     const url = new URL(window.location.href);
     const queryParameters = url.searchParams;
     // console.log('accountId -=> ', queryParameters.get("accountId"));
@@ -298,6 +315,8 @@ const App = ({
         record.seer_name = info?.seerName; // Text
         record.seer_description = info?.seerDescription;
         record.seer_settingsupdateddate = info?.latestChangesTime; // Text
+        record.seer_isfinalversion = info?.seer_isfinalversion; // Boolean
+        record.seer_reporttype = romReportType['SMB Rom'];
         // console.log('record ==> ', info?.seerDescription, info?.latestChangesTime, typeof info?.latestChangesTime)
 
         // console.log('JSON.stringify(record)', JSON.stringify(record));
@@ -325,6 +344,7 @@ const App = ({
   }
 
   const saveInitialUpdateSnapshotRecordAsyncAPI : any = (info: any) => {
+    console.log("update save info ==> ", info);
     const url = new URL(window.location.href);
     const queryParameters = url.searchParams;
     const accountId = localStorage.getItem("accountId") || queryParameters.get(snapshotAPIConstants.ACCOUNT_ID);
@@ -338,7 +358,10 @@ const App = ({
         dispatch(setIsSnapshotLoading(true));
         const record: any = {};
         record[snapshotAPIConstants?.SEER_MODIFIED_BY_ID] = `/contacts(${contactId})`;
-        record.seer_settingsupdateddate = info?.latestChangesTime;
+        if (!info?.finalizeUpdate)
+          record.seer_settingsupdateddate = info?.latestChangesTime;
+        record.seer_isfinalversion = info?.seer_isfinalversion; // Boolean
+        // record.seer_reporttype = romReportType['SMB Rom']; // Choice
 
         window.parent.webapi.safeAjax({
           type: "PATCH",
@@ -346,15 +369,28 @@ const App = ({
           url: `${snapshotAPIConstants.INITIAL_SNAPSHOT_URL}(${info?.recodeId})`,
           data: JSON.stringify(record),
           success: function (data: any, textStatus: any, xhr: any) {
-            dispatch(saveSnapshotAsyncAPI({...info}))
+            console.log('===,,, ==> ', info?.finalizeUpdate);
+            
+            if (info?.finalizeUpdate) {
+                dispatch(loadSnapshotsAsync());
+                dispatch(loadSelectedSnapshotAsync({snapshotId: info?.recodeId, arrayGeneratorHandler: info?.arrayGeneratorHandler}))
+                dispatch(setShowOverlayUpdateFlag(false))
+                afterFinishRequestStateHandler(true, updatedSnapshotSuccessfully)
+
+            } else {
+              dispatch(saveSnapshotAsyncAPI({...info}))
+            }
+            
           },
           error: function (xhr: any, textStatus: any, errorThrown: any) {
+            dispatch(setShowOverlayUpdateFlag(false))
             afterFinishRequestStateHandler(false, failedToSave)
             // showAlertError(failedToSave);
             
           }
         });
       } catch (error) {
+        dispatch(setShowOverlayUpdateFlag(false))
         afterFinishRequestStateHandler(false, failedToSave)
         // showAlertError(failedToSave);        
       } 
@@ -410,6 +446,8 @@ const App = ({
                 }))
 
                 // NEW STATES
+                // if (!info?.seer_isfinalversion)
+                //   dispatch(setFinalizeSnapshot(null));
                 dispatch(loadSnapshotsAsync());
                 dispatch(loadSelectedSnapshotAsync({snapshotId: recodeId, arrayGeneratorHandler: info?.arrayGeneratorHandler}))
                 afterFinishRequestStateHandler(true, successfullySaved)
@@ -473,7 +511,7 @@ const App = ({
     dispatch(loadSnapshotsAsync(info))
   }, [dispatch])
 
-  const saveHandler = React.useCallback((info: {name: string, description: string}) => {
+  const saveHandler = React.useCallback((info: {name: string, description: string, seer_isfinalversion: boolean}) => {
     setShowOverlaySave(true)
     let latestChangesTimeData = latestChangesTime;
     if (latestChanges?.parameterChanged) {
@@ -514,6 +552,7 @@ const App = ({
           currentSavedProjectTasks,
         }),
         seerDescription: info?.description,
+        seer_isfinalversion: info?.seer_isfinalversion,
         arrayGeneratorHandler,
         latestChangesTime: JSON.stringify(latestChangesTimeData),
       })
@@ -534,9 +573,9 @@ const App = ({
 
   const handleSaveSnapshot = () => {
     // NEW STATES
-    if (snapshotSaveLoacalyOneTime
-      // currentSavedParameters 
-      // && currentSavedResources && currentSavedProjectTasks
+    if (snapshotSaveLoacalyOneTime ||
+      (loadedSnapshotId && currentSavedParameters 
+      && currentSavedResources && currentSavedProjectTasks)
       ) {
         if (loadedSnapshotId) {
           setOpenCustomDialog(true)
@@ -577,8 +616,10 @@ const App = ({
     dispatch(setSnapshotLoading(true));
   }, [dispatch])
 
-  const submitRecord: any = React.useCallback((info: {name: string, description: string}) => {
+  const submitRecord: any = React.useCallback((info: {name: string, description: string, seer_isfinalversion: boolean}) => {
     // setShowOverlaySubmit(true)
+    console.log('info ===> ', info);
+    
     let latestChangesTimeData = latestChangesTime;
     latestChangesTimeData = {
       ...latestChangesTimeData,
@@ -597,9 +638,23 @@ const App = ({
         currentSavedProjectTasks,
       }),
       seerDescription: info?.description,
+      seer_isfinalversion: info?.seer_isfinalversion,
       arrayGeneratorHandler,
       latestChangesTime: JSON.stringify(latestChangesTimeData),
     }))
+  }, [dispatch])
+
+  const updateFinalizeStateHandler = React.useCallback((info) => {
+    setShowOverlayUpdateFlag(true)
+    setOpenCustomDialogConfirmUpdate(false);
+    setSelected(!selected)
+    setSubmitFormData((prev: any) => ({ ...prev, seer_isfinalversion: !selected }))
+    dispatch(saveInitialUpdateSnapshotRecordAsyncAPI({
+      seer_isfinalversion: !selected,
+      finalizeUpdate: true,
+      recodeId: loadedSnapshotId,
+      arrayGeneratorHandler: arrayGeneratorHandler,
+    }));
   }, [dispatch])
 
   React.useEffect(() => {
@@ -635,7 +690,47 @@ const App = ({
               <span className="gray-text">{selectedSnapshotFromDB?.seer_name}{loadedSnapshotDetails?.seer_name}</span>
             )  */}
             {loadedSnapshotDetails ? (
-              <span className="gray-text">{loadedSnapshotDetails?.seer_name}</span>
+              <>
+                <span className="gray-text">{loadedSnapshotDetails?.seer_name}</span>
+                {/* {((finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotDetails?.seer_rominportalsnapshotid) || !finalizeSnapshot) && ( */}
+                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    {/* <DialogContentText className='mt-10 d-inline' sx={{ mr: '10px' }}>
+                      <label className="flex-wrpa-start">
+                        Finalize Snapshot:
+                      </label>
+                    </DialogContentText>
+                      <ToggleButton
+                        size="small"
+                        value="check"
+                        selected={(!disabled && selected)}
+                        disabled={finalizeSnapshot && disabled}
+                        onChange={(e) => {
+                          // need to add popup
+                          setOpenCustomDialogConfirmUpdate(true);
+                          // setSelected(!selected)
+                          // setSubmitFormData((prev: any) => ({ ...prev, seer_isfinalversion: !selected }))
+                        }}
+                        sx={{
+                          p: '4px',
+                          '& .MuiToggleButton-root': {
+                            padding: '4px',
+                          },
+                          '& .MuiSvgIcon-root': {
+                            fontSize: '18px', // Adjust the size of the check icon
+                          },
+                        }}
+                      >
+                        <CheckIcon />
+                      </ToggleButton> */}
+                      <div>
+                        {(finalizeSnapshot && disabled) && (
+                          <span className="blue-text">Finalized Snapshot Name: <span className="gray-text">{finalizeSnapshot?.seer_name} </span></span>
+                        )}
+                      </div>
+                  </div>
+                  
+                {/* )} */}
+              </>
             ) : (
               <span className="gray-text">Unsaved</span>
             )}
@@ -671,10 +766,35 @@ const App = ({
               <div className='text-right flex-wrap-end'>
                 <DropDownButtons currentSavedParameters={currentSavedParameters} selectedButton={selectedButton} handleSaveSnapshot={handleSaveSnapshot} arrayGeneratorHandler={arrayGeneratorHandler} />
                 <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
-                formattedSettingHandler(e, initialFetchData);
-              
-                // getSnapshotsListHandler(initialFetchData);
-              }}><Settings className="btn-icon" /></Button>
+                  formattedSettingHandler(e, initialFetchData);
+                
+                  // getSnapshotsListHandler(initialFetchData);
+                }}><Settings className="btn-icon" /></Button>
+                {loadedSnapshotDetails && (
+                  <ToggleButton
+                    size="small"
+                    value="check"
+                    selected={(!disabled && selected)}
+                    disabled={finalizeSnapshot && disabled}
+                    onChange={(e) => {
+                      // need to add popup
+                      setOpenCustomDialogConfirmUpdate(true);
+                      // setSelected(!selected)
+                      // setSubmitFormData((prev: any) => ({ ...prev, seer_isfinalversion: !selected }))
+                    }}
+                    sx={{
+                      p: '4px',
+                      '& .MuiToggleButton-root': {
+                        padding: '4px',
+                      },
+                      '& .MuiSvgIcon-root': {
+                        fontSize: '18px', // Adjust the size of the check icon
+                      },
+                    }}
+                  >
+                    <CheckIcon />
+                  </ToggleButton>
+                )}
               </div>
               // <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
               //   formattedSettingHandler(e, initialFetchData);
@@ -683,7 +803,7 @@ const App = ({
             )}
             {
               openLoadSnapshotModal ? 
-              <SnapShotPopup snapshots = {snapshotsList} handleClose={handleClosePopup} open={openLoadSnapshotModal}/> : <></>
+              <SnapShotPopup finalizeSnapshot={finalizeSnapshot}  snapshots = {snapshotsList} handleClose={handleClosePopup} open={openLoadSnapshotModal}/> : <></>
               
               }
           </div>
@@ -695,25 +815,36 @@ const App = ({
         )}
       </div>
       <Tabs size="small" defaultActiveKey="1" items={items} onChange={onChange} />
-      {(showOverlaySubmit || showOverlayInitLoad || showOverlaySave) && <OverlayComponent showOverlay={showOverlaySubmit || showOverlayInitLoad || showOverlaySave}/>}
+      {(showOverlayUpdateFlag || showOverlaySubmit || showOverlayInitLoad || showOverlaySave) && <OverlayComponent showOverlay={showOverlaySubmit || showOverlayInitLoad || showOverlaySave}/>}
       {/* {showOverlaySave && <OverlayComponent showOverlay={showOverlaySave}/>} */}
       {/* {showOverlayLoad && <OverlayComponent showOverlay={showOverlayLoad}/>} */}
       
       {
-         openSaveSnapshotPopup ? 
-         <FormDialog
-         handleClickOpen={true}
-         handleSubmit={onSubmit}
-         setSubmitFormData={setSubmitFormData}
-         handleClose={() => setOpenSaveSnapshotPopup(false)}
-       /> : <> </>
+        openSaveSnapshotPopup ? 
+          <FormDialog
+            handleClickOpen={true}
+            handleSubmit={onSubmit}
+            setSubmitFormData={setSubmitFormData}
+            handleClose={() => setOpenSaveSnapshotPopup(false)}
+            finalizeSnapshot={finalizeSnapshot}
+          /> : <> </>
       }
       {openCustomDialog && (
         <CustomDialog 
           title={snapshotSaveConfirmMessage}
           open={openCustomDialog}
           handleClose={() => setOpenCustomDialog(false)}
-          buttons={
+          buttons={(finalizeSnapshot && !disabled) ?
+            [
+              {
+                text: createNew,
+                action: onClickNo
+              },
+              {
+                text: cancel,
+                action: () => setOpenCustomDialog(false)
+              }
+            ] :
             [
               {
                 text: updateExisting,
@@ -728,6 +859,26 @@ const App = ({
                 action: () => setOpenCustomDialog(false)
               }
             ]
+          }
+        />
+      )}
+      {openCustomDialogConfirmUpdate && (
+        <CustomDialog 
+          title={areYouSure}
+          description={selected ? updateConfirmationDes : updateAddConfirmationDes}
+          open={openCustomDialogConfirmUpdate}
+          handleClose={() => setOpenCustomDialogConfirmUpdate(false)}
+          buttons={[
+            {
+              text: confirm,
+              action: updateFinalizeStateHandler
+              // onClickNo
+            },
+            {
+              text: cancel,
+              action: () => setOpenCustomDialogConfirmUpdate(false)
+            }
+          ]
           }
         />
       )}

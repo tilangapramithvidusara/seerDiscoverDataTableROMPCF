@@ -26,6 +26,7 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
   const [columns, setColumns] = useState(parameterSettingColumns);
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
   const [showSnapshotForm, setShowSnapshotForm] = useState(false);
+  const finalizeSnapshot = useSelector((state: any) => state?.snapshot?.finalizeSnapshot);
 
   // NEW STATE
   const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters);
@@ -34,7 +35,9 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
   const latestChanges = useSelector((state: any) => state?.snapshot?.latestChanges)
   const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
   const initialFetchData = useSelector((state: any) => state.report.initialFetchData);
+  const loadedSnapshotId = useSelector((state: any) => state?.snapshot?.loadedSnapshotId);
 
+  const [disabled, setIsDisabled] = useState(finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)
 
   const onChangeHanlder = useCallback(
     (info) => {
@@ -76,6 +79,10 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
       setColumns(parameterSettingColumns);
     }
   }, [isBaesline]);
+
+  useEffect(() => {
+    setIsDisabled(finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)
+  }, [loadedSnapshotId, finalizeSnapshot?.seer_rominportalsnapshotid])
 
   return (
     <div className="containerManualTable">
@@ -123,6 +130,7 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
                               isDropDown: true
                             });
                           }}
+                          disabled={disabled}
                         >
                           {dropdownValues?.map((fteItem: any) => (
                             <option value={fteItem?.value}>{fteItem?.label}</option>
@@ -152,6 +160,7 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
                               isDropDown: true
                             });
                           }}
+                          disabled={disabled}
                         >
                           {currentValueDropdownValues?.map((currentItem: any) => (
                             <option value={currentItem?.value}>{currentItem?.label}</option>
@@ -177,6 +186,7 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
                             });
                           }}
                           placeholder="Current Value"
+                          disabled={disabled}
                         />
                       </div>
                     )}
@@ -192,9 +202,14 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
         <Button className="btn-blue-outline mr-10" onClick={() => handleClose()}>
           Cancel
         </Button>
-        <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
+        {(!disabled) && (
+          <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
+            Save
+          </Button>
+        )}
+        {/* <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
           Save
-        </Button>
+        </Button> */}
         {/* <Button className="btn-primary">
           Save
         </Button> */}

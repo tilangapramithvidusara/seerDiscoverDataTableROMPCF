@@ -35,6 +35,11 @@ const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
   const currentSavedProjectTasks = useSelector((state: any) => state?.snapshot?.currentSavedProjectTasks)
   const currentChangingProjectTasks = useSelector((state: any) => state?.snapshot?.currentChangingProjectTasks)
   const latestChanges = useSelector((state: any) => state?.snapshot?.latestChanges);
+  const finalizeSnapshot = useSelector((state: any) => state?.snapshot?.finalizeSnapshot);
+  const loadedSnapshotId = useSelector((state: any) => state?.snapshot?.loadedSnapshotId);
+
+  const [disabled, setIsDisabled] = useState(finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)
+
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter') {
@@ -74,6 +79,11 @@ const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
       currentSavedProjectTasks: currentChangingProjectTasks
     }, 'snapshot')
   };
+
+  useEffect(() => {
+    setIsDisabled(finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)
+  }, [loadedSnapshotId, finalizeSnapshot?.seer_rominportalsnapshotid])
+
 
   // useEffect(() => {
   //   if (isBaesline) {
@@ -131,6 +141,7 @@ const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
                           value: parseFloat(e.target.value)
                         });
                       }}
+                      disabled={disabled}
                       placeholder="HourlyCost"
                     />
                   </div>
@@ -149,6 +160,7 @@ const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
                           value: parseFloat(e.target.value)
                         });
                       }}
+                      disabled={disabled}
                       placeholder="HourlyRate"
                     />
                   </div>
@@ -163,9 +175,14 @@ const ResourceTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
         <Button className="btn-primary mr-10" onClick={() => handleClose()}>
           Cancel
         </Button>
-        <Button className="btn-primary" onClick={() => saveHandler()}>
+        {(!disabled) && (
+          <Button className="btn-primary" onClick={() => saveHandler()}>
+            Save
+          </Button>
+        )}
+        {/* <Button className="btn-primary" onClick={() => saveHandler()}>
           Save
-        </Button>
+        </Button> */}
       </div>
     </div>
   );
