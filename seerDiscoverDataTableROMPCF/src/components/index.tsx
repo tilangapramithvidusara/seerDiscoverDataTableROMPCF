@@ -759,13 +759,13 @@ const App = ({
           // style={{margin: '2px', height: '10px !important', fontSize: '11px !important'}}
           >
             {/* {selectedButton == 'button1' && ( */}
-              <Button title={selectedButton == 'button1' ? "Get Latest" : "Sync With Live Data"} className='btn-primary btn-small mr-10' onClick={(e) => initialTriggerHandler(e, 0, selectedButton == 'button1' ? true : false)}><AutorenewOutlinedIcon className="btn-icon" /></Button>
+              <Button title={selectedButton == 'button1' ? "Get Latest" : "Sync With Live Data"} className='btn-blue-outline btn-small mr-10' onClick={(e) => initialTriggerHandler(e, 0, selectedButton == 'button1' ? true : false)}><AutorenewOutlinedIcon className="btn-icon" /></Button>
             {/* )} */}
             
             {selectedButton == 'button2' && (
               <div className='text-right flex-wrap-end'>
                 <DropDownButtons currentSavedParameters={currentSavedParameters} selectedButton={selectedButton} handleSaveSnapshot={handleSaveSnapshot} arrayGeneratorHandler={arrayGeneratorHandler} />
-                <Button title="Setting" className='btn-primary btn-small' onClick={(e) => {
+                <Button title="Setting" className='btn-blue-outline btn-small' onClick={(e) => {
                   formattedSettingHandler(e, initialFetchData);
                 
                   // getSnapshotsListHandler(initialFetchData);
