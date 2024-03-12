@@ -469,6 +469,10 @@ table {
   padding: 15px 0;
 }
 
+.alert-modal .pt-15 {
+  padding-top: 15px;
+}
+
 .containerManualTable input, .containerManualTable select, .alert-modal input, .alert-modal textarea {
   border: 1px solid #dedede;
   text-align: left;
@@ -580,6 +584,29 @@ table {
   font-size: 13px;
   font-family: 'Roboto', sans-serif !important;
   font-weight: 700;
+} 
+
+.confirm-modal .heading {
+  text-align: left !important;
+}
+
+.confirm-modal .footer {
+  justify-content: flex-end !important;
+}
+
+.confirm-modal .ml-10 {
+  margin-left: 10px;
+}
+
+.confirm-modal .actions {
+  padding: 0;
+}
+
+.alert-modal .content {
+  color: #000;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif !important;
+  margin: 5px 0 10px;
 }
 
 .alert-modal .mt-15 {

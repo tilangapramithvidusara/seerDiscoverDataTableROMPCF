@@ -29,21 +29,21 @@ function CustomDialog(props: CustomDialogProps) {
       {/* <Button variant="contained" color="primary" onClick={handleClickOpen}>
         Open Dialog
       </Button> */}
-      <Dialog open={open} onClose={handleClose} className='alert-modal'>
+      <Dialog open={open} onClose={handleClose} className='alert-modal confirm-modal'>
         <DialogTitle className='heading'>{title}</DialogTitle>
         {description && (
           <DialogContent>
-            <DialogContentText>
+            <DialogContentText className='content'>
               {description}
             </DialogContentText>
           </DialogContent>
         )}
-        <div className='flex py-15'>
+        <div className='flex pt-15 footer'>
         {buttons?.length && buttons.map((item: AlertButtonProps, index: number) => {
           const {text, action} = item;
           return (
-            <DialogActions>
-              <Button onClick={(e) => action(e)} color="primary" className='btn-primary'>
+            <DialogActions className='actions'>
+              <Button onClick={(e) => action(e)} color="primary" className='btn-primary ml-10'>
                 {text}
               </Button>
             </DialogActions>
