@@ -9,8 +9,6 @@ import { useSelector } from 'react-redux';
 export default function SnapShotPopup({ snapshots, handleClose, open, onSelect, finalizeSnapshot }: any) {
   const [selectSnapshot, setSelectSnapshot] = useState(null);
   const finalizeSnapshotData = useSelector((state: any) => state?.snapshot?.finalizeSnapshot);
-  console.log('finalizeSnapshot ===> ', finalizeSnapshot, finalizeSnapshotData)
-
   return (
     <Modal className='snapshot-modal' open={open} title={`Load Snapshot ${(finalizeSnapshot || finalizeSnapshotData) ? "Contain - Finalized Snapshot" : ''}`} onOk={() => selectSnapshot ? onSelect(selectSnapshot) : alert('Please select the snapshot to load')} onCancel={handleClose}>
       <Space wrap style={{width: '100%'}}>
@@ -32,12 +30,8 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect, 
               setSelectSnapshot(e)
               // onSelect(e)
             }}
-            options={snapshots?.map((snapshot: any) => {
-              console.log('8888 ===> ', finalizeSnapshot?.seer_rominportalsnapshotid == snapshot?.seer_rominportalsnapshotid );
-              
-              const isFinalized = (finalizeSnapshot && (finalizeSnapshot?.seer_rominportalsnapshotid == snapshot?.seer_rominportalsnapshotid)) || (finalizeSnapshotData && (finalizeSnapshotData?.seer_rominportalsnapshotid == snapshot?.seer_rominportalsnapshotid));
-              console.log("isFinalized ==> ", isFinalized, finalizeSnapshot?.seer_rominportalsnapshotid, snapshot?.seer_rominportalsnapshotid, finalizeSnapshotData?.seer_rominportalsnapshotid);
-              
+            options={snapshots?.map((snapshot: any) => {              
+              const isFinalized = (finalizeSnapshot && (finalizeSnapshot?.seer_rominportalsnapshotid == snapshot?.seer_rominportalsnapshotid)) || (finalizeSnapshotData && (finalizeSnapshotData?.seer_rominportalsnapshotid == snapshot?.seer_rominportalsnapshotid));              
               return {
                 value: snapshot?.seer_rominportalsnapshotid,
                 label: (

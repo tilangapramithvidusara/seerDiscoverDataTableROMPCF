@@ -65,6 +65,8 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
     }
     
     const analisisAndDesignCalculation: any = await generateIColoumnValue({...initialDataSet, fteValue}, analysisAndDesign.row, dispatch, hasFteValue, settingParameters, isSnapshotModeEnable);
+    console.log('fit gap ===> ', analisisAndDesignCalculation?.fitGapTab);
+    
     // data[0] = Object.assign({}, data[0], { M: analisisAndDesignCalculation?.analysisDesing?.resultValue });
     (data[0] as any).M = analisisAndDesignCalculation?.analysisDesing?.resultValue;
     (data[0] as any)['M/S'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMS;
@@ -436,6 +438,7 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
       dataEstimateResourceMilestone: responseGenerateEstimateResourceMilestoneSub,
       // responseGenerateEstimateResourceMilestone
       reducerValues: analisisAndDesignCalculation?.reducerValues,
+      fitGapTab: analisisAndDesignCalculation?.fitGapTab
     };
   } catch (error) {
     console.error('Error:', error);

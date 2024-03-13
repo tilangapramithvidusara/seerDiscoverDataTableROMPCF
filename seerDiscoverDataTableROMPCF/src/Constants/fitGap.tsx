@@ -94,6 +94,7 @@ export const fitGapColumnsMSC = [
 
 export let fitGapObject = {
   moduleName: '',
+  moduleId: '',
   fit_M: 0,
   isvfit_M: 0,
   partial_M: 0,

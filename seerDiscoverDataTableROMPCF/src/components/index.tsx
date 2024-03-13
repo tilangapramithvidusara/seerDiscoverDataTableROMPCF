@@ -39,7 +39,8 @@ const App = ({
   customisationData,
   arrayGeneratorHandler,
   documentLayoutsData,
-  dataMigrationData
+  dataMigrationData,
+  fitGapData,
 }: {
   dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, 
   dataSetEstimateResource: any, 
@@ -49,8 +50,9 @@ const App = ({
   customisationData: any,
   arrayGeneratorHandler: any,
   documentLayoutsData: any,
-  dataMigrationData: any
-}) => { 
+  dataMigrationData: any,
+  fitGapData: any,
+}) => {   
 
   const items: TabsProps['items'] = [
     {
@@ -90,22 +92,24 @@ const App = ({
       key: '6',
       label: 'Customisations',
       children: <AdvancedTable data={customisationData} type={'CustomisationData'} isLoading={isRefreshing}/>,
-    }
-    // {
-    //   key: '7',
-    //   label: 'Document Layouts',
-    //   children: <AdvancedTable data={documentLayoutsData} type={'DocumentLayoutsData'} isLoading={isRefreshing}/>,
-    // },
-    // {
-    //   key: '8',
-    //   label: 'Data Migrations',
-    //   children: <AdvancedTable data={dataMigrationData} type={'DataMigrationData'} isLoading={isRefreshing}/>,
-    // }
-    // {
-    //   key: '7',
-    //   label: 'Governance',
-    //   children: <Governance/>,
-    // },
+    },
+    {
+      key: '7',
+      label: 'Document Layouts',
+      children: <AdvancedTable data={documentLayoutsData} type={'DocumentLayoutsData'} isLoading={isRefreshing}/>,
+    },
+    {
+      key: '8',
+      label: 'Data Migrations',
+      children: <AdvancedTable data={dataMigrationData} type={'DataMigrationData'} isLoading={isRefreshing}/>,
+    },
+    {
+      key: '9',
+      label: 'FitGap',
+      // fitGapData
+      children: <AdvancedTable data={fitGapData} type={'FitGap'} isLoading={isRefreshing}/>
+      // <Governance/>,
+    },
     // {
     //   key: '8',
     //   label: 'ROM by Phase',
@@ -168,8 +172,6 @@ const App = ({
   const [selected, setSelected] = React.useState<boolean>(finalizeSnapshot ? true : false);
   const [disabled, setDisabled] = React.useState<boolean>((finalizeSnapshot && finalizeSnapshot?.seer_rominportalsnapshotid != loadedSnapshotDetails?.seer_rominportalsnapshotid) ? true : false)
   const [openCustomDialogConfirmUpdate, setOpenCustomDialogConfirmUpdate] = React.useState<boolean>(false)
-
-  console.log('finalizeSnapshot ==> ', finalizeSnapshot)
 
   const onChange = (key: string) => {
     console.log(key);
@@ -293,7 +295,7 @@ const App = ({
   }
 
   const saveInitialSnapshotRecordAsyncAPI : any = (info: any) => {
-    console.log("init save info ==> ", info);
+    // console.log("init save info ==> ", info);
     
     const url = new URL(window.location.href);
     const queryParameters = url.searchParams;
@@ -344,7 +346,7 @@ const App = ({
   }
 
   const saveInitialUpdateSnapshotRecordAsyncAPI : any = (info: any) => {
-    console.log("update save info ==> ", info);
+    // console.log("update save info ==> ", info);
     const url = new URL(window.location.href);
     const queryParameters = url.searchParams;
     const accountId = localStorage.getItem("accountId") || queryParameters.get(snapshotAPIConstants.ACCOUNT_ID);
@@ -368,9 +370,7 @@ const App = ({
           contentType: "application/json",
           url: `${snapshotAPIConstants.INITIAL_SNAPSHOT_URL}(${info?.recodeId})`,
           data: JSON.stringify(record),
-          success: function (data: any, textStatus: any, xhr: any) {
-            console.log('===,,, ==> ', info?.finalizeUpdate);
-            
+          success: function (data: any, textStatus: any, xhr: any) {            
             if (info?.finalizeUpdate) {
                 dispatch(loadSnapshotsAsync());
                 dispatch(loadSelectedSnapshotAsync({snapshotId: info?.recodeId, arrayGeneratorHandler: info?.arrayGeneratorHandler}))
@@ -617,9 +617,7 @@ const App = ({
   }, [dispatch])
 
   const submitRecord: any = React.useCallback((info: {name: string, description: string, seer_isfinalversion: boolean}) => {
-    // setShowOverlaySubmit(true)
-    console.log('info ===> ', info);
-    
+    // setShowOverlaySubmit(true)    
     let latestChangesTimeData = latestChangesTime;
     latestChangesTimeData = {
       ...latestChangesTimeData,
@@ -765,13 +763,14 @@ const App = ({
             {selectedButton == 'button2' && (
               <div className='text-right flex-wrap-end'>
                 <DropDownButtons currentSavedParameters={currentSavedParameters} selectedButton={selectedButton} handleSaveSnapshot={handleSaveSnapshot} arrayGeneratorHandler={arrayGeneratorHandler} />
-                <Button title="Setting" className='btn-blue-outline btn-small' onClick={(e) => {
+                <Button title="Setting" className='btn-blue-outline btn-small mr-10' onClick={(e) => {
                   formattedSettingHandler(e, initialFetchData);
                 
                   // getSnapshotsListHandler(initialFetchData);
                 }}><Settings className="btn-icon" /></Button>
                 {loadedSnapshotDetails && (
                   <ToggleButton
+                    className="btn-small btn-blue-outline"
                     size="small"
                     value="check"
                     selected={(!disabled && selected)}

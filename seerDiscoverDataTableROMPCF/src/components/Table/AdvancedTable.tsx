@@ -35,7 +35,7 @@ const buttonTitles= [
 ]
 
 const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {data?: any, isLoading?: boolean, type: string, dataMigrationData?: any, documentLayoutsData?: any}) => {  
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();  
   const [isOpenSideDrawer, setIsOpenSideDrawer] = React.useState<boolean>(false);
   const [selectedRow, setSelectedRow] = React.useState();
   const [tabData, setTabData] = React.useState(data);
@@ -53,12 +53,12 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
   const showSaveParameters = useSelector((state: any) => state?.snapshot?.showSaveParameters)
   const showLoadedParameters = useSelector((state: any) => state?.snapshot?.showLoadedParameters)
   let currency = useSelector((state: any) => state?.report?.currency)
-  const [typeLoader, setTypeLoader] = React.useState(false);
+  const [typeLoader, setTypeLoader] = React.useState(false);  
   const [columnsSet, setColumnSet] = React.useState(
     type == 'RequirementData' ? columnRequirementData : type == 'FitGap' ? fitGapColumnsM : type !== 'Estimate Resource' ? columnDetails : 
   estimateResourceMustColumnDetails
   // estimateResourceMustShouldColumnDetails
-  )
+  )  
   const reportReducerValues = useSelector((state: any) => state?.report?.estimateAverageRateStoreData);
   const [cellDataForSidePane, setCellDataForSidePane] = React.useState<any>();
   const [sidePaneEnable, setSidePaneEnable] = React.useState(false);
@@ -82,17 +82,16 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
       (type === 'Estimate Average Rate' && tableMode == dayHoursText) ? columnDetailsHOURS : 
       (type === 'Estimate Average Rate Milestone' && tableMode == defaultText) ? columnDetails :
       (type === 'Estimate Average Rate Milestone' && tableMode == dayHoursText) ? columnDetailsHOURS :
+      (resourceType === 'Must' && type === 'FitGap') ? fitGapColumnsM :
       (resourceType === 'Must' && tableMode == defaultText) ? estimateResourceMustColumnDetails :
       (resourceType === 'Must' && tableMode == dayHoursText) ? estimateResourceMustColumnDetailsHours :
-      (resourceType === 'Must' && type === 'FitGap') ? fitGapColumnsM :
+      (resourceType === 'Must Should' && type === 'FitGap') ? fitGapColumnsMS :
       (resourceType === 'Must Should' && tableMode == defaultText) ? estimateResourceMustShouldColumnDetails :
       (resourceType === 'Must Should' && tableMode == dayHoursText) ? estimateResourceMustShouldColumnDetailsHours :
-      (resourceType === 'Must Should' && type === 'FitGap') ? fitGapColumnsMS :
+      (resourceType === 'Must Should Could' && type === 'FitGap') ? fitGapColumnsMSC :
       (resourceType === 'Must Should Could' && tableMode == defaultText) ? estimateResourceMustShouldCouldColumnDetails :
       (resourceType === 'Must Should Could' && tableMode == dayHoursText) ? estimateResourceMustShouldCouldColumnDetailsHours : 
-      (resourceType === 'Must Should Could' && type === 'FitGap') ? fitGapColumnsMSC :
-      columnDetails;
-    
+      columnDetails;    
     setColumnSet([...columnCreator]);
     // setTimeout(() => {
     //   const newData = [...tabData];
@@ -102,9 +101,9 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
     // setTabData(newData);
   }
 
-  React.useEffect(() => {      
+  React.useEffect(() => {          
     columnCreator();
-  }, [resourceType, type, tableMode]) // resourceType
+  }, [resourceType, type, tableMode, data]) // resourceType
 
   React.useEffect(() => {
     setReloadTable(false); // Reset reloadTable state after reload
@@ -239,14 +238,14 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
             columnResizeMode={'onEnd'}
             enableColumnResizing={true}
             // layoutMode= 'grid-no-grow'
-            enableGrouping={(type != 'RequirementData' && type != 'CustomisationData' && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? true : false}
+            enableGrouping={(type != 'FitGap' && type != 'RequirementData' && type != 'CustomisationData' && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? true : false}
             enableStickyHeader
             enableStickyFooter
             enableHiding={true}
             initialState={{
               density: 'compact',
               expanded: true, //expand all groups by default   'M', "M/S", "M/S/C", 
-              grouping: (type != 'RequirementData' && type != 'CustomisationData'  && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? ['nameCategory'] : [], //an array of columns to group by by default (can be multiple)
+              grouping: (type != 'FitGap' && type != 'RequirementData' && type != 'CustomisationData'  && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? ['nameCategory'] : [], //an array of columns to group by by default (can be multiple)
               pagination: { pageIndex: 0, pageSize: 100 },
               // sorting: [{ id: 'state', desc: false }, { id: 'state', desc: false }], //sort by state by default
             }}

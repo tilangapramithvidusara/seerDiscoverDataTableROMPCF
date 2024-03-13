@@ -23,6 +23,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   const [dataMigrations, setDataMigrations] = React.useState<any []>([]);
   const [requirementData, setRequirementData] = React.useState([])
   const [customisationData, setCustomisationData] = React.useState([]);
+  const [fitGapData, setFitGapData] = React.useState([]);
   const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
   const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
   const showSaveParameters = useSelector((state: any) => state?.snapshot?.showSaveParameters)
@@ -114,6 +115,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
         setDataSetEstimateResource(result?.dataEstimateResource ? result?.dataEstimateResource : [])
         setDataEstimateAverageRateMilestone(result?.dataEstimateAverageRateMilestone ? result?.dataEstimateAverageRateMilestone : [])
         setDataEstimateResourceMilestone(result?.dataEstimateResourceMilestone ? result?.dataEstimateResourceMilestone : []);
+        setFitGapData(result?.fitGapTab || [])
         dispatch(setEstimateAveRateAnalysisDesign(result?.reducerValues?.estimageAveRateAnalysisDesignSidePane))
         dispatch(setEstimateAveRateCusomisationDesign(result?.reducerValues?.estimageAveRateCustomisationDesignSidePane));
         dispatch(setEstimateAveRateCustomerRequirementDesign(result?.reducerValues?.estimageAveRateCustomerRequirementDesignSidePane));
@@ -145,14 +147,14 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   }, 
   [data]);
 
-  console.log('dataSet => ', dataSet);
-  console.log('dataSetEstimateResource ==> ', dataSetEstimateResource);
-  console.log('dataEstimateAverageRateMilestone => ', dataEstimateAverageRateMilestone);
-  console.log("dataEstimateResourceMilestone ==> ", dataEstimateResourceMilestone);
-  console.log("requirementData ==> ", requirementData);
-  console.log('customisationData ==> ', customisationData);
-  console.log('documentLayoutsData ==> ', documentLayouts);
-  console.log('dataMigrationData ==> ', dataMigrations);
+  // console.log('dataSet => ', dataSet);
+  // console.log('dataSetEstimateResource ==> ', dataSetEstimateResource);
+  // console.log('dataEstimateAverageRateMilestone => ', dataEstimateAverageRateMilestone);
+  // console.log("dataEstimateResourceMilestone ==> ", dataEstimateResourceMilestone);
+  // console.log("requirementData ==> ", requirementData);
+  // console.log('customisationData ==> ', customisationData);
+  // console.log('documentLayoutsData ==> ', documentLayouts);
+  // console.log('dataMigrationData ==> ', dataMigrations);
   
   
   
@@ -173,6 +175,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
           arrayGeneratorHandler={arrayGeneratorHandler}
           documentLayoutsData={documentLayouts}
           dataMigrationData={dataMigrations}
+          fitGapData={fitGapData}
         />}
     </div>
   )

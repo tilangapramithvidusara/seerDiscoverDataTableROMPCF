@@ -872,7 +872,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         isSnapshotModeEnable
       );
 
-    }
+    }    
 
     ////////////////ESTIMATE RESOURCE MILESTONE START///////////////    
     return {
@@ -1037,7 +1037,8 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         estimageAveRateCustomerCustomisationBuildSidePane,
         estimageAveRateCustomerCustomRequirementBuildSidePane,
         estimageAveRateDocumentLayoutSidePane,
-      }
+      },
+      fitGapTab: responseAnalisisDesign?.fitGapTab
     };
   } catch (error) {
     return {
@@ -1227,7 +1228,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
   const seenModuleConfigurationMSCIds = new Set();
 
   const fitGapModules = new Set();
-  const fitGapRecords = [];
+  let fitGapRecords: any[] = [];
 
   let fitGapValue = fitGapObject;
   try {
@@ -1245,28 +1246,18 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
       const baseLoop = await BaseData && BaseData.length && BaseData.map(async(baseItem: any, baseIndex: number) => {
         const {allResources} = baseItem;
 
-        // if (fitGapModules.has(baseItem?.module?.id)) {
+        if (fitGapModules.has(baseItem?.module?.id)) {
+          fitGapRecords = fitGapHanlder(baseItem, fitGapRecords);
 
-        // } else {
-        //   fitGapModules.add(baseItem?.module?.id)
-        //   if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000]) {
-        //     // fitGap
-        //     if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000000]) { // Fit
-
-        //     } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000001]) { // Gap
-
-        //     } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000002]) { // Partial
-
-        //     } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000003]) { // ISV Fit
-
-        //     }
-
-        //   } else if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) {
-            
-        //   } else if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) {
-
-        //   }
-        // }
+        } else {
+          fitGapModules.add(baseItem?.module?.id)
+          fitGapRecords.push({
+            ...fitGapObject,
+            moduleName: baseItem?.module?.name,
+            moduleId: baseItem?.module?.id,
+          });
+          fitGapRecords = fitGapHanlder(baseItem, fitGapRecords);
+        }
 
         // && baseItem?.module?.name != "Assembly - BC"
         // Assembly - BC
@@ -1505,7 +1496,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
       // modulesConfiguration.length,
       // modulesConfigurationMS.length,
       // modulesConfigurationMSC.length,
-      // );
+      // );      
       
       buildEstimateConfigurationValueFromBaseData = primaryResourceConfigurationValueFromBaseData + secondaryResourceConfigurationValueFromBaseData
       buildEstimateConfigurationValueFromBaseDataMS = primaryResourceConfigurationValueFromBaseDataMS + secondaryResourceConfigurationValueFromBaseDataMS
@@ -1711,7 +1702,8 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             hoursPerday,
             condition
           ),
-        }
+        },
+        fitGapTab: fitGapRecords,
       };
     } else {
       return {resultValue, resultValueMS, resultValueMSC, 
@@ -1755,7 +1747,8 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           resultBaseValue: 0,
           resultBaseValueMS: 0,
           resultBaseValueMSC: 0,
-        }
+        },
+        fitGapTab: fitGapRecords,
       };
     }
   } catch (error) {
@@ -1800,7 +1793,8 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         resultBaseValue: 0,
         resultBaseValueMS: 0,
         resultBaseValueMSC: 0,
-      }
+      },
+      fitGapTab: fitGapRecords,
     };
   }
 }
@@ -1959,35 +1953,47 @@ export const moduleReaderConfiguration = (moduleDataItem: any, primaryResourceCo
   return {primaryResourceConfigurationValueFromModuleData, secondaryResourceConfigurationValueFromModuleData}
 }
 
-// export const fitGapHanlder = (fitGapModules: Set<string>, baseItem: {module: {id: string}, seerMoscow: string, fitGap: string}, fitGapRecords,) => {
-//   fitGapModules.add(baseItem?.module?.id)
-//   if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000]) {
-//     // fitGap
-//     if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000000]) { // Fit
+export const fitGapHanlder = (baseItem: {module: {id: string}, seerMoscow: string, fitGap: string}, fitGapRecords: any[]) => {
+  let response = fitGapRecords;
+  if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000]) {
+    response = checkFitGapTypeHandler(baseItem, fitGapRecords, 'M');
 
-//     } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000001]) { // Gap
+  }
+  if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) {
+    response = checkFitGapTypeHandler(baseItem, fitGapRecords, 'MS');
+  }
+  if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) {
+    response = checkFitGapTypeHandler(baseItem, fitGapRecords, 'MSC');
+  }
+  return response;
+}
 
-//     } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000002]) { // Partial
+export const checkFitGapTypeHandler = (baseItem: {module: {id: string}, seerMoscow: string, fitGap: string}, fitGapRecords: any[], moscowKeyValue: string) => {
+  let response = fitGapRecords;
+  if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000000]) { // Fit
+    response = findAndSetFitGapValue(baseItem, fitGapRecords, moscowKeyValue, 'fit');
 
-//     } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000003]) { // ISV Fit
+  } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000001]) { // Gap
+    response = findAndSetFitGapValue(baseItem, fitGapRecords, moscowKeyValue, 'gap');
+  } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000002]) { // Partial
+    response = findAndSetFitGapValue(baseItem, fitGapRecords, moscowKeyValue, 'partial');
 
-//     }
+  } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000003]) { // ISV Fit
+    response = findAndSetFitGapValue(baseItem, fitGapRecords, moscowKeyValue, 'isvfit');
 
-//   } else if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) {
-    
-//   } else if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) {
-    
-//   }
-// }
+  }
+  return response;
+}
 
-// export const checkFitGapTypeHandler = (fitGapModules: Set<string>, baseItem: {module: {id: string}, seerMoscow: string, fitGap: string}) => {
-//   if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000000]) { // Fit
+export const findAndSetFitGapValue = (baseItem: {module: {id: string}, seerMoscow: string, fitGap: string}, fitGapRecords: any[], moscowKeyValue: string, fitgapKeyValue: string) => {
+  const index = fitGapRecords.findIndex((item: any) => item?.moduleId == baseItem?.module?.id);
+  let itemValue = fitGapRecords[index];  
+  const key = `${fitgapKeyValue}_${moscowKeyValue}`;  
+  itemValue = {
+    ...itemValue,
+    [key]: itemValue?.[key] + 1
+  }
 
-//   } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000001]) { // Gap
-
-//   } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000002]) { // Partial
-
-//   } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000003]) { // ISV Fit
-
-//   }
-// }
+  fitGapRecords[index] = itemValue;
+  return fitGapRecords
+}
