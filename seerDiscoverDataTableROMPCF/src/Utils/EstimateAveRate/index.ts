@@ -19,7 +19,6 @@ export const generateIColoumnValue = async(inititlaData: any, type: string) => {
       return resultValue;
     }
   } catch (error) {
-    console.log("generateIColoumnValue error ==> ", error);
     return 0;
   }
 }
@@ -76,25 +75,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, type: strin
           // default:
           //   break;
         }
-        // if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] && fitGapData[baseItem?.fitGap] != fitGapData[100000001]) { // Equal to Must
-        //   x += 1;
-        //   if (baseItem?.quantity && baseItem?.quantity > 0) { // Quantity greaterthan 0
-        //     // (design*(split/100))*quantity
-        //     console.log('primaryResourceDesignValueFromBaseData => ', primaryResourceDesignValueFromBaseData, (baseItem?.designEstimate * (baseItem?.resourceSplit / 100)) * baseItem?.quantity);
-            
-        //     primaryResourceDesignValueFromBaseData += (baseItem?.designEstimate * (baseItem?.resourceSplit / 100)) * baseItem?.quantity
-        //   } else {
-        //     // design value
-        //     console.log('primaryResourceDesignValueFromBaseData22 => ', primaryResourceDesignValueFromBaseData, (baseItem?.designEstimate * (baseItem?.resourceSplit / 100)));
-        //     primaryResourceDesignValueFromBaseData += (baseItem?.designEstimate * (baseItem?.resourceSplit / 100))
-        //   }
-
-        //   secondaryResourceDesignValueFromBaseData += (baseItem?.designEstimate * ((100 - baseItem?.resourceSplit) / 100))
-
-          
-        // } else {
-        //   //
-        // }
       });
       
       const moduleLoop = await ModuleData && ModuleData?.length && ModuleData.map((moduleDataItem: any, moduleDataIndex: any) => {
@@ -150,17 +130,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, type: strin
           // default:
           //   break;
         }
-        // if (moscowsData?.[moduleDataItem?.seerMoscow] == moscowsData?.[100000000]) {
-        //   y += 1;
-        //   // design*(split/100)
-        //   // Design*((100-Split)/100)
-        //   console.log('primaryResourceDesignValueFromModuleData => ', primaryResourceDesignValueFromModuleData, moduleDataItem?.moduleSeerEstimateDesign * (moduleDataItem?.moduleSeerResourceSplit / 100));
-        //   primaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * (moduleDataItem?.moduleSeerResourceSplit / 100)
-        //   console.log('secondaryResourceDesignValueFromModuleData => ', secondaryResourceDesignValueFromModuleData, moduleDataItem?.moduleSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100));
-        //   secondaryResourceDesignValueFromModuleData += moduleDataItem?.moduleOverridePartnerSeerEstimateDesign * ((100 - moduleDataItem?.moduleSeerResourceSplit) / 100)
-        // } else {
-        //   //
-        // }
 
       });
       if (parameterModel?.length)
@@ -176,7 +145,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, type: strin
       return resultValue;
     }
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return 0;
   }
 }
@@ -186,7 +154,6 @@ export const generateAnalysisDesignMValue2 = async (inititlaData: any) => {
     const resultValue = calculateResultValue(BaseData, ModuleData, parameterModel);
     return resultValue;
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return 0;
   }
 }

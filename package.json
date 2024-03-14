@@ -13,7 +13,8 @@
     "rebuild": "pcf-scripts rebuild",
     "start": "pcf-scripts start",
     "start:watch": "pcf-scripts start watch",
-    "refreshTypes": "pcf-scripts refreshTypes"
+    "refreshTypes": "pcf-scripts refreshTypes",
+    "release": "cd seerDiscoverDataTableROMPCFSolution && pac solution add-reference --path ../ && dotnet msbuild /t:restore && dotnet msbuild /p:configuration=Release"
   },
   "dependencies": {
     "@mui/icons-material": "^5.15.0",
@@ -38,13 +39,14 @@
     "@types/react": "^17.0.2",
     "@types/react-dom": "^18.2.7",
     "@types/react-highlight-words": "^0.16.4",
-    "@typescript-eslint/eslint-plugin": "^5.39.0",
-    "@typescript-eslint/parser": "^5.39.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
     "compression-webpack-plugin": "^10.0.0",
-    "eslint": "^8.24.0",
+    "eslint": "^8.56.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.1",
+    "eslint-plugin-react": "^7.33.2",
     "pcf-scripts": "^1",
     "pcf-start": "^1",
     "typescript": "^4.8.4",

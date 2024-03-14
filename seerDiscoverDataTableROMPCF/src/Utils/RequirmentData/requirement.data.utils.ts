@@ -2,7 +2,7 @@ import { complexityData, fitGapData, moscowsData, percentData } from "../../Cons
 
 export const dataMapper = (data: any[], type = 'requirement') => {
   try {
-    const finalData = data && data.length && data.map((value: {seer_Moscow:  any, seer_FitGap: any, seer_Complexity: any, seer_moscow:  any, seer_fitgap: any, seer_complexity: any}) => {
+    const finalData = data && data.length && data.map((value: {seer_Moscow:  any, seer_FitGap: any, seer_Complexity: any, seer_moscow:  any, seer_fitgap: any, seer_complexity: any, seerMoscow: any, seerFitgap: any, seerComplexity: any}) => {
       let ob = {...value};
       if(type == 'requirement') {
         ob = {
@@ -18,8 +18,21 @@ export const dataMapper = (data: any[], type = 'requirement') => {
           seer_fitgap: fitGapData[value['seer_fitgap']],
           seer_complexity: complexityData[value['seer_complexity']],
         };
+      } else if (type == 'documentLayouts') {
+        ob = {
+          ...ob, // Copy existing properties
+          seerMoscow: moscowsData[value['seerMoscow']],
+          seerFitgap: fitGapData[value['seerFitgap']],
+          seerComplexity: complexityData[value['seerComplexity']],
+        };
+      } else if (type == 'dataMigrations') {
+        ob = {
+          ...ob, // Copy existing properties
+          seerMoscow: moscowsData[value['seerMoscow']],
+          seerFitgap: fitGapData[value['seerFitgap']],
+          seerComplexity: complexityData[value['seerComplexity']],
+        };
       }
-        
       
       // ob['seer_Moscow'] = moscowsData[value['seer_Moscow']];
       // ob['seer_FitGap'] = fitGapData[value['seer_FitGap']];
@@ -27,7 +40,6 @@ export const dataMapper = (data: any[], type = 'requirement') => {
     });    
     return finalData;
   } catch (error) {
-    console.log('erroraaa', error);
     
     return data;
   }

@@ -6,11 +6,37 @@ import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import DownloadingOutlinedIcon from '@mui/icons-material/DownloadingOutlined';
 import UpdateOutlined from '@mui/icons-material/UpdateOutlined';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectSnapshot } from '../../../redux/snapshotReport/snapshotReportSlice';
+import {
+  setBaseJson,
+  setCurrentSavedParameters,
+  setCurrentSavedProjectTasks,
+  setCurrentSavedResources,
+  setInitiallyCurrentChangingParameters,
+  setInitiallyCurrentChangingProjectTasks,
+  setInitiallyCurrentChangingResources,
+  setLoadedSnapshotDetails,
+  setLoadedSnapshotId,
+  setResourceModelDataParameters,
+  setSelectSnapshot,
+  setSelectedSnapshotFromDB,
+  setSettingParameters,
+  setShowLoadedSnapshotBase,
+  setShowLoadedSnapshotPametersNRates,
+  setShowSaveParameters,
+  setSnapshotBase,
+  setSnapshotLoading,
+  setSnapshotParameters,
+  setStateSnapshot
+} from '../../../redux/snapshotReport/snapshotReportSlice';
 import SnapShotPopup from '../../SnapshotPopup/SnapshotPopup';
+import OverlayComponent from '../../Overley';
+import { showAlertError } from '../../../Utils/Alerts';
+import { failedToLoadSelectedSnapshot, noExistingSnapshots } from '../../../Constants/messages';
+import { convertBase64ToJson } from '../../../Utils/commonFunc.utils';
+import { seerBasejson, seerUpdatedsnapshotdata } from '../../../Constants/endPoints';
 
-const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, handleSaveSnapshot}: 
-  {selectedButton: any, hasSnapshots?: boolean, selectItem?: any, selectedItemParent?: string, handleSaveSnapshot?: any}) => {
+const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, handleSaveSnapshot, arrayGeneratorHandler, currentSavedParameters}: 
+  {selectedButton: any, hasSnapshots?: boolean, selectItem?: any, selectedItemParent?: string, handleSaveSnapshot?: any, arrayGeneratorHandler?: any, currentSavedParameters?: any}) => {
   const dispatch = useDispatch()
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -18,12 +44,143 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
   const [openLoadSnapshotModal, setOpenLoadSnapshotModal] = useState(false); // Initialize the state for selected item
 
   const snapshotsList = useSelector((state: any) => state.snapshot.snapshotsList)
-  // const snapshotsList = [{seer_name: "test", seer_description: "Des", seer_rominportalsnapshotid: "idd", createdOn: "2024-01-10T09:37:11Z"}, {seer_name: "teeest", seer_description: "Deseee", seer_rominportalsnapshotid: "iddss", createdOn: "2024-01-10T09:37:11Z"}];
+  const [showOverlayLoad, setShowOverlayLoad] = useState(false);
 
-  console.log("snapshotsListState", snapshotsList)
-  const handleClick = (event: any) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const loadSelectedSnapshotAsyncAPI: any = (info: any) => {
+    return (dispatch: (arg0: any) => void) => {
+      try {
+        dispatch(setSnapshotLoading(true))
+        window.parent.webapi.safeAjax({
+          type: "GET",
+          url: `/_api/seer_rominportalsnapshots(${info?.snapshotId})?$select=seer_rominportalsnapshotid,_seer_account_value,seer_basejson,seer_basejson_name,_seer_contact_value,createdon,modifiedon,seer_name,seer_updatedsnapshotdata,seer_updatedsnapshotdata_name`,
+          contentType: "application/json",
+          headers: {
+              "Prefer": "odata.include-annotations=*"
+          },
+          success: async function (data: any, textStatus: any, xhr: any) {
+              var result = data;
+              // Columns
+              var seer_rominportalsnapshotid = result["seer_rominportalsnapshotid"];
+              dispatch(getSnapshotBaseJSONFileAPI({requestNumber: 1, recodeId: seer_rominportalsnapshotid, ...info}))
+              // dispatch(getUpdatedSnapshotFile({requestNumber: 1, recodeId: seer_rominportalsnapshotid}))
+          },
+          error: function (xhr: any, textStatus: any, errorThrown: any) {
+              dispatch(setSnapshotLoading(false))
+              setShowOverlayLoad(false)
+              setTimeout(() => {
+                showAlertError(failedToLoadSelectedSnapshot);
+              }, 10);
+          }
+        });
+      
+      } catch (error) {
+        dispatch(setSnapshotLoading(false))
+        setShowOverlayLoad(false)
+        setTimeout(() => {
+          showAlertError(failedToLoadSelectedSnapshot);
+        }, 10);
+      }
+    }
+  }
+  
+  const getSnapshotBaseJSONFileAPI = (info: any) => {
+    const {requestNumber, recodeId} = info;
+  
+    return (dispatch: (arg0: any) => void) => {
+      try {
+        window.parent.webapi.safeAjax({
+          type: "GET",
+          url: `/_api/seer_rominportalsnapshots(${recodeId})/${seerBasejson}`,
+          contentType: "application/json",
+          success: async function (data: any, textStatus: any, xhr: any) {
+              var fileContent = data["value"]; // Base 64
+              var fileName = "file.bin"; // default name
+              // dispatch(setBaseJson({...info, fileContent:fileContent, recordId: recodeId}));
+              const convertedJSONData = await convertBase64ToJson(fileContent);
+              dispatch(setBaseJson(convertedJSONData));
+              dispatch(getUpdatedSnapshotFileAPI({requestNumber: 1, recodeId, base: convertedJSONData, ...info}))
+          },
+          error: function (xhr: any, textStatus: any, errorThrown: any) {
+              dispatch(setSnapshotLoading(false))
+              setShowOverlayLoad(false)
+              setTimeout(() => {
+                showAlertError(failedToLoadSelectedSnapshot);
+              }, 10);
+          }
+        });
+      } catch (error) {
+        dispatch(setSnapshotLoading(false))
+        setShowOverlayLoad(false)
+        setTimeout(() => {
+          showAlertError(failedToLoadSelectedSnapshot);
+        }, 10);
+      }
+    }
+  }
+  
+  const getUpdatedSnapshotFileAPI = (info: any) => {
+    const {requestNumber, recodeId, base} = info;
+  
+    return (dispatch: (arg0: any) => void) => {
+      try {
+        window.parent.webapi.safeAjax({
+          type: "GET",
+          url: `/_api/seer_rominportalsnapshots(${recodeId})/${seerUpdatedsnapshotdata}`,
+          contentType: "application/json",
+          success: async function (data: any, textStatus: any, xhr: any) {
+              var fileContent = data["value"]; // Base 64
+              var fileName = "file.bin"; // default name
+
+              const convertedJSONData = await convertBase64ToJson(fileContent);
+              const {snapshotResourceModelDataParameters, currentSavedResources, currentSavedProjectTasks, ...rest} = convertedJSONData;
+              dispatch(setSettingParameters(rest));
+              dispatch(setResourceModelDataParameters(snapshotResourceModelDataParameters));
+              dispatch(setSelectedSnapshotFromDB(recodeId));
+              dispatch(setShowSaveParameters(true));
+              dispatch(setStateSnapshot(true))
+  
+              // NEW STATE
+              dispatch(setLoadedSnapshotId(recodeId));
+              dispatch(setLoadedSnapshotDetails(recodeId))
+              dispatch(setCurrentSavedParameters(rest));
+              dispatch(setInitiallyCurrentChangingParameters(rest))
+              dispatch(setSnapshotParameters(rest))
+              // resource
+              dispatch(setCurrentSavedResources(currentSavedResources))
+              dispatch(setInitiallyCurrentChangingResources(currentSavedResources))
+              // project task
+              dispatch(setCurrentSavedProjectTasks(currentSavedProjectTasks))
+              dispatch(setInitiallyCurrentChangingProjectTasks(currentSavedProjectTasks))
+              dispatch(setSnapshotBase(base));
+              dispatch(setShowLoadedSnapshotBase(true));
+              dispatch(setShowLoadedSnapshotPametersNRates(true));
+              dispatch(info?.arrayGeneratorHandler(false, {...convertedJSONData, base}, 'snapshot'))
+              dispatch(setSnapshotLoading(false))
+              setShowOverlayLoad(false)
+          },
+          error: function (xhr: any, textStatus: any, errorThrown: any) {
+            dispatch(setSnapshotLoading(false))
+            setShowOverlayLoad(false)
+            setTimeout(() => {
+              showAlertError(failedToLoadSelectedSnapshot);
+            }, 10);
+          }
+      });
+      } catch (error) {
+        dispatch(setSnapshotLoading(false))
+        setShowOverlayLoad(false)
+        setTimeout(() => {
+          showAlertError(failedToLoadSelectedSnapshot);
+        }, 10);
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    if (showOverlayLoad) {
+      loadSelectedSnapshotHandler(selectedItem);
+    }
+  }, [showOverlayLoad, selectedItem])
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -33,10 +190,13 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
     dispatch(setSelectSnapshot(info))
   }, [dispatch])
 
+  const loadSelectedSnapshotHandler = React.useCallback((info) => {
+    dispatch(loadSelectedSnapshotAsyncAPI({snapshotId: info, arrayGeneratorHandler}))
+  }, [dispatch])
+
   const handleMenuItemClick = (itemValue: any) => {
-    console.log('itemValue => ', itemValue);
     setSelectedItem(itemValue); // Update the selected item in state
-    selectItem(itemValue);
+    setShowOverlayLoad(true);
     setSelectSnapshotHandler(itemValue);
     handleClose(); // Close the menu
   };
@@ -54,7 +214,6 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
     <div>
       <div style={{ display: 'flex' }}>
         {
-          // selectedButton === "button2" && 
           selectedButton === "button2" && 
           (
           <>
@@ -64,30 +223,23 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
               variant="contained" 
               color="primary" 
               className='btn-blue-outline btn-small mr-10'  
-              aria-haspopup="true" onClick={handleClick}>
+              aria-haspopup="true" 
+              onClick={() => {
+                if (snapshotsList && snapshotsList?.length) {
+                  setOpenLoadSnapshotModal(!openLoadSnapshotModal)
+                } else {
+                  alert(noExistingSnapshots)
+                }
+              }}
+            >
               <DownloadingOutlinedIcon className='btn-icon'/> 
             </Button>
-            {snapshotsList && snapshotsList?.length && (   <div>
-        {
-          openLoadSnapshotModal ? <SnapShotPopup snapshots = {snapshotsList} handleClose={handleClosePopup} open={openLoadSnapshotModal}/> : <></>
-        }
-      </div>
-              // <Menu
-              //   id="dropdown-menu"
-              //   anchorEl={anchorEl}
-              //   open={Boolean(anchorEl)}
-              //   onClose={handleClose}
-              //   className='custom-dropdown-menu'
-              // >
-              //   {
-              //     snapshotsList?.map((optionItem: any, ) => (
-              //       <MenuItem value={optionItem?.seer_rominportalsnapshotid} onClick={() => handleMenuItemClick(optionItem?.seer_rominportalsnapshotid)}>{optionItem?.seer_name}</MenuItem>
-              //     ))
-              //   }
-              //   {/* <MenuItem value="item1" onClick={() => handleMenuItemClick("item1")}>Load Snapshots Option 1</MenuItem>
-              //   <MenuItem value="item2" onClick={() => handleMenuItemClick("item2")}>Load Snapshots Option 2</MenuItem>
-              //   <MenuItem value="item3" onClick={() => handleMenuItemClick("item3")}>Load Snapshots Option 3</MenuItem> */}
-              // </Menu> 
+            {(snapshotsList && snapshotsList?.length > 0) && (   
+              <div>
+                {
+                  openLoadSnapshotModal && <SnapShotPopup snapshots = {snapshotsList} handleClose={handleClosePopup} onSelect={handleMenuItemClick} open={openLoadSnapshotModal}/>
+                }
+              </div>
             )}
           </>
         )}
@@ -97,9 +249,11 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
         (
           <Button  title='Save Snapshot'
             variant="contained" 
-            color="primary" 
+            color="primary"
             className='btn-blue-outline btn-small mr-10'
+            // className={!currentSavedParameters ? 'btn-gray-outline btn-small mr-10' : 'btn-blue-outline btn-small mr-10'}
             onClick={handleSaveSnapshot}
+            // disabled={!currentSavedParameters}// new change
             >
             <SaveOutlinedIcon className='btn-icon'/> 
           </Button>
@@ -109,17 +263,18 @@ const index = ({selectedButton, hasSnapshots, selectItem, selectedItemParent, ha
             variant="contained" 
             color="primary" 
             className='btn-gray-outline btn-small mr-10'
-            onClick={() => setOpenLoadSnapshotModal(true)}
+            onClick={() => {}}
           >
             <UpdateOutlined className='btn-icon'/> 
           </Button>
         )}
       </div>
-      <div className='text-right'>
+      {showOverlayLoad && <OverlayComponent showOverlay={showOverlayLoad}/>}
+      {/* <div className='text-right'>
         {selectedItem && selectedButton === "button2" && (
           <InputLabel className='label  ptb-10'>{optionList?.[selectedItem]}</InputLabel>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -157,8 +157,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
      return {resultValue, resultValueMS, resultValueMSC};
    }
  } catch (error) {
-   console.log("generateAnalysisDesignMValue error ==> ", error);
-   return {resultValue, resultValueMS, resultValueMSC};
+    return {resultValue, resultValueMS, resultValueMSC};
  }
 }
 

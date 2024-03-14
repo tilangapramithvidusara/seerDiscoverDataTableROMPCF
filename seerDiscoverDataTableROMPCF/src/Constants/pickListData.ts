@@ -29,12 +29,17 @@ export const complexityData: any = {
 }
 
 export const currencyData: any = {
-  'AUD': 'AUD$',
+  'AUD': 'A$', // AUD
   'GBP': '£',
-  'CAD': 'CAD$',
+  'CAD': 'CA$', // CAD
   'EUR': '€',
-  'NZD': 'NZD$',
+  'NZD': 'NZ$', // NZD
   'BRL': 'R$',
-  'ZAR': 'R',
+  'ZAR': 'ZAR', // R
   'USD': '$'
+}
+
+export const romReportType = {
+  "SMB Rom": '381070000',
+  "ENT Rom": "381070001",
 }

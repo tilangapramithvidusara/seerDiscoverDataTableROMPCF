@@ -21,9 +21,7 @@ export const initialFetch = async (context?: any) => {
             "seerdwp_functionappurl": "https://seerv2samplefunctions.azurewebsites.net/api/GetRomData?code=-MzCAimwQEWOrW4ZNgz8ZbETkcPy0LUzQtGMGVOQXpCiAzFupB0xYA==",
             "seerdwp_jasonobjectformat": "{\n\"id\": \"accountId\"\n}",
             "seerdwp_reportid": "testROMReport"
-          };
-          console.log("data ", data);
-              
+          };              
           const res = await jsonLoader(data, accountId);
         }
       } else {
@@ -47,7 +45,6 @@ const getUrls = async(reportId: any, context: any) => {
     const res: any = result
     returnMethod = {error: false, result: res};
   } catch (error: any) {
-    console.log("error when load urls : ", error, error instanceof Error);
     returnMethod = {error: true, result: error} 
   }
   return returnMethod;
@@ -60,9 +57,7 @@ const jsonLoader = async(data?: any, accountId?: any) => {
   const jsonFormat = await JSON.parse(data?.['seerdwp_jasonobjectformat']?.trim());
   if (jsonFormat?.['id'] === "accountId") {
       jsonFormat['id'] = accountId;
-  }
-  console.log("jsonFormat ===> ", jsonFormat, data);
-  
+  }  
   var raw = JSON.stringify(jsonFormat);
 
   var requestOptions: any = {
@@ -84,7 +79,6 @@ const jsonLoader = async(data?: any, accountId?: any) => {
   .then((result: any)=> {
 
     // console.log(result)
-    console.log('====> ', result && result?.data && result?.data?.length > 0, result?.data);
     
     if (result && result?.data && result?.data?.length > 0) {
       response = {error: false, result: result?.data}
@@ -92,7 +86,6 @@ const jsonLoader = async(data?: any, accountId?: any) => {
 
   })
   .catch(error=>{
-    console.log('error', error);
     response = {error: true, result: error}
   });
 

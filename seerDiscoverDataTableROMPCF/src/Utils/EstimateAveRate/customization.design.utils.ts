@@ -70,7 +70,7 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
     const {BaseData, resourceModelData, ModuleData, parameterModel, CustomisationModels} = inititlaData
     let {hourlyRate, hoursPerday} = parameterModel[0]
     if (hasParameters) {
-      hoursPerday = parseInt(settingParameters?.formattedData[
+      hoursPerday = parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.hoursPerDay
       ]?.currentValue || '0');
     }
@@ -171,7 +171,6 @@ export const generateCustomisationDesignMValue = async(inititlaData: any, condit
       return returnObject;
     }
   } catch (error) {
-    console.log("generateAnalysisDesignMValue error ==> ", error);
     return returnObject;
   }
 }

@@ -10,7 +10,8 @@ export const deleteOutputSetAsync: any = async(info: {OutputSetId: string}) => {
     const data = {
       "outputsetid":  info?.OutputSetId
     };
-    const response = await axios.post('https://prod-08.uksouth.logic.azure.com:443/workflows/ca2c7c8980354726999b8b76f250554c/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=4mCZMVAtQxN-tYZbGR1pFqylfIgmAPCrRLCsn0PB6_k',
+    const response = {data: ''}    
+    await axios.post(localStorage.getItem("flowurl") || 'https://prod-08.uksouth.logic.azure.com:443/workflows/ca2c7c8980354726999b8b76f250554c/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=4mCZMVAtQxN-tYZbGR1pFqylfIgmAPCrRLCsn0PB6_k',
       data,
       {
         headers: {
@@ -20,7 +21,6 @@ export const deleteOutputSetAsync: any = async(info: {OutputSetId: string}) => {
     );
     return {result: response?.data, error: false}
   } catch (error) {
-    console.log('error delete ==> ', error);
     return {result: [], error: true}
   }
   
@@ -30,104 +30,33 @@ export const fetchInitialDataAsync = async() => {
   try {    
     const url = new URL(window.location.href);
     const queryParameters = url.searchParams;
-    console.log('accountId -=> ', queryParameters.get("accountId"));
     const currentDate = new Date();
     const isoString = currentDate?.toISOString();
-    
+    // "14130939-4eb1-ee11-a569-002248015232" ||
     const requestBody = {
-      "accountid": queryParameters?.get("accountId") || 'b8357ad8-a499-ee11-be37-000d3a0be042',
-      // "63b776a5-0c82-ee11-8179-002248015232",
-      // queryParameters?.get("accountId") || "c514b3d1-a45b-ee11-8def-002248015232",
-      // "c514b3d1-a45b-ee11-8def-002248015232",
-      // "1857b6d8-1d72-ee11-8179-002248015232",
-      // queryParameters?.get("id") || "c514b3d1-a45b-ee11-8def-002248015232",
+      "accountid": localStorage.getItem("accountId") || queryParameters?.get("accountId"),
+      // || 
+      // "5172763a-52b1-ee11-a569-000d3a0bcfb2" || "77c96e64-e3b6-ee11-a568-6045bdd2c9ae" || "3c278286-8c5e-ed11-9562-002248428304" || "5172763a-52b1-ee11-a569-000d3a0bcfb2" ||'b8357ad8-a499-ee11-be37-000d3a0be042',
       "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
       "lastexecutedOn" : isoString,
-      // isoString,
-      // "2023-10-25T07:47:46.0261668Z"
-    }
-
-    console.log('requestBody', requestBody);
-    
-    // {
-    //   "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
-    //   "partnerid": "b388d7ee-bd7e-ec11-8d21-6045bd0e691e",
-    //   "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
-    //   "apps": "2cc55a59-46d7-ec11-a7b5-6045bd1001f9",
-    //   "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
-    //   "outputSetId": "08585041680294683701939216538CU29",
-    //   "outputHistoryId": "381097e1-ef6b-ee11-9ae7-002248015232"
-    // }
-    // {
-    //   "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
-    //   "partnerid": "b388d7ee-bd7e-ec11-8d21-6045bd0e691e",
-    //   "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
-    //   "apps": "2cc55a59-46d7-ec11-a7b5-6045bd1001f9",
-    //   "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
-    //   "outputSetId": "08585045133102494979573715267CU11",
-    //   "outputHistoryId": "8f1416f5-cb68-ee11-9ae7-000d3a0bca56"
-    // }
-    // {
-    //   "accountid": "82b4fc2f-bc4c-ee11-be6f-6045bdc1ec82",
-    //   "partnerid": "b68dbc7d-76fc-ec11-82e6-002248428304",
-    //   "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
-    //   "apps": "25635765-46d7-ec11-a7b5-6045bd1001f9",
-    //   "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
-    //   "outputSetId": "08585046738151656861741238998CU04",
-    //   "outputHistoryId": "28cf9643-5667-ee11-9ae7-000d3a0be073"
-    // }
-    // {
-    //   "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
-    //   "partnerid": "b388d7ee-bd7e-ec11-8d21-6045bd0e691e",
-    //   "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
-    //   "apps": "2cc55a59-46d7-ec11-a7b5-6045bd1001f9",
-    //   "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
-    //   "outputSetId": "08585045016328982278967445319CU00",
-    //   "outputHistoryId": "98f06824-e768-ee11-9ae7-002248015232"
-    // }
-    
-    // {
-    //   "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
-    //   "partnerid": "b388d7ee-bd7e-ec11-8d21-6045bd0e691e",
-    //   "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
-    //   "apps": "2cc55a59-46d7-ec11-a7b5-6045bd1001f9",
-    //   "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
-    //   "outputSetId": "08585045133102494979573715267CU11",
-    //   "outputHistoryId": "8f1416f5-cb68-ee11-9ae7-000d3a0bca56"
-    // }
-    
-    // {
-    //   "accountid": "c514b3d1-a45b-ee11-8def-002248015232",
-    //   "partnerid": "b388d7ee-bd7e-ec11-8d21-6045bd0e691e",
-    //   "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
-    //   "apps": "2cc55a59-46d7-ec11-a7b5-6045bd1001f9",
-    //   "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
-    //   "outputSetId": "08585045969990987213619994154CU04",
-    //   "outputHistoryId": "bf6c241a-0968-ee11-9ae7-002248015232"
-    // }
-    // {
-    //   "accountid": "82b4fc2f-bc4c-ee11-be6f-6045bdc1ec82",
-    //   "partnerid": "b68dbc7d-76fc-ec11-82e6-002248428304",
-    //   "masterid": "1edca5e0-47d7-ec11-a7b5-6045bd1001f9",
-    //   "apps": "25635765-46d7-ec11-a7b5-6045bd1001f9",
-    //   "languageId": "50122d0c-87d7-ec11-a7b5-002248008ee0",
-    //   "outputSetId": "08585046738151656861741238998CU04",
-    //   "outputHistoryId": "28cf9643-5667-ee11-9ae7-000d3a0be073"
-    // }
-
+    }    
     const res: any = await axios.post(
-      'https://poc-rom-in-portal-uat.azurewebsites.net/api/DiscoverSMBROM?code=HwBgZK01CGG1OgSDraJwW3Nj-HdI_VaYznAPufDYEutDAzFuCIQvvg==', 
+      // UAT Url
+      localStorage.getItem("azureFunction") || '',
+      //  || 'https://poc-rom-in-portal-uat.azurewebsites.net/api/DiscoverSMBROM?code=HwBgZK01CGG1OgSDraJwW3Nj-HdI_VaYznAPufDYEutDAzFuCIQvvg==', 
+      // Prod Url
+      // 'https://rom-in-portal-prod.azurewebsites.net/api/DiscoverSMBROM?code=ud6ha95-yiOmqooksNCaf95hdDJwx60GSu-0hZgypDVDAzFu6G-qBA==',
         requestBody, 
         {
           headers: {
             'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
           },
           timeout: 30000,
         });
     if (res?.status !== 200) throw new Error();
     return {result: (res as any)?.data, error: false}
   } catch (error) {
-    console.log('error ==> ', error);
     return {result: [], error: true}
   }
 }
@@ -172,7 +101,6 @@ export const initialFetch = (context?: any) => {
         }
       }
     } catch (error) {
-      console.log('error1  ==> ', error);
       dispatch(initialFetchFailure(error));
     }
   }
@@ -189,7 +117,6 @@ const getUrls = async(reportId: any, context: any) => {
     const res: any = result
     returnMethod = {error: false, result: res};
   } catch (error: any) {
-    console.log("error when load urls : ", error, error instanceof Error);
     returnMethod = {error: true, result: error} 
   }
   return returnMethod;
@@ -229,7 +156,6 @@ const jsonLoader = async(data?: any, accountId?: any) => {
 
   })
   .catch(error=>{
-    console.log('error', error);
     response = {error: true, result: error}
   });
 

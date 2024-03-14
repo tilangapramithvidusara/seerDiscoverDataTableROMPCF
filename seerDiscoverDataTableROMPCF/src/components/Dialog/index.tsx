@@ -5,6 +5,8 @@ import DyanamicTable from '../Table/DyanamicTable';
 // const DyanamicTable = React.lazy(() => import('../Table/DyanamicTable'));
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
+import ResourceTable from '../Table/ResourceTable';
+import ProjectTaskTable from '../Table/ProjectTaskTable';
 
 export interface SimpleDialogProps {
   open?: boolean;
@@ -12,10 +14,11 @@ export interface SimpleDialogProps {
   openSettingPopup: boolean, 
   setOpenSettingPopup: (value: boolean) => void;
   onClose?: (value: string) => void;
+  arrayGeneratorHandler?: any
 }
 
 export default function SimpleDialog(props: SimpleDialogProps) {
-  const { setOpenSettingPopup, openSettingPopup } = props;
+  const { setOpenSettingPopup, openSettingPopup, arrayGeneratorHandler } = props;
 
   const handleClose = () => {
     setOpenSettingPopup(false)
@@ -31,12 +34,17 @@ export default function SimpleDialog(props: SimpleDialogProps) {
     {
       key: '1',
       label: 'Parameters',
-      children: <DyanamicTable handleClose={handleClose} />,
+      children: <DyanamicTable handleClose={handleClose} arrayGeneratorHandler={arrayGeneratorHandler} />,
     },
     {
       key: '2',
-      label: 'Rates',
-      children: <div style={{ height: '200px' }}></div>,
+      label: 'Resources',
+      children: <ResourceTable handleClose={handleClose} arrayGeneratorHandler={arrayGeneratorHandler}/>,
+    },
+    {
+      key: '3',
+      label: 'Project Tasks',
+      children: <ProjectTaskTable handleClose={handleClose} arrayGeneratorHandler={arrayGeneratorHandler}/>,
     },
   ];
 
@@ -53,7 +61,7 @@ export default function SimpleDialog(props: SimpleDialogProps) {
       <Tabs defaultActiveKey="1" 
       items={tabItems} 
       onChange={onChange} 
-      style={{ padding: '12px' }}
+      style={{ padding: '0 25px 0 25px' }}
       />
     </Dialog>
   );

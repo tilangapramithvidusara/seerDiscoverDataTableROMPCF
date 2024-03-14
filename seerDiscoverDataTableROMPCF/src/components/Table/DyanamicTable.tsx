@@ -7,65 +7,69 @@ import {
   parameterBaseSettingColumns
 } from '../../Constants/parametersSetting';
 import {
-  setSettingParameterAttributes,
-  setSettingParameters,
+  setCurrentChangingParameters,
+  setCurrentChangingResources,
+  setCurrentSavedParameters,
+  setCurrentSavedProjectTasks,
+  setCurrentSavedResources,
+  setLatestChanges,
+  setShowSaveParameters,
+  setSnapshotSaveLoacalyOneTime,
   setStateSnapshot
 } from '../../redux/snapshotReport/snapshotReportSlice';
 import { Parameter } from '../../Utils/setting.values.convertor.utils';
-import { fteDropdown } from '../../Constants/dropdownConstants';
-import {
-  saveInitialSnapshotRecordAsync,
-  saveSnapshotAsync
-} from '../../redux/snapshotReport/snapshoAsync';
-import { convertBase64ToJson, convertJsonToBase64 } from '../../Utils/commonFunc.utils';
 
-
-const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
+const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { handleClose: any, tableNumber?: number, arrayGeneratorHandler?: any }) => {
   const dispatch = useDispatch();
   const baseJson = useSelector((state: any) => state?.snapshot?.baseJson)
   const [isBaesline, setIsBaseline] = useState(false);
   const [columns, setColumns] = useState(parameterSettingColumns);
   const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
-  const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
   const [showSnapshotForm, setShowSnapshotForm] = useState(false);
-  const [submitFormData, setSubmitFormData] = useState<any>();
+  const finalizeSnapshot = useSelector((state: any) => state?.snapshot?.finalizeSnapshot);
 
-  const handleKeyDown = (event: any) => {
-    if (event.key === 'Enter') {
-      console.log('Sentence changed:');
-      dispatch(setStateSnapshot(true));
-    }
-  };
+  // NEW STATE
+  const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters);
+  const currentChangingResources = useSelector((state: any) => state?.snapshot?.currentChangingResources);
+  const currentChangingProjectTasks = useSelector((state: any) => state?.snapshot?.currentChangingProjectTasks);
+  const latestChanges = useSelector((state: any) => state?.snapshot?.latestChanges)
+  const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
+  const initialFetchData = useSelector((state: any) => state.report.initialFetchData);
+  const loadedSnapshotId = useSelector((state: any) => state?.snapshot?.loadedSnapshotId);
 
+  const [disabled, setIsDisabled] = useState((loadedSnapshotId && (finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)))
 
   const onChangeHanlder = useCallback(
     (info) => {
-      dispatch(setSettingParameterAttributes(info));
-      // if (info?.isDropDown) {
-      //   dispatch(setStateSnapshot(true));
-      // }
-      // example for checking
-      // dispatch(setStateSnapshot(true))
+      dispatch(setCurrentChangingParameters(info));
+      dispatch(setLatestChanges({
+        ...latestChanges,
+        parameterChanged: true,
+      }));
     },
     [dispatch]
   );
-
-  // call this when retrive success
-  const handleSetSettingParameters = useCallback(
-    (info) => {
-      dispatch(setSettingParameters(info));
-    },
-    [dispatch]
-  );
-
-  // const saveHandler = useCallback((info: any) => {
-  //   saveSnapshotAsync(info);
-  //   setShowSnapshotForm(true);
-  // }, [dispatch])
 
   const saveHandler = (info: any) => {
     // saveSnapshotAsync(info);
     setShowSnapshotForm(true);
+    dispatch(setShowSaveParameters(true))
+    dispatch(setStateSnapshot(true))
+    dispatch(setCurrentSavedParameters(currentChangingParameters))
+    // dispatch(setCurrentChangingResources(currentChangingResources))
+    dispatch(setCurrentSavedResources(currentChangingResources))
+    dispatch(setCurrentSavedProjectTasks(currentChangingProjectTasks))
+    dispatch(setLatestChanges({
+      ...latestChanges,
+      parameterChanged: true,
+    }));
+    dispatch(setSnapshotSaveLoacalyOneTime(true))
+    arrayGeneratorHandler(false, {
+      ...currentChangingParameters, 
+      base: snapshotBase ? snapshotBase : initialFetchData,
+      currentSavedResources: currentChangingResources,
+      currentSavedProjectTasks: currentChangingProjectTasks
+    }, 'snapshot')
   };
 
   useEffect(() => {
@@ -76,21 +80,9 @@ const DyanamicTable = ({ handleClose }: { handleClose: any }) => {
     }
   }, [isBaesline]);
 
-  const onSubmit = () => {
-    if (submitFormData?.name && submitFormData?.description) {
-        dispatch(saveInitialSnapshotRecordAsync({
-          seerName: submitFormData?.name,
-          baseData: convertJsonToBase64(baseJson), 
-          snapshotData: convertJsonToBase64(snapshotSettingParameters),
-          seerDescription: submitFormData?.description
-        }))
-      }
-}
-
-const onClose = () => {
-  setShowSnapshotForm(false);
-  setSubmitFormData({});
-};
+  useEffect(() => {
+    setIsDisabled((loadedSnapshotId && (finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)))
+  }, [loadedSnapshotId, finalizeSnapshot?.seer_rominportalsnapshotid])
 
   return (
     <div className="containerManualTable">
@@ -107,7 +99,9 @@ const onClose = () => {
           </tr>
         </thead>
         <tbody>
-          {settingParameters?.formattedData?.map((settingItem: Parameter, id: number) => {
+          {
+          // snapshotSettingParameters
+          currentChangingParameters?.formattedData?.map((settingItem: Parameter, id: number) => {            
             let name = settingItem?.name;
             let switchValue = settingItem?.switch;
             let currentValue = settingItem?.currentValue;
@@ -136,8 +130,9 @@ const onClose = () => {
                               isDropDown: true
                             });
                           }}
+                          disabled={disabled}
                         >
-                          {fteDropdown?.map((fteItem: any) => (
+                          {dropdownValues?.map((fteItem: any) => (
                             <option value={fteItem?.value}>{fteItem?.label}</option>
                           ))}
                           {/* <option value="Admin">Admin</option>
@@ -165,6 +160,7 @@ const onClose = () => {
                               isDropDown: true
                             });
                           }}
+                          disabled={disabled}
                         >
                           {currentValueDropdownValues?.map((currentItem: any) => (
                             <option value={currentItem?.value}>{currentItem?.label}</option>
@@ -190,6 +186,7 @@ const onClose = () => {
                             });
                           }}
                           placeholder="Current Value"
+                          disabled={disabled}
                         />
                       </div>
                     )}
@@ -202,15 +199,20 @@ const onClose = () => {
       </table>
       <div className="modal-footer">
         {/* btn-gray-outline */}
-        <Button className="btn-primary mr-10" onClick={() => handleClose()}>
+        <Button className="btn-blue-outline mr-10" onClick={() => handleClose()}>
           Cancel
         </Button>
+        {(!disabled) && (
+          <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
+            Save
+          </Button>
+        )}
         {/* <Button className="btn-primary" onClick={() => saveHandler(settingParameters)}>
           Save
         </Button> */}
-        <Button className="btn-primary">
+        {/* <Button className="btn-primary">
           Save
-        </Button>
+        </Button> */}
       </div>
       {/* {showSnapshotForm ? (
         <FormDialog

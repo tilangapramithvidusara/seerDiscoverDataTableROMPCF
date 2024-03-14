@@ -31,12 +31,14 @@ export default function SwipeableTemporaryDrawer({
   data,
   setIsOpenSideDrawer,
   cellDataForSidePane,
+  currency,
 }: {
   anchor: Anchor;
   isOpenSideDrawer: boolean;
   setIsOpenSideDrawer: any;
   data: any;
   cellDataForSidePane: any;
+  currency: string;
 }) {
   const selectorForSidePane = useSelector((state: any) => state?.report);
   const [showCellData, setShowCellData] = React.useState<any>();
@@ -46,8 +48,6 @@ export default function SwipeableTemporaryDrawer({
   const [tabledata, setTableData] = React.useState<any>([{ name: "" }]);
 
   React.useEffect(() => {
-    console.log("cellDataForSidePane 1", cellDataForSidePane);
-    console.log("cellDataForSidePane 2", selectorForSidePane);
     const columnValue = cellDataForSidePane?.columnId?.replace(/\//g, "");
     setSidePaneTitle(
       `${cellDataForSidePane?.nameCategory} - ${cellDataForSidePane?.name} - ${cellDataForSidePane?.columnId}`
@@ -55,8 +55,7 @@ export default function SwipeableTemporaryDrawer({
 
     const data: any = CommonUtils[cellDataForSidePane?.table]?.[
       cellDataForSidePane?.nameCategory
-    ]?.[cellDataForSidePane?.name]?.(selectorForSidePane, columnValue);
-    console.log("Common Utl Result Data", data);
+    ]?.[cellDataForSidePane?.name]?.(selectorForSidePane, columnValue, currency);
     if (data) setTableData(data);
   }, [cellDataForSidePane]);
 
@@ -181,8 +180,6 @@ export default function SwipeableTemporaryDrawer({
       </TableContainer>
     </Box>
   );
-
-  console.log("rw ==> ", data);
 
   return (
     <div>

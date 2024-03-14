@@ -9,24 +9,9 @@ import { useSelector } from 'react-redux';
 
 
 
-export const columnFixed = (columnArray: any, data: any, currency: string) => {
-    
-  // const AggregatedGroupRow = ({ row }) => {
-  //   const customRowStyle = {
-  //     backgroundColor: 'your-group-background-color', // Change to your desired background color for grouped rows
-  //   };
-  
-  //   return (
-  //     <MRT_HeaderGroup {...row} sx={customRowStyle} />
-  //   );
-  // };
+export const columnFixed = (columnArray: any, data: any, currency: string) => {  
   const totalColumn =
     (key?: string | number | undefined | any) => {      
-      // return data.reduce((acc: any, curr: any) => {
-      //   console.log('acc + curr', acc, curr[key], key);
-        
-      //   return acc + curr[key]
-      // }, 0)
       let sumEstimateResource = 0;
       let indicesToSum = []
       // type: 'Estimate Resource'
@@ -57,6 +42,9 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
       accessorKey: columnItem?.accessorKey,
       enableGrouping: columnItem?.enableGrouping ? true : false,
       size: columnItem?.size || undefined,
+      _filterFn: "fuzzy",
+      visibleInShowHideMenu: true,
+      enableHiding: true,
       
       Cell: columnItem?.isCalcultionEnabled ? ({ cell }: { cell: any }) => {
         const clickable = (cell?.row?.original?.isClickable && cell?.row?.original?.type == 'Estimate Avg Rate') ? true : false;
@@ -107,7 +95,22 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
             }
           }
         }
-      } : null,
+      } : 
+      // (props: any) => {
+      //   // nameCategory  column
+      //   console.log('990i00-', props);
+        
+      //   if (props?.row?.groupingValue) {
+      //     return(
+      //       <Box sx={{textAlign: 'left', fontWeight: 'bold', textDecorationColor: 'black', color: 'black'}}>
+      //         {
+      //           props?.row?.groupingValue
+      //         }
+      //       </Box>
+      //     )
+      //   } else return null
+      // },
+      null,
       aggregationFn: columnItem?.aggregationFn ? columnItem?.aggregationFn : null,
       AggregatedCell: columnItem?.aggregationFn ? ({ cell, table }: { cell: any, table: any }) => {
         const clickable = cell?.row?._valuesCache?.name == 'Analysis and Design';        
@@ -157,9 +160,10 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
       //       </Box>
       //     </div>
       // )
-    } :  null,
+    } : null,
 
-      Footer: columnItem?.showBottomTotal ? () => {
+      Footer: columnItem?.showBottomTotal ? (props: any) => {
+        
         if (columnItem?.showBottomTotal) {
           // if (columnItem?.isCalcultionEnabled) {
             if (columnItem?.accessorKey?.includes('_H')) {
@@ -175,7 +179,7 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
               )
             } else {
               return(
-                <Box color="white" sx={{textAlign: 'right'}} >
+                <Box color="white" sx={{textAlign: 'right', fontWeight: 'bold'}} >
                 {totalColumn(columnItem?.accessorKey)?.toLocaleString?.('en-US', {
                 style: 'currency',
                   currency: (currency || 'GBP'),
@@ -202,10 +206,20 @@ export const columnFixed = (columnArray: any, data: any, currency: string) => {
           // )
         }
         
-      } :  null,
+      } : (props: any) => {
+        // nameCategory  column
+        if (props?.column?.id.includes('nameCategory')) {
+          return(
+            <Box color="white" sx={{textAlign: 'left', fontWeight: 'bold'}}>
+              Total
+            </Box>
+          )
+        } else return null
+      },
+        // null,
 
     }
-    return itemObjec;
+    return {...itemObjec};
   });
-  return arrayValue;
+  return [...arrayValue];
 }

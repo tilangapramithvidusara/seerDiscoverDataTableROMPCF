@@ -1,4 +1,4 @@
-import { currencyDropdown, fteDropdown } from "../Constants/dropdownConstants";
+import { currencyDropdown, fteDropdown, fteDropdownWithMoscow } from "../Constants/dropdownConstants";
 
 interface ParameterObject {
   hoursPerday?: number;
@@ -22,6 +22,17 @@ export interface Parameter {
   typeValueCurrent?: string | null;
   typeValueBasline?: string | null;
   currentValueDropdownValues?: string[]
+}
+
+export interface ProjectTask {
+  name: string,
+  projectTaskCustomer_Name: string | null,
+  projectTaskCustomer_Resource: {
+    id: string,
+    name: string,
+  } | null,
+  projectTaskCustomer_ResourceSecondary: any,
+  projectTaskCustomer_ResourceSecondaryName: string | null
 }
 
 
@@ -52,6 +63,8 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
     hoursPerdayCurrent: parameterObject?.hoursPerday,
     postGoLiveSupportCurrent: parameterObject?.postGoLiveSupport,
     postGoLiveSupportTypeCurrent: parameterObject?.postGoLiveSupportType,
+    // documnentLayoutCurrent: parameterObject?.documnentLayout,
+    // documnentLayoutTypeCurrent: parameterObject?.documnentLayoutType,
   }
 
   const formattedData: Parameter[] = [
@@ -150,6 +163,16 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       dropdownValues: fteDropdown,
     },
     {
+      name: 'Document Layout',
+      switch: null,
+      currentValue: parameterObject?.documentlayouts,
+      baslineValue: parameterObject?.documentlayouts,
+      type: 'dropdown', // dropdown | string | null
+      typeValueCurrent: parameterObject?.documentlayoutstype,
+      typeValueBasline: parameterObject?.documentlayoutstype,
+      dropdownValues: fteDropdownWithMoscow,
+    },
+    {
       name: 'Reporting',
       switch: null,
       currentValue: parameterObject?.reporting,
@@ -167,7 +190,7 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       type: 'dropdown', // dropdown | string | null
       typeValueCurrent: parameterObject?.dataMigrationType,
       typeValueBasline: parameterObject?.dataMigrationType,
-      dropdownValues: fteDropdown,
+      dropdownValues: fteDropdownWithMoscow,
     },
     {
       name: 'CRP',
@@ -262,7 +285,7 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       dropdownValues: fteDropdown,
     },
     {
-      name: 'Trainin Hours',
+      name: 'Training Hours',
       switch: null,
       currentValue: parameterObject?.endUserTraining,
       baslineValue: parameterObject?.endUserTraining,
@@ -270,13 +293,24 @@ export const parameterModelConvertToTableJson = (parameterModel: any) => {
       dropdownValues: [],
     },
     {
-      name: 'Trainin Users',
+      name: 'Training Users',
       switch: null,
       currentValue: parameterObject?.endUserTrainingUsers,
       baslineValue: parameterObject?.endUserTrainingUsers,
       type: null, // dropdown | string | null
       dropdownValues: [],
     },
+    // {
+    //   name: 'Document Layout',
+    //   switch: null,
+    //   currentValue: parameterObject?.documentlayouts,
+    //   baslineValue: parameterObject?.documentlayouts,
+    //   type: 'dropdown', // dropdown | string | null
+    //   typeValueCurrent: parameterObject?.documentlayoutstype,
+    //   typeValueBasline: parameterObject?.documentlayoutstype,
+    //   dropdownValues: fteDropdownWithMoscow,
+    // },
+    // 
   ];
   return {formattedData, parameterObject}
 }
@@ -308,13 +342,15 @@ export const tableJsonConvertToparameterModel = (formattedData: Parameter[], cur
     hoursPerday: parameterObject?.hoursPerday,
     postGoLiveSupport: parameterObject?.postGoLiveSupport,
     postGoLiveSupportType: parameterObject?.postGoLiveSupportType,
+    // documnentLayout: parameterObject?.documnentLayout,
+    // documnentLayoutType: parameterObject?.documnentLayoutType,
   }
 }
 
 
-export const checkTypeParseInt = (value: any) => {
+export const checkTypeparseFloat = (value: any) => {
   if (typeof value == 'string') {
-    return parseInt(value)
+    return parseFloat(value)
   }
   return value
 }

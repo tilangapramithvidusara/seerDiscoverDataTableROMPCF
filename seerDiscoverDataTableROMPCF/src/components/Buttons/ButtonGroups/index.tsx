@@ -1,25 +1,44 @@
 import * as React from 'react'
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
+import { setIsLiveModeEnable } from '../../../redux/snapshotReport/snapshotReportSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const index = (
   {
     setSelectedButton, 
     selectedButton, 
     numberOfButtons, 
-    buttonTitles
+    buttonTitles,
+    arrayGeneratorHandler
   }: 
   {
     setSelectedButton: any, selectedButton: any, 
-    numberOfButtons?: number, buttonTitles?: any
+    numberOfButtons?: number, buttonTitles?: any,
+    arrayGeneratorHandler?: any,
   }) => {
 
+  const dispatch = useDispatch();
+
+  const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters);
+  const currentSavedResources = useSelector((state: any) => state?.snapshot?.currentSavedResources);
+  const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
+  const loadedSnapshotId = useSelector((state: any) => state?.snapshot?.loadedSnapshotId);
+
   const handleButtonChange = (event: any, newValue: any) => {
-    setTimeout(() => {
-      setSelectedButton(newValue);
-    }, 10);
-    // setSelectedButton(newValue);
+    if (!newValue) return;
+    setSelectedButton(newValue);
+    if (newValue == 'button2') {
+      dispatch(setIsLiveModeEnable(false))
+      if (currentSavedParameters || loadedSnapshotId) {
+        arrayGeneratorHandler(false, {...currentSavedParameters, base: snapshotBase, currentSavedResources}, 'snapshot')
+      }
+    } else if (newValue == 'button1') {
+      dispatch(setIsLiveModeEnable(true));
+      setTimeout(() => {
+        arrayGeneratorHandler(true)
+      }, 2)
+    }
   };
 
   
@@ -56,7 +75,7 @@ const index = (
           <ToggleButton className='toggle-btn' value="button1" aria-label="Button 1">
             Live Data
           </ToggleButton>
-          <ToggleButton className='toggle-btn' value="button2" aria-label="Button 2">
+          <ToggleButton className='toggle-btn' style={{ display: 'flex' }} value="button2" aria-label="Button 2">
               SnapShot
           </ToggleButton>  
         </ToggleButtonGroup>

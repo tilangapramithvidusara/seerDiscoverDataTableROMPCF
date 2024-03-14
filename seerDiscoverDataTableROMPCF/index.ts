@@ -6,17 +6,11 @@ import * as React from "react";
 
 import * as ReactDOM from "react-dom";
 import App from "./src/App";
-// const App = React.lazy(() => import('./src/App'));
 
 import { connect } from 'react-redux';
 
 import toJsonSchema = require("to-json-schema");
 
-// declare global {
-//     interface Window {
-//       Xrm: any;
-//     }
-// }
 export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
     private theComponent: ComponentFramework.ReactControl<IInputs, IOutputs>;
@@ -44,6 +38,7 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
     public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container:HTMLDivElement): void
     {
         // this.notifyOutputChanged = notifyOutputChanged;
+        
         this.imgElement = document.createElement("img");
 		context.resources.getResource("refresh.png", this.setImage.bind(this, false, "png"), this.showError.bind(this));
 		container.appendChild(this.imgElement);
@@ -65,7 +60,7 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
 
     private showError(): void
 	{
-        console.log('error occur');
+        // console.log('error occur');
         
 	}
 
@@ -76,6 +71,27 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
      */
     public updateView(context?: ComponentFramework.Context<IInputs>): any
     {   
+        // flowurl, accountId, userId, name, azureurl
+        // console.log('context?.parameters ==> ', context?.parameters);
+        
+        const flowurl = context?.parameters?.deleteFlow?.raw;
+        const accountId = context?.parameters?.accountId?.raw;
+        const userId = context?.parameters?.userId?.raw;
+        const name = context?.parameters?.name?.raw;
+        const azureurl = context?.parameters?.azureFunction?.raw;
+        // localStorage.setItem("flowurl", ('https://uat-18.uksouth.logic.azure.com:443/workflo…0&sig=uWULxjDR3f6LwFWo87fMqmnKL4FaxsiMOO8vIN4E1XY' || flowurl || ''));
+        // localStorage.setItem("accountId", ("91855757-e8d6-ee11-904d-000d3a0bca56" || "7b95b904-8d5e-ed11-9562-002248428304" || "22506193-8fbe-ee11-9079-002248015232" || "91855757-e8d6-ee11-904d-000d3a0bca56" || "5172763a-52b1-ee11-a569-000d3a0bcfb2" || "22506193-8fbe-ee11-9079-002248015232" || accountId || ''));
+        // localStorage.setItem("userId", ("b7d3be6f-a9b3-ee11-a568-002248015232" || userId || ''));
+        // localStorage.setItem("name", (name || ''));
+        // localStorage.setItem("azureFunction", ("https://poc-rom-in-portal-uat.azurewebsites.net/api/DiscoverSMBROM?code=HwBgZK01CGG1OgSDraJwW3Nj-HdI_VaYznAPufDYEutDAzFuCIQvvg==" || azureurl || ''));
+        // "https://rom-in-portal-prod.azurewebsites.net/api/DiscoverSMBROM?code=ud6ha95-yiOmqooksNCaf95hdDJwx60GSu-0hZgypDVDAzFu6G-qBA==" || 
+        // "7b95b904-8d5e-ed11-9562-002248428304" ||
+        localStorage.setItem("flowurl", (flowurl || ''));
+        localStorage.setItem("accountId", (accountId || ''));
+        localStorage.setItem("userId", (userId || ''));
+        localStorage.setItem("name", (name || ''));
+        localStorage.setItem("azureFunction", (azureurl || ''));
+
         // : React.ReactElement
         // console.log('entity name : ', context?.parameters?.entityName?.raw)
         // console.log('account id : ', context?.parameters?.accountId?.raw)
@@ -87,20 +103,7 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
         // this.dataLoad(reportId, accountId, context)
         // return React.createElement(React.Fragment);
 
-        const ConnectedApp = connect()(App);
-
-        console.log('context => ', context);
-        
-
-        ReactDOM.render(React.createElement(App, { tableContent: [], context: context }), this.container);
-        // ReactDOM.render(
-        //     <Provider>
-        //   );
-
-          // <Provider store={store}>
-            //   <ConnectedApp tableContent={[]} context={context} />
-            // </Provider>,
-            // this.container
+        // ReactDOM.render(React.createElement(App, { tableContent: [], context: context }), this.container);
         this.renderComponent(context);
     }
 
@@ -157,7 +160,6 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
             const res: any = result
             returnMethod = {error: false, result: res};
         } catch (error: any) {
-            console.log("error when load urls : ", error, error instanceof Error);
             returnMethod = {error: true, result: error}
             
         }
@@ -170,9 +172,7 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
         const jsonFormat = JSON.parse(data?.['seerdwp_jasonobjectformat']?.trim());
         if (jsonFormat?.['id'] === "accountId") {
             jsonFormat['id'] = accountId;
-        }
-        console.log("jsonFormat ===> ", jsonFormat, data);
-        
+        }        
         var raw = JSON.stringify(jsonFormat);
 
         var requestOptions: any = {
@@ -188,12 +188,9 @@ export class seerDiscoverDataTableROMPCF implements ComponentFramework.StandardC
             data?.["seerdwp_functionappurl"], 
             requestOptions
         )
-        .then(response=>response.json())
+        .then(response=> response.json())
         .then((result: any)=> {
 
-            // console.log(result)
-            console.log('====> ', result && result?.data && result?.data?.length > 0, result?.data);
-            
             if (result && result?.data && result?.data?.length > 0) {
                 this.response = JSON.stringify(result?.data)
                 // {...result.data}

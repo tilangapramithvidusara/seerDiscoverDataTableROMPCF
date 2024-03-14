@@ -155,7 +155,9 @@ export const generateEstimateResourceMilestoneSub = async( dataEstimateResourceM
     // subTotalMSAnalysisDesign += analisisAndDesignCalculation?.designReviewEstimateResource?.["M/S_Resource_Total"] || 0;
     // subTotalMSCAnalysisDesign += analisisAndDesignCalculation?.designReviewEstimateResource?.["M/S/C_Resource_Total"] || 0;
     
-    let subValueAnalysisDesign = await calculateProjectManagerEstimateAvgRateMilestone(initialDataSet, analisisAndDesignCalculation?.subSections, 'Analysis and Design', settingParameters, isSnapshotModeEnable)
+    let subValueAnalysisDesign = await calculateProjectManagerEstimateAvgRateMilestone({...initialDataSet}, analisisAndDesignCalculation?.subSections, 'Analysis and Design', settingParameters, isSnapshotModeEnable)
+    // console.log(' ==> ', subValueAnalysisDesign);
+    
     let resultValueSubProjectManagerAnalysisDesign = generateEstimateResourceValue(
       initialDataSet, 
       {
@@ -170,6 +172,9 @@ export const generateEstimateResourceMilestoneSub = async( dataEstimateResourceM
       condition,
       settingParameters, isSnapshotModeEnable
     ); 
+
+    // console.log("resultValueSubProjectManagerAnalysisDesign ==> ", resultValueSubProjectManagerAnalysisDesign);
+    
   
     // dataEstimateResourceMilestone Project Manager Analysis Design
     dataEstimateResourceMilestone[5]['M_Resource1_H'] =  resultValueSubProjectManagerAnalysisDesign?.resultValue1;
@@ -745,7 +750,7 @@ const getSubTotalAndRiskSub = async(dataEstimateResourceMilestone: any, fColmnVa
   (dataEstimateResourceMilestone[17]?.['M/S_Resource2_H'] || 0) +
   (dataEstimateResourceMilestone[6]?.['M/S_Resource2_H'] || 0);
 
-  const mscr1 = (dataEstimateResourceMilestone[28]?.['M/S/C_Resource2_H'] || 0) +
+  const mscr1 = (dataEstimateResourceMilestone[28]?.['M/S/C_Resource1_H'] || 0) +
   (dataEstimateResourceMilestone[24]?.['M/S/C_Resource1_H'] || 0) + 
   (dataEstimateResourceMilestone[17]?.['M/S/C_Resource1_H'] || 0) +
   (dataEstimateResourceMilestone[6]?.['M/S/C_Resource1_H'] || 0);

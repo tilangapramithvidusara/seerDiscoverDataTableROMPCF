@@ -8,10 +8,6 @@ table {
   table-layout: auto; /* Set the table layout to auto */
 }
 
-/* Data row styles
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-} */
 
 /* Pagination styles */
 .pagination {
@@ -30,6 +26,7 @@ tr:nth-child(even) {
 .pagination a.active {
   font-weight: bold;
 }
+
 
 /* styles.css */
 .blur-background {
@@ -55,7 +52,16 @@ tr:nth-child(even) {
   z-index: 1000; /* Ensure it's above the blurred background */
 }
 
-.seerDiscoverROM {
+.snapshot-modal .ant-modal-body .ant-space, .snapshot-modal .ant-modal-body .ant-space .ant-space-item{
+  width: 100%;
+} 
+
+
+.seerDiscoverROM html *:not(i) {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.seerDiscoverROM, .ant-modal-content, .ant-tabs {
   font-family: 'Roboto', sans-serif !important;
 }
 
@@ -88,21 +94,29 @@ tr:nth-child(even) {
   font-size: 13px;
 }
 
+.seerDiscoverROM .ant-tabs {
+  margin-top: 5px;
+}
+
+.seerDiscoverROM .MuiButton-containedPrimary {
+  height: 25px;
+}
+
 .seerDiscoverROM  .toggle-btn {
-  height: 20px;
+  height: 25px;
   font-size:12px;
-  padding: 10px 12px;
+  padding: 0px 12px;
   color: #676767;
   border-width: 0.5px;
   background-color: transparent !important;
-  border-color: #C1BDBD !important;
+  border: 0.5px solid #C1BDBD;
   text-transform: capitalize;
 }
 
 .seerDiscoverROM .toggle-btn.Mui-selected {
-  background-color: #FC804A !important;
+  background-color: #B23000 !important;
   color: #ffffff !important;
-  border-color: #FC804A !important;
+  border-color: #B23000 !important;
 }
 
 .seerDiscoverROM  .mr-10 {
@@ -136,7 +150,7 @@ tr:nth-child(even) {
 
 .seerDiscoverROM  .dropdown {
   border: 1px solid rgb(216, 216, 216) !important;
-  height: 20px;
+  height: 25px;
   font-size: 12px;
   text-transform: capitalize;
 }
@@ -193,13 +207,12 @@ tr:nth-child(even) {
   padding: 0.5rem 0 !important;
 }
 
-.seerDiscoverROM td, .seerDiscoverROM th {
+.seerDiscoverROM td, .seerDiscoverROM th{
   padding: 1px 10px;
   font-size: 13px;
   border-bottom: 1px solid #C1BDBD;
   font-family: 'Roboto', sans-serif !important;
-  color: #000000 !important;
-  white-space: nowrap; /* Prevent cell content from wrapping */
+  white-space: nowrap;
 }
 
 .seerDiscoverROM td {
@@ -215,44 +228,50 @@ tr:nth-child(even) {
 }
 
 .seerDiscoverROM .btn-gray-outline, .containerManualTable .btn-gray-outline {
-  height: 20px;
+  height: 25px;
   font-size:12px;
-  padding: 10px 12px;
+  padding: 0px 12px;
   color: #C1BDBD;
   background-color: transparent !important;
   border: 0.5px solid#C1BDBD !important;
   box-shadow: none !important;
   text-transform: capitalize;
+  font-family: 'Roboto', sans-serif !important;
+  vertical-align: middle;
 }
 
 
-.seerDiscoverROM .btn-blue-outline {
-  height: 20px;
-  /* 35px; */
-  font-size:12px;
-  /* 13px; */
-  padding: 10px 12px;
-  /* 7px 12px; */
+.seerDiscoverROM .btn-blue-outline, .alert-modal .btn-blue-outline, .snapshot-modal .ant-btn-default, .containerManualTable .btn-blue-outline {
+  height: 25px;
+  font-size:13px !important;
+  font-weight: 400 !important;
+  padding: 0px 12px;
   color: #0E94FD;
   background-color: transparent !important;
   border: 0.5px solid#0E94FD !important;
   box-shadow: none !important;
   text-transform: capitalize;
+  min-width: 60px;
+  border-radius: 5px !important;
+  font-family: 'Roboto', sans-serif !important;
+  vertical-align: middle;
 }
 
 
-.seerDiscoverROM  .btn-primary, .containerManualTable .btn-primary {
-  height: 20px;
-  /* 35px; */
-  font-size:12px;
-  /* 13px; */
-  padding: 10px 12px;
-  /* 7px 12px; */
+.seerDiscoverROM  .btn-primary, .containerManualTable .btn-primary, .alert-modal .btn-primary, .snapshot-modal .ant-btn-primary{
+  height: 25px;
+  font-size:13px !important;
+  font-weight: 400 !important;
+  padding: 0px 12px;
   color: #ffffff !important;
   background-color: #0E94FD !important;
   border: 1px solid#0E94FD !important;
   box-shadow: none !important;
   text-transform: capitalize;
+  min-width: 60px;
+  border-radius: 5px !important;
+  font-family: 'Roboto', sans-serif !important;
+  vertical-align: middle;
 }
 
 .seerDiscoverROM  .btn-blue-outline .btn-icon{
@@ -264,9 +283,8 @@ tr:nth-child(even) {
 }
 
 .seerDiscoverROM .btn-icon {
-  height: 19px;
+  height: 18px;
   color: #C1BDBD;
-  margin-right: 2px;
 }
 
 .seerDiscoverROM .MuiChip-deletable {
@@ -296,6 +314,7 @@ tr:nth-child(even) {
 
 .seerDiscoverROM .custom-toggle-button .MuiButtonBase-root {
   width: 50px;
+  background-color: #0093FE;
 }
 
 .MuiDrawer-modal .MuiPaper-elevation {
@@ -375,7 +394,6 @@ tr:nth-child(even) {
 
 .containerManualTable {
   width: 100%;
-  max-width: 830px;
   margin: 0 auto;
   margin-top: 10;
 }
@@ -391,22 +409,27 @@ table {
   width: 100%;
 }
 
+.seerDiscoverROM .MuiInput-root:focus {
+  background-color: #ffffff;
+}
+
 .seerDiscoverROM input {
-  font-size: 16px;
+  font-size: 13px;
   background-color: transparent;
   border: none;
   width: 91%;
-  padding: 12px 12px;
+  padding: 7px 12px;
   font-family: 'Poppins', sans-serif;
 }
 
-.seerDiscoverROM input:hover {
-  background-color: #fffaf3;
+.seerDiscoverROM input:hover, .seerDiscoverROM input:focus {
+  background-color: transparent !important;
+  outline: none !important;
 }
 
 .seerDiscoverROM input:focus {
-  outline: 1px solid #ccc;
-  border: 1px solid #ccc;
+  background-color: #ffffff !important;
+  outline: none !important;
 }
 
 .seerDiscoverROM .ant-tabs th {
@@ -419,11 +442,13 @@ table {
 }
 
 .containerManualTable td {
-  border: 1px solid #000000;
-  padding: 4px 10px;
+  padding: 6px 15px;
   font-size: 13px;
   font-family: 'Roboto', sans-serif !important;
-  color: #000000 !important;
+  color: #292929 !important;
+  border-bottom: 1px solid #C1BDBD;
+  white-space: nowrap; 
+  text-align: left;
 }
 
 .containerManualTable th {
@@ -436,16 +461,39 @@ table {
   text-align: left;
 }
 
-.containerManualTable input, .containerManualTable select {
-  border: none;
+.snapshot-modal .ant-select-selector, .snapshot-modal input {
+  font-size: 13px;
+}
+
+.alert-modal .py-15 {
+  padding: 15px 0;
+}
+
+.alert-modal .pt-15 {
+  padding-top: 15px;
+}
+
+.containerManualTable input, .containerManualTable select, .alert-modal input, .alert-modal textarea {
+  border: 1px solid #dedede;
   text-align: left;
-  padding: 0;
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
+  padding: 5px 6px;
+  font-size: 13px;
+  font-family: 'Roboto', sans-serif !important;
+  color: #292929 !important;
 }
 
 .custom-modal .modal-title {
   padding: 0 25px;
-  margin: 20px 0;
+  margin: 20px 0 10px 0;
   font-weight: 600;
+  font-size: 16px;
+}
+
+.custom-modal .MuiButton-textPrimary {
+  line-height: 25px !important;
 }
 
 .containerManualTable .modal-footer {
@@ -456,4 +504,181 @@ table {
 
 .containerManualTable .mr-10 {
   margin-right: 10px;
+}
+
+.seerDiscoverROM .requrinemntSubTabs {
+  display: 'flex';
+  margin-left: 10px
+}
+
+.requrinemntSubTabs {
+  display: 'flex';
+  margin-left: 10px
+}
+
+.reqTabBtn {
+  margin-right: '10px';
+  font-size: '10px';
+  text-transform: 'none' 
+}
+
+.MuiMenuItem-root .MuiBox-root {
+  font-size: 13px;
+}
+.grouping-title {
+  font-weight: bold;
+}
+
+.MuiTableCell-root.MuiTableCell-body.MuiTableCell-sizeMedium.css-1dbaf3q-MuiTableCell-root::after {
+  content: "" !important;
+  display: none !important;
+}
+
+.MuiTooltip-tooltip {
+  font-size: 13px !important;
+}
+
+.seerDiscoverROM {
+  min-height: 71vh;
+}
+
+.MuiFormControl-root.MuiFormControl-fullWidth.MuiTextField-root:focus {
+  background-color: #ffffff;
+}
+
+.alert-modal .heading {
+  font-size: 16px;
+  text-align: center;
+  font-weight: 700;
+  padding: 0;
+  padding-bottom: 10px;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+.alert-modal .heading.custom-heading {
+  text-align: left;
+  padding-bottom: 0;
+}
+
+.alert-modal .flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert-modal .MuiPaper-elevation {
+  padding: 20px;
+  border-radius: 5px !important;
+}
+
+.alert-modal .d-inline {
+  display: inline-block;
+}
+
+.alert-modal .mt-10 {
+  margin-top: 10px;
+}
+
+.alert-modal label {
+  color: rgb(51, 51, 51);
+  font-size: 13px;
+  font-family: 'Roboto', sans-serif !important;
+  font-weight: 700;
+} 
+
+.confirm-modal .heading {
+  text-align: left !important;
+}
+
+.confirm-modal .footer {
+  justify-content: flex-end !important;
+}
+
+.confirm-modal .ml-10 {
+  margin-left: 10px;
+}
+
+.confirm-modal .actions {
+  padding: 0;
+}
+
+.alert-modal .content {
+  color: #000;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif !important;
+  margin: 5px 0 10px;
+}
+
+.alert-modal .mt-15 {
+ margin-top: 15px;
+}
+
+.alert-modal .MuiInput-underline::before, .alert-modal .MuiInput-underline::after {
+  border-bottom: none !important;
+}
+
+.alert-modal .MuiTextField-root label.Mui-focused {
+  font-size: 13px;
+  padding-left: 0 !important;
+  color: #292929 !important;
+}
+
+.alert-modal .MuiDialogContent-root {
+  padding: 0;
+}
+
+.alert-modal .btn-wrap{
+  padding: 0;
+  margin-top: 20px;
+}
+
+.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay-component {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  backdrop-filter: blur(8px); /* Apply a blur effect to the background */
+  z-index: 9999; /* Ensures it's on top of other content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-overlay-component {
+  position: relative;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background for text */
+}
+
+.mandatory-text-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.mandatory-text-container-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.mandatory-text-container-row-red {
+  color: red;
+  align-self: flex-start;
 }

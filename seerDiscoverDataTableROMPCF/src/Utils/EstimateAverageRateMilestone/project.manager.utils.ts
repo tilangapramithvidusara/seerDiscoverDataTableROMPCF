@@ -4,11 +4,14 @@ import { percentData } from "../../Constants/pickListData";
 export const calculateProjectManagerEstimateAvgRateMilestone = async(inititlaData: any, subSections: any, type: string, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   let hasParameters = settingParameters && isSnapshotModeEnable;
 
-  const {parameterModel} = inititlaData;
+  const {parameterModel, fteValue} = inititlaData;
+  
   let {hoursPerday} = parameterModel[0]
+  // hoursPerday
+
   if (hasParameters) {
     if (hasParameters) {
-      hoursPerday = parseInt(settingParameters?.formattedData[
+      hoursPerday = parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.hoursPerDay
       ]?.currentValue || '0');
     }
@@ -48,6 +51,7 @@ export const calculateProjectManagerEstimateAvgRateMilestone = async(inititlaDat
   let mustShouldCal = 0;
   let mustShouldCouldCal = 0
   if (type == 'Analysis and Design') {
+    
     mustCal = responseAnalisisDesign?.resultValue +
       responseCustomisationDesign?.customisation?.resultValue +
       responseCustomRequirementDesign?.customRequirement?.resultValue +
@@ -64,7 +68,7 @@ export const calculateProjectManagerEstimateAvgRateMilestone = async(inititlaDat
       responseCustomisationDesign?.customisation?.resultValueMSC +
       responseCustomRequirementDesign?.customRequirement?.resultValueMSC +
       responseDocumentation?.documentation?.resultValueMSC +
-      responseDesignReview?.designReview?.resultValueMSC;
+      responseDesignReview?.designReview?.resultValueMSC;      
   } else if (type == 'BUILD') {
     mustCal = responseAnalisisDesign?.configuration?.resultValue +
       responseIntegration?.integration?.resultValue +
@@ -127,16 +131,24 @@ export const calculateProjectManagerEstimateAvgRateMilestone = async(inititlaDat
   const F4Parameter = hoursPerday * 5;
   const O37 = 0// to find this we need to complete Estimate Avg Rate Milestone table
   const H6 = 29// if days === c2 => O37/5 else (O37/8)/5
-  const h8 = 1123.176 // need to gets it from api
-  const g8 = 1217.546
-  const f8 = 1406.438
+  const h7 = fteValue?.totalFte || 0; // need to gets it from api
+  const g7 = fteValue?.totalFteMS || 0;
+  const f7 = fteValue?.totalFteMSC || 0;
+  // console.log('fteValue ==> ', fteValue);
+    
+  const h8 = h7 * F4Parameter
+  // hoursPerWeek
+  const g8 = g7 * F4Parameter
+  // hoursPerWeek
+  const f8 = f7 * F4Parameter
+  // hoursPerWeek
   
   try {
     if (hasParameters) {
-      const projectManagementValue = parseInt(settingParameters?.formattedData[
+      const projectManagementValue = parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.projectManagement
       ]?.currentValue || '0')
-      const projectManagementTypeValue = parseInt(settingParameters?.formattedData[
+      const projectManagementTypeValue = parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.projectManagement
       ]?.typeValueCurrent)
 
@@ -147,50 +159,54 @@ export const calculateProjectManagerEstimateAvgRateMilestone = async(inititlaDat
       } else {
         //
         // not done yet
-        if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000001]) {
+        if (percentData?.[projectManagementTypeValue] == percentData?.[100000001]) {
           // solutionArchitecture
-          returnObject.resultValue = (mustCal * (parameterModel[0]?.solutionArchitecture/100))/4;
-          returnObject.resultValueMS = (mustShouldCal * (parameterModel[0]?.solutionArchitecture/100))/4;
-          returnObject.resultValueMSC = (mustShouldCouldCal * (parameterModel[0]?.solutionArchitecture/100))/4;
-        } else if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000002]) { // hours
+          returnObject.resultValue = (mustCal * (projectManagementValue/100))/4;
+          returnObject.resultValueMS = (mustShouldCal * (projectManagementValue/100))/4;
+          returnObject.resultValueMSC = (mustShouldCouldCal * (projectManagementValue/100))/4;
+        } else if (percentData?.[projectManagementTypeValue] == percentData?.[100000002]) { // hours
           
-          returnObject.resultValue = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture)/4 : (parameterModel[0]?.solutionArchitecture/hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
-          returnObject.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture)/4 : (parameterModel[0]?.solutionArchitecture/hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
-          returnObject.resultValueMSC = (mustShouldCouldCal * (parameterModel[0]?.solutionArchitecture/100))/4;
-        } else if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000000]) { // FTE
+          returnObject.resultValue = romParameter == "Hours" ? (projectManagementValue)/4 : (projectManagementValue/hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.resultValueMS = romParameter == "Hours" ? (projectManagementValue)/4 : (projectManagementValue/hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.resultValueMSC = romParameter == "Hours" ? (projectManagementValue)/4 : (projectManagementValue/hoursPerday)/4
+          // (mustShouldCouldCal * (projectManagementValue/100))/4;
+        } else if (percentData?.[projectManagementTypeValue] == percentData?.[100000000]) { // FTE
           // dont need yet
-          // returnObject.resultValue = (parameterModel[0]?.solutionArchitecture * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
-          // returnObject.resultValueMS = (parameterModel[0]?.solutionArchitecture * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
-          // returnObject.resultValueMSC = (parameterModel[0]?.solutionArchitecture * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
+          returnObject.resultValue = romParameter == "Hours" ? (projectManagementValue * h8)/4 :  ((projectManagementValue * h8)/hoursPerday)/4 // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
+          returnObject.resultValueMS = romParameter == "Hours" ? (projectManagementValue * h8)/4 :  ((projectManagementValue * g8)/hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
+          returnObject.resultValueMSC = romParameter == "Hours" ? (projectManagementValue * h8)/4 :  ((projectManagementValue * f8)/hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
+          // returnObject.resultValue = (projectManagementValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
+          // returnObject.resultValueMS = (projectManagementValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
+          // returnObject.resultValueMSC = (projectManagementValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
         }
       }
     } else {
-      if (percentData?.[parameterModel[0]?.projectManagementType] === percentData?.[100000001]) {
+      if (percentData?.[parameterModel[0]?.projectManagementType] == percentData?.[100000001]) {
         returnObject.resultValue = mustCal * (parameterModel[0].projectManagement /100)
         returnObject.resultValueMS = mustShouldCal * (parameterModel[0].projectManagement /100)
         returnObject.resultValueMSC = mustShouldCouldCal * (parameterModel[0].projectManagement /100)
       } else {
         //
         // not done yet
-        if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000001]) {
+        if (percentData?.[parameterModel[0]?.projectManagementType] == percentData?.[100000001]) {
           // solutionArchitecture
-          returnObject.resultValue = (mustCal * (parameterModel[0]?.solutionArchitecture/100))/4;
-          returnObject.resultValueMS = (mustShouldCal * (parameterModel[0]?.solutionArchitecture/100))/4;
-          returnObject.resultValueMSC = (mustShouldCouldCal * (parameterModel[0]?.solutionArchitecture/100))/4;
-        } else if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000002]) { // hours
+          returnObject.resultValue = (mustCal * (parameterModel[0]?.projectManagement/100))/4;
+          returnObject.resultValueMS = (mustShouldCal * (parameterModel[0]?.projectManagement/100))/4;
+          returnObject.resultValueMSC = (mustShouldCouldCal * (parameterModel[0]?.projectManagement/100))/4;
+        } else if (percentData?.[parameterModel[0]?.projectManagementType] == percentData?.[100000002]) { // hours
           
-          returnObject.resultValue = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture)/4 : (parameterModel[0]?.solutionArchitecture/parameterModel[0]?.hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
-          returnObject.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.solutionArchitecture)/4 : (parameterModel[0]?.solutionArchitecture/parameterModel[0]?.hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
-          returnObject.resultValueMSC = (mustShouldCouldCal * (parameterModel[0]?.solutionArchitecture/100))/4;
-        } else if (percentData?.[parameterModel[0]?.solutionArchitectureType] === percentData?.[100000000]) { // FTE
-          // dont need yet
-          // returnObject.resultValue = (parameterModel[0]?.solutionArchitecture * h8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
-          // returnObject.resultValueMS = (parameterModel[0]?.solutionArchitecture * g8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
-          // returnObject.resultValueMSC = (parameterModel[0]?.solutionArchitecture * f8)/parameterModel[0]?.hoursPerday // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
+          returnObject.resultValue = romParameter == "Hours" ? (parameterModel[0]?.projectManagement)/4 : (parameterModel[0]?.projectManagement/parameterModel[0]?.hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.projectManagement)/4 : (parameterModel[0]?.projectManagement/parameterModel[0]?.hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting
+          returnObject.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.projectManagement)/4 : (parameterModel[0]?.projectManagement/parameterModel[0]?.hoursPerday)/4
+          // (mustShouldCouldCal * (parameterModel[0]?.projectManagement/100))/4;
+        } else if (percentData?.[parameterModel[0]?.projectManagementType] == percentData?.[100000000]) { // FTE
+          // dont need yet          
+          returnObject.resultValue = romParameter == "Hours" ? (parameterModel[0]?.projectManagement * h8)/4 :  ((parameterModel[0]?.projectManagement * h8)/parameterModel[0]?.hoursPerday)/4 // if c2 === hours then get direct (parameterModel[0]?.reporting * h8)  // need to find H8
+          returnObject.resultValueMS = romParameter == "Hours" ? (parameterModel[0]?.projectManagement * h8)/4 :  ((parameterModel[0]?.projectManagement * g8)/parameterModel[0]?.hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting * g8  // need to find G8
+          returnObject.resultValueMSC = romParameter == "Hours" ? (parameterModel[0]?.projectManagement * h8)/4 :  ((parameterModel[0]?.projectManagement * f8)/parameterModel[0]?.hoursPerday)/4 // if c2 === hours then get direct parameterModel[0]?.reporting * f8  // need to find F8
         }
       }
-    }
-    
+    }    
 
     returnObject.resultValueSub = (mustCal || 0) + (returnObject.resultValue || 0);
     returnObject.resultValueMSSub = (mustShouldCal || 0) + (returnObject.resultValueMS || 0);
