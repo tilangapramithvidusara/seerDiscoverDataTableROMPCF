@@ -16,7 +16,7 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect, 
     <div style={{ display: 'flex', alignItems: 'center'}}>
       Load Snapshot{' '}
       {finalizeSnapshot || finalizeSnapshotData ? (
-        <DialogTitle sx={{ backgroundColor: 'green', color: 'white', marginLeft: '5px', fontSize: '10px', height: '0px', lineHeight: '0px', borderRadius: '3px' }}>
+        <DialogTitle className='badge'>
           {finalizeCreated}
         </DialogTitle>
       ) : (

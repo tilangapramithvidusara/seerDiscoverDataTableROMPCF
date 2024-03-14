@@ -697,7 +697,7 @@ const App = ({
                   <span className="gray-text">{loadedSnapshotDetails?.seer_name}</span>
                   {(finalizeSnapshot && !disabled) && (
                     <span className="blue-text" style={{ marginLeft: '5px' }}>
-                      <LockIcon sx={{ color: green[500] }} />
+                      <LockIcon className="locked-icon" />
                     </span>
                   )}
                 </>
@@ -720,7 +720,7 @@ const App = ({
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   {finalizeCount > 0 && (
                     <div style={{ display: 'flex', alignItems: 'center'}}>
-                      <DialogTitle sx={{ backgroundColor: 'green', color: 'white', marginLeft: '2px', fontSize: '10px', height: '0px', lineHeight: '0px', borderRadius: '3px' }}>
+                      <DialogTitle className="badge">
                         {finalizeCreated}
                       </DialogTitle>
                   </div>
