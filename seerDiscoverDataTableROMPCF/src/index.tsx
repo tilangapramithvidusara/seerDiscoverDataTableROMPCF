@@ -8,6 +8,7 @@ import { initialFetchFailure, initialFetchSuccess, setEstimateAveRateAnalysisDes
 import { dataMapper } from "./Utils/RequirmentData/requirement.data.utils";
 import { setBaseJson, setLiveBase, setLiveResources, setSnapshotBase } from "./redux/snapshotReport/snapshotReportSlice";
 import OverlayComponent from "./components/Overley";
+import { loadFinalizeSnapshotsAsync } from "./redux/snapshotReport/snapshoAsync";
 
 
 function Index({tableContent, context, imageUrl}: {tableContent: any, context: any, imageUrl?: any}) {
@@ -126,6 +127,8 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
         dispatch(setEstimateAveRateCustomisationBuild(result?.reducerValues?.estimageAveRateCustomerCustomisationBuildSidePane));
         dispatch(setEstimateAveRateCustomRequirementBuild(result?.reducerValues?.estimageAveRateCustomerCustomRequirementBuildSidePane));
         dispatch(setEstimateAveRateDocumentLayout(result?.reducerValues?.estimageAveRateDocumentLayoutSidePane))
+
+        dispatch(loadFinalizeSnapshotsAsync());
         // estimageAveRateDocumentLayoutSidePane
 
         deleteOutputSetAsync({ OutputSetId: data?.OutputSetId })
@@ -155,8 +158,6 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   // console.log('customisationData ==> ', customisationData);
   // console.log('documentLayoutsData ==> ', documentLayouts);
   // console.log('dataMigrationData ==> ', dataMigrations);
-  
-  
   
   return (
     <div>

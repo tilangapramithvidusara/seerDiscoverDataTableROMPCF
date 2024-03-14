@@ -165,7 +165,20 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
                   ]}/>
                 )}
               </div>
-              <div className='text-right'>
+              {type !== 'FitGap' && (
+                <div className='text-right'>
+                  <ButtonGroups
+                    selectedButton={tableMode} 
+                    setSelectedButton={setTableMode} 
+                    numberOfButtons={2} 
+                    buttonTitles={[
+                      {title: defaultText, value: 'Cost'}, 
+                      {title: dayHoursText, value: 'Effort'}
+                    ]}
+                  />
+                </div>
+              )}
+              {/* <div className='text-right'>
                 <ButtonGroups
                 selectedButton={tableMode} 
                 setSelectedButton={setTableMode} 
@@ -174,7 +187,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
                   {title: defaultText, value: 'Cost'}, 
                   {title: dayHoursText, value: 'Effort'}
                 ]}/>
-              </div>
+              </div> */}
               {/* <div className='text-right'>
                 <Button className='btn-default' onClick={(e) => initialTriggerHandler(e)}><img src={imageUrl} className='refresh-icon' alt="icon"/>Refresh</Button>
               </div> */}

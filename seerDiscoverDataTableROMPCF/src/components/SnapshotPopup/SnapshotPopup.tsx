@@ -4,13 +4,44 @@ import { useState } from 'react';
 import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
 import StarsIcon from '@mui/icons-material/Stars';
 import { green, red } from '@mui/material/colors';
+import LabelIcon from '@mui/icons-material/Label';
 import { useSelector } from 'react-redux';
+import { finalizeCreated } from '../../Constants/messages';
+import { DialogTitle } from '@mui/material';
 
 export default function SnapShotPopup({ snapshots, handleClose, open, onSelect, finalizeSnapshot }: any) {
   const [selectSnapshot, setSelectSnapshot] = useState(null);
   const finalizeSnapshotData = useSelector((state: any) => state?.snapshot?.finalizeSnapshot);
+  const titleContent = (
+    <div style={{ display: 'flex', alignItems: 'center'}}>
+      Load Snapshot{' '}
+      {finalizeSnapshot || finalizeSnapshotData ? (
+        <DialogTitle sx={{ backgroundColor: 'green', color: 'white', marginLeft: '5px', fontSize: '10px', height: '0px', lineHeight: '0px', borderRadius: '3px' }}>
+          {finalizeCreated}
+        </DialogTitle>
+      ) : (
+        ''
+      )}
+    </div>)
+    // <div style={{ display: 'flex', alignItems: 'center' }}>
+    //   Load Snapshot{' '}
+    //   {/* (finalizeSnapshot || finalizeSnapshotData) */}
+    //   {(finalizeSnapshot || finalizeSnapshotData) ? 
+    //     <DialogTitle>{finalizeCreated}</DialogTitle>
+    //     // <LabelIcon style={{marginLeft: '5px'}} sx={{ color: green[500] }}/> 
+    //     : 
+    //     ''
+    //   }
+    // </div>);
   return (
-    <Modal className='snapshot-modal' open={open} title={`Load Snapshot ${(finalizeSnapshot || finalizeSnapshotData) ? "Contain - Finalized Snapshot" : ''}`} onOk={() => selectSnapshot ? onSelect(selectSnapshot) : alert('Please select the snapshot to load')} onCancel={handleClose}>
+    // <LabelIcon sx={{ color: green[500] }}/>
+    <Modal className='snapshot-modal' open={open} 
+      title={titleContent}
+
+      // {`Load Snapshot ${(finalizeSnapshot || finalizeSnapshotData) ? 
+      // "Contain - Finalized Snapshot" 
+      // : ''}`} 
+      onOk={() => selectSnapshot ? onSelect(selectSnapshot) : alert('Please select the snapshot to load')} onCancel={handleClose}>
       <Space wrap style={{width: '100%'}}>
         <div style={{ 
           display: 'flex-column', 

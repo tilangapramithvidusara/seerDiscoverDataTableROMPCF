@@ -7,6 +7,7 @@ import AdvancedTable from "./Table/AdvancedTable";
 import DropDownButtons from "./Buttons/DropDownButtons";
 import ButtonGroups from "./Buttons/ButtonGroups";
 import { Box, Button, DialogContent, DialogContentText, Grid, Stack, ToggleButton} from "@mui/material";
+import { DialogTitle } from '@mui/material';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchInitialDataAsync } from "../redux/report/reportAsycn";
 import { initialFetchFailure, initialFetchSuccess } from "../redux/report/reportSlice";
@@ -14,14 +15,16 @@ import Loader from "./Loader/Loader";
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 import Settings from "@mui/icons-material/Settings";
 import CheckIcon from '@mui/icons-material/Check';
+import LabelIcon from '@mui/icons-material/Label';
+import LockIcon from '@mui/icons-material/Lock';
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
 import { setCurrentSavedParameters, setCurrentSavedProjectTasks, setCurrentSavedResources, setDoCalculation, setFinalizeSnapshot, setInitiallyCurrentChangingParameters, setInitiallyCurrentChangingProjectTasks, setInitiallyCurrentChangingResources, setIsLive, setIsSnapshotEnable, setIsSnapshotLoading, setLatestChanges, setLatestChangesTime, setLiveBase, setLiveParameters, setLiveProjectTasks, setLiveResources, setLoadedSnapshotDetailsWhenSave, setLoadedSnapshotId, setRecordId, setResourceModelDataParameters, setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setSnapshotBase, setSnapshotLoading, setSnapshotSaveLoacalyOneTime, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
-import { loadSelectedSnapshotAsync, loadSnapshotsAsync, saveInitialSnapshotRecordAsync, saveSnapshotAsync } from "../redux/snapshotReport/snapshoAsync";
+import { loadFinalizeSnapshotsAsync, loadSelectedSnapshotAsync, loadSnapshotsAsync, saveInitialSnapshotRecordAsync, saveSnapshotAsync } from "../redux/snapshotReport/snapshoAsync";
 import FormDialog from "./Form";
 import { convertJsonToBase64 } from "../Utils/commonFunc.utils";
 import SnapShotPopup from "./SnapshotPopup/SnapshotPopup";
-import { areYouSure, cancel, confirm, createNew, failedToSave, missingSnapshot, snapshotSaveConfirmMessage, successfullySaved, updateAddConfirmationDes, updateConfirmationDes, updateExisting, updatedSnapshotSuccessfully } from "../Constants/messages";
+import { areYouSure, cancel, confirm, createNew, failedToSave, finalize, finalizeCreated, missingSnapshot, snapshotSaveConfirmMessage, successfullySaved, updateAddConfirmationDes, updateConfirmationDes, updateExisting, updatedSnapshotSuccessfully } from "../Constants/messages";
 import CustomDialog from "./Dialog/CommonDialog";
 import { checkDuplicates } from "../Utils/Validations/check.duplication.utils";
 import OverlayComponent from "./Overley";
@@ -29,6 +32,7 @@ import { showAlertError, showAlertSuccess } from "../Utils/Alerts";
 import { snapshotAPIConstants } from "../Constants/snapshotConstants";
 import { seerBasejson, seerUpdatedsnapshotdata } from "../Constants/endPoints";
 import { romReportType } from "../Constants/pickListData";
+import { green } from "@mui/material/colors";
 
 const App = ({
   dataSet, onRefreshHandler, isRefreshing, 
@@ -93,16 +97,16 @@ const App = ({
       label: 'Customisations',
       children: <AdvancedTable data={customisationData} type={'CustomisationData'} isLoading={isRefreshing}/>,
     },
-    {
-      key: '7',
-      label: 'Document Layouts',
-      children: <AdvancedTable data={documentLayoutsData} type={'DocumentLayoutsData'} isLoading={isRefreshing}/>,
-    },
-    {
-      key: '8',
-      label: 'Data Migrations',
-      children: <AdvancedTable data={dataMigrationData} type={'DataMigrationData'} isLoading={isRefreshing}/>,
-    },
+    // {
+    //   key: '7',
+    //   label: 'Document Layouts',
+    //   children: <AdvancedTable data={documentLayoutsData} type={'DocumentLayoutsData'} isLoading={isRefreshing}/>,
+    // },
+    // {
+    //   key: '8',
+    //   label: 'Data Migrations',
+    //   children: <AdvancedTable data={dataMigrationData} type={'DataMigrationData'} isLoading={isRefreshing}/>,
+    // },
     {
       key: '9',
       label: 'FitGap',
@@ -172,6 +176,7 @@ const App = ({
   const [selected, setSelected] = React.useState<boolean>(finalizeSnapshot ? true : false);
   const [disabled, setDisabled] = React.useState<boolean>((finalizeSnapshot && finalizeSnapshot?.seer_rominportalsnapshotid != loadedSnapshotDetails?.seer_rominportalsnapshotid) ? true : false)
   const [openCustomDialogConfirmUpdate, setOpenCustomDialogConfirmUpdate] = React.useState<boolean>(false)
+  const finalizeCount = useSelector((state: any) => state?.snapshot?.finalizeCount)
 
   const onChange = (key: string) => {
     console.log(key);
@@ -372,6 +377,7 @@ const App = ({
           data: JSON.stringify(record),
           success: function (data: any, textStatus: any, xhr: any) {            
             if (info?.finalizeUpdate) {
+                dispatch(loadFinalizeSnapshotsAsync())
                 dispatch(loadSnapshotsAsync());
                 dispatch(loadSelectedSnapshotAsync({snapshotId: info?.recodeId, arrayGeneratorHandler: info?.arrayGeneratorHandler}))
                 dispatch(setShowOverlayUpdateFlag(false))
@@ -448,6 +454,7 @@ const App = ({
                 // NEW STATES
                 // if (!info?.seer_isfinalversion)
                 //   dispatch(setFinalizeSnapshot(null));
+                dispatch(loadFinalizeSnapshotsAsync())
                 dispatch(loadSnapshotsAsync());
                 dispatch(loadSelectedSnapshotAsync({snapshotId: recodeId, arrayGeneratorHandler: info?.arrayGeneratorHandler}))
                 afterFinishRequestStateHandler(true, successfullySaved)
@@ -508,6 +515,7 @@ const App = ({
   }
 
   const loadSnapshotHanlder = React.useCallback((info?: any) => {
+    dispatch(loadFinalizeSnapshotsAsync())
     dispatch(loadSnapshotsAsync(info))
   }, [dispatch])
 
@@ -681,59 +689,23 @@ const App = ({
       )}
       <Grid className="flex-wrap">
         <div className="flex-wrpa-start">
-        {selectedButton == 'button2' && (
-          <div >
-            <span className="blue-text">Snapshot Name: </span>
-            {/* {selectedSnapshotFromDB ? (
-              <span className="gray-text">{selectedSnapshotFromDB?.seer_name}{loadedSnapshotDetails?.seer_name}</span>
-            )  */}
-            {loadedSnapshotDetails ? (
-              <>
-                <span className="gray-text">{loadedSnapshotDetails?.seer_name}</span>
-                {/* {((finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotDetails?.seer_rominportalsnapshotid) || !finalizeSnapshot) && ( */}
-                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                    {/* <DialogContentText className='mt-10 d-inline' sx={{ mr: '10px' }}>
-                      <label className="flex-wrpa-start">
-                        Finalize Snapshot:
-                      </label>
-                    </DialogContentText>
-                      <ToggleButton
-                        size="small"
-                        value="check"
-                        selected={(!disabled && selected)}
-                        disabled={finalizeSnapshot && disabled}
-                        onChange={(e) => {
-                          // need to add popup
-                          setOpenCustomDialogConfirmUpdate(true);
-                          // setSelected(!selected)
-                          // setSubmitFormData((prev: any) => ({ ...prev, seer_isfinalversion: !selected }))
-                        }}
-                        sx={{
-                          p: '4px',
-                          '& .MuiToggleButton-root': {
-                            padding: '4px',
-                          },
-                          '& .MuiSvgIcon-root': {
-                            fontSize: '18px', // Adjust the size of the check icon
-                          },
-                        }}
-                      >
-                        <CheckIcon />
-                      </ToggleButton> */}
-                      <div>
-                        {(finalizeSnapshot && disabled) && (
-                          <span className="blue-text">Finalized Snapshot Name: <span className="gray-text">{finalizeSnapshot?.seer_name} </span></span>
-                        )}
-                      </div>
-                  </div>
-                  
-                {/* )} */}
-              </>
-            ) : (
-              <span className="gray-text">Unsaved</span>
-            )}
-          </div>
-        )}
+          {selectedButton === 'button2' && (
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+              <span className="blue-text">Snapshot Name: {' '}</span>
+              {loadedSnapshotDetails ? (
+                <>
+                  <span className="gray-text">{loadedSnapshotDetails?.seer_name}</span>
+                  {(finalizeSnapshot && !disabled) && (
+                    <span className="blue-text" style={{ marginLeft: '5px' }}>
+                      <LockIcon sx={{ color: green[500] }} />
+                    </span>
+                  )}
+                </>
+              ) : (
+                <span className="gray-text">Unsaved</span>
+              )}
+            </div>
+          )}
         </div>
         
         <div className="flex-wrap-end">
@@ -745,7 +717,17 @@ const App = ({
               {/* buttonTitles */}
 
               {initialFetchData?.parameterModel[0]?.seer_Enablesnapshots && (
-                <ButtonGroups setSelectedButton={modeHanlder} selectedButton={selectedButton} arrayGeneratorHandler={arrayGeneratorHandler}  />
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  {finalizeCount > 0 && (
+                    <div style={{ display: 'flex', alignItems: 'center'}}>
+                      <DialogTitle sx={{ backgroundColor: 'green', color: 'white', marginLeft: '2px', fontSize: '10px', height: '0px', lineHeight: '0px', borderRadius: '3px' }}>
+                        {finalizeCreated}
+                      </DialogTitle>
+                  </div>
+                  )}
+                  <ButtonGroups setSelectedButton={modeHanlder} selectedButton={selectedButton} arrayGeneratorHandler={arrayGeneratorHandler}  />
+                </div>
+                // <ButtonGroups setSelectedButton={modeHanlder} selectedButton={selectedButton} arrayGeneratorHandler={arrayGeneratorHandler}  />
               )}
               
             </Stack>
@@ -790,6 +772,7 @@ const App = ({
                         fontSize: '18px', // Adjust the size of the check icon
                       },
                     }}
+                    title={finalize}
                   >
                     <CheckIcon />
                   </ToggleButton>
@@ -836,15 +819,19 @@ const App = ({
           buttons={(finalizeSnapshot && !disabled) ?
             [
               {
+                text: cancel,
+                action: () => setOpenCustomDialog(false)
+              },
+              {
                 text: createNew,
                 action: onClickNo
               },
+            ] :
+            [
               {
                 text: cancel,
                 action: () => setOpenCustomDialog(false)
-              }
-            ] :
-            [
+              },
               {
                 text: updateExisting,
                 action: onClickYes
@@ -853,10 +840,6 @@ const App = ({
                 text: createNew,
                 action: onClickNo
               },
-              {
-                text: cancel,
-                action: () => setOpenCustomDialog(false)
-              }
             ]
           }
         />
@@ -869,14 +852,14 @@ const App = ({
           handleClose={() => setOpenCustomDialogConfirmUpdate(false)}
           buttons={[
             {
+              text: cancel,
+              action: () => setOpenCustomDialogConfirmUpdate(false)
+            },
+            {
               text: confirm,
               action: updateFinalizeStateHandler
               // onClickNo
             },
-            {
-              text: cancel,
-              action: () => setOpenCustomDialogConfirmUpdate(false)
-            }
           ]
           }
         />

@@ -1,4 +1,4 @@
-import { setRecordId, setBaseJson, setSnapshotLoading, setSettingParameters, setLoadedSnapshot, setSnapshotList, setShowSaveParameters, setResourceModelDataParameters, setSelectedSnapshotFromDB, setStateSnapshot, setIsSnapshotLoading, setLoadedSnapshotId, setCurrentSavedParameters, setInitiallyCurrentChangingParameters, setCurrentSavedResources, setInitiallyCurrentChangingResources, setCurrentSavedProjectTasks, setInitiallyCurrentChangingProjectTasks, setSnapshotBase, setLoadedSnapshotDetails, setLoadedSnapshotDetailsWhenSave, setDoCalculation, setShowLoadedSnapshotBase, setShowLoadedSnapshotPametersNRates, setSnapshotParameters, setLiveBase } from './snapshotReportSlice';
+import { setRecordId, setBaseJson, setSnapshotLoading, setSettingParameters, setLoadedSnapshot, setSnapshotList, setShowSaveParameters, setResourceModelDataParameters, setSelectedSnapshotFromDB, setStateSnapshot, setIsSnapshotLoading, setLoadedSnapshotId, setCurrentSavedParameters, setInitiallyCurrentChangingParameters, setCurrentSavedResources, setInitiallyCurrentChangingResources, setCurrentSavedProjectTasks, setInitiallyCurrentChangingProjectTasks, setSnapshotBase, setLoadedSnapshotDetails, setLoadedSnapshotDetailsWhenSave, setDoCalculation, setShowLoadedSnapshotBase, setShowLoadedSnapshotPametersNRates, setSnapshotParameters, setLiveBase, setFinalizeCount } from './snapshotReportSlice';
 import { convertBase64ToJson, executeAfterGivenDilay } from '../../Utils/commonFunc.utils';
 import { seerBasejson, seerUpdatedsnapshotdata } from '../../Constants/endPoints';
 import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
@@ -100,6 +100,7 @@ export const saveSnapshotAsync: any = (info: any) => {
                   seer_name: info?.seerName,
                 }));
                 // NEW STATES
+                dispatch(loadFinalizeSnapshotsAsync())
                 dispatch(loadSnapshotsAsync());
                 dispatch(loadSelectedSnapshotAsync({snapshotId: recodeId, arrayGeneratorHandler: info?.arrayGeneratorHandler}))
                 showAlertSuccess("Snapshot saved succesfully!")
@@ -114,6 +115,63 @@ export const saveSnapshotAsync: any = (info: any) => {
       showAlertError(failedToSave)
       dispatch(setIsSnapshotLoading(false))
     } 
+  }
+}
+
+// webapi.safeAjax({
+//   type: "GET",
+//   url: "/_api/seer_rominportalsnapshots?$select=seer_rominportalsnapshotid,seer_isfinalversion&$filter=(_seer_account_value eq 91855757-e8d6-ee11-904d-000d3a0bca56 and seer_reporttype eq 381070000 and seer_isfinalversion eq true)&$count=true",
+//   contentType: "application/json",
+//   headers: {
+//       "Prefer": "odata.include-annotations=*"
+//   },
+//   success: function (data, textStatus, xhr) {
+//       var results = data;
+//       console.log(results);
+//       var odata_count = results["@odata.count"];
+//       for (var i = 0; i < results.value.length; i++) {
+//           var result = results.value[i];
+//           // Columns
+//           var seer_rominportalsnapshotid = result["seer_rominportalsnapshotid"]; // Guid
+//           var seer_isfinalversion = result["seer_isfinalversion"]; // Boolean
+//           var seer_isfinalversion_formatted = result["seer_isfinalversion@OData.Community.Display.V1.FormattedValue"];
+//       }
+//   },
+//   error: function (xhr, textStatus, errorThrown) {
+//       console.log(xhr);
+//   }
+// });
+
+export const loadFinalizeSnapshotsAsync: any = () => {
+  const accountId = localStorage.getItem("accountId");
+  return (dispatch: (arg0: any) => void) => {
+    try {
+      dispatch(setSnapshotLoading(true));
+      window.parent.webapi.safeAjax({
+        type: "GET",
+        url: `/_api/seer_rominportalsnapshots?$select=seer_rominportalsnapshotid,seer_isfinalversion&$filter=(_seer_account_value eq ${accountId} and seer_reporttype eq 381070000 and seer_isfinalversion eq true)&$count=true`,
+        // "/_api/seer_rominportalsnapshots?$select=seer_rominportalsnapshotid,_seer_contact_value,_createdby_value,createdon,seer_description,_modifiedby_value,modifiedon"
+        contentType: "application/json",
+        headers: {
+            "Prefer": "odata.include-annotations=*"
+        },
+        success: function (data: any, textStatus: any, xhr: any) {
+            var results = data;
+            var odata_count = results["@odata.count"]
+            dispatch(setFinalizeCount(odata_count));
+            // setSnapshotConfigList("List results", results?.value);
+        },
+        error: function (xhr: any, textStatus: any, errorThrown: any) {
+          // showAlertError(failedToLoadSelectedSnapshot);
+        }
+      });
+    } catch (error) {
+      // showAlertError(failedToLoadSelectedSnapshot);
+    } finally {
+      executeAfterGivenDilay(() => {
+        dispatch(setSnapshotLoading(false))
+      });
+    }
   }
 }
 

@@ -164,6 +164,7 @@ const initialState: any = {
   snapshotSaveLoacalyOneTime: false,
 
   finalizeSnapshot: null,
+  finalizeCount: 0
 }
 
 const snapshotSlice: any = createSlice({
@@ -493,6 +494,9 @@ const snapshotSlice: any = createSlice({
     },
     setFinalizeSnapshot: (state, action) => {
       state.finalizeSnapshot = action?.payload
+    },
+    setFinalizeCount: (state, action) => {
+      state.finalizeCount = action.payload;
     }
   }
   
@@ -551,6 +555,7 @@ export const {
   setLatestChangesTime,
   setSnapshotSaveLoacalyOneTime,
   setFinalizeSnapshot,
+  setFinalizeCount,
 } = snapshotSlice.actions;
 
 

@@ -47,7 +47,7 @@ const ProjectTaskTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: {
   const latestChanges = useSelector((state: any) => state?.snapshot?.latestChanges);
   const finalizeSnapshot = useSelector((state: any) => state?.snapshot?.finalizeSnapshot);
   const loadedSnapshotId = useSelector((state: any) => state?.snapshot?.loadedSnapshotId);
-  const [disabled, setIsDisabled] = useState(finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)
+  const [disabled, setIsDisabled] = useState((loadedSnapshotId && (finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)))
 
 
   const handleKeyDown = (event: any) => {
@@ -132,7 +132,7 @@ const ProjectTaskTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: {
   };
 
   useEffect(() => {
-    setIsDisabled(finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)
+    setIsDisabled((loadedSnapshotId && (finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)))
   }, [loadedSnapshotId, finalizeSnapshot?.seer_rominportalsnapshotid])
 
 

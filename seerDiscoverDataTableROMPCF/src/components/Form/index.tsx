@@ -62,11 +62,11 @@ export default function FormDialog({handleClickOpen, handleClose, handleSubmit, 
             onChange={(e) => setSubmitFormData((prev: any) => ({ ...prev, description: e?.target?.value }))}
           />
         </DialogContent>
-        {(!finalizeSnapshot || finalizeSnapshot === undefined) && (
+        {/* {(!finalizeSnapshot || finalizeSnapshot === undefined) && (
           <>
             <DialogContentText className='mt-10 d-inline'>
               <label>
-                Is final version
+                Final version
               </label>
             </DialogContentText>
             <DialogContent>
@@ -82,7 +82,7 @@ export default function FormDialog({handleClickOpen, handleClose, handleSubmit, 
               </ToggleButton>
             </DialogContent>
           </>
-        )}
+        )} */}
         {/* <DialogContentText className='mt-10 d-inline'>
           <label>
             Is final version

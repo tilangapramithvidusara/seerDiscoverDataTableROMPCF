@@ -9,9 +9,11 @@ export const updatedSnapshotSuccessfully = 'Snapshot updated successfully!'
 export const failedToLoadSelectedSnapshot = 'Failed to load selected snapshot.';
 export const noExistingSnapshots = 'There are no existing snapshots!'
 export const areYouSure = 'Confirmation';
-export const updateConfirmationDes = 'Please confirm, do you want to remove "finalize" flag?';
-export const updateAddConfirmationDes = 'Please confirm, do you want to add "finalize" flag?';
-export const confirm = 'Confirm'
+export const updateConfirmationDes = 'Please confirm to unflag this snapshot as the final version?';
+export const updateAddConfirmationDes = 'Please confirm to flag this snapshot as the final version?';
+export const confirm = 'Confirm';
+export const finalize = 'Finalize';
+export const finalizeCreated = 'Final snapshot created!'
 
 
 // seer_enablesnapshots

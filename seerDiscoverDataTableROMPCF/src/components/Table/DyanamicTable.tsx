@@ -37,7 +37,7 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
   const initialFetchData = useSelector((state: any) => state.report.initialFetchData);
   const loadedSnapshotId = useSelector((state: any) => state?.snapshot?.loadedSnapshotId);
 
-  const [disabled, setIsDisabled] = useState(finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)
+  const [disabled, setIsDisabled] = useState((loadedSnapshotId && (finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)))
 
   const onChangeHanlder = useCallback(
     (info) => {
@@ -81,7 +81,7 @@ const DyanamicTable = ({ handleClose, tableNumber, arrayGeneratorHandler }: { ha
   }, [isBaesline]);
 
   useEffect(() => {
-    setIsDisabled(finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)
+    setIsDisabled((loadedSnapshotId && (finalizeSnapshot?.seer_rominportalsnapshotid == loadedSnapshotId)))
   }, [loadedSnapshotId, finalizeSnapshot?.seer_rominportalsnapshotid])
 
   return (
