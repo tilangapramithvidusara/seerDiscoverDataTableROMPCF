@@ -17,6 +17,7 @@ import Settings from "@mui/icons-material/Settings";
 import CheckIcon from '@mui/icons-material/Check';
 import LabelIcon from '@mui/icons-material/Label';
 import LockIcon from '@mui/icons-material/Lock';
+import Tooltip from '@mui/material/Tooltip';
 import { parameterModelConvertToTableJson } from "../Utils/setting.values.convertor.utils";
 import DialogComponent from "./Dialog";
 import { setCurrentSavedParameters, setCurrentSavedProjectTasks, setCurrentSavedResources, setDoCalculation, setFinalizeSnapshot, setInitiallyCurrentChangingParameters, setInitiallyCurrentChangingProjectTasks, setInitiallyCurrentChangingResources, setIsLive, setIsSnapshotEnable, setIsSnapshotLoading, setLatestChanges, setLatestChangesTime, setLiveBase, setLiveParameters, setLiveProjectTasks, setLiveResources, setLoadedSnapshotDetailsWhenSave, setLoadedSnapshotId, setRecordId, setResourceModelDataParameters, setSettingParameters, setShowLoadedParameters, setShowSaveParameters, setSnapshotBase, setSnapshotLoading, setSnapshotSaveLoacalyOneTime, setStateSnapshot } from "../redux/snapshotReport/snapshotReportSlice";
@@ -45,6 +46,9 @@ const App = ({
   documentLayoutsData,
   dataMigrationData,
   fitGapData,
+  fitGapAllMoscowData,
+  fitGapGapMoscowData,
+  fitGapWithoutGapMoscowData,
 }: {
   dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, 
   dataSetEstimateResource: any, 
@@ -56,6 +60,9 @@ const App = ({
   documentLayoutsData: any,
   dataMigrationData: any,
   fitGapData: any,
+  fitGapAllMoscowData: any,
+  fitGapGapMoscowData: any,
+  fitGapWithoutGapMoscowData: any,
 }) => {   
 
   const items: TabsProps['items'] = [
@@ -111,7 +118,13 @@ const App = ({
       key: '9',
       label: 'FitGap',
       // fitGapData
-      children: <AdvancedTable data={fitGapData} type={'FitGap'} isLoading={isRefreshing}/>
+      children: <AdvancedTable data={fitGapData} type={'FitGap'} isLoading={isRefreshing} 
+      subData={{
+        fitGapData,
+        fitGapAllMoscowData,
+        fitGapGapMoscowData,
+        fitGapWithoutGapMoscowData,
+      }}/>
       // <Governance/>,
     },
     // {
@@ -176,7 +189,8 @@ const App = ({
   const [selected, setSelected] = React.useState<boolean>(finalizeSnapshot ? true : false);
   const [disabled, setDisabled] = React.useState<boolean>((finalizeSnapshot && finalizeSnapshot?.seer_rominportalsnapshotid != loadedSnapshotDetails?.seer_rominportalsnapshotid) ? true : false)
   const [openCustomDialogConfirmUpdate, setOpenCustomDialogConfirmUpdate] = React.useState<boolean>(false)
-  const finalizeCount = useSelector((state: any) => state?.snapshot?.finalizeCount)
+  const finalizeCount = useSelector((state: any) => state?.snapshot?.finalizeCount);
+  const finalizeSanpshotName = useSelector((state: any) => state?.snapshot?.finalizeSanpshotName);
 
   const onChange = (key: string) => {
     console.log(key);
@@ -718,12 +732,18 @@ const App = ({
 
               {initialFetchData?.parameterModel[0]?.seer_Enablesnapshots && (
                 <div style={{ display: 'flex', alignItems: 'center' }}>
+                  {/* finalizeSanpshotName */}
                   {finalizeCount > 0 && (
                     <div style={{ display: 'flex', alignItems: 'center'}}>
-                      <DialogTitle className="badge">
+                      {/* <DialogTitle className="badge">
                         {finalizeCreated}
-                      </DialogTitle>
-                  </div>
+                      </DialogTitle> */}
+                      <Tooltip title={finalizeSanpshotName}>
+                        <DialogTitle className="badge">
+                          {finalizeCreated}
+                        </DialogTitle>
+                      </Tooltip>
+                    </div>
                   )}
                   <ButtonGroups setSelectedButton={modeHanlder} selectedButton={selectedButton} arrayGeneratorHandler={arrayGeneratorHandler}  />
                 </div>
@@ -752,7 +772,7 @@ const App = ({
                 }}><Settings className="btn-icon" /></Button>
                 {loadedSnapshotDetails && (
                   <ToggleButton
-                    className="btn-small btn-blue-outline"
+                    className={`btn-small ${(finalizeSnapshot && disabled) ? "btn-gray-outline" : (!disabled && selected) ? 'btn-primary' : 'btn-blue-outline'}`}
                     size="small"
                     value="check"
                     selected={(!disabled && selected)}

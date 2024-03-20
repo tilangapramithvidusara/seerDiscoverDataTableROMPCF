@@ -164,7 +164,8 @@ const initialState: any = {
   snapshotSaveLoacalyOneTime: false,
 
   finalizeSnapshot: null,
-  finalizeCount: 0
+  finalizeCount: 0,
+  finalizeSanpshotName: '',
 }
 
 const snapshotSlice: any = createSlice({
@@ -497,6 +498,9 @@ const snapshotSlice: any = createSlice({
     },
     setFinalizeCount: (state, action) => {
       state.finalizeCount = action.payload;
+    },
+    setFinalizeSanpshotName: (state, action) => {
+      state.finalizeSanpshotName = action.payload
     }
   }
   
@@ -556,6 +560,7 @@ export const {
   setSnapshotSaveLoacalyOneTime,
   setFinalizeSnapshot,
   setFinalizeCount,
+  setFinalizeSanpshotName,
 } = snapshotSlice.actions;
 
 

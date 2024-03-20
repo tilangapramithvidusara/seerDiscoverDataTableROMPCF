@@ -28,14 +28,14 @@ import { columnRequirementData } from '../../Constants/requirementsData';
 import { columnCustomisationData } from '../../Constants/cutomisationData';
 import { columnDataLayoutData } from '../../Constants/dataLayouts';
 import { parameterKeyIndex } from '../../Constants/parametersSetting';
-import { fitGapColumnsM, fitGapColumnsMS, fitGapColumnsMSC } from '../../Constants/fitGap';
+import { fitGapColumnsM, fitGapColumnsMS, fitGapColumnsMSC, fitGapMocow } from '../../Constants/fitGap';
 
 const buttonTitles= [
   {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
 ]
 
-const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {data?: any, isLoading?: boolean, type: string, dataMigrationData?: any, documentLayoutsData?: any}) => {  
-  const dispatch = useDispatch();  
+const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subData}: {data?: any, isLoading?: boolean, type: string, dataMigrationData?: any, documentLayoutsData?: any, subData?: any}) => {  
+  const dispatch = useDispatch();    
   const [isOpenSideDrawer, setIsOpenSideDrawer] = React.useState<boolean>(false);
   const [selectedRow, setSelectedRow] = React.useState();
   const [tabData, setTabData] = React.useState(data);
@@ -103,6 +103,8 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
 
   React.useEffect(() => {          
     columnCreator();
+    if (type === 'FitGap')
+      handleSubTab('FitGap')
   }, [resourceType, type, tableMode, data]) // resourceType
 
   React.useEffect(() => {
@@ -136,6 +138,27 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
       setColumnSet(columnDataLayoutData);
       setTabData(documentLayoutsData);
     }
+    if (type === 'FitGap') {
+      if (resourceType === 'Must')
+        setColumnSet(fitGapColumnsM)
+      if (resourceType === 'Must Should')
+        setColumnSet(fitGapColumnsMS)
+      if (resourceType === 'Must Should Could')
+        setColumnSet(fitGapColumnsMSC)
+      setTabData(subData?.fitGapData);
+    }
+    if (type === 'FitGapAllMoscow') {
+      setColumnSet(fitGapMocow)
+      setTabData(subData?.fitGapAllMoscowData);
+    }
+    if (type === 'FitGapGapMoscow') {
+      setColumnSet(fitGapMocow)
+      setTabData(subData?.fitGapGapMoscowData);
+    }
+    if (type === 'FitGapWithoutGapMoscow') {
+      setColumnSet(fitGapMocow)
+      setTabData(subData?.fitGapWithoutGapMoscowData);
+    }
     setSelectedTab(type);
   }
   return (
@@ -157,12 +180,20 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
           <div>
             <div className='flex-wrap ptb-10 custom-toggle-button'>
               <div className='text-left'>
-                {(type === 'Estimate Resource' || type === 'Estimate Resource Milestone' || type === 'FitGap') && (
+                {/* || (type == 'FitGap' && selectedTab === 'FitGap') */}
+                {((type === 'Estimate Resource' || type === 'Estimate Resource Milestone' )) && (
                   <ButtonGroups selectedButton={resourceType} setSelectedButton={
                     setResourceType
-                  } numberOfButtons={3} buttonTitles={[
-                    {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
-                  ]}/>
+                  } numberOfButtons={3} buttonTitles={
+                    [
+                      {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
+                    ]
+                  //   (type == 'FitGap') ? [
+                  //   {title: 'Must', value: 'M'}, {title: 'Must Should', value: "MS"}, {title: 'Must Should Could', value: 'MSC'}
+                  // ] : [
+                  //   {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
+                  // ]
+                }/>
                 )}
               </div>
               {type !== 'FitGap' && (
@@ -231,6 +262,49 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData}: {da
                   }} onClick={() => handleSubTab("DL")} variant="contained">Document Layouts</Button>
               </div>
             } 
+            {
+              type === 'FitGap' && (
+                <div style={{ display: 'flex', padding: '10px 0' }}>
+                <Button style={{ 
+                  marginRight: '10px', 
+                  fontSize: '10px', 
+                  textTransform: 'none' ,
+                  backgroundColor: selectedTab === 'FitGap' ? '#015BA1' : '#676767', // Change 'green' to the color you want
+                  }} onClick={() => handleSubTab("FitGap")} variant="contained">Fit Gap</Button>
+                <Button style={{ 
+                  marginRight: '10px', 
+                  fontSize: '10px', 
+                  textTransform: 'none',
+                  backgroundColor: selectedTab === 'FitGapAllMoscow' ? '#015BA1' : '#676767', // Change 'blue' to the color you want
+                  }} onClick={() => handleSubTab("FitGapAllMoscow")} variant="contained">All Fit Gap</Button>
+                <Button style={{ 
+                  marginRight: '10px', 
+                  fontSize: '10px', 
+                  textTransform: 'none',
+                  backgroundColor: selectedTab === 'FitGapGapMoscow' ? '#015BA1' : '#676767', // Change 'blue' to the color you want
+                  }} onClick={() => handleSubTab("FitGapGapMoscow")} variant="contained">Gap</Button>
+                <Button style={{
+                  fontSize: '10px',
+                  textTransform: 'none',
+                  backgroundColor: selectedTab === 'FitGapWithoutGapMoscow' ? '#015BA1' : '#676767', // Change 'red' to the color you want
+                  }} onClick={() => handleSubTab("FitGapWithoutGapMoscow")} variant="contained">Fit/Patial/ISV</Button>
+              </div>
+              )
+            }
+              <div className='text-left'>
+                {(type == 'FitGap' && selectedTab === 'FitGap') && (
+                  <ButtonGroups selectedButton={resourceType} setSelectedButton={
+                    setResourceType
+                  } numberOfButtons={3} buttonTitles={
+                  //   (type == 'FitGap') ? [
+                  //   {title: 'Must', value: 'M'}, {title: 'Must Should', value: "MS"}, {title: 'Must Should Could', value: 'MSC'}
+                  // ] : [
+                  //   {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
+                  // ]
+                  [{title: 'Must', value: 'M'}, {title: 'Must Should', value: "MS"}, {title: 'Must Should Could', value: 'MSC'}]
+                  }/>
+                )}
+              </div>
             </div>
           <MaterialReactTable
             // key={reloadTable ? 'reload' : 'no-reload'} // Key to force re-mounting

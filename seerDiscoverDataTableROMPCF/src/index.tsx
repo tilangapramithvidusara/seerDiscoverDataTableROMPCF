@@ -9,46 +9,52 @@ import { dataMapper } from "./Utils/RequirmentData/requirement.data.utils";
 import { setBaseJson, setLiveBase, setLiveResources, setSnapshotBase } from "./redux/snapshotReport/snapshotReportSlice";
 import OverlayComponent from "./components/Overley";
 import { loadFinalizeSnapshotsAsync } from "./redux/snapshotReport/snapshoAsync";
+import { generateFitGapTotalAndPrecentage } from "./Utils/commonFunc.utils";
 
 
 function Index({tableContent, context, imageUrl}: {tableContent: any, context: any, imageUrl?: any}) {
   const dispatch = useDispatch();
-  const data = useSelector((state: any) => state.report?.initialFetchData)
+
+  const data = useSelector((state: any) => state.report?.initialFetchData); // Base data came from azure function
   const loading = useSelector((state: any) => state.report.loading)
   const [isLoading, setIsloading] = React.useState<boolean>(false);
-  const [dataSet, setDataSet] = React.useState<any []>([])
-  const [dataSetEstimateResource, setDataSetEstimateResource] = React.useState<any []>([])
-  const [dataEstimateAverageRateMilestone, setDataEstimateAverageRateMilestone] = React.useState<any[]>([])
-  const [dataEstimateResourceMilestone, setDataEstimateResourceMilestone] = React.useState<any []>([]);
-  const [documentLayouts, setDocumentLayouts] = React.useState<any []>([]);
-  const [dataMigrations, setDataMigrations] = React.useState<any []>([]);
-  const [requirementData, setRequirementData] = React.useState([])
-  const [customisationData, setCustomisationData] = React.useState([]);
-  const [fitGapData, setFitGapData] = React.useState([]);
-  const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
-  const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
-  const showSaveParameters = useSelector((state: any) => state?.snapshot?.showSaveParameters)
-  const showLoadedParameters = useSelector((state: any) => state?.snapshot?.showLoadedParameters)
-  const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
-  const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
-  const selectedSnapshotFromDB = useSelector((state: any) => state?.snapshot?.selectedSnapshotFromDB);
-  const selectedBaseJson = useSelector((state: any) => state?.snapshot?.baseJson);
+  const [dataSet, setDataSet] = React.useState<any []>([]) // // Average estimate rate data
+  const [dataSetEstimateResource, setDataSetEstimateResource] = React.useState<any []>([]) // Estimate resource data
+  const [dataEstimateAverageRateMilestone, setDataEstimateAverageRateMilestone] = React.useState<any[]>([]) // Estimate average rate milestone data
+  const [dataEstimateResourceMilestone, setDataEstimateResourceMilestone] = React.useState<any []>([]); // Estimate resource milestone data
+  const [documentLayouts, setDocumentLayouts] = React.useState<any []>([]); // document layout data
+  const [dataMigrations, setDataMigrations] = React.useState<any []>([]); // data migration data
+  const [requirementData, setRequirementData] = React.useState([]); // requirment data
+  const [customisationData, setCustomisationData] = React.useState([]); // customisation data
+  const [fitGapData, setFitGapData] = React.useState<any []>([]); // fit gap data
+  const [fitGapAllMoscowData, setFitGapAllMoscowData] = React.useState<any []>([]); // fit gap data
+  const [fitGapGapMoscowData, setFitGapGapMoscowData] = React.useState<any []>([]); // fit gap data
+  const [fitGapWithoutGapMoscowData, setFitGapWithoutGapMoscowData] = React.useState<any []>([]); // fit gap data
+  // const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
+  // const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
+  // const showSaveParameters = useSelector((state: any) => state?.snapshot?.showSaveParameters)
+  // const showLoadedParameters = useSelector((state: any) => state?.snapshot?.showLoadedParameters)
+  // const settingParameters = useSelector((state: any) => state?.snapshot?.settingParameters || []);
+  // const snapshotSettingParameters = useSelector((state: any) => state?.snapshot?.snapshotSettingParameters || []);
+  // const selectedSnapshotFromDB = useSelector((state: any) => state?.snapshot?.selectedSnapshotFromDB);
+  // const selectedBaseJson = useSelector((state: any) => state?.snapshot?.baseJson);
 
   // NEW STATE
-  const liveParameters = useSelector((state: any) => state?.snapshot?.liveParameters);
-  const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters);
-  const liveResources = useSelector((state: any) => state?.snapshot?.liveResources);
-  const currentSavedResources = useSelector((state: any) => state?.snapshot?.currentSavedResources);
-  const liveProjectTasks = useSelector((state: any) => state?.snapshot?.liveProjectTasks);
-  const currentSavedProjectTasks = useSelector((state: any) => state?.snapshot?.currentSavedProjectTasks);
+  const liveParameters = useSelector((state: any) => state?.snapshot?.liveParameters); // Live parameter data
+  const currentSavedParameters = useSelector((state: any) => state?.snapshot?.currentSavedParameters); // When change snapshot latest saved snapshot parameters data
+  const liveResources = useSelector((state: any) => state?.snapshot?.liveResources); // Live resource data
+  const currentSavedResources = useSelector((state: any) => state?.snapshot?.currentSavedResources); // When change snapshot latest saved snapshot resource data
+  const liveProjectTasks = useSelector((state: any) => state?.snapshot?.liveProjectTasks); // Live project task data
+  const currentSavedProjectTasks = useSelector((state: any) => state?.snapshot?.currentSavedProjectTasks); // When change snapshot latest saved snapshot project task data
   // const currentChangingParameters = useSelector((state: any) => state?.snapshot?.currentChangingParameters);
   const snapshotParameters = useSelector((state: any) => state?.snapshot?.snapshotParameters);
-  const isLiveValue: boolean = useSelector((state: any) => state?.snapshot?.isLive);
-  const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase);
-  const liveBase = useSelector((state: any) => state?.snapshot?.liveBase)
+  const isLiveValue: boolean = useSelector((state: any) => state?.snapshot?.isLive); // State that maintain current state is live or snapshot
+  const snapshotBase = useSelector((state: any) => state?.snapshot?.snapshotBase); // Current snapshot baseline data
+  const liveBase = useSelector((state: any) => state?.snapshot?.liveBase) // Live mode baseline data
   const isLoadingSnapshot = useSelector((state: any) => state?.snapshot?.isLoadingSnapshot);
 
   React.useEffect(() => {
+    // When application load fetch initial base data through the azure function
     initialTriggerHandler();
     // saveSnapshotAsync(imageUrl)
   }, []);
@@ -57,6 +63,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     dispatch(setImageUrl(imageUrl));
   }, [imageUrl]);
 
+  // fetch initial base data through the azure function
   const initialTriggerHandler = async() => {
     setIsloading(true)
     const inititalData = await fetchInitialDataAsync();
@@ -73,6 +80,8 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     }
   }
 
+
+  // This is the function contains all the calculation regarding generating all the sheets
   const arrayGeneratorHandler = async(isLive?: boolean, requestObj?: any, mode?: string) => {
     setIsloading(true)
 
@@ -109,14 +118,21 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     // console.log('(selectedSnapshotFromDB && modeStatus) ==> ', (selectedSnapshotFromDB && modeStatus));
     // console.log('selectedBaseJson opo ==> ', selectedBaseJson);
 
+    // Callback function which handle all the calculations
     arrayGenerator(dataBundle, dispatch, parameterSet, modeStatus)
       .then(async(result: any) => {
-        // Handle the result here
+        // Handle the result here        
+        const fitGapData = await generateFitGapTotalAndPrecentage(result?.fitGapTab || [])
+        setFitGapData(fitGapData || [])
+        setFitGapAllMoscowData(result?.fitGapAllMoscowTab || [])
+        setFitGapGapMoscowData(result?.fitGapGapMoscowTab || []);
+        setFitGapWithoutGapMoscowData(result?.fitGapWithoutGapMoscow || []);
+
         setDataSet(result?.dataEstimateAverageRate ? result?.dataEstimateAverageRate : []);
         setDataSetEstimateResource(result?.dataEstimateResource ? result?.dataEstimateResource : [])
         setDataEstimateAverageRateMilestone(result?.dataEstimateAverageRateMilestone ? result?.dataEstimateAverageRateMilestone : [])
         setDataEstimateResourceMilestone(result?.dataEstimateResourceMilestone ? result?.dataEstimateResourceMilestone : []);
-        setFitGapData(result?.fitGapTab || [])
+        
         dispatch(setEstimateAveRateAnalysisDesign(result?.reducerValues?.estimageAveRateAnalysisDesignSidePane))
         dispatch(setEstimateAveRateCusomisationDesign(result?.reducerValues?.estimageAveRateCustomisationDesignSidePane));
         dispatch(setEstimateAveRateCustomerRequirementDesign(result?.reducerValues?.estimageAveRateCustomerRequirementDesignSidePane));
@@ -128,9 +144,9 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
         dispatch(setEstimateAveRateCustomRequirementBuild(result?.reducerValues?.estimageAveRateCustomerCustomRequirementBuildSidePane));
         dispatch(setEstimateAveRateDocumentLayout(result?.reducerValues?.estimageAveRateDocumentLayoutSidePane))
 
+        // Request for get is their any specific finalize snapshot available for specific account (Organization)
         dispatch(loadFinalizeSnapshotsAsync());
         // estimageAveRateDocumentLayoutSidePane
-
         deleteOutputSetAsync({ OutputSetId: data?.OutputSetId })
         setIsloading(false)
       })
@@ -177,6 +193,9 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
           documentLayoutsData={documentLayouts}
           dataMigrationData={dataMigrations}
           fitGapData={fitGapData}
+          fitGapAllMoscowData={fitGapAllMoscowData}
+          fitGapGapMoscowData={fitGapGapMoscowData}
+          fitGapWithoutGapMoscowData={fitGapWithoutGapMoscowData}
         />}
     </div>
   )

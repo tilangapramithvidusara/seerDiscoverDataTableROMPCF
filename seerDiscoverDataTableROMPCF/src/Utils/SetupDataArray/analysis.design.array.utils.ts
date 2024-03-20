@@ -18,28 +18,32 @@ import { generateEstimateResource } from "./estimate.resource.utils";
 import { generateEstimateResourceSub } from "./estimate.resource.sub.utils";
 import { generateEstimateResourceMilestone } from "./estimate.resource.milestone.utils";
 import { generateEstimateResourceMilestoneSub } from "./estimate.resource.milestone.sub.utils";
+import { fitGapTabValue } from "../EstimateAveRate/fitgap.utils";
 
 export const arrayGenerator = async (initialDataSet: any, dispatch: any, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
-  const hasParameters = settingParameters && isSnapshotModeEnable
+
+  const hasParameters = settingParameters && isSnapshotModeEnable // check if it is live mode or snapshot mode (if hasParameter equal true then it is in snapshot mode)
   let resultArray: any[] = [];
-  let subTotalMAnalysisDesign = 0;
-  let subTotalMSAnalysisDesign = 0;
-  let subTotalMSCAnalysisDesign = 0;
+  let subTotalMAnalysisDesign = 0; // varaiable for handle sub total of "Average rate" MUST value
+  let subTotalMSAnalysisDesign = 0; // varaiable for handle sub total of "Average rate" MUST/SHOULD value
+  let subTotalMSCAnalysisDesign = 0; // varaiable for handle sub total of "Average rate" MUST/SHOULD/COULD value
 
-  let subTotalMEstimateDesignAvgRateMilestone = 0;
-  let subTotalMSEstimateDesignAvgRateMilestone = 0;
-  let subTotalMSCEstimateDesignAvgRateMilestone = 0;
+  let subTotalMEstimateDesignAvgRateMilestone = 0; // varaiable for handle sub total of "Average rate milstone" MUST value
+  let subTotalMSEstimateDesignAvgRateMilestone = 0; // varaiable for handle sub total of "Average rate milstone" MUST/SHOULD value
+  let subTotalMSCEstimateDesignAvgRateMilestone = 0; // varaiable for handle sub total of "Average rate milstone" MUST/SHOULD/COULD value
 
-  const condition = romParameter === "Days";
+  const condition = romParameter === "Days"; // currently this is using as ahrd coded value
   const {parameterModel} = initialDataSet;
   let {hourlyRate, hoursPerday} = parameterModel[0];
   if (hasParameters) {
+    // Set hourly rate if has snapshot
     hourlyRate = {
       ...hourlyRate,
       value: parseFloat(settingParameters?.formattedData[
         parameterKeyIndex.hourlyRate
       ]?.currentValue || '0')
     }
+    // Set hours per data if has snapshot
     hoursPerday = parseFloat(settingParameters?.formattedData[
       parameterKeyIndex.hoursPerDay
     ]?.currentValue || '0');
@@ -52,25 +56,29 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
     // checkHasFteParameter
     
     if (hasParameters) {
+      // check, snapshot parameter values has contain atleast one "FTE" value
       hasFteValue = await checkHasFteParameter(settingParameters);
       
       if (hasFteValue) {
+        // if contains atleast one "fte" value then do the calculation for getting 
         fteValue = await generateIColoumnValueFte(initialDataSet, '', settingParameters, isSnapshotModeEnable);
       }
     } else {
+      // check, live parameter values has contain atleast one "FTE" value
       hasFteValue = await checkHasFte(parameterModel);
       if (hasFteValue) {
+        // if contains atleast one "fte" value then do the calculation for getting
         fteValue = await generateIColoumnValueFte(initialDataSet, '', settingParameters, isSnapshotModeEnable);
       }
     }
     
+    // Get calculated value for "Average estimate rate" and "Average estimate rate milestone"
     const analisisAndDesignCalculation: any = await generateIColoumnValue({...initialDataSet, fteValue}, analysisAndDesign.row, dispatch, hasFteValue, settingParameters, isSnapshotModeEnable);
-    console.log('fit gap ===> ', analisisAndDesignCalculation?.fitGapTab);
+    const fitGapCalculation = await fitGapTabValue({...initialDataSet, fteValue}, condition, settingParameters, isSnapshotModeEnable);
     
-    // data[0] = Object.assign({}, data[0], { M: analisisAndDesignCalculation?.analysisDesing?.resultValue });
-    (data[0] as any).M = analisisAndDesignCalculation?.analysisDesing?.resultValue;
-    (data[0] as any)['M/S'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMS;
-    (data[0] as any)['M/S/C'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMSC;
+    (data[0] as any).M = analisisAndDesignCalculation?.analysisDesing?.resultValue; // set cost's MUST value of "analysis design"
+    (data[0] as any)['M/S'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMS; // set cost's MUST/SHOULD value of "analysis design"
+    (data[0] as any)['M/S/C'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMSC; // set cost's MUST/SHOULD/COULD value of "analysis design"
     subTotalMAnalysisDesign +=analisisAndDesignCalculation?.analysisDesing?.resultValue;
     subTotalMSAnalysisDesign += analisisAndDesignCalculation?.analysisDesing?.resultValueMS || 0;
     subTotalMSCAnalysisDesign += analisisAndDesignCalculation?.analysisDesing?.resultValueMSC || 0;
@@ -438,7 +446,15 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
       dataEstimateResourceMilestone: responseGenerateEstimateResourceMilestoneSub,
       // responseGenerateEstimateResourceMilestone
       reducerValues: analisisAndDesignCalculation?.reducerValues,
-      fitGapTab: analisisAndDesignCalculation?.fitGapTab
+      // fitGapCalculation
+      fitGapTab: fitGapCalculation?.fitGapTab,
+      fitGapAllMoscowTab: fitGapCalculation?.fitGapAllMoscowTab,
+      fitGapGapMoscowTab: fitGapCalculation?.fitGapGapMoscowTab,
+      fitGapWithoutGapMoscow: fitGapCalculation?.fitGapWithoutGapMoscow,
+      // fitGapTab: analisisAndDesignCalculation?.fitGapTab,
+      // fitGapAllMoscowTab: analisisAndDesignCalculation?.fitGapAllMoscowTab,
+      // fitGapGapMoscowTab: analisisAndDesignCalculation?.fitGapGapMoscowTab,
+      // fitGapWithoutGapMoscow: analisisAndDesignCalculation?.fitGapWithoutGapMoscow,
     };
   } catch (error) {
     console.error('Error:', error);

@@ -1,4 +1,4 @@
-import { setRecordId, setBaseJson, setSnapshotLoading, setSettingParameters, setLoadedSnapshot, setSnapshotList, setShowSaveParameters, setResourceModelDataParameters, setSelectedSnapshotFromDB, setStateSnapshot, setIsSnapshotLoading, setLoadedSnapshotId, setCurrentSavedParameters, setInitiallyCurrentChangingParameters, setCurrentSavedResources, setInitiallyCurrentChangingResources, setCurrentSavedProjectTasks, setInitiallyCurrentChangingProjectTasks, setSnapshotBase, setLoadedSnapshotDetails, setLoadedSnapshotDetailsWhenSave, setDoCalculation, setShowLoadedSnapshotBase, setShowLoadedSnapshotPametersNRates, setSnapshotParameters, setLiveBase, setFinalizeCount } from './snapshotReportSlice';
+import { setRecordId, setBaseJson, setSnapshotLoading, setSettingParameters, setLoadedSnapshot, setSnapshotList, setShowSaveParameters, setResourceModelDataParameters, setSelectedSnapshotFromDB, setStateSnapshot, setIsSnapshotLoading, setLoadedSnapshotId, setCurrentSavedParameters, setInitiallyCurrentChangingParameters, setCurrentSavedResources, setInitiallyCurrentChangingResources, setCurrentSavedProjectTasks, setInitiallyCurrentChangingProjectTasks, setSnapshotBase, setLoadedSnapshotDetails, setLoadedSnapshotDetailsWhenSave, setDoCalculation, setShowLoadedSnapshotBase, setShowLoadedSnapshotPametersNRates, setSnapshotParameters, setLiveBase, setFinalizeCount, setFinalizeSanpshotName } from './snapshotReportSlice';
 import { convertBase64ToJson, executeAfterGivenDilay } from '../../Utils/commonFunc.utils';
 import { seerBasejson, seerUpdatedsnapshotdata } from '../../Constants/endPoints';
 import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
@@ -149,7 +149,7 @@ export const loadFinalizeSnapshotsAsync: any = () => {
       dispatch(setSnapshotLoading(true));
       window.parent.webapi.safeAjax({
         type: "GET",
-        url: `/_api/seer_rominportalsnapshots?$select=seer_rominportalsnapshotid,seer_isfinalversion&$filter=(_seer_account_value eq ${accountId} and seer_reporttype eq 381070000 and seer_isfinalversion eq true)&$count=true`,
+        url: `/_api/seer_rominportalsnapshots?$select=seer_rominportalsnapshotid,seer_name,seer_isfinalversion&$filter=(_seer_account_value eq ${accountId} and seer_reporttype eq 381070000 and seer_isfinalversion eq true)&$count=true`,
         // "/_api/seer_rominportalsnapshots?$select=seer_rominportalsnapshotid,_seer_contact_value,_createdby_value,createdon,seer_description,_modifiedby_value,modifiedon"
         contentType: "application/json",
         headers: {
@@ -159,6 +159,7 @@ export const loadFinalizeSnapshotsAsync: any = () => {
             var results = data;
             var odata_count = results["@odata.count"]
             dispatch(setFinalizeCount(odata_count));
+            dispatch(setFinalizeSanpshotName(results?.value?.[0]?.seer_name))
             // setSnapshotConfigList("List results", results?.value);
         },
         error: function (xhr: any, textStatus: any, errorThrown: any) {
