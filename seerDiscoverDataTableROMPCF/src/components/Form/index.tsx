@@ -9,7 +9,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
 import CheckIcon from '@mui/icons-material/Check';
 import { ToggleButton } from '@mui/material';
-
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function FormDialog({handleClickOpen, handleClose, handleSubmit, setSubmitFormData, finalizeSnapshot} : any) {
   const [selected, setSelected] = React.useState(false);
@@ -25,6 +26,19 @@ export default function FormDialog({handleClickOpen, handleClose, handleSubmit, 
         },
       }}>
         <DialogTitle className='heading custom-heading'>Create New</DialogTitle>
+        <IconButton
+          aria-label="close"
+          className='close'
+          onClick={handleClose}
+          sx={{
+            position: 'absolute',
+            right: 18,
+            top: 18,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
         <DialogContentText className='mt-10 d-inline'>
           <label>
             <span>
