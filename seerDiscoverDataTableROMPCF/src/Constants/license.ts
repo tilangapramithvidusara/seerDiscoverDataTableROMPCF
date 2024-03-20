@@ -3,33 +3,33 @@
 export const licenseColumns = [
   {
     header: 'License',
-    accessorKey: 'moduleName',
+    accessorKey: 'licenseName',
     enableGrouping: true,
     size: 150,
   },
   {
     header: 'Quantity',
-    accessorKey: 'fit_M',
+    accessorKey: 'quantity',
     size: 220,
   },
   {
     header: 'Building Period',
-    accessorKey: 'isvfit_M',
+    accessorKey: 'buildingPeriod',
     size: 220,
   },
   {
     header: 'Cost Price (PUPM)',
-    accessorKey: 'partial_M',
+    accessorKey: 'costrPrice',
     size: 220,
   },
   {
     header: 'Sell Price (PUPM)',
-    accessorKey: 'gap_M',
+    accessorKey: 'sellPrice',
     size: 220,
   },
   {
     header: 'Estimated Price',
-    accessorKey: 'gap_M',
+    accessorKey: 'estimatedPrice',
     size: 220,
   },
 ]

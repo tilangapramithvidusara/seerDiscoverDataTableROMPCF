@@ -215,7 +215,7 @@ const App = ({
       dispatch(setSnapshotBase(inititalData?.result));
       if (isLive) {
         const formatedData = parameterModelConvertToTableJson(inititalData?.result?.parameterModel);
-        arrayGeneratorHandler(true, {...formatedData, base: inititalData?.result, currentSavedResources: inititalData?.result?.resourceModelData}, 'liveRefresh');
+        // arrayGeneratorHandler(true, {...formatedData, base: inititalData?.result, currentSavedResources: inititalData?.result?.resourceModelData}, 'liveRefresh');
       } else {
         const formatedData = parameterModelConvertToTableJson(inititalData?.result?.parameterModel);
         dispatch(setLatestChanges({

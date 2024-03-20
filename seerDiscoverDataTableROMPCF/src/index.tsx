@@ -86,6 +86,9 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     setIsloading(true)
 
     const modeStatus =  (mode && (mode == 'snapshot' || mode == 'liveRefresh')) ? true : isLive ? !isLive : !isLiveValue;
+
+    // console.log('modeStatus ==> ', modeStatus, requestObj);
+    
     
     const requirment: any = dataMapper(modeStatus ? snapshotBase?.OutputData : data?.OutputData);
     const customisation: any = dataMapper(modeStatus ? snapshotBase?.CustomisationModels : data?.CustomisationModels, 'customisation');
@@ -120,7 +123,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
 
     // Callback function which handle all the calculations
     arrayGenerator(dataBundle, dispatch, parameterSet, modeStatus)
-      .then(async(result: any) => {
+      .then(async(result: any) => {        
         // Handle the result here        
         const fitGapData = await generateFitGapTotalAndPrecentage(result?.fitGapTab || [])
         setFitGapData(fitGapData || [])
@@ -165,6 +168,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     }
   }, 
   [data]);
+  // data
 
   // console.log('dataSet => ', dataSet);
   // console.log('dataSetEstimateResource ==> ', dataSetEstimateResource);

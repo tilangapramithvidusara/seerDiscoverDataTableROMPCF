@@ -88,7 +88,7 @@ export const generateDesignReviewMValue = async(inititlaData: any, analisisDesig
           returnObject.designReview.resultValue = romParameter == "Hours" ? designValue :  designValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview
           returnObject.designReview.resultValueMS = romParameter == "Hours" ? designValue :  designValue/hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview
           returnObject.designReview.resultValueMSC = romParameter == "Hours" ? designValue :  designValue/hoursPerday
-        } else if (percentData?.[designTypeValue] == percentData?.[100000000]) { // FTE
+        } else if (percentData?.[designTypeValue] == percentData?.[100000000]) { // FTE          
           returnObject.designReview.resultValue = romParameter == "Hours" ? (designValue * h8) : (designValue * h8)/hoursPerday // if c2 === hours then get direct (parameterModel[0]?.designReview * h8)  // need to find H8
           returnObject.designReview.resultValueMS = romParameter == "Hours" ? (designValue * g8) : (designValue * g8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview * g8  // need to find G8
           returnObject.designReview.resultValueMSC = romParameter == "Hours" ? (designValue * f8) : (designValue * f8)/hoursPerday // if c2 === hours then get direct parameterModel[0]?.designReview * f8  // need to find F8

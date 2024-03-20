@@ -134,12 +134,12 @@ export const fitGapMocow = [
     size: 220,
   },
   {
-    header: 'Must Should',
+    header: 'Should',
     accessorKey: 'MS',
     size: 220,
   },
   {
-    header: 'Must Should Could',
+    header: 'Could',
     accessorKey: 'MSC',
     size: 220,
   },

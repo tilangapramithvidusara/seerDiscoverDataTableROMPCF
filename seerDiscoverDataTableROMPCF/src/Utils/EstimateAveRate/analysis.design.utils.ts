@@ -534,8 +534,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
       fColmnValueEstimateAveRate = responseDocumentLayout?.projectRisk?.estimateAveRate
 
 
-      // ################################ESTIMATE RESOURCE################################
-      
+      // ################################ESTIMATE RESOURCE################################      
       resultValueAnalisisDesignEstimateResource = generateEstimateResourceValue(
         inititlaData, {
           M: (responseAnalisisDesign?.resultValue || 0),
@@ -1249,8 +1248,10 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
     if (inititlaData) {
       // let response: any;
       // BASE DATA LOOP
+      
       const baseLoop = await BaseData && BaseData.length && BaseData.map(async(baseItem: any, baseIndex: number) => {
         const {allResources} = baseItem;
+
         // let response = {
         //   fitGapRecords,
         //   fitGapMoscowRecords,

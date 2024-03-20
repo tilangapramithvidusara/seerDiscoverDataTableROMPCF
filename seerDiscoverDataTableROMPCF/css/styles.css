@@ -699,3 +699,35 @@ table {
   color: red;
   align-self: flex-start;
 }
+
+.customControl .text-left {
+  text-align: left;
+}
+
+.customControl .ml-5 {
+  margin-left: 5px;
+}
+
+.alert-modal .close, .custom-modal .close{
+  height: 18px;
+  width: 18px;
+}
+
+.alert-modal .close svg, .custom-modal .close svg{
+  font-size: 22px;
+}
+
+.alert-modal .close:hover, .custom-modal .close:hover{
+  color: rgba(0, 0, 0, 0.88);
+  background-color: rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  border-radius: 4px !important;
+}
+
+.alert-modal .pb-5 {
+  padding-bottom: 5px;
+}
+
+.snapshot-modal input, .snapshot-modal .ant-select, .snapshot-modal .ant-input  {
+  font-family: 'Roboto', sans-serif !important;
+}
