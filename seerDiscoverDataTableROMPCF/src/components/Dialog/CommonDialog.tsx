@@ -7,6 +7,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useSelector } from 'react-redux';
 import { cancel } from '../../Constants/messages';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface AlertButtonProps {
   text: string;
@@ -32,6 +34,19 @@ function CustomDialog(props: CustomDialogProps) {
       </Button> */}
       <Dialog open={open} onClose={handleClose} className='alert-modal confirm-modal'>
         <DialogTitle className='heading'>{title}</DialogTitle>
+        <IconButton
+          aria-label="close"
+          className='close'
+          onClick={handleClose}
+          sx={{
+            position: 'absolute',
+            right: 18,
+            top: 18,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
         {description && (
           <DialogContent>
             <DialogContentText className='content'>
@@ -39,7 +54,7 @@ function CustomDialog(props: CustomDialogProps) {
             </DialogContentText>
           </DialogContent>
         )}
-        <div className='flex pt-15 footer'>
+        <div className='flex pt-15 pb-5 footer'>
         {buttons?.length && buttons.map((item: AlertButtonProps, index: number) => {
           const {text, action} = item;
           return (

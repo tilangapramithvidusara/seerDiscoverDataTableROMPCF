@@ -179,9 +179,10 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subD
         {type != 'RequirementData' && type != 'CustomisationData' && (
           <div>
             <div className='flex-wrap ptb-10 custom-toggle-button'>
+            {((type === 'Estimate Resource' || type === 'Estimate Resource Milestone' )) && (
               <div className='text-left'>
                 {/* || (type == 'FitGap' && selectedTab === 'FitGap') */}
-                {((type === 'Estimate Resource' || type === 'Estimate Resource Milestone' )) && (
+               
                   <ButtonGroups selectedButton={resourceType} setSelectedButton={
                     setResourceType
                   } numberOfButtons={3} buttonTitles={
@@ -194,8 +195,9 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subD
                   //   {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
                   // ]
                 }/>
-                )}
+                
               </div>
+              )}
               {type !== 'FitGap' && (
                 <div className='text-right'>
                   <ButtonGroups

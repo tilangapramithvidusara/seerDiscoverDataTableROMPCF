@@ -7,6 +7,8 @@ import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import ResourceTable from '../Table/ResourceTable';
 import ProjectTaskTable from '../Table/ProjectTaskTable';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 export interface SimpleDialogProps {
   open?: boolean;
@@ -58,6 +60,19 @@ export default function SimpleDialog(props: SimpleDialogProps) {
       className='custom-modal'
     >
       <DialogTitle className='modal-title'>Settings</DialogTitle>
+      <IconButton
+          aria-label="close"
+          className='close'
+          onClick={handleClose}
+          sx={{
+            position: 'absolute',
+            right: 18,
+            top: 18,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
       <Tabs defaultActiveKey="1" 
       items={tabItems} 
       onChange={onChange} 

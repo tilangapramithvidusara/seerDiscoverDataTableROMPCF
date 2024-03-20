@@ -708,7 +708,7 @@ const App = ({
               <span className="blue-text">Snapshot Name: {' '}</span>
               {loadedSnapshotDetails ? (
                 <>
-                  <span className="gray-text">{loadedSnapshotDetails?.seer_name}</span>
+                  <span className="gray-text ml-5">{loadedSnapshotDetails?.seer_name}</span>
                   {(finalizeSnapshot && !disabled) && (
                     <span className="blue-text" style={{ marginLeft: '5px' }}>
                       <LockIcon className="locked-icon" />
@@ -716,7 +716,7 @@ const App = ({
                   )}
                 </>
               ) : (
-                <span className="gray-text">Unsaved</span>
+                <span className="gray-text ml-5">Unsaved</span>
               )}
             </div>
           )}
@@ -833,7 +833,8 @@ const App = ({
       }
       {openCustomDialog && (
         <CustomDialog 
-          title={snapshotSaveConfirmMessage}
+          title="Confirmation"
+          description={snapshotSaveConfirmMessage}
           open={openCustomDialog}
           handleClose={() => setOpenCustomDialog(false)}
           buttons={(finalizeSnapshot && !disabled) ?
