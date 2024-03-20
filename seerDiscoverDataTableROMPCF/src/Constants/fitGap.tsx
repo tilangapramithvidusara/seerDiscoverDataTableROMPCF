@@ -92,7 +92,7 @@ export const fitGapColumnsMSC = [
   },
 ]
 
-export let fitGapObject = {
+export const fitGapObject = {
   moduleName: '',
   moduleId: '',
   fit_M: 0,
@@ -108,3 +108,39 @@ export let fitGapObject = {
   partial_MSC: 0,
   gap_MSC: 0,
 }
+
+export let fitGapMoscowObject = {
+  moduleName: '',
+  moduleId: '',
+  M: 0,
+  MS: 0,
+  MSC: 0,
+}
+
+export let figGapMoscowRecords: any[] = [];
+export let fitGapGapMoscowRecords: any[] = [];
+export let fitGapWithoutGapRecords: any[] = [];
+
+export const fitGapMocow = [
+  {
+    header: 'Name',
+    accessorKey: 'moduleName',
+    enableGrouping: true,
+    size: 150,
+  },
+  {
+    header: 'Must',
+    accessorKey: 'M',
+    size: 220,
+  },
+  {
+    header: 'Must Should',
+    accessorKey: 'MS',
+    size: 220,
+  },
+  {
+    header: 'Must Should Could',
+    accessorKey: 'MSC',
+    size: 220,
+  },
+]

@@ -21,7 +21,7 @@ import { generateUATSupportMValue } from "./uat.support.utils";
 import { setEstimateAveRateAnalysisDesign } from "../../redux/report/reportSlice";
 import { parameterKeyIndex } from "../../Constants/parametersSetting";
 import { checkTypeparseFloat } from "../setting.values.convertor.utils";
-import { fitGapObject } from "../../Constants/fitGap";
+import { fitGapMoscowObject, fitGapObject } from "../../Constants/fitGap";
 
 export const generateIColoumnValue = async(inititlaData: any, title: string, dispatch: any, hasFteValue?: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   const hasParameters = settingParameters && isSnapshotModeEnable;
@@ -1038,7 +1038,10 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
         estimageAveRateCustomerCustomRequirementBuildSidePane,
         estimageAveRateDocumentLayoutSidePane,
       },
-      fitGapTab: responseAnalisisDesign?.fitGapTab
+      fitGapTab: responseAnalisisDesign?.fitGapTab,
+      fitGapAllMoscowTab: responseAnalisisDesign?.fitGapAllMoscowTab,
+      fitGapGapMoscowTab: responseAnalisisDesign?.fitGapGapMoscowTab,
+      fitGapWithoutGapMoscow: responseAnalisisDesign?.fitGapWithoutGapMoscow,
     };
   } catch (error) {
     return {
@@ -1229,6 +1232,9 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
 
   const fitGapModules = new Set();
   let fitGapRecords: any[] = [];
+  let fitGapMoscowRecords: any[] = [];
+  let fitGapGapMoscowRecords: any[] = [];
+  let fitGapWithoutGapRecords: any[] = [];
 
   let fitGapValue = fitGapObject;
   try {
@@ -1241,23 +1247,62 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
     }
 
     if (inititlaData) {
-
+      // let response: any;
       // BASE DATA LOOP
       const baseLoop = await BaseData && BaseData.length && BaseData.map(async(baseItem: any, baseIndex: number) => {
         const {allResources} = baseItem;
+        // let response = {
+        //   fitGapRecords,
+        //   fitGapMoscowRecords,
+        //   fitGapGapMoscowRecords,
+        //   fitGapWithoutGapRecords,
+        // };
+        // console.log('x ==> ', baseItem?.module?.name);
+          
+        // console.log('2222 ==> ', baseItem?.module?.id == '641dfbc7-ff5b-ec11-8f8f-000d3ad652a4', fitGapModules.has(baseItem?.module?.id));
+        
+        // if (fitGapModules.has(baseItem?.module?.id)) {
+        //   // fitGapRecords 
+        //   console.log('we2');
+          
+        //   response = await fitGapHanlder(baseItem, fitGapRecords, fitGapMoscowRecords, fitGapGapMoscowRecords, fitGapWithoutGapRecords);
+        //   console.log('wwww ==> ', response);
+          
 
-        if (fitGapModules.has(baseItem?.module?.id)) {
-          fitGapRecords = fitGapHanlder(baseItem, fitGapRecords);
-
-        } else {
-          fitGapModules.add(baseItem?.module?.id)
-          fitGapRecords.push({
-            ...fitGapObject,
-            moduleName: baseItem?.module?.name,
-            moduleId: baseItem?.module?.id,
-          });
-          fitGapRecords = fitGapHanlder(baseItem, fitGapRecords);
-        }
+        // } else {
+        //   console.log('qq');
+          
+        //   fitGapModules.add(baseItem?.module?.id)
+        //   fitGapRecords.push({
+        //     ...fitGapObject,
+        //     moduleName: baseItem?.module?.name,
+        //     moduleId: baseItem?.module?.id,
+        //   });
+        //   fitGapMoscowRecords.push({
+        //     ...fitGapMoscowObject,
+        //     moduleName: baseItem?.module?.name,
+        //     moduleId: baseItem?.module?.id,
+        //   })
+        //   fitGapGapMoscowRecords.push({
+        //     ...fitGapMoscowObject,
+        //     moduleName: baseItem?.module?.name,
+        //     moduleId: baseItem?.module?.id,
+        //   })
+        //   fitGapWithoutGapRecords.push({
+        //     ...fitGapMoscowObject,
+        //     moduleName: baseItem?.module?.name,
+        //     moduleId: baseItem?.module?.id,
+        //   })
+        //   // fitGapRecords = 
+        //   response = await fitGapHanlder(baseItem, fitGapRecords, fitGapMoscowRecords, fitGapGapMoscowRecords, fitGapWithoutGapRecords);
+        //   console.log('wwww2222 ==> ', response);
+        // }
+        // console.log('response ==> ', response);
+        
+        // fitGapRecords = response?.fitGapRecords;
+        // fitGapMoscowRecords = response?.fitGapMoscowRecords;
+        // fitGapGapMoscowRecords = response?.fitGapGapMoscowRecords;
+        // fitGapWithoutGapRecords = response?.fitGapWithoutGapRecords;
 
         // && baseItem?.module?.name != "Assembly - BC"
         // Assembly - BC
@@ -1487,7 +1532,6 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           }
         }
       });
-
       // console.log('p ==>', 
       // totalModules.length, 
       // overidesModulesConfiguration.length, 
@@ -1703,7 +1747,11 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
             condition
           ),
         },
+        
         fitGapTab: fitGapRecords,
+        fitGapAllMoscowTab: fitGapMoscowRecords,
+        fitGapGapMoscowTab: fitGapGapMoscowRecords,
+        fitGapWithoutGapMoscow: fitGapWithoutGapRecords,
       };
     } else {
       return {resultValue, resultValueMS, resultValueMSC, 
@@ -1748,7 +1796,10 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
           resultBaseValueMS: 0,
           resultBaseValueMSC: 0,
         },
-        fitGapTab: fitGapRecords,
+        // fitGapTab: fitGapRecords,
+        // fitGapAllMoscowTab: fitGapMoscowRecords,
+        // fitGapGapMoscowTab: fitGapGapMoscowRecords,
+        // fitGapWithoutGapMoscow: fitGapWithoutGapRecords,
       };
     }
   } catch (error) {
@@ -1794,7 +1845,10 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         resultBaseValueMS: 0,
         resultBaseValueMSC: 0,
       },
-      fitGapTab: fitGapRecords,
+      // fitGapTab: fitGapRecords,
+      // fitGapAllMoscowTab: fitGapMoscowRecords,
+      // fitGapGapMoscowTab: fitGapGapMoscowRecords,
+      // fitGapWithoutGapMoscow: fitGapWithoutGapRecords,
     };
   }
 }
@@ -1953,47 +2007,91 @@ export const moduleReaderConfiguration = (moduleDataItem: any, primaryResourceCo
   return {primaryResourceConfigurationValueFromModuleData, secondaryResourceConfigurationValueFromModuleData}
 }
 
-export const fitGapHanlder = (baseItem: {module: {id: string}, seerMoscow: string, fitGap: string}, fitGapRecords: any[]) => {
-  let response = fitGapRecords;
-  if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000]) {
-    response = checkFitGapTypeHandler(baseItem, fitGapRecords, 'M');
+// export const fitGapHanlder = async(baseItem: {module: {id: string}, seerMoscow: string, fitGap: string}, fitGapRecords: any[], fitGapMoscowRecords: any[], fitGapGapMoscowRecords: any[], fitGapWithoutGapRecords: any[]) => {
+//   console.log('wswswswwsww');
+  
+//   let response: any;
+//   // response.fitGapRecords = fitGapRecords;
+//   // response.fitGapMoscowRecords = fitGapMoscowRecords;
+//   // response.fitGapGapMoscowRecords = fitGapGapMoscowRecords;
+//   // response.fitGapWithoutGapRecords = fitGapWithoutGapRecords;
+//   console.log('sesese ===> ');
+  
+//   if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000]) {
+//     response = await checkFitGapTypeHandler(baseItem, fitGapRecords, 'M', fitGapMoscowRecords, fitGapGapMoscowRecords, fitGapWithoutGapRecords);
 
-  }
-  if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) {
-    response = checkFitGapTypeHandler(baseItem, fitGapRecords, 'MS');
-  }
-  if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) {
-    response = checkFitGapTypeHandler(baseItem, fitGapRecords, 'MSC');
-  }
-  return response;
-}
+//   }
+//   if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001]) {
+//     response = await checkFitGapTypeHandler(baseItem, fitGapRecords, 'MS', fitGapMoscowRecords, fitGapGapMoscowRecords, fitGapWithoutGapRecords);
+//   }
+//   if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) {
+//     response = await checkFitGapTypeHandler(baseItem, fitGapRecords, 'MSC', fitGapMoscowRecords, fitGapGapMoscowRecords, fitGapWithoutGapRecords);
+//   }
 
-export const checkFitGapTypeHandler = (baseItem: {module: {id: string}, seerMoscow: string, fitGap: string}, fitGapRecords: any[], moscowKeyValue: string) => {
-  let response = fitGapRecords;
-  if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000000]) { // Fit
-    response = findAndSetFitGapValue(baseItem, fitGapRecords, moscowKeyValue, 'fit');
+//   console.log('reswwwww ==> ', response);
+  
+//   return response;
+// }
 
-  } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000001]) { // Gap
-    response = findAndSetFitGapValue(baseItem, fitGapRecords, moscowKeyValue, 'gap');
-  } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000002]) { // Partial
-    response = findAndSetFitGapValue(baseItem, fitGapRecords, moscowKeyValue, 'partial');
+// export const checkFitGapTypeHandler = (baseItem: {module: {id: string}, seerMoscow: string, fitGap: string}, fitGapRecords: any[], moscowKeyValue: string, fitGapMoscowRecords: any[], fitGapGapMoscowRecords: any[], fitGapWithoutGapRecords: any[]) => {
+//   let response: any;
+//   // response.fitGapRecords = fitGapRecords;
+//   // response.fitGapMoscowRecords = fitGapMoscowRecords;
+//   // response.fitGapGapMoscowRecords = fitGapGapMoscowRecords;
+//   // response.fitGapWithoutGapRecords = fitGapWithoutGapRecords;
+//   if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000000]) { // Fit
+//     response = findAndSetFitGapValue(baseItem, fitGapRecords, moscowKeyValue, 'fit', fitGapMoscowRecords, fitGapGapMoscowRecords, fitGapWithoutGapRecords);
 
-  } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000003]) { // ISV Fit
-    response = findAndSetFitGapValue(baseItem, fitGapRecords, moscowKeyValue, 'isvfit');
+//   } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000001]) { // Gap
+//     response = findAndSetFitGapValue(baseItem, fitGapRecords, moscowKeyValue, 'gap', fitGapMoscowRecords, fitGapGapMoscowRecords, fitGapWithoutGapRecords);
+//   } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000002]) { // Partial
+//     response = findAndSetFitGapValue(baseItem, fitGapRecords, moscowKeyValue, 'partial', fitGapMoscowRecords, fitGapGapMoscowRecords, fitGapWithoutGapRecords);
 
-  }
-  return response;
-}
+//   } else if (fitGapData?.[baseItem?.fitGap] == fitGapData?.[100000003]) { // ISV Fit
+//     response = findAndSetFitGapValue(baseItem, fitGapRecords, moscowKeyValue, 'isvfit', fitGapMoscowRecords, fitGapGapMoscowRecords, fitGapWithoutGapRecords);
+//   } else {
+//     console.log('****** ==> ', baseItem?.fitGap);
+    
+//   }
+//   return response;
+// }
 
-export const findAndSetFitGapValue = (baseItem: {module: {id: string}, seerMoscow: string, fitGap: string}, fitGapRecords: any[], moscowKeyValue: string, fitgapKeyValue: string) => {
-  const index = fitGapRecords.findIndex((item: any) => item?.moduleId == baseItem?.module?.id);
-  let itemValue = fitGapRecords[index];  
-  const key = `${fitgapKeyValue}_${moscowKeyValue}`;  
-  itemValue = {
-    ...itemValue,
-    [key]: itemValue?.[key] + 1
-  }
+// export const findAndSetFitGapValue = (baseItem: {module: {id: string}, seerMoscow: string, fitGap: string}, fitGapRecords: any[], moscowKeyValue: string, fitgapKeyValue: string, fitGapMoscowRecords: any[], fitGapGapMoscowRecords: any[], fitGapWithoutGapRecords: any[]) => {
+//   const index = fitGapRecords.findIndex((item: any) => item?.moduleId == baseItem?.module?.id);
+//   let itemValue = fitGapRecords[index];  
+//   const key = `${fitgapKeyValue}_${moscowKeyValue}`;  
+//   itemValue = {
+//     ...itemValue,
+//     [key]: itemValue?.[key] + 1
+//   }
 
-  fitGapRecords[index] = itemValue;
-  return fitGapRecords
-}
+//   fitGapRecords[index] = itemValue;
+
+//   let fitGapMoscowRecordItemValue = fitGapMoscowRecords[index];
+//   let fitGapGapMoscowRecordsItemValue = fitGapGapMoscowRecords[index];
+//   let fitGapWithoutGapRecordsItemValue = fitGapWithoutGapRecords[index];
+//   // if (moscowKeyValue == 'M') {
+//     fitGapMoscowRecordItemValue = {
+//       ...fitGapMoscowRecordItemValue,
+//       [moscowKeyValue]: fitGapMoscowRecordItemValue?.[moscowKeyValue] + 1
+//     }
+//     if (fitgapKeyValue == 'gap') {
+//       fitGapGapMoscowRecordsItemValue = {
+//         ...fitGapGapMoscowRecordsItemValue,
+//         [moscowKeyValue]: fitGapGapMoscowRecordsItemValue?.[moscowKeyValue] + 1
+//       }
+//     } else {
+      
+//       fitGapWithoutGapRecordsItemValue = {
+//         ...fitGapWithoutGapRecordsItemValue,
+//         [moscowKeyValue]: fitGapWithoutGapRecordsItemValue?.[moscowKeyValue] + 1
+//       }
+//     }
+//   // }
+//   fitGapMoscowRecords[index] = fitGapMoscowRecordItemValue;
+//   fitGapGapMoscowRecords[index] = fitGapGapMoscowRecordsItemValue;
+//   fitGapWithoutGapRecords[index] = fitGapWithoutGapRecordsItemValue;
+//   console.log(' ===> ', fitGapMoscowRecordItemValue, fitGapRecords);
+  
+//   return {fitGapRecords, fitGapMoscowRecords, fitGapGapMoscowRecords, fitGapWithoutGapRecords}
+// }

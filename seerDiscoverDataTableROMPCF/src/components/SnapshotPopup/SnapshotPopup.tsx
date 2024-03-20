@@ -5,6 +5,7 @@ import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
 import StarsIcon from '@mui/icons-material/Stars';
 import { green, red } from '@mui/material/colors';
 import LabelIcon from '@mui/icons-material/Label';
+import Tooltip from '@mui/material/Tooltip';
 import { useSelector } from 'react-redux';
 import { finalizeCreated } from '../../Constants/messages';
 import { DialogTitle } from '@mui/material';
@@ -16,9 +17,14 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect, 
     <div style={{ display: 'flex', alignItems: 'center'}}>
       Load Snapshot{' '}
       {finalizeSnapshot || finalizeSnapshotData ? (
-        <DialogTitle className='badge'>
-          {finalizeCreated}
-        </DialogTitle>
+        // <DialogTitle className='badge'>
+        //   {finalizeCreated}
+        // </DialogTitle>
+        <Tooltip title={finalizeSnapshotData?.seer_name || ''}>
+          <DialogTitle className="badge">
+            {finalizeCreated}
+          </DialogTitle>
+        </Tooltip>
       ) : (
         ''
       )}
