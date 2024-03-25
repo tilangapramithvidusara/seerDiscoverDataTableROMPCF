@@ -1248,10 +1248,8 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
     if (inititlaData) {
       // let response: any;
       // BASE DATA LOOP
-      
       const baseLoop = await BaseData && BaseData.length && BaseData.map(async(baseItem: any, baseIndex: number) => {
         const {allResources} = baseItem;
-
         // let response = {
         //   fitGapRecords,
         //   fitGapMoscowRecords,
@@ -1407,6 +1405,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         }
 
       });
+      
       const totalModules: any[] = [];
       const moduleLoop = await ModuleData && ModuleData?.length && ModuleData.map((moduleDataItem: any, moduleDataIndex: any) => {
         

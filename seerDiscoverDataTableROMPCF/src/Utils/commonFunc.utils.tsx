@@ -86,10 +86,19 @@ export const generateFitGapPercentatge = (fitGapObject: any, moscow: string) => 
   )
   returnObject = {
     ...returnObject,
-    [`fit_${moscow}`]: ((fitGapObject[`fit_${moscow}`]/total)*100)?.toFixed(2)+"%",
-    [`isvfit_${moscow}`]: ((fitGapObject[`isvfit_${moscow}`]/total)*100)?.toFixed(2)+"%",
-    [`partial_${moscow}`]: ((fitGapObject[`partial_${moscow}`]/total)*100)?.toFixed(2)+"%",
-    [`gap_${moscow}`]: ((fitGapObject[`gap_${moscow}`]/total)*100)?.toFixed(2)+"%"
+    [`fit_${moscow}`]: (((fitGapObject[`fit_${moscow}`] || 0)/(total || 0))*100)?.toFixed(2)+"%",
+    [`isvfit_${moscow}`]: (((fitGapObject[`isvfit_${moscow}`] || 0)/(total || 0))*100)?.toFixed(2)+"%",
+    [`partial_${moscow}`]: (((fitGapObject[`partial_${moscow}`] || 0)/(total || 0))*100)?.toFixed(2)+"%",
+    [`gap_${moscow}`]: (((fitGapObject[`gap_${moscow}`] || 0)/(total || 0))*100)?.toFixed(2)+"%"
   }
   return returnObject;
+}
+
+export const generateReturnValue = (val1: number, val2: number, val3: number, val4: number, hoursPerDay: number, condtion: boolean) => {
+  if (condtion) {
+    
+    return (val1 + val2 + val3 + val4)/hoursPerDay
+  }
+  
+  return (val1 + val2 + val3 + val4)
 }

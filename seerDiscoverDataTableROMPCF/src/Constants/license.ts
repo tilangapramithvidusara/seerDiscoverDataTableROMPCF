@@ -33,3 +33,16 @@ export const licenseColumns = [
     size: 220,
   },
 ]
+
+
+export const licenseObject = {
+  licenseName: '',
+  quantity: '',
+  buildingPeriod: '',
+  // buildingPreiodKey: '',
+  costPrice: '',
+  sellPrice: '',
+  estimatedPrice: '',
+  currency: '',
+  currencyKey: '',
+}
