@@ -5,32 +5,35 @@ export const licenseColumns = [
     header: 'License',
     accessorKey: 'licenseName',
     enableGrouping: true,
-    size: 150,
+    size: 350,
   },
   {
     header: 'Quantity',
     accessorKey: 'quantity',
-    size: 220,
+    size: 200,
   },
   {
     header: 'Building Period',
-    accessorKey: 'buildingPeriod',
-    size: 220,
+    accessorKey: 'billingPeriod',
+    size: 200,
   },
   {
     header: 'Cost Price (PUPM)',
-    accessorKey: 'costrPrice',
-    size: 220,
+    accessorKey: 'costPrice',
+    size: 200,
+    isCalcultionEnabled: true,
   },
   {
     header: 'Sell Price (PUPM)',
     accessorKey: 'sellPrice',
-    size: 220,
+    size: 200,
+    isCalcultionEnabled: true,
   },
   {
     header: 'Estimated Price',
     accessorKey: 'estimatedPrice',
-    size: 220,
+    size: 200,
+    isCalcultionEnabled: true,
   },
 ]
 
@@ -38,7 +41,7 @@ export const licenseColumns = [
 export const licenseObject = {
   licenseName: '',
   quantity: '',
-  buildingPeriod: '',
+  billingPeriod: '',
   // buildingPreiodKey: '',
   costPrice: '',
   sellPrice: '',

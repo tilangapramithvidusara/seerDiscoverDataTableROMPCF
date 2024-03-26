@@ -30,6 +30,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   const [fitGapAllMoscowData, setFitGapAllMoscowData] = React.useState<any []>([]); // fit gap data
   const [fitGapGapMoscowData, setFitGapGapMoscowData] = React.useState<any []>([]); // fit gap data
   const [fitGapWithoutGapMoscowData, setFitGapWithoutGapMoscowData] = React.useState<any []>([]); // fit gap data
+  const [licenseData, setLicenseData] = React.useState<any []>([])
   // const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
   // const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
   // const showSaveParameters = useSelector((state: any) => state?.snapshot?.showSaveParameters)
@@ -131,6 +132,8 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
         setFitGapGapMoscowData(result?.fitGapGapMoscowTab || []);
         setFitGapWithoutGapMoscowData(result?.fitGapWithoutGapMoscow || []);
 
+        setLicenseData(result?.licenseTab || [])
+
         setDataSet(result?.dataEstimateAverageRate ? result?.dataEstimateAverageRate : []);
         setDataSetEstimateResource(result?.dataEstimateResource ? result?.dataEstimateResource : [])
         setDataEstimateAverageRateMilestone(result?.dataEstimateAverageRateMilestone ? result?.dataEstimateAverageRateMilestone : [])
@@ -200,6 +203,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
           fitGapAllMoscowData={fitGapAllMoscowData}
           fitGapGapMoscowData={fitGapGapMoscowData}
           fitGapWithoutGapMoscowData={fitGapWithoutGapMoscowData}
+          licenseData={licenseData}
         />}
     </div>
   )

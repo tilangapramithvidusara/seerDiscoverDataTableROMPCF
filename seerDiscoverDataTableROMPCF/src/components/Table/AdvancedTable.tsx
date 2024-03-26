@@ -29,6 +29,7 @@ import { columnCustomisationData } from '../../Constants/cutomisationData';
 import { columnDataLayoutData } from '../../Constants/dataLayouts';
 import { parameterKeyIndex } from '../../Constants/parametersSetting';
 import { fitGapColumnsM, fitGapColumnsMS, fitGapColumnsMSC, fitGapMocow } from '../../Constants/fitGap';
+import { licenseColumns } from '../../Constants/license';
 
 const buttonTitles= [
   {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
@@ -55,7 +56,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subD
   let currency = useSelector((state: any) => state?.report?.currency)
   const [typeLoader, setTypeLoader] = React.useState(false);  
   const [columnsSet, setColumnSet] = React.useState(
-    type == 'RequirementData' ? columnRequirementData : type == 'FitGap' ? fitGapColumnsM : type !== 'Estimate Resource' ? columnDetails : 
+    type == 'RequirementData' ? columnRequirementData : type == 'LicenseData' ? licenseColumns : type == 'FitGap' ? fitGapColumnsM : type !== 'Estimate Resource' ? columnDetails : 
   estimateResourceMustColumnDetails
   // estimateResourceMustShouldColumnDetails
   )  
@@ -82,6 +83,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subD
       (type === 'Estimate Average Rate' && tableMode == dayHoursText) ? columnDetailsHOURS : 
       (type === 'Estimate Average Rate Milestone' && tableMode == defaultText) ? columnDetails :
       (type === 'Estimate Average Rate Milestone' && tableMode == dayHoursText) ? columnDetailsHOURS :
+      (type == 'LicenseData') ? licenseColumns :
       (resourceType === 'Must' && type === 'FitGap') ? fitGapColumnsM :
       (resourceType === 'Must' && tableMode == defaultText) ? estimateResourceMustColumnDetails :
       (resourceType === 'Must' && tableMode == dayHoursText) ? estimateResourceMustColumnDetailsHours :
@@ -176,7 +178,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subD
       )} */}
       {/* {isSnapshotLoading ? (<>Loading...</>) : ( */}
       <>
-        {(type != 'RequirementData' && type != 'CustomisationData' && type !== 'FitGap') && (
+        {(type != 'RequirementData' && type != 'CustomisationData' && type !== 'FitGap' && type !== 'LicenseData') && (
           <div>
             <div className='flex-wrap ptb-10 custom-toggle-button'>
             {/* {((type === 'Estimate Resource' || type === 'Estimate Resource Milestone' )) && ( */}
@@ -333,14 +335,14 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subD
             columnResizeMode={'onEnd'}
             enableColumnResizing={true}
             // layoutMode= 'grid-no-grow'
-            enableGrouping={(type != 'FitGap' && type != 'RequirementData' && type != 'CustomisationData' && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? true : false}
+            enableGrouping={(type != 'LicenseData' && type != 'FitGap' && type != 'RequirementData' && type != 'CustomisationData' && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? true : false}
             enableStickyHeader
             enableStickyFooter
             enableHiding={true}
             initialState={{
               density: 'compact',
               expanded: true, //expand all groups by default   'M', "M/S", "M/S/C", 
-              grouping: (type != 'FitGap' && type != 'RequirementData' && type != 'CustomisationData'  && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? ['nameCategory'] : [], //an array of columns to group by by default (can be multiple)
+              grouping: (type != 'LicenseData' && type != 'FitGap' && type != 'RequirementData' && type != 'CustomisationData'  && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? ['nameCategory'] : [], //an array of columns to group by by default (can be multiple)
               pagination: { pageIndex: 0, pageSize: 100 },
               // sorting: [{ id: 'state', desc: false }, { id: 'state', desc: false }], //sort by state by default
             }}

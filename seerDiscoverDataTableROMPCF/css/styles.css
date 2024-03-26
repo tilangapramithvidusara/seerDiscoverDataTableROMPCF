@@ -640,7 +640,8 @@ table {
 .customControl .badge, .snapshot-modal .badge {
   margin: 0 15px !important;
   color: #fff;
-  background-color: #28a745;
+  background-color: #B23000;
+  /* #28a745; */
   padding: 13px 14px !important;
   height: 25px;
   font-size: 12px !important;
@@ -730,4 +731,20 @@ table {
 
 .snapshot-modal input, .snapshot-modal .ant-select, .snapshot-modal .ant-input  {
   font-family: 'Roboto', sans-serif !important;
+}
+
+/* .disableContent {
+  color: rgba(0, 0, 0, 0.25);
+} */
+
+.customControl .disableContent, .snapshot-modal .disableContent {
+  margin: 0 15px !important;
+  color: rgba(0, 0, 0, 0.25);
+  background-color: #28a745;
+  padding: 13px 14px !important;
+  height: 25px;
+  font-size: 12px !important;
+  padding: 0px 12px !important;
+  line-height: 25px !important;
+  border-radius: 5px;
 }

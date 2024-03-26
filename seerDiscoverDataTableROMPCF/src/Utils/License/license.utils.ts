@@ -1,28 +1,30 @@
 import { licenseObject } from "../../Constants/license";
-import { currencyNameData } from "../../Constants/pickListData";
+import { currencyNameData, msTimePeriodData } from "../../Constants/pickListData";
 import { LicenseItem } from "../../types/license.types";
 
 
-export const licenseTabValue = async(inititlaData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
+export const licenseTabValue = async(initialData: any, condition: boolean, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
   try {
     const licenseData = [];
-    const {licensesModel} = inititlaData;
+    const {licensesModel} = initialData;
     let estimateTotal = 0;
     let currency = '';
     const licenseLoop = await licensesModel?.map((licenseItem: LicenseItem) => {
-      const {licencePriceSell, licencePriceCost, licenceCount, microsoftLicenseBillingPeriod, seerCurrency} = licenseItem;
+      const {licencePriceSell, licencePriceCost, licenceCount, microsoftLicenseBillingPeriod, seerCurrency, microsoftlicenseName} = licenseItem;
       let objectModel = licenseObject;
       currency = currencyNameData?.[seerCurrency?.value?.name];
       let estimatePriceValue = ((licencePriceSell?.value) + licencePriceCost?.value);
       estimateTotal += estimatePriceValue;
+      
+      // ${microsoftLicenseBillingPeriod?.value?.value}
       objectModel = {
         ...objectModel,
-        licenseName: '',
+        licenseName: microsoftlicenseName,
         quantity: `${licenceCount}`,
-        buildingPeriod: `${microsoftLicenseBillingPeriod?.value?.value}`,
-        costPrice: `${currency} ${licencePriceCost?.value}`,
-        sellPrice: `${currency} ${licencePriceSell?.value}`,
-        estimatedPrice: `${currency} ${estimatePriceValue}`,
+        billingPeriod: `${msTimePeriodData?.[microsoftLicenseBillingPeriod?.value?.value]}`,
+        costPrice: `${currency} ${(licencePriceCost?.value || 0).toFixed(2)}`,
+        sellPrice: `${currency} ${(licencePriceSell?.value || 0).toFixed(2)}`,
+        estimatedPrice: `${currency} ${(estimatePriceValue || 0).toFixed(2)}`,
         currency: currency,
         currencyKey: seerCurrency?.value?.name
       }
@@ -31,9 +33,8 @@ export const licenseTabValue = async(inititlaData: any, condition: boolean, sett
     await Promise.all(licenseLoop);
     licenseData.push({
       ...licenseObject,
-      estimatedPrice: `${currency} ${estimateTotal}`
-    });
-
+      estimatedPrice: `${currency} ${(estimateTotal || 0).toFixed(2)}`
+    });    
     return licenseData;
   } catch (error) {
     console.log("error License tab ===> ", error)

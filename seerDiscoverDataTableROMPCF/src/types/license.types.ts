@@ -32,4 +32,16 @@ export type LicenseItem = {
   licencePriceCost: SubLicensePriceItem;
   licencePriceSell: SubLicensePriceItem;
   seerCurrency: SubLicenseCurrencyItem;
+  microsoftlicenseName: string;
+}
+
+export type LicenseTabItem = {
+  licenseName: string;
+  quantity: string;
+  billingPeriod: string;
+  costPrice: string;
+  sellPrice: string;
+  estimatedPrice: string;
+  currency: string;
+  currencyKey: string;
 }
