@@ -18,7 +18,8 @@ import { generateEstimateResource } from "./estimate.resource.utils";
 import { generateEstimateResourceSub } from "./estimate.resource.sub.utils";
 import { generateEstimateResourceMilestone } from "./estimate.resource.milestone.utils";
 import { generateEstimateResourceMilestoneSub } from "./estimate.resource.milestone.sub.utils";
-import { fitGapTabValue } from "../EstimateAveRate/fitgap.utils";
+import { fitGapTabValue, getFilteredFitGapsAgainstMoscow } from "../EstimateAveRate/fitgap.utils";
+import { licenseTabValue } from "../License/license.utils";
 
 export const arrayGenerator = async (initialDataSet: any, dispatch: any, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
 
@@ -73,8 +74,9 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
     }
     
     // Get calculated value for "Average estimate rate" and "Average estimate rate milestone"
-    const analisisAndDesignCalculation: any = await generateIColoumnValue({...initialDataSet, fteValue}, analysisAndDesign.row, dispatch, hasFteValue, settingParameters, isSnapshotModeEnable);
+    const analisisAndDesignCalculation: any = await generateIColoumnValue({...initialDataSet, fteValue}, analysisAndDesign.row, dispatch, hasFteValue, settingParameters, isSnapshotModeEnable);    
     const fitGapCalculation = await fitGapTabValue({...initialDataSet, fteValue}, condition, settingParameters, isSnapshotModeEnable);
+    const licenseCalculation = await licenseTabValue({...initialDataSet, fteValue}, condition, settingParameters, isSnapshotModeEnable);
     
     (data[0] as any).M = analisisAndDesignCalculation?.analysisDesing?.resultValue; // set cost's MUST value of "analysis design"
     (data[0] as any)['M/S'] = analisisAndDesignCalculation?.analysisDesing?.resultValueMS; // set cost's MUST/SHOULD value of "analysis design"
@@ -397,6 +399,7 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
       subTotalMSAnalysisDesign,
       subTotalMSCAnalysisDesign
     }, condition, {...initialDataSet, fteValue}, settingParameters, isSnapshotModeEnable);
+    
     const responseGenerateEstimateResourceMilestone = await generateEstimateResourceMilestone(dataEstimateResourceMilestone, analisisAndDesignCalculation, condition, {...initialDataSet, fteValue}, settingParameters, isSnapshotModeEnable);
 // generateEstimateResourceMilestoneSub
     const responseGenerateEstimateResourceMilestoneSub = await generateEstimateResourceMilestoneSub(responseGenerateEstimateResourceMilestone, analisisAndDesignCalculation, condition, {...initialDataSet, fteValue}, settingParameters, isSnapshotModeEnable);
@@ -448,9 +451,10 @@ export const arrayGenerator = async (initialDataSet: any, dispatch: any, setting
       reducerValues: analisisAndDesignCalculation?.reducerValues,
       // fitGapCalculation
       fitGapTab: fitGapCalculation?.fitGapTab,
-      fitGapAllMoscowTab: fitGapCalculation?.fitGapAllMoscowTab,
-      fitGapGapMoscowTab: fitGapCalculation?.fitGapGapMoscowTab,
-      fitGapWithoutGapMoscow: fitGapCalculation?.fitGapWithoutGapMoscow,
+      fitGapAllMoscowTab: await getFilteredFitGapsAgainstMoscow(fitGapCalculation?.fitGapAllMoscowTab),
+      fitGapGapMoscowTab: await getFilteredFitGapsAgainstMoscow(fitGapCalculation?.fitGapGapMoscowTab),
+      fitGapWithoutGapMoscow: await getFilteredFitGapsAgainstMoscow(fitGapCalculation?.fitGapWithoutGapMoscow),
+      licenseTab: licenseCalculation,
       // fitGapTab: analisisAndDesignCalculation?.fitGapTab,
       // fitGapAllMoscowTab: analisisAndDesignCalculation?.fitGapAllMoscowTab,
       // fitGapGapMoscowTab: analisisAndDesignCalculation?.fitGapGapMoscowTab,

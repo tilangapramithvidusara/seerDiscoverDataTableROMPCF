@@ -39,7 +39,25 @@ export const currencyData: any = {
   'USD': '$'
 }
 
+export const currencyNameData: any = {
+  'Australian Dollar': 'A$', // AUD
+  'British Pound': '£',
+  'Canadian Dollar': 'CA$', // CAD
+  'Euro': '€',
+  'New Zealand Dollar': 'NZ$', // NZD
+  'Real': 'R$',
+  'South African Rand': 'ZAR', // R
+  'US Dollar': '$'
+}
+
 export const romReportType = {
   "SMB Rom": '381070000',
   "ENT Rom": "381070001",
+}
+
+export const msTimePeriodData: any = {
+  '100000000': 'Year',
+  '100000001': "Month",
+  "100000002": "Perpetual",
+  "100000003": "N/A",
 }

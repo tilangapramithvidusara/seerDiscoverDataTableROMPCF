@@ -79,7 +79,7 @@ export const generateCRPMValue = async(inititlaData: any, analisisDesignPre: {re
       const g8 = g7 * F4Parameter
       // hoursPerWeek
       const f8 = f7 * F4Parameter
-      // hoursPerWeek
+      // hoursPerWeek      
       
       // not done yet
       if (fte) {

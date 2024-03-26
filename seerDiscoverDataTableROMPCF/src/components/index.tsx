@@ -34,6 +34,7 @@ import { snapshotAPIConstants } from "../Constants/snapshotConstants";
 import { seerBasejson, seerUpdatedsnapshotdata } from "../Constants/endPoints";
 import { romReportType } from "../Constants/pickListData";
 import { green } from "@mui/material/colors";
+import { LicenseItem, LicenseTabItem } from "../types/license.types";
 
 const App = ({
   dataSet, onRefreshHandler, isRefreshing, 
@@ -49,6 +50,7 @@ const App = ({
   fitGapAllMoscowData,
   fitGapGapMoscowData,
   fitGapWithoutGapMoscowData,
+  licenseData,
 }: {
   dataSet: any, onRefreshHandler?: any, isRefreshing: boolean, 
   dataSetEstimateResource: any, 
@@ -63,6 +65,7 @@ const App = ({
   fitGapAllMoscowData: any,
   fitGapGapMoscowData: any,
   fitGapWithoutGapMoscowData: any,
+  licenseData: LicenseTabItem[]
 }) => {   
 
   const items: TabsProps['items'] = [
@@ -126,6 +129,11 @@ const App = ({
         fitGapWithoutGapMoscowData,
       }}/>
       // <Governance/>,
+    },
+    {
+      key: '10',
+      label: 'Licenses',
+      children: <AdvancedTable data={licenseData} type={'LicenseData'} isLoading={isRefreshing}/>,
     },
     // {
     //   key: '8',
@@ -215,7 +223,16 @@ const App = ({
       dispatch(setSnapshotBase(inititalData?.result));
       if (isLive) {
         const formatedData = parameterModelConvertToTableJson(inititalData?.result?.parameterModel);
-        arrayGeneratorHandler(true, {...formatedData, base: inititalData?.result, currentSavedResources: inititalData?.result?.resourceModelData}, 'liveRefresh');
+        arrayGeneratorHandler(
+          true, 
+          {
+            ...formatedData, 
+            base: inititalData?.result, 
+            currentSavedResources: inititalData?.result?.resourceModelData,
+            currentSavedProjectTasks: inititalData?.result?.ProjectTasktModel,
+          }, 
+          'liveRefresh'
+        );
       } else {
         const formatedData = parameterModelConvertToTableJson(inititalData?.result?.parameterModel);
         dispatch(setLatestChanges({

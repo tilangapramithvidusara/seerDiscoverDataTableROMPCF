@@ -640,7 +640,8 @@ table {
 .customControl .badge, .snapshot-modal .badge {
   margin: 0 15px !important;
   color: #fff;
-  background-color: #28a745;
+  background-color: #B23000;
+  /* #28a745; */
   padding: 13px 14px !important;
   height: 25px;
   font-size: 12px !important;
@@ -698,4 +699,52 @@ table {
 .mandatory-text-container-row-red {
   color: red;
   align-self: flex-start;
+}
+
+.customControl .text-left {
+  text-align: left;
+}
+
+.customControl .ml-5 {
+  margin-left: 5px;
+}
+
+.alert-modal .close, .custom-modal .close{
+  height: 18px;
+  width: 18px;
+}
+
+.alert-modal .close svg, .custom-modal .close svg{
+  font-size: 22px;
+}
+
+.alert-modal .close:hover, .custom-modal .close:hover{
+  color: rgba(0, 0, 0, 0.88);
+  background-color: rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  border-radius: 4px !important;
+}
+
+.alert-modal .pb-5 {
+  padding-bottom: 5px;
+}
+
+.snapshot-modal input, .snapshot-modal .ant-select, .snapshot-modal .ant-input  {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+/* .disableContent {
+  color: rgba(0, 0, 0, 0.25);
+} */
+
+.customControl .disableContent, .snapshot-modal .disableContent {
+  margin: 0 15px !important;
+  color: rgba(0, 0, 0, 0.25);
+  background-color: #28a745;
+  padding: 13px 14px !important;
+  height: 25px;
+  font-size: 12px !important;
+  padding: 0px 12px !important;
+  line-height: 25px !important;
+  border-radius: 5px;
 }

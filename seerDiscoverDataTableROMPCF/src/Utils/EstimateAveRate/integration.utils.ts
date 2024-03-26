@@ -37,10 +37,14 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
       // interfaces_Crf96_json
       const {interfaces_Crf96_json} = IntegrationModel[0];
       const IntegrationDataSet = JSON.parse(interfaces_Crf96_json?.value)
+      
       if(IntegrationDataSet?.length) {
       const integrationLoop = IntegrationDataSet && IntegrationDataSet.length && IntegrationDataSet.map((integrationItem: any, itegrationIndex: number) => {
-        let k2 = integrationItem?.['305110'];        
+        let k2 = integrationItem?.['305110'];   
+        // console.log('k2 ==> ', k2);
+        // console.log('s2 ===> ', integrationItem?.['305110']);
         
+
         let m2 = 0
         let n2 = 0
         let o2 = 0
@@ -97,6 +101,9 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
           
           const valueS2: any = maxObject
           s2 = valueS2?.score || 0
+
+          // console.log('s2 ==> ', s2);
+          
           
           // Days per msg
           const valuePT21: any = integrationParameters.find((item, index) => item.type == 'Days per msg');
@@ -130,6 +137,8 @@ export const generateIntegrationMValue = async(inititlaData: any, condition: boo
         )
         
       }
+      // console.log('returnObject ==> ', returnObject);
+      
       // await Promise.all([integrationLoop])      
       return returnObject;
     } else {

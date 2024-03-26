@@ -534,8 +534,7 @@ export const generateIColoumnValue = async(inititlaData: any, title: string, dis
       fColmnValueEstimateAveRate = responseDocumentLayout?.projectRisk?.estimateAveRate
 
 
-      // ################################ESTIMATE RESOURCE################################
-      
+      // ################################ESTIMATE RESOURCE################################      
       resultValueAnalisisDesignEstimateResource = generateEstimateResourceValue(
         inititlaData, {
           M: (responseAnalisisDesign?.resultValue || 0),
@@ -1406,6 +1405,7 @@ export const generateAnalysisDesignMValue = async(inititlaData: any, condition: 
         }
 
       });
+      
       const totalModules: any[] = [];
       const moduleLoop = await ModuleData && ModuleData?.length && ModuleData.map((moduleDataItem: any, moduleDataIndex: any) => {
         

@@ -1,25 +1,25 @@
 import * as React from 'react';
-import { Space, Select, Modal, Input } from 'antd';
+import { Space, Select, Modal, Input, Popover, Tooltip } from 'antd';
 import { useState } from 'react';
 import { snapshotAPIConstants } from '../../Constants/snapshotConstants';
 import StarsIcon from '@mui/icons-material/Stars';
 import { green, red } from '@mui/material/colors';
 import LabelIcon from '@mui/icons-material/Label';
-import Tooltip from '@mui/material/Tooltip';
+// import Tooltip from '@mui/material/Tooltip';
+import Box from '@mui/material/Box';
 import { useSelector } from 'react-redux';
 import { finalizeCreated } from '../../Constants/messages';
 import { DialogTitle } from '@mui/material';
 
-export default function SnapShotPopup({ snapshots, handleClose, open, onSelect, finalizeSnapshot }: any) {
+const { TextArea } = Input;
+
+export default function SnapShotPopup({ snapshots, handleClose, open, onSelect, finalizeSnapshot }: any) {  
   const [selectSnapshot, setSelectSnapshot] = useState(null);
   const finalizeSnapshotData = useSelector((state: any) => state?.snapshot?.finalizeSnapshot);
   const titleContent = (
     <div style={{ display: 'flex', alignItems: 'center'}}>
       Load Snapshot{' '}
       {finalizeSnapshot || finalizeSnapshotData ? (
-        // <DialogTitle className='badge'>
-        //   {finalizeCreated}
-        // </DialogTitle>
         <Tooltip title={finalizeSnapshotData?.seer_name || ''}>
           <DialogTitle className="badge">
             {finalizeCreated}
@@ -28,25 +28,17 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect, 
       ) : (
         ''
       )}
-    </div>)
-    // <div style={{ display: 'flex', alignItems: 'center' }}>
-    //   Load Snapshot{' '}
-    //   {/* (finalizeSnapshot || finalizeSnapshotData) */}
-    //   {(finalizeSnapshot || finalizeSnapshotData) ? 
-    //     <DialogTitle>{finalizeCreated}</DialogTitle>
-    //     // <LabelIcon style={{marginLeft: '5px'}} sx={{ color: green[500] }}/> 
-    //     : 
-    //     ''
-    //   }
-    // </div>);
+    </div>);
+
+  const description = selectSnapshot
+    ? snapshots?.find(
+        (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
+      )?.seer_description
+    : '';    
   return (
     // <LabelIcon sx={{ color: green[500] }}/>
     <Modal className='snapshot-modal' open={open} 
       title={titleContent}
-
-      // {`Load Snapshot ${(finalizeSnapshot || finalizeSnapshotData) ? 
-      // "Contain - Finalized Snapshot" 
-      // : ''}`} 
       onOk={() => selectSnapshot ? onSelect(selectSnapshot) : alert('Please select the snapshot to load')} onCancel={handleClose}>
       <Space wrap style={{width: '100%'}}>
         <div style={{ 
@@ -81,25 +73,66 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect, 
               };
             })}
           />
-          {/* <InfoIcon 
-                      sx={{ fontSize: 12, color: green[500] }}
-                      // fontSize="small" 
-                      /> */}
+
           <div style={{ marginTop: '10px' }}>
             Description:{' '}
-            <Input
-              placeholder="Description"
-              disabled
-              value={
-                selectSnapshot
-                  ? snapshots?.find(
-                      (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
-                    )?.seer_description
-                  : ''
-              }
-            />
+            {(selectSnapshot && description) ? (
+              <Tooltip 
+                overlayStyle={{ maxWidth: '400px' }}
+                title={description}>
+                {/* <Input
+                  placeholder="Description"
+                  disabled
+                  value={
+                    selectSnapshot
+                      ? snapshots?.find(
+                          (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
+                        )?.seer_description
+                      : ''
+                  }
+                /> */}
+                <TextArea
+                  rows={4} // Set the number of rows (height) of the text area
+                  placeholder="Description"
+                  disabled
+                  value={
+                    selectSnapshot
+                      ? snapshots?.find(
+                          (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
+                        )?.seer_description
+                      : ''
+                  }
+                />
+                {/* <InputContent selectSnapshot={selectSnapshot} snapshots={snapshots} /> */}
+              </Tooltip>
+            ) : (
+              // <Input
+              //   placeholder="Description"
+              //   disabled
+              //   value={
+              //     selectSnapshot
+              //       ? snapshots?.find(
+              //           (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
+              //         )?.seer_description
+              //       : ''
+              //   }
+              // />
+              <TextArea
+                rows={4} // Set the number of rows (height) of the text area
+                placeholder="Description"
+                disabled
+                value={
+                  selectSnapshot
+                    ? snapshots?.find(
+                        (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
+                      )?.seer_description
+                    : ''
+                }
+              />
+            )}
+            
           </div>
-          <div style={{ marginTop: '10px' }}>
+          {/* <div style={{ marginTop: '10px' }}>
             Created At:{' '}
             <Input
               placeholder="Created At"
@@ -127,35 +160,72 @@ export default function SnapShotPopup({ snapshots, handleClose, open, onSelect, 
                   : ''
               }
             />
+          </div> */}
+          <div style={{ display: 'flex', marginTop: '10px' }}>
+            {/* First div */}
+            <div style={{ flex: 1, marginRight: '10px' }}>
+              Created At:{' '}
+              <Input
+                style={{ width: '100%' }} // Make sure the input takes up 100% width of the container
+                placeholder="Created At"
+                disabled
+                value={
+                  selectSnapshot
+                    ? snapshots?.find(
+                        (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
+                      )?.[snapshotAPIConstants?.CREATED_AT] // 'createdon@OData.Community.Display.V1.FormattedValue'
+                    : ''
+                }
+              />
+            </div>
+            
+            {/* Second div */}
+            <div style={{ flex: 1, marginLeft: '10px' }}>
+              Created By:{' '}
+              <Input
+                style={{ width: '100%' }} // Make sure the input takes up 100% width of the container
+                placeholder="Created By"
+                disabled
+                value={
+                  selectSnapshot
+                    ? snapshots?.find(
+                        (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
+                      )?.[snapshotAPIConstants?.CREATED_BY] // '_seer_createdbyportal_value@OData.Community.Display.V1.FormattedValue'
+                    : ''
+                }
+              />
+            </div>
           </div>
-          <div style={{ marginTop: '10px' }}>
-            Last Modified At:{' '}
-            <Input
-              placeholder="Last Modified At"
-              disabled
-              value={
-                selectSnapshot
-                  ? snapshots?.find(
-                      (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
-                    )?.[snapshotAPIConstants?.MODIFIED_AT] // 'modifiedon@OData.Community.Display.V1.FormattedValue'
-                  : ''
-              }
-            />
-          </div>
-          <div style={{ marginTop: '10px' }}>
-            Last Modified By:{' '}
-            <Input
-              placeholder="Last Modified By"
-              disabled
-              value={
-                selectSnapshot
-                  ? snapshots?.find(
-                      (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
-                    )?.[snapshotAPIConstants?.MODIFIED_BY] // '_seer_modifiedbyportal_value@OData.Community.Display.V1.FormattedValue'
-                    // ['_modifiedby_value@OData.Community.Display.V1.FormattedValue']
-                  : ''
-              }
-            />
+          <div style={{ display: 'flex', marginTop: '10px' }}>
+            <div style={{ flex: 1, marginRight: '10px' }}>
+              Last Modified At:{' '}
+              <Input
+                placeholder="Last Modified At"
+                disabled
+                value={
+                  selectSnapshot
+                    ? snapshots?.find(
+                        (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
+                      )?.[snapshotAPIConstants?.MODIFIED_AT] // 'modifiedon@OData.Community.Display.V1.FormattedValue'
+                    : ''
+                }
+              />
+            </div>
+            <div style={{ flex: 1, marginLeft: '10px' }}>
+              Last Modified By:{' '}
+              <Input
+                placeholder="Last Modified By"
+                disabled
+                value={
+                  selectSnapshot
+                    ? snapshots?.find(
+                        (snap: any) => snap?.seer_rominportalsnapshotid === selectSnapshot
+                      )?.[snapshotAPIConstants?.MODIFIED_BY] // '_seer_modifiedbyportal_value@OData.Community.Display.V1.FormattedValue'
+                      // ['_modifiedby_value@OData.Community.Display.V1.FormattedValue']
+                    : ''
+                }
+              />
+            </div>
           </div>
           <div></div>
         </div>

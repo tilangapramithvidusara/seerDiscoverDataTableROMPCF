@@ -30,6 +30,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
   const [fitGapAllMoscowData, setFitGapAllMoscowData] = React.useState<any []>([]); // fit gap data
   const [fitGapGapMoscowData, setFitGapGapMoscowData] = React.useState<any []>([]); // fit gap data
   const [fitGapWithoutGapMoscowData, setFitGapWithoutGapMoscowData] = React.useState<any []>([]); // fit gap data
+  const [licenseData, setLicenseData] = React.useState<any []>([])
   // const selectedSnapshot = useSelector((state: any) => state?.snapshot?.selectedSnapshot)
   // const isSnapshotModeEnable = useSelector((state: any) => state?.snapshot?.isSnapshotModeEnable);
   // const showSaveParameters = useSelector((state: any) => state?.snapshot?.showSaveParameters)
@@ -86,6 +87,9 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     setIsloading(true)
 
     const modeStatus =  (mode && (mode == 'snapshot' || mode == 'liveRefresh')) ? true : isLive ? !isLive : !isLiveValue;
+
+    // console.log('modeStatus ==> ', modeStatus, requestObj);
+    
     
     const requirment: any = dataMapper(modeStatus ? snapshotBase?.OutputData : data?.OutputData);
     const customisation: any = dataMapper(modeStatus ? snapshotBase?.CustomisationModels : data?.CustomisationModels, 'customisation');
@@ -120,13 +124,15 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
 
     // Callback function which handle all the calculations
     arrayGenerator(dataBundle, dispatch, parameterSet, modeStatus)
-      .then(async(result: any) => {
+      .then(async(result: any) => {        
         // Handle the result here        
         const fitGapData = await generateFitGapTotalAndPrecentage(result?.fitGapTab || [])
         setFitGapData(fitGapData || [])
         setFitGapAllMoscowData(result?.fitGapAllMoscowTab || [])
         setFitGapGapMoscowData(result?.fitGapGapMoscowTab || []);
         setFitGapWithoutGapMoscowData(result?.fitGapWithoutGapMoscow || []);
+
+        setLicenseData(result?.licenseTab || [])
 
         setDataSet(result?.dataEstimateAverageRate ? result?.dataEstimateAverageRate : []);
         setDataSetEstimateResource(result?.dataEstimateResource ? result?.dataEstimateResource : [])
@@ -165,6 +171,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
     }
   }, 
   [data]);
+  // data
 
   // console.log('dataSet => ', dataSet);
   // console.log('dataSetEstimateResource ==> ', dataSetEstimateResource);
@@ -196,6 +203,7 @@ function Index({tableContent, context, imageUrl}: {tableContent: any, context: a
           fitGapAllMoscowData={fitGapAllMoscowData}
           fitGapGapMoscowData={fitGapGapMoscowData}
           fitGapWithoutGapMoscowData={fitGapWithoutGapMoscowData}
+          licenseData={licenseData}
         />}
     </div>
   )

@@ -107,7 +107,9 @@ export const fitGapHanlder = async(baseItem: FitGapItem, fitGapRecords: FitGapOb
   }
   if (moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000000] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000001] || moscowsData?.[baseItem?.seerMoscow] == moscowsData?.[100000002]) {
     response = await checkFitGapTypeHandler(baseItem, fitGapRecords, 'MSC', fitGapMoscowRecords, fitGapGapMoscowRecords, fitGapWithoutGapRecords);
-  }  
+  } 
+
+
   return response;
 }
 
@@ -164,4 +166,25 @@ export const findAndSetFitGapValue = (baseItem: FitGapItem, fitGapRecords: FitGa
   fitGapGapMoscowRecords[index] = fitGapGapMoscowRecordsItemValue;
   fitGapWithoutGapRecords[index] = fitGapWithoutGapRecordsItemValue;  
   return {fitGapRecords, fitGapMoscowRecords, fitGapGapMoscowRecords, fitGapWithoutGapRecords}
+}
+
+
+export const getFilteredFitGapsAgainstMoscow = async(dataArray: FitGapMoscowType[]) => {
+  try {
+    const res = dataArray.map((item: FitGapMoscowType) => {
+      let itemValue = item;
+      itemValue = {
+        ...itemValue,
+        M: item.M,
+        MS: (item.MS - item.M),
+        MSC: (item.MSC - item.MS)
+      }
+      return itemValue;
+    });
+    await Promise.all(res);
+    return res;
+  } catch (error) {
+    return []
+  }
+
 }

@@ -1,5 +1,5 @@
 export const generateEstimateResource = async(dataEstimateResource: any, analisisAndDesignCalculation: any, responseSubtotal: any, condition: boolean, initialDataSet: any, settingParameters?: any, isSnapshotModeEnable?: boolean) => {
-  /////////////////// ESTIMATE RESOURCE - START ///////////////////
+  /////////////////// ESTIMATE RESOURCE - START ///////////////////  
 // analysisDesingEstimateResource
 dataEstimateResource[0]['M_Resource1'] = analisisAndDesignCalculation?.analysisDesingEstimateResource?.resultValue1 || 0;
 dataEstimateResource[0]['M_Resource2'] = analisisAndDesignCalculation?.analysisDesingEstimateResource?.resultValue2 || 0;

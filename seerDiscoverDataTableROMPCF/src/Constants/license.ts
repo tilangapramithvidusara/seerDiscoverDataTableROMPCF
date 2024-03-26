@@ -3,33 +3,49 @@
 export const licenseColumns = [
   {
     header: 'License',
-    accessorKey: 'moduleName',
+    accessorKey: 'licenseName',
     enableGrouping: true,
-    size: 150,
+    size: 350,
   },
   {
     header: 'Quantity',
-    accessorKey: 'fit_M',
-    size: 220,
+    accessorKey: 'quantity',
+    size: 200,
   },
   {
     header: 'Building Period',
-    accessorKey: 'isvfit_M',
-    size: 220,
+    accessorKey: 'billingPeriod',
+    size: 200,
   },
   {
     header: 'Cost Price (PUPM)',
-    accessorKey: 'partial_M',
-    size: 220,
+    accessorKey: 'costPrice',
+    size: 200,
+    isCalcultionEnabled: true,
   },
   {
     header: 'Sell Price (PUPM)',
-    accessorKey: 'gap_M',
-    size: 220,
+    accessorKey: 'sellPrice',
+    size: 200,
+    isCalcultionEnabled: true,
   },
   {
     header: 'Estimated Price',
-    accessorKey: 'gap_M',
-    size: 220,
+    accessorKey: 'estimatedPrice',
+    size: 200,
+    isCalcultionEnabled: true,
   },
 ]
+
+
+export const licenseObject = {
+  licenseName: '',
+  quantity: '',
+  billingPeriod: '',
+  // buildingPreiodKey: '',
+  costPrice: '',
+  sellPrice: '',
+  estimatedPrice: '',
+  currency: '',
+  currencyKey: '',
+}

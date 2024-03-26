@@ -29,6 +29,7 @@ import { columnCustomisationData } from '../../Constants/cutomisationData';
 import { columnDataLayoutData } from '../../Constants/dataLayouts';
 import { parameterKeyIndex } from '../../Constants/parametersSetting';
 import { fitGapColumnsM, fitGapColumnsMS, fitGapColumnsMSC, fitGapMocow } from '../../Constants/fitGap';
+import { licenseColumns } from '../../Constants/license';
 
 const buttonTitles= [
   {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
@@ -55,7 +56,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subD
   let currency = useSelector((state: any) => state?.report?.currency)
   const [typeLoader, setTypeLoader] = React.useState(false);  
   const [columnsSet, setColumnSet] = React.useState(
-    type == 'RequirementData' ? columnRequirementData : type == 'FitGap' ? fitGapColumnsM : type !== 'Estimate Resource' ? columnDetails : 
+    type == 'RequirementData' ? columnRequirementData : type == 'LicenseData' ? licenseColumns : type == 'FitGap' ? fitGapColumnsM : type !== 'Estimate Resource' ? columnDetails : 
   estimateResourceMustColumnDetails
   // estimateResourceMustShouldColumnDetails
   )  
@@ -82,6 +83,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subD
       (type === 'Estimate Average Rate' && tableMode == dayHoursText) ? columnDetailsHOURS : 
       (type === 'Estimate Average Rate Milestone' && tableMode == defaultText) ? columnDetails :
       (type === 'Estimate Average Rate Milestone' && tableMode == dayHoursText) ? columnDetailsHOURS :
+      (type == 'LicenseData') ? licenseColumns :
       (resourceType === 'Must' && type === 'FitGap') ? fitGapColumnsM :
       (resourceType === 'Must' && tableMode == defaultText) ? estimateResourceMustColumnDetails :
       (resourceType === 'Must' && tableMode == dayHoursText) ? estimateResourceMustColumnDetailsHours :
@@ -176,10 +178,10 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subD
       )} */}
       {/* {isSnapshotLoading ? (<>Loading...</>) : ( */}
       <>
-        {type != 'RequirementData' && type != 'CustomisationData' && (
+        {(type != 'RequirementData' && type != 'CustomisationData' && type !== 'FitGap' && type !== 'LicenseData') && (
           <div>
             <div className='flex-wrap ptb-10 custom-toggle-button'>
-            {((type === 'Estimate Resource' || type === 'Estimate Resource Milestone' )) && (
+            {/* {((type === 'Estimate Resource' || type === 'Estimate Resource Milestone' )) && ( */}
               <div className='text-left'>
                 {/* || (type == 'FitGap' && selectedTab === 'FitGap') */}
                
@@ -197,8 +199,8 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subD
                 }/>
                 
               </div>
-              )}
-              {type !== 'FitGap' && (
+              {/* // )} */}
+              {/* {type !== 'FitGap' && ( */}
                 <div className='text-right'>
                   <ButtonGroups
                     selectedButton={tableMode} 
@@ -210,7 +212,7 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subD
                     ]}
                   />
                 </div>
-              )}
+              {/* )} */}
               {/* <div className='text-right'>
                 <ButtonGroups
                 selectedButton={tableMode} 
@@ -243,70 +245,76 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subD
         <div style={{ flexGrow: 0 }}>
           {columns?.length ? (
             <>
-            <div> {type === "RequirementData" && 
-              <div style={{ display: 'flex', padding: '10px 0' }}>
-                <Button style={{ 
-                  marginRight: '10px', 
-                  fontSize: '10px', 
-                  textTransform: 'none' ,
-                  backgroundColor: selectedTab === 'RQ' ? '#015BA1' : '#676767', // Change 'green' to the color you want
-                  }} onClick={() => handleSubTab("RQ")} variant="contained">Requirements</Button>
-                <Button style={{ 
-                  marginRight: '10px', 
-                  fontSize: '10px', 
-                  textTransform: 'none',
-                  backgroundColor: selectedTab === 'DM' ? '#015BA1' : '#676767', // Change 'blue' to the color you want
-                  }} onClick={() => handleSubTab("DM")} variant="contained">Data Migrations</Button>
-                <Button style={{
-                  fontSize: '10px',
-                  textTransform: 'none',
-                  backgroundColor: selectedTab === 'DL' ? '#015BA1' : '#676767', // Change 'red' to the color you want
-                  }} onClick={() => handleSubTab("DL")} variant="contained">Document Layouts</Button>
-              </div>
-            } 
-            {
-              type === 'FitGap' && (
+            <div> 
+              {type === "RequirementData" && 
                 <div style={{ display: 'flex', padding: '10px 0' }}>
-                <Button style={{ 
-                  marginRight: '10px', 
-                  fontSize: '10px', 
-                  textTransform: 'none' ,
-                  backgroundColor: selectedTab === 'FitGap' ? '#015BA1' : '#676767', // Change 'green' to the color you want
-                  }} onClick={() => handleSubTab("FitGap")} variant="contained">Fit Gap</Button>
-                <Button style={{ 
-                  marginRight: '10px', 
-                  fontSize: '10px', 
-                  textTransform: 'none',
-                  backgroundColor: selectedTab === 'FitGapAllMoscow' ? '#015BA1' : '#676767', // Change 'blue' to the color you want
-                  }} onClick={() => handleSubTab("FitGapAllMoscow")} variant="contained">All Fit Gap</Button>
-                <Button style={{ 
-                  marginRight: '10px', 
-                  fontSize: '10px', 
-                  textTransform: 'none',
-                  backgroundColor: selectedTab === 'FitGapGapMoscow' ? '#015BA1' : '#676767', // Change 'blue' to the color you want
-                  }} onClick={() => handleSubTab("FitGapGapMoscow")} variant="contained">Gap</Button>
-                <Button style={{
-                  fontSize: '10px',
-                  textTransform: 'none',
-                  backgroundColor: selectedTab === 'FitGapWithoutGapMoscow' ? '#015BA1' : '#676767', // Change 'red' to the color you want
-                  }} onClick={() => handleSubTab("FitGapWithoutGapMoscow")} variant="contained">Fit/Patial/ISV</Button>
-              </div>
-              )
-            }
-              <div className='text-left'>
-                {(type == 'FitGap' && selectedTab === 'FitGap') && (
-                  <ButtonGroups selectedButton={resourceType} setSelectedButton={
-                    setResourceType
-                  } numberOfButtons={3} buttonTitles={
-                  //   (type == 'FitGap') ? [
-                  //   {title: 'Must', value: 'M'}, {title: 'Must Should', value: "MS"}, {title: 'Must Should Could', value: 'MSC'}
-                  // ] : [
-                  //   {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
-                  // ]
-                  [{title: 'Must', value: 'M'}, {title: 'Must Should', value: "MS"}, {title: 'Must Should Could', value: 'MSC'}]
-                  }/>
-                )}
-              </div>
+                  <Button style={{ 
+                    marginRight: '10px', 
+                    fontSize: '10px', 
+                    textTransform: 'none' ,
+                    backgroundColor: selectedTab === 'RQ' ? '#015BA1' : '#676767', // Change 'green' to the color you want
+                    }} onClick={() => handleSubTab("RQ")} variant="contained">Requirements</Button>
+                  <Button style={{ 
+                    marginRight: '10px', 
+                    fontSize: '10px', 
+                    textTransform: 'none',
+                    backgroundColor: selectedTab === 'DM' ? '#015BA1' : '#676767', // Change 'blue' to the color you want
+                    }} onClick={() => handleSubTab("DM")} variant="contained">Data Migrations</Button>
+                  <Button style={{
+                    fontSize: '10px',
+                    textTransform: 'none',
+                    backgroundColor: selectedTab === 'DL' ? '#015BA1' : '#676767', // Change 'red' to the color you want
+                    }} onClick={() => handleSubTab("DL")} variant="contained">Document Layouts</Button>
+                </div>
+              } 
+              {
+                type === 'FitGap' && (
+                  <div style={{ display: 'flex', padding: '10px 0' }}>
+                  <Button style={{ 
+                    marginRight: '10px', 
+                    fontSize: '10px', 
+                    textTransform: 'none' ,
+                    backgroundColor: selectedTab === 'FitGap' ? '#015BA1' : '#676767', // Change 'green' to the color you want
+                    }} onClick={() => handleSubTab("FitGap")} variant="contained">Fit Gap</Button>
+                  <Button style={{ 
+                    marginRight: '10px', 
+                    fontSize: '10px', 
+                    textTransform: 'none',
+                    backgroundColor: selectedTab === 'FitGapAllMoscow' ? '#015BA1' : '#676767', // Change 'blue' to the color you want
+                    }} onClick={() => handleSubTab("FitGapAllMoscow")} variant="contained">All</Button>
+                  
+                  <Button style={{
+                    marginRight: '10px', 
+                    fontSize: '10px',
+                    textTransform: 'none',
+                    backgroundColor: selectedTab === 'FitGapWithoutGapMoscow' ? '#015BA1' : '#676767', // Change 'red' to the color you want
+                    }} onClick={() => handleSubTab("FitGapWithoutGapMoscow")} variant="contained">Fit/Partial Fit /ISV Fit</Button>
+
+                  <Button style={{ 
+                    marginRight: '10px', 
+                    fontSize: '10px', 
+                    textTransform: 'none',
+                    backgroundColor: selectedTab === 'FitGapGapMoscow' ? '#015BA1' : '#676767', // Change 'blue' to the color you want
+                    }} onClick={() => handleSubTab("FitGapGapMoscow")} variant="contained">Gaps</Button>
+                </div>
+                )
+              }
+              {(type == 'FitGap' && selectedTab === 'FitGap') && (
+                <div className='text-left' style={{alignItems: 'left'}}>
+                  {/* {(type == 'FitGap' && selectedTab === 'FitGap') && ( */}
+                    <ButtonGroups selectedButton={resourceType} setSelectedButton={
+                      setResourceType
+                    } numberOfButtons={3} buttonTitles={
+                    //   (type == 'FitGap') ? [
+                    //   {title: 'Must', value: 'M'}, {title: 'Must Should', value: "MS"}, {title: 'Must Should Could', value: 'MSC'}
+                    // ] : [
+                    //   {title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}
+                    // ]
+                    [{title: 'Must', value: 'M'}, {title: 'Must Should', value: "M/S"}, {title: 'Must Should Could', value: 'M/S/C'}]
+                    }/>
+                  {/* )} */}
+                </div>
+              )}
             </div>
           <MaterialReactTable
             // key={reloadTable ? 'reload' : 'no-reload'} // Key to force re-mounting
@@ -327,14 +335,14 @@ const AdvancedTable = ({data, type, dataMigrationData, documentLayoutsData, subD
             columnResizeMode={'onEnd'}
             enableColumnResizing={true}
             // layoutMode= 'grid-no-grow'
-            enableGrouping={(type != 'FitGap' && type != 'RequirementData' && type != 'CustomisationData' && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? true : false}
+            enableGrouping={(type != 'LicenseData' && type != 'FitGap' && type != 'RequirementData' && type != 'CustomisationData' && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? true : false}
             enableStickyHeader
             enableStickyFooter
             enableHiding={true}
             initialState={{
               density: 'compact',
               expanded: true, //expand all groups by default   'M', "M/S", "M/S/C", 
-              grouping: (type != 'FitGap' && type != 'RequirementData' && type != 'CustomisationData'  && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? ['nameCategory'] : [], //an array of columns to group by by default (can be multiple)
+              grouping: (type != 'LicenseData' && type != 'FitGap' && type != 'RequirementData' && type != 'CustomisationData'  && type != 'DocumentLayoutsData' && type != 'DataMigrationData') ? ['nameCategory'] : [], //an array of columns to group by by default (can be multiple)
               pagination: { pageIndex: 0, pageSize: 100 },
               // sorting: [{ id: 'state', desc: false }, { id: 'state', desc: false }], //sort by state by default
             }}
